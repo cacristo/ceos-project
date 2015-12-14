@@ -48,8 +48,6 @@ public class XlsMasterHeaderTest extends TestCase {
 				assertEquals(xlsMasterHeader.startY(), 0);
 				assertEquals(xlsMasterHeader.endX(), 0);
 				assertEquals(xlsMasterHeader.endY(), 0);
-				assertEquals(xlsMasterHeader.decorator(), 0);
-				assertEquals(xlsMasterHeader.border(), 0);
 			}
 
 		}

@@ -49,16 +49,4 @@ public @interface XlsMasterHeader {
 	 */
 	int endY() default 0;
 
-	// org.apache.poi.ss.util.CellRangeAddress;
-	@Deprecated
-	int mergedRegion() default 0;
-
-	/**
-	 * 
-	 * @return by default is 0
-	 */
-	int decorator() default 0;
-
-	int border() default 0;
-
 }
