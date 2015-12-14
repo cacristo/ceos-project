@@ -1,0 +1,9 @@
+* Manage file opened while try to generate another
+* Manage exception
+	Priority:
+		- Manage null objects
+		- Conflit configuration
+* Manage cascade LEVEL
+* Format data using mask
+* Possibility of links between sheets and/or lists
+* Decorate cells
