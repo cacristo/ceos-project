@@ -6,25 +6,40 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-//@Target({ FIELD })
+/**
+ * Annotation responsible to manage the fields attributes.
+ * 
+ * @author CristoAbreu
+ */
 @Target(FIELD)
 @Retention(RUNTIME)
 public @interface XlsElement {
-	
+
 	/**
-	 * Define the cell title.
+	 * Define the title of the element.
 	 * 
 	 * @return
 	 */
 	String title();
 
-	// org.apache.poi.ss.usermodel.Comment
-	String comment() default "";
-
-	// FIXME org.apache.poi.ss.usermodel.CellStyle;
-	int cellStyle() default 0;
-
+	/**
+	 * The position of the element at the Sheet.
+	 * 
+	 * @return the position
+	 */
 	int position();
 
+	/**
+	 * Define the commentary of the element.
+	 * 
+	 * @return by default is empty
+	 */
+	String comment() default "";
+
+	/**
+	 * The decorator mask to apply to the element.
+	 * 
+	 * @return by default is empty
+	 */
 	String decorator() default "";
 }
