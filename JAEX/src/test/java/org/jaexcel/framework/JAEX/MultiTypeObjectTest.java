@@ -72,7 +72,6 @@ public class MultiTypeObjectTest extends TestCase {
 
 		en.unmarshal(mto);
 
-		System.out.println(mto.getDateAttribute());
 		// TODO validation result
 		// assertEquals(true, false);
 	}
