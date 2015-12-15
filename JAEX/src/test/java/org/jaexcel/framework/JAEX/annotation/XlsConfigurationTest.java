@@ -2,13 +2,12 @@ package org.jaexcel.framework.JAEX.annotation;
 
 import java.lang.annotation.Annotation;
 
+import org.jaexcel.framework.JAEX.bean.ObjectsBuilderTest;
+import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.jaexcel.framework.JAEX.bean.ObjectWithDefaultConfig;
-import org.jaexcel.framework.JAEX.definition.CascadeType;
-import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 
 public class XlsConfigurationTest extends TestCase {
 	/**
@@ -32,7 +31,7 @@ public class XlsConfigurationTest extends TestCase {
 	 * Test default configuration.
 	 */
 	public void testDefaultConfiguration() {
-		Class<ObjectWithDefaultConfig> o = ObjectWithDefaultConfig.class;
+		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> o = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
 
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
@@ -42,7 +41,40 @@ public class XlsConfigurationTest extends TestCase {
 
 			// add here the annotations attributes
 			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLS);
-			assertEquals(xlsConfig.cascadeLevel(), CascadeType.CASCADE_BASE);
+		}
+	}
+
+	/**
+	 * Test name file attribute.
+	 */
+	public void testNameFileAttribute() {
+		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> o = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+
+		// Process @XlsConfiguration
+		if (o.isAnnotationPresent(XlsConfiguration.class)) {
+
+			Annotation annotation = o.getAnnotation(XlsConfiguration.class);
+			XlsConfiguration xlsConfig = (XlsConfiguration) annotation;
+
+			// add here the annotations attributes
+			assertEquals(xlsConfig.nameFile(), "DefaultConfigurationSample");
+		}
+	}
+
+	/**
+	 * Test name file attribute.
+	 */
+	public void testExtensionFileAttribute() {
+		Class<ObjectsBuilderTest.Cyclops> o = ObjectsBuilderTest.Cyclops.class;
+
+		// Process @XlsConfiguration
+		if (o.isAnnotationPresent(XlsConfiguration.class)) {
+
+			Annotation annotation = o.getAnnotation(XlsConfiguration.class);
+			XlsConfiguration xlsConfig = (XlsConfiguration) annotation;
+
+			// add here the annotations attributes
+			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLSX);
 		}
 	}
 }
