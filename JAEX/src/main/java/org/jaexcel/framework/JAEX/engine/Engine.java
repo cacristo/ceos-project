@@ -41,7 +41,7 @@ public class Engine {
 	private String dateDecorator = "yyyy-MM-dd";
 	private String integerDecorator = "0";
 	private String doubleDecorator = "0.00";
-	
+
 	Workbook wb;
 	ConfigurationData configData;
 	CellDecorator headerDecorator;
@@ -50,10 +50,8 @@ public class Engine {
 		headerDecorator = configuration;
 
 		// if specific border not configured
-		if (headerDecorator.getBorder() != 0
-				&& headerDecorator.getBorderLeft() == 0
-				&& headerDecorator.getBorderRight() == 0
-				&& headerDecorator.getBorderTop() == 0
+		if (headerDecorator.getBorder() != 0 && headerDecorator.getBorderLeft() == 0
+				&& headerDecorator.getBorderRight() == 0 && headerDecorator.getBorderTop() == 0
 				&& headerDecorator.getBorderBottom() == 0) {
 			// propagate generic border configuration to specific border
 			headerDecorator.setBorderLeft(headerDecorator.getBorder());
@@ -63,22 +61,14 @@ public class Engine {
 		}
 	}
 
-	private CellStyle initializeHeaderCellDecorator()
-			throws JAEXConfigurationException {
+	private CellStyle initializeHeaderCellDecorator() throws JAEXConfigurationException {
 		CellStyle cs = initializeCellStyle(wb);
 		try {
 			// add the alignment to the cell
-			CellStyleUtils.applyAlignment(
-					cs, 
-					headerDecorator.getAlignment(),
-					headerDecorator.getVerticalAlignment());
+			CellStyleUtils.applyAlignment(cs, headerDecorator.getAlignment(), headerDecorator.getVerticalAlignment());
 			// add the border to the cell
-			CellStyleUtils.applyBorder(
-					cs, 
-					headerDecorator.getBorderLeft(),
-					headerDecorator.getBorderRight(), 
-					headerDecorator.getBorderTop(), 
-					headerDecorator.getBorderBottom());
+			CellStyleUtils.applyBorder(cs, headerDecorator.getBorderLeft(), headerDecorator.getBorderRight(),
+					headerDecorator.getBorderTop(), headerDecorator.getBorderBottom());
 			// add the background to the cell
 			cs.setFillBackgroundColor(headerDecorator.getBackgroundColor());
 			cs.setFillForegroundColor(headerDecorator.getBackgroundColor());
@@ -86,14 +76,11 @@ public class Engine {
 			// add the wrap mode to the cell
 			cs.setWrapText(headerDecorator.isWrapText());
 			// add the font style to the cell
-			CellStyleUtils.applyFont(
-					wb, 
-					cs, 
-					headerDecorator.isFontBold(),
-					headerDecorator.isFontItalic());
+			CellStyleUtils.applyFont(wb, cs, headerDecorator.isFontBold(), headerDecorator.isFontItalic());
 
 		} catch (Exception e) {
-			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(), e);
+			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
+					e);
 		}
 		return cs;
 	}
@@ -109,8 +96,7 @@ public class Engine {
 			configData = new ConfigurationData();
 		}
 		configData.setName(config.nameFile());
-		configData.setNameFile(config.nameFile()
-				+ config.extensionFile().getExtension());
+		configData.setNameFile(config.nameFile() + config.extensionFile().getExtension());
 		configData.setExtensionFile(config.extensionFile());
 		return configData;
 	}
@@ -153,7 +139,7 @@ public class Engine {
 	 * @param type
 	 *            the type of workbook
 	 * @return the {@link Workbook}.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(FileInputStream inputStream, ExtensionFileType type) throws IOException {
 		if (ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
@@ -231,6 +217,9 @@ public class Engine {
 				r = initializeRow(s, idxR);
 			}
 
+			// validation of configuration
+			isValidMasterHeaderConfiguration(isPH, annotation);
+			
 			// prepare position rows / cells
 			int startRow, endRow, startCell, endCell;
 			if (isPH) {
@@ -249,6 +238,26 @@ public class Engine {
 			// merge region of the master header cell
 			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell,
 					endCell));
+		}
+	}
+
+	/**
+	 * Validate if the master header configuration is valid.
+	 * 
+	 * @param isPH true if propagation is HORIZONTAL otherwise false to propagation VERTICAL
+	 * @param annotation the {@link XlsMasterHeader} annotation
+	 * @throws JAEXConfigurationException
+	 */
+	private void isValidMasterHeaderConfiguration(boolean isPH, XlsMasterHeader annotation)
+			throws JAEXConfigurationException {
+
+		if (isPH && annotation.startX() == annotation.endX()) {
+			throw new JAEXConfigurationException(
+					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
+			
+		} else if (!isPH && annotation.startY() == annotation.endY()) {
+			throw new JAEXConfigurationException(
+					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
 		}
 	}
 
@@ -313,9 +322,8 @@ public class Engine {
 	 *         otherwise 0
 	 * @throws Exception
 	 */
-	private int initializeCellByField(Sheet s, Row headerRow, Row contentRow,
-			int idxR, int idxC, int cL, Object o, Field f, String d)
-			throws Exception {
+	private int initializeCellByField(Sheet s, Row headerRow, Row contentRow, int idxR, int idxC, int cL, Object o,
+			Field f, String d) throws Exception {
 
 		// make the field accessible to recover the value
 		f.setAccessible(true);
@@ -324,17 +332,15 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow,
-				idxC, d);
+		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, d);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
 			Class<?> oC = nO.getClass();
-			
+
 			// FIXME manage null objects
-			
-			counter = marshalAsPropagationHorizontal(nO, oC, s, headerRow,
-					contentRow, idxR, idxC - 1, cL + 1);
+
+			counter = marshalAsPropagationHorizontal(nO, oC, s, headerRow, contentRow, idxR, idxC - 1, cL + 1);
 		}
 		return counter;
 	}
@@ -362,8 +368,8 @@ public class Engine {
 	 * @return
 	 * @throws Exception
 	 */
-	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC,
-			int cL, Object o, Field f, String d) throws Exception {
+	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC, int cL, Object o, Field f, String d)
+			throws Exception {
 
 		// make the field accessible to recover the value
 		f.setAccessible(true);
@@ -377,11 +383,10 @@ public class Engine {
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
 			Class<?> oC = nO.getClass();
-			
+
 			// FIXME manage null objects
-			
-			counter = marshalAsPropagationVertical(nO, oC, s, idxR - 1,
-					idxC - 1, cL + 1);
+
+			counter = marshalAsPropagationVertical(nO, oC, s, idxR - 1, idxC - 1, cL + 1);
 		}
 		return counter;
 	}
@@ -401,11 +406,10 @@ public class Engine {
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException 
+	 * @throws JAEXConverterException
 	 */
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r,
-			int idxC, String decorator) throws IllegalArgumentException,
-			IllegalAccessException, JAEXConverterException {
+	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, String decorator)
+			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 		// FIXME add all primitive type here
 
@@ -414,8 +418,7 @@ public class Engine {
 			c.setCellValue((String) f.get(o));
 			isUpdated = true;
 
-		} else if (fT.equals(Integer.class) || fT.isPrimitive()
-				&& fT.toString().equals("int")) {
+		} else if (fT.equals(Integer.class) || fT.isPrimitive() && fT.toString().equals("int")) {
 			Cell c = r.createCell(idxC);
 			c.setCellValue((Integer) f.get(o));
 			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? integerDecorator : decorator));
@@ -429,15 +432,13 @@ public class Engine {
 			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? doubleDecorator : decorator));
 			isUpdated = true;
 
-		} else if (fT.equals(Double.class) || fT.isPrimitive()
-				&& fT.toString().equals("double")) {
+		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
 			Cell c = r.createCell(idxC);
 			c.setCellValue((Double) f.get(o));
 			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? doubleDecorator : decorator));
 			isUpdated = true;
 
-		} else if (fT.equals(Long.class) || fT.isPrimitive()
-				&& fT.toString().equals("long")) {
+		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
 			Cell c = r.createCell(idxC);
 			c.setCellValue((Long) f.get(o));
 			isUpdated = true;
@@ -445,11 +446,13 @@ public class Engine {
 		} else if (fT.equals(Date.class)) {
 			Cell c = r.createCell(idxC);
 			Date d = (Date) f.get(o);
-			if(d != null){
-				SimpleDateFormat dt = new SimpleDateFormat((StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
+			if (d != null) {
+				SimpleDateFormat dt = new SimpleDateFormat(
+						(StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
 				String dateFormated = dt.format(d);
-				if(dateFormated.equals(decorator)){
-					// if date decorator do not match with a valid mask launch exception
+				if (dateFormated.equals(decorator)) {
+					// if date decorator do not match with a valid mask launch
+					// exception
 					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
 				}
 				c.setCellValue(dateFormated);
@@ -457,10 +460,10 @@ public class Engine {
 			}
 			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive()
-				&& fT.toString().equals("boolean")) {
+		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
 			Cell c = r.createCell(idxC);
-			// FIXME define option to user select : locale mode or true/false mode
+			// FIXME define option to user select : locale mode or true/false
+			// mode
 			Boolean b = (Boolean) f.get(o);
 			c.setCellValue((b == null ? "" : b).toString());
 			isUpdated = true;
@@ -470,20 +473,18 @@ public class Engine {
 		return isUpdated;
 	}
 
-	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c,
-			String decorator) throws IllegalArgumentException,
-			IllegalAccessException, JAEXConverterException {
+	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, String decorator)
+			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 		// FIXME add all primitive type here
 
 		f.setAccessible(true);
-		
+
 		if (fT.equals(String.class)) {
 			f.set(o, c.getStringCellValue());
 			isUpdated = true;
 
-		} else if (fT.equals(Integer.class) || fT.isPrimitive()
-				&& fT.toString().equals("int")) {
+		} else if (fT.equals(Integer.class) || fT.isPrimitive() && fT.toString().equals("int")) {
 			int intValue = ((Double) c.getNumericCellValue()).intValue();
 			f.set(o, intValue);
 			isUpdated = true;
@@ -492,33 +493,34 @@ public class Engine {
 			f.set(o, c.getNumericCellValue());
 			isUpdated = true;
 
-		} else if (fT.equals(Double.class) || fT.isPrimitive()
-				&& fT.toString().equals("double")) {
+		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
 			f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
 			isUpdated = true;
 
-		} else if (fT.equals(Long.class) || fT.isPrimitive()
-				&& fT.toString().equals("long")) {
+		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
 			long longValue = ((Double) c.getNumericCellValue()).longValue();
 			f.set(o, longValue);
 			isUpdated = true;
 
 		} else if (fT.equals(Date.class)) {
 			String date = c.getStringCellValue();
-			if(StringUtils.isNotBlank(date)){
-				SimpleDateFormat dt = new SimpleDateFormat((StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
+			if (StringUtils.isNotBlank(date)) {
+				SimpleDateFormat dt = new SimpleDateFormat(
+						(StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
 				try {
 					Date dateConverted = dt.parse(date);
 					f.set(o, dateConverted);
-				} catch (ParseException e) {// if date decorator do not match with a valid mask launch exception
+				} catch (ParseException e) {// if date decorator do not match
+											// with a valid mask launch
+											// exception
 					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
 				}
 			}
 			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive()
-				&& fT.toString().equals("boolean")) {
-			// FIXME define option to user select : locale mode or true/false mode
+		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
+			// FIXME define option to user select : locale mode or true/false
+			// mode
 			String bool = c.getStringCellValue();
 			f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
 			isUpdated = true;
@@ -526,9 +528,10 @@ public class Engine {
 		// TODO manage Enum
 		return isUpdated;
 	}
-	
+
 	/**
-	 * Convert the object to file with the PropagationType as PROPAGATION_HORIZONTAL.
+	 * Convert the object to file with the PropagationType as
+	 * PROPAGATION_HORIZONTAL.
 	 * 
 	 * @param o
 	 *            the object
@@ -549,9 +552,8 @@ public class Engine {
 	 * @return
 	 * @throws IllegalAccessException
 	 */
-	private int marshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s,
-			Row headerRow, Row contentRow, int idxR, int idxC, int cL)
-			throws Exception {
+	private int marshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, Row headerRow, Row contentRow, int idxR,
+			int idxC, int cL) throws Exception {
 		// counter related to the number of fields (if new object)
 		int counter = -1;
 
@@ -567,17 +569,15 @@ public class Engine {
 
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) f
-						.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if new object)
+				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+				// increment of the counter related to the number of fields (if
+				// new object)
 				counter++;
 				// header
-				initializeCell(headerRow, idxC + xlsAnnotation.position(),
-						xlsAnnotation.title());
+				initializeCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
 
 				// content
-				idxC += initializeCellByField(s, headerRow, contentRow, idxR,
-						idxC + xlsAnnotation.position(), cL, o, f,
+				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
 						xlsAnnotation.decorator());
 			}
 		}
@@ -585,7 +585,8 @@ public class Engine {
 	}
 
 	/**
-	 * Convert the object to file with the PropagationType as PROPAGATION_VERTICAL.
+	 * Convert the object to file with the PropagationType as
+	 * PROPAGATION_VERTICAL.
 	 * 
 	 * @param o
 	 *            the object
@@ -602,8 +603,8 @@ public class Engine {
 	 * @return
 	 * @throws Exception
 	 */
-	private int marshalAsPropagationVertical(Object o, Class<?> oC, Sheet s,
-			int idxR, int idxC, int cL) throws Exception {
+	private int marshalAsPropagationVertical(Object o, Class<?> oC, Sheet s, int idxR, int idxC, int cL)
+			throws Exception {
 		// counter related to the number of fields (if new object)
 		int counter = -1;
 		// backup base index of the cell
@@ -619,9 +620,9 @@ public class Engine {
 
 			// Process @XlsElement
 			if (field.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) field
-						.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if new object)
+				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
+				// increment of the counter related to the number of fields (if
+				// new object)
 				counter++;
 				// create the row
 				Row row = initializeRow(s, idxR + xlsAnnotation.position());
@@ -636,8 +637,7 @@ public class Engine {
 				// increment the cell position
 				idxC++;
 				// content
-				idxR += initializeCellByField(s, row, idxR
-						+ xlsAnnotation.position(), idxC, cL, o, field,
+				idxR += initializeCellByField(s, row, idxR + xlsAnnotation.position(), idxC, cL, o, field,
 						xlsAnnotation.decorator());
 			}
 		}
@@ -646,7 +646,8 @@ public class Engine {
 
 	/**
 	 * 
-	 * Convert the file to object with the PropagationType as PROPAGATION_HORIZONTAL.
+	 * Convert the file to object with the PropagationType as
+	 * PROPAGATION_HORIZONTAL.
 	 * 
 	 * @param o
 	 *            the object
@@ -662,8 +663,8 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
 	 */
-	private int unmarshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, int idxR,
-			int idxC) throws IllegalAccessException, JAEXConverterException {
+	private int unmarshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, int idxR, int idxC)
+			throws IllegalAccessException, JAEXConverterException {
 		// counter related to the number of fields (if new object)
 		int counter = -1;
 
@@ -676,25 +677,24 @@ public class Engine {
 
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) f
-						.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if new object)
+				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+				// increment of the counter related to the number of fields (if
+				// new object)
 				counter++;
-				
+
 				// content row
 				Row contentRow = s.getRow(idxR + 1);
-				Cell contentCell = contentRow.getCell(idxC
-						+ xlsAnnotation.position());
+				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(o,
-						fT, f, contentCell, xlsAnnotation.decorator());
+				boolean isAppliedToBaseObject = applyBaseExcelObject(o, fT, f, contentCell, xlsAnnotation.decorator());
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-					
+
 					Object subObjbect = f.get(o);
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshalAsPropagationHorizontal(subObjbect, subObjbectClass, s, idxR, idxC + xlsAnnotation.position() -1);
+					int internalCellCounter = unmarshalAsPropagationHorizontal(subObjbect, subObjbectClass, s, idxR,
+							idxC + xlsAnnotation.position() - 1);
 
 					// add the sub object to the parent object
 					f.set(o, subObjbect);
@@ -725,9 +725,8 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
 	 */
-	private int unmarshalAsPropagationVertical(Object object, Class<?> oC,
-			Sheet s, int idxR, int idxC) throws IllegalAccessException,
-			JAEXConverterException {
+	private int unmarshalAsPropagationVertical(Object object, Class<?> oC, Sheet s, int idxR, int idxC)
+			throws IllegalAccessException, JAEXConverterException {
 		// counter related to the number of fields (if new object)
 		int counter = -1;
 
@@ -740,8 +739,7 @@ public class Engine {
 
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) f
-						.getAnnotation(XlsElement.class);
+				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 				// increment of the counter related to the number of fields (if
 				// new object)
 				counter++;
@@ -750,17 +748,16 @@ public class Engine {
 				Row contentRow = s.getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(object,
-						fT, f, contentCell, xlsAnnotation.decorator());
+				boolean isAppliedToBaseObject = applyBaseExcelObject(object, fT, f, contentCell,
+						xlsAnnotation.decorator());
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
 					Object subObjbect = f.get(object);
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshalAsPropagationVertical(
-							subObjbect, subObjbectClass, s, idxR
-									+ xlsAnnotation.position() - 1, idxC);
+					int internalCellCounter = unmarshalAsPropagationVertical(subObjbect, subObjbectClass, s,
+							idxR + xlsAnnotation.position() - 1, idxC);
 
 					// add the sub object to the parent object
 					f.set(object, subObjbect);
@@ -772,7 +769,7 @@ public class Engine {
 		}
 		return counter;
 	}
-	
+
 	/**
 	 * Generate file output stream.
 	 * 
@@ -783,8 +780,7 @@ public class Engine {
 	 * @return
 	 * @throws Exception
 	 */
-	private FileOutputStream workbookFileOutputStream(Workbook wb, String name)
-			throws Exception {
+	private FileOutputStream workbookFileOutputStream(Workbook wb, String name) throws Exception {
 		FileOutputStream output = new FileOutputStream(name);
 		wb.write(output);
 		output.close();
@@ -801,15 +797,13 @@ public class Engine {
 		ConfigurationData config = null;
 		// Process @XlsConfiguration
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass
-					.getAnnotation(XlsConfiguration.class);
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
 			config = initializeConfiguration(xlsAnnotation);
 
 		}
 		// Process @XlsSheet
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) objectClass
-					.getAnnotation(XlsSheet.class);
+			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
 			config = initializeSheetConfiguration(xlsAnnotation);
 
 		}
@@ -827,16 +821,13 @@ public class Engine {
 
 		// initialize rows according the PropagationType
 		Row headerRow, contentRow;
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config
-				.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
 			headerRow = initializeRow(s, idxRow++);
 			contentRow = initializeRow(s, idxRow++);
 
-			marshalAsPropagationHorizontal(object, objectClass, s, headerRow,
-					contentRow, idxRow, idxCell, 0);
+			marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
 		} else {
-			marshalAsPropagationVertical(object, objectClass, s, idxRow,
-					idxCell, 0);
+			marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
 
 		}
 		// FIXME manage return value
@@ -851,29 +842,25 @@ public class Engine {
 		// TODO
 	}
 
-	public Object unmarshal(Object object) throws IOException,
-			IllegalArgumentException, IllegalAccessException,
-			JAEXConverterException {
+	public Object unmarshal(Object object)
+			throws IOException, IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		// instance object class
 		Class<?> oC = object.getClass();
 		ConfigurationData config = null;
 
 		// Process @XlsConfiguration
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC
-					.getAnnotation(XlsConfiguration.class);
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
 			config = initializeConfiguration(xlsAnnotation);
 		}
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) oC
-					.getAnnotation(XlsSheet.class);
+			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			config = initializeSheetConfiguration(xlsAnnotation);
 		}
 
-		FileInputStream input = new FileInputStream("D:\\"
-				+ config.getNameFile());
+		FileInputStream input = new FileInputStream("D:\\" + config.getNameFile());
 		Workbook wb = initializeWorkbook(input, config.getExtensionFile());
 		Sheet s = wb.getSheet(config.getTitleSheet());
 
@@ -881,13 +868,12 @@ public class Engine {
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config
-				.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
 			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
 		} else {
 			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
 		}
-		
+
 		return object;
 	}
 
