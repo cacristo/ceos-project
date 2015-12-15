@@ -30,6 +30,13 @@ public class EngineTest extends TestCase {
 	}
 
 	/**
+	 * Test with propagation type is HORIZONTAL
+	 */
+	public void testPropagationTypeHorizontal() {
+		assertEquals(true, false);
+	}
+
+	/**
 	 * Test with propagation type is VERTICAL
 	 */
 	public void testPropagationTypeVertical() {
@@ -75,6 +82,20 @@ public class EngineTest extends TestCase {
 	 * Test an null object
 	 */
 	public void testObjectNulll() {
+		assertEquals(true, false);
+	}
+
+	/**
+	 * Test an empty list
+	 */
+	public void testListEmpty() {
+		assertEquals(true, false);
+	}
+
+	/**
+	 * Test an null list
+	 */
+	public void testListNulll() {
 		assertEquals(true, false);
 	}
 }
