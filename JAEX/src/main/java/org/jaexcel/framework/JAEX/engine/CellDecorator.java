@@ -2,6 +2,10 @@ package org.jaexcel.framework.JAEX.engine;
 
 public class CellDecorator {
 
+	private String decoratorName;
+	
+	private String fontName = "Arial";
+	private short fontSize = 10;
 	private boolean fontBold = false;
 	private boolean fontItalic = false;
 
@@ -20,6 +24,48 @@ public class CellDecorator {
 	private boolean wrapText = false;
 
 	public CellDecorator() {
+	}
+	
+	/**
+	 * @return the decoratorName
+	 */
+	public String getDecoratorName() {
+		return decoratorName;
+	}
+
+	/**
+	 * @param decoratorName the decoratorName to set
+	 */
+	public void setDecoratorName(String decoratorName) {
+		this.decoratorName = decoratorName;
+	}
+
+	/**
+	 * @return the fontName
+	 */
+	public String getFontName() {
+		return fontName;
+	}
+
+	/**
+	 * @param fontName the fontName to set
+	 */
+	public void setFontName(String fontName) {
+		this.fontName = fontName;
+	}
+
+	/**
+	 * @return the fontSize
+	 */
+	public short getFontSize() {
+		return fontSize;
+	}
+
+	/**
+	 * @param fontSize the fontSize to set
+	 */
+	public void setFontSize(short fontSize) {
+		this.fontSize = fontSize;
 	}
 
 	/**
