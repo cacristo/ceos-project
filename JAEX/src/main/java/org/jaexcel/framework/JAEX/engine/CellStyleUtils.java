@@ -60,8 +60,10 @@ public class CellStyleUtils {
 	 * @param i
 	 *            is italic format
 	 */
-	protected static void applyFont(Workbook wb, CellStyle cs, boolean b, boolean i) {
+	protected static void applyFont(Workbook wb, CellStyle cs, String name, short size, boolean b, boolean i) {
 		Font f = initializeFont(wb);
+		f.setFontName(name);
+		f.setFontHeightInPoints(size);
 		f.setBold(b);
 		f.setItalic(i);
 		cs.setFont(f);
@@ -78,8 +80,12 @@ public class CellStyleUtils {
 	 *            the vertical alignment
 	 */
 	protected static void applyAlignment(CellStyle cs, short a, short vA) {
-		cs.setAlignment(a);
-		cs.setVerticalAlignment(vA);
+		if(a != 0){
+			cs.setAlignment(a);
+		}
+		if(vA != 0){
+			cs.setVerticalAlignment(vA);
+		}
 	}
 
 	/**
