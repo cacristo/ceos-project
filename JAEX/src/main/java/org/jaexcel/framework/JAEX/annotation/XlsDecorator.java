@@ -12,6 +12,27 @@ import java.lang.annotation.Target;
 public @interface XlsDecorator {
 
 	/**
+	 * Define the decorator name to be related at the element.
+	 * 
+	 * @return
+	 */
+	String decoratorName();
+	
+	/**
+	 * Define the font name at the element. By default is Arial.
+	 * 
+	 * @return
+	 */
+	String fontName() default "Arial";
+	
+	/**
+	 * Define the font size at the element. By default is 10.
+	 * 
+	 * @return
+	 */
+	short fontSize() default 10;
+	
+	/**
 	 * Define if the font is bold or not at the element.
 	 * 
 	 * @return
