@@ -12,11 +12,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -37,17 +40,214 @@ import org.jaexcel.framework.JAEX.exception.JAEXConfigurationException;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 
 public class Engine {
-
+	// cell decorator constants
+	private static final String CELL_DECORATOR_DATE = "date";
+	private static final String CELL_DECORATOR_BOOLEAN = "boolean";
+	private static final String CELL_DECORATOR_NUMERIC = "numeric";
+	private static final String CELL_DECORATOR_HEADER = "header";
 	// default mask decorators
 	private static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
 	private static final String MASK_DECORATOR_INTEGER = "0";
 	private static final String MASK_DECORATOR_DOUBLE = "0.00";
 
+	// TODO manage the decorator configuration
+
+	// TODO see the behavior of using only one instance of the JAEX object
+	// inside one project
+
 	Workbook wb;
 	ConfigurationData configData;
 	CellDecorator headerDecorator;
+	Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
 
-	public void initializeHeaderDecorator(CellDecorator configuration) {
+	public Engine() {
+		// initializeDefaultCellDecorator();
+	}
+	
+	
+	
+	/**
+	 * Initialize default Header Cell Decorator.
+	 * 
+	 * @return the {@link CellStyle} header decorator
+	 */
+	private CellStyle initializeHeaderCellDecorator() {
+		CellStyle cs = initializeCellStyle(wb);
+
+		// add the alignment to the cell
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
+		
+		// add the border to the cell
+		CellStyleUtils.applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN,
+				CellStyle.BORDER_THIN);
+		
+		// add the background to the cell
+		// FIXME review setFillBackgroundColor
+		//cs.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
+		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
+		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		
+		// add the wrap mode to the cell
+		cs.setWrapText(true);
+		
+		// add the font style to the cell
+		CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, true, true);
+
+		return cs;
+	}
+
+	/**
+	 * Initialize default Numeric Cell Decorator.
+	 * 
+	 * @return the {@link CellStyle} numeric decorator
+	 */
+	private CellStyle initializeNumericCellDecorator() {
+		CellStyle cs = initializeCellStyle(wb);
+
+		// add the alignment to the cell
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT, (short) 0);
+
+		return cs;
+	}
+
+	/**
+	 * Initialize default Date Cell Decorator.
+	 * 
+	 * @return the {@link CellStyle} date decorator
+	 */
+	private CellStyle initializeDateCellDecorator() {
+		CellStyle cs = initializeCellStyle(wb);
+
+		// add the alignment to the cell
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
+
+		return cs;
+	}
+
+	/**
+	 * Initialize default Boolean Cell Decorator.
+	 * 
+	 * @return the {@link CellStyle} boolean decorator
+	 */
+	private CellStyle initializeBooleanCellDecorator() {
+		CellStyle cs = initializeCellStyle(wb);
+
+		// add the alignment to the cell
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
+
+		return cs;
+	}
+
+	/**
+	 * Initialize default Cell Decorator system.
+	 */
+	private void initializeDefaultCellDecorator() {
+		stylesMap.put(CELL_DECORATOR_HEADER, initializeHeaderCellDecorator());
+		stylesMap.put(CELL_DECORATOR_NUMERIC, initializeNumericCellDecorator());
+		stylesMap.put(CELL_DECORATOR_DATE, initializeDateCellDecorator());
+		stylesMap.put(CELL_DECORATOR_BOOLEAN, initializeBooleanCellDecorator());
+	}
+
+	/**
+	 * Initialize {@link CellStyle} by  Cell Decorator.
+	 * 
+	 * @param decorator
+	 * @return the {@link CellStyle} decorator
+	 */
+	private CellStyle initializeCellStyleByCellDecorator(CellDecorator decorator) {
+		CellStyle cs = initializeCellStyle(wb);
+
+		// add the alignment to the cell
+		CellStyleUtils.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
+
+		// add the border to the cell
+		borderPropagationManagement(decorator);
+		CellStyleUtils.applyBorder(cs, decorator.getBorderLeft(), decorator.getBorderRight(), decorator.getBorderTop(),
+				decorator.getBorderBottom());
+
+		// add the background to the cell
+		// FIXME review setFillBackgroundColor
+		//cs.setFillBackgroundColor(decorator.getBackgroundColor());
+		cs.setFillForegroundColor(decorator.getForegroundColor());
+		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+		// add the wrap mode to the cell
+		cs.setWrapText(decorator.isWrapText());
+
+		// add the font style to the cell
+		CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.isFontBold(),
+				decorator.isFontItalic());
+
+		return cs;
+	}
+
+	/**
+	 * if specific border not configured, propagate generic border configuration
+	 * to specific border.
+	 * 
+	 * @param decorator the cell decorator
+	 */
+	private void borderPropagationManagement(CellDecorator decorator) {
+		// if specific border not configured
+		if (decorator.getBorder() != 0 && decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0
+				&& decorator.getBorderTop() == 0 && decorator.getBorderBottom() == 0) {
+			// propagate generic border configuration to specific border
+			decorator.setBorderLeft(decorator.getBorder());
+			decorator.setBorderRight(decorator.getBorder());
+			decorator.setBorderTop(decorator.getBorder());
+			decorator.setBorderBottom(decorator.getBorder());
+		}
+	}
+
+	/**
+	 * Set the Header Cell Decorator.
+	 * 
+	 * @param decorator
+	 */
+	public void setHeaderCellDecorator(CellDecorator decorator) {
+		stylesMap.put(CELL_DECORATOR_HEADER, initializeCellStyleByCellDecorator(decorator));
+	}
+
+	/**
+	 * Set the Numeric Cell Decorator.
+	 * 
+	 * @param decorator
+	 */
+	public void setNumericCellDecorator(CellDecorator decorator) {
+		stylesMap.put(CELL_DECORATOR_NUMERIC, initializeCellStyleByCellDecorator(decorator));
+	}
+
+	/**
+	 * Set the Boolean Cell Decorator.
+	 * 
+	 * @param decorator
+	 */
+	public void setBooleanCellDecorator(CellDecorator decorator) {
+		stylesMap.put(CELL_DECORATOR_BOOLEAN, initializeCellStyleByCellDecorator(decorator));
+	}
+
+	/**
+	 * Set the Date Cell Decorator.
+	 * 
+	 * @param decorator
+	 */
+	public void setDateCellDecorator(CellDecorator decorator) {
+		stylesMap.put(CELL_DECORATOR_DATE, initializeCellStyleByCellDecorator(decorator));
+	}
+
+	/**
+	 * Add a new Cell Decorator for a specific use case.
+	 * 
+	 * @param decoratorName
+	 *            the decorator name
+	 * @param decorator
+	 *            the cell decorator
+	 */
+	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
+		stylesMap.put(decoratorName, initializeCellStyleByCellDecorator(decorator));
+	}
+
+	public void initializeHeaderDecoratorOld(CellDecorator configuration) {
 		headerDecorator = configuration;
 
 		// if specific border not configured
@@ -62,7 +262,7 @@ public class Engine {
 		}
 	}
 
-	private CellStyle initializeHeaderCellDecorator() throws JAEXConfigurationException {
+	private CellStyle initializeHeaderCellDecoratorOld() throws JAEXConfigurationException {
 		CellStyle cs = initializeCellStyle(wb);
 		try {
 			// add the alignment to the cell
@@ -296,9 +496,9 @@ public class Engine {
 		Cell c = r.createCell(idxC);
 		c.setCellValue(value);
 
-		CellStyle cs = initializeHeaderCellDecorator();
-
-		c.setCellStyle(cs);
+		// CellStyle cs = initializeHeaderCellDecoratorOld();
+		// c.setCellStyle(cs);
+		c.setCellStyle(stylesMap.get(CELL_DECORATOR_HEADER));
 		return c;
 
 	}
@@ -514,7 +714,7 @@ public class Engine {
 			}
 			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
+		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals(CELL_DECORATOR_BOOLEAN)) {
 			Cell c = r.createCell(idxC);
 			Boolean b = (Boolean) f.get(o);
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
@@ -602,7 +802,7 @@ public class Engine {
 			}
 			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
+		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals(CELL_DECORATOR_BOOLEAN)) {
 			String bool = c.getStringCellValue();
 
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
@@ -902,6 +1102,10 @@ public class Engine {
 		// initialize Workbook
 		wb = initializeWorkbook(config.getExtensionFile());
 
+		// FIXME possible change
+		initializeDefaultCellDecorator();
+		
+		
 		// initialize Sheet
 		// FIXME add loop if necessary
 		Sheet s = initializeSheet(wb, config.getTitleSheet());
@@ -922,7 +1126,7 @@ public class Engine {
 
 		}
 		// FIXME manage return value
-		workbookFileOutputStream(wb, "D:\\" + config.getNameFile());
+		workbookFileOutputStream(wb, "D:\\projects\\" + config.getNameFile());
 	}
 
 	public void marshal(Object... objects) {
@@ -951,7 +1155,7 @@ public class Engine {
 			config = initializeSheetConfiguration(xlsAnnotation);
 		}
 
-		FileInputStream input = new FileInputStream("D:\\" + config.getNameFile());
+		FileInputStream input = new FileInputStream("D:\\projects\\" + config.getNameFile());
 		Workbook wb = initializeWorkbook(input, config.getExtensionFile());
 		Sheet s = wb.getSheet(config.getTitleSheet());
 
