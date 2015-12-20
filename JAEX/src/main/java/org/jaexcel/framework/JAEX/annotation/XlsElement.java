@@ -42,4 +42,27 @@ public @interface XlsElement {
 	 * @return by default is empty
 	 */
 	String decorator() default "";
+
+	/**
+	 * Format the field visually and the original value will remains at the
+	 * element.
+	 * 
+	 * @return by default is empty
+	 */
+	String formatMask() default "";
+
+	/**
+	 * Transform the field with the mask applied and we will lost the original
+	 * value at the element.
+	 * 
+	 * @return by default is empty
+	 */
+	String transformMask() default "";
+	
+	/**
+	 * Define the decimal scale of the Double / BigDecimal objects.
+	 * 
+	 * @return the decimal scale to apply
+	 */
+	// FIXME int decimalScale() default 2;
 }
