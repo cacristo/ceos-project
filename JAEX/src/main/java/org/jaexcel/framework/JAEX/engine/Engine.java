@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -37,10 +38,10 @@ import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 
 public class Engine {
 
-	// default decorators
-	private String dateDecorator = "yyyy-MM-dd";
-	private String integerDecorator = "0";
-	private String doubleDecorator = "0.00";
+	// default mask decorators
+	private static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
+	private static final String MASK_DECORATOR_INTEGER = "0";
+	private static final String MASK_DECORATOR_DOUBLE = "0.00";
 
 	Workbook wb;
 	ConfigurationData configData;
@@ -66,17 +67,23 @@ public class Engine {
 		try {
 			// add the alignment to the cell
 			CellStyleUtils.applyAlignment(cs, headerDecorator.getAlignment(), headerDecorator.getVerticalAlignment());
+			
 			// add the border to the cell
 			CellStyleUtils.applyBorder(cs, headerDecorator.getBorderLeft(), headerDecorator.getBorderRight(),
 					headerDecorator.getBorderTop(), headerDecorator.getBorderBottom());
+			
 			// add the background to the cell
-			cs.setFillBackgroundColor(headerDecorator.getBackgroundColor());
+			// FIXME review setFillBackgroundColor
+			//cs.setFillBackgroundColor(headerDecorator.getBackgroundColor());
 			cs.setFillForegroundColor(headerDecorator.getBackgroundColor());
 			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+			
 			// add the wrap mode to the cell
 			cs.setWrapText(headerDecorator.isWrapText());
+			
 			// add the font style to the cell
-			CellStyleUtils.applyFont(wb, cs, headerDecorator.isFontBold(), headerDecorator.isFontItalic());
+			CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, headerDecorator.isFontBold(),
+					headerDecorator.isFontItalic());
 
 		} catch (Exception e) {
 			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
@@ -206,12 +213,10 @@ public class Engine {
 	 *            true if propagation horizontally, false if propagation
 	 *            vertically
 	 */
-	private void applyMergeRegion(Sheet s, Row r, int idxR, int idxC, Field f,
-			boolean isPH) throws Exception {
+	private void applyMergeRegion(Sheet s, Row r, int idxR, int idxC, Field f, boolean isPH) throws Exception {
 		// Process @XlsMasterHeader
 		if (f.isAnnotationPresent(XlsMasterHeader.class)) {
-			XlsMasterHeader annotation = (XlsMasterHeader) f
-					.getAnnotation(XlsMasterHeader.class);
+			XlsMasterHeader annotation = (XlsMasterHeader) f.getAnnotation(XlsMasterHeader.class);
 			// if row null is necessary to create it
 			if (r == null) {
 				r = initializeRow(s, idxR);
@@ -219,7 +224,7 @@ public class Engine {
 
 			// validation of configuration
 			isValidMasterHeaderConfiguration(isPH, annotation);
-			
+
 			// prepare position rows / cells
 			int startRow, endRow, startCell, endCell;
 			if (isPH) {
@@ -236,16 +241,18 @@ public class Engine {
 			initializeCell(r, startCell, annotation.title());
 
 			// merge region of the master header cell
-			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell,
-					endCell));
+			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
 		}
 	}
 
 	/**
 	 * Validate if the master header configuration is valid.
 	 * 
-	 * @param isPH true if propagation is HORIZONTAL otherwise false to propagation VERTICAL
-	 * @param annotation the {@link XlsMasterHeader} annotation
+	 * @param isPH
+	 *            true if propagation is HORIZONTAL otherwise false to
+	 *            propagation VERTICAL
+	 * @param annotation
+	 *            the {@link XlsMasterHeader} annotation
 	 * @throws JAEXConfigurationException
 	 */
 	private void isValidMasterHeaderConfiguration(boolean isPH, XlsMasterHeader annotation)
@@ -254,7 +261,7 @@ public class Engine {
 		if (isPH && annotation.startX() == annotation.endX()) {
 			throw new JAEXConfigurationException(
 					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
-			
+
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
 			throw new JAEXConfigurationException(
 					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
@@ -323,7 +330,7 @@ public class Engine {
 	 * @throws Exception
 	 */
 	private int initializeCellByField(Sheet s, Row headerRow, Row contentRow, int idxR, int idxC, int cL, Object o,
-			Field f, String d) throws Exception {
+			Field f, XlsElement xlsAnnotation) throws Exception {
 
 		// make the field accessible to recover the value
 		f.setAccessible(true);
@@ -332,7 +339,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, d);
+		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -368,8 +375,8 @@ public class Engine {
 	 * @return
 	 * @throws Exception
 	 */
-	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC, int cL, Object o, Field f, String d)
-			throws Exception {
+	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC, int cL, Object o, Field f,
+			XlsElement xlsAnnotation) throws Exception {
 
 		// make the field accessible to recover the value
 		f.setAccessible(true);
@@ -378,7 +385,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, r, idxC, d);
+		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, r, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -408,7 +415,7 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
 	 */
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, String decorator)
+	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 		// FIXME add all primitive type here
@@ -421,21 +428,47 @@ public class Engine {
 		} else if (fT.equals(Integer.class) || fT.isPrimitive() && fT.toString().equals("int")) {
 			Cell c = r.createCell(idxC);
 			c.setCellValue((Integer) f.get(o));
-			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? integerDecorator : decorator));
+			String tM = xlsAnnotation.transformMask();
+			String fM = xlsAnnotation.formatMask();
+			applyCellStyle(wb, c,
+					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM));
 			isUpdated = true;
 
 		} else if (fT.equals(BigDecimal.class)) {
 			Cell c = r.createCell(idxC);
-			// FIXME review manage value
+
 			BigDecimal bd = (BigDecimal) f.get(o);
-			c.setCellValue(Double.valueOf(bd.toString()));
-			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? doubleDecorator : decorator));
+
+			// FIXME use the comment below to manage decimalScale
+			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+			Double d = bd.doubleValue();
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
+				c.setCellValue(df.format(d));
+			} else {
+				c.setCellValue(d);
+				applyCellStyle(wb, c, StringUtils.isEmpty(xlsAnnotation.formatMask()) ? MASK_DECORATOR_DOUBLE
+						: xlsAnnotation.formatMask());
+			}
 			isUpdated = true;
 
 		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
 			Cell c = r.createCell(idxC);
-			c.setCellValue((Double) f.get(o));
-			applyCellStyle(wb, c, (StringUtils.isEmpty(decorator) ? doubleDecorator : decorator));
+
+			// FIXME use the comment below to manage decimalScale
+			// Double d = (Double) f.get(o);
+			// BigDecimal bd = new BigDecimal(d);
+			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
+				c.setCellValue(df.format((Double) f.get(o)));
+			} else {
+				c.setCellValue((Double) f.get(o));
+				applyCellStyle(wb, c, StringUtils.isEmpty(xlsAnnotation.formatMask()) ? MASK_DECORATOR_DOUBLE
+						: xlsAnnotation.formatMask());
+			}
 			isUpdated = true;
 
 		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
@@ -447,25 +480,53 @@ public class Engine {
 			Cell c = r.createCell(idxC);
 			Date d = (Date) f.get(o);
 			if (d != null) {
-				SimpleDateFormat dt = new SimpleDateFormat(
-						(StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
-				String dateFormated = dt.format(d);
-				if (dateFormated.equals(decorator)) {
-					// if date decorator do not match with a valid mask launch
-					// exception
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
+
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					// apply transformation mask
+					String decorator = xlsAnnotation.transformMask();
+					try {
+						SimpleDateFormat dt = new SimpleDateFormat(decorator);
+
+						String dateFormated = dt.format(d);
+						if (dateFormated.equals(decorator)) {
+							// if date decorator do not match with a valid mask
+							// launch exception
+							throw new JAEXConverterException(
+									JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
+						}
+						c.setCellValue(dateFormated);
+					} catch (Exception e) {
+						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
+								e);
+					}
+
+				} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
+					// apply format mask
+					c.setCellValue(d);
+					applyCellStyle(wb, c, xlsAnnotation.formatMask());
+
+				} else {
+					// apply default date mask
+					c.setCellValue(d);
+					applyCellStyle(wb, c, MASK_DECORATOR_DATE);
+
 				}
-				c.setCellValue(dateFormated);
-				applyCellStyle(wb, c, decorator);
 			}
 			isUpdated = true;
 
 		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
 			Cell c = r.createCell(idxC);
-			// FIXME define option to user select : locale mode or true/false
-			// mode
 			Boolean b = (Boolean) f.get(o);
-			c.setCellValue((b == null ? "" : b).toString());
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				// apply format mask defined at transform mask
+				String[] split = xlsAnnotation.transformMask().split("/");
+				c.setCellValue((b == null ? "" : (b ? split[0] : split[1])));
+
+			} else {
+				// locale mode
+				c.setCellValue((b == null ? "" : b).toString());
+			}
+
 			isUpdated = true;
 		}
 		// TODO manage Enum
@@ -473,7 +534,7 @@ public class Engine {
 		return isUpdated;
 	}
 
-	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, String decorator)
+	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 		// FIXME add all primitive type here
@@ -490,11 +551,19 @@ public class Engine {
 			isUpdated = true;
 
 		} else if (fT.equals(BigDecimal.class)) {
-			f.set(o, c.getNumericCellValue());
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
+			} else {
+				f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
+			}
 			isUpdated = true;
 
 		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
-			f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
+			} else {
+				f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
+			}
 			isUpdated = true;
 
 		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
@@ -503,26 +572,49 @@ public class Engine {
 			isUpdated = true;
 
 		} else if (fT.equals(Date.class)) {
-			String date = c.getStringCellValue();
-			if (StringUtils.isNotBlank(date)) {
-				SimpleDateFormat dt = new SimpleDateFormat(
-						(StringUtils.isEmpty(decorator) ? dateDecorator : decorator));
-				try {
-					Date dateConverted = dt.parse(date);
-					f.set(o, dateConverted);
-				} catch (ParseException e) {// if date decorator do not match
-											// with a valid mask launch
-											// exception
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
+			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
+				f.set(o, c.getDateCellValue());
+			} else {
+				String date = c.getStringCellValue();
+				if (StringUtils.isNotBlank(date)) {
+
+					// FIXME
+					String tM = xlsAnnotation.transformMask();
+					String fM = xlsAnnotation.formatMask();
+					String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DATE : fM)
+							: tM;
+
+					// SimpleDateFormat dt = new
+					// SimpleDateFormat((StringUtils.isEmpty(decorator) ?
+					// dateDecorator : decorator));
+					SimpleDateFormat dt = new SimpleDateFormat(decorator);
+					try {
+						Date dateConverted = dt.parse(date);
+						f.set(o, dateConverted);
+					} catch (ParseException e) {// if date decorator do not
+												// match
+												// with a valid mask launch
+												// exception
+						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
+								e);
+					}
 				}
 			}
 			isUpdated = true;
 
 		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals("boolean")) {
-			// FIXME define option to user select : locale mode or true/false
-			// mode
 			String bool = c.getStringCellValue();
-			f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				// apply format mask defined at transform mask
+				String[] split = xlsAnnotation.transformMask().split("/");
+				f.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
+
+			} else {
+				// locale mode
+				f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+			}
+
 			isUpdated = true;
 		}
 		// TODO manage Enum
@@ -578,7 +670,7 @@ public class Engine {
 
 				// content
 				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
-						xlsAnnotation.decorator());
+						xlsAnnotation);
 			}
 		}
 		return counter;
@@ -638,7 +730,7 @@ public class Engine {
 				idxC++;
 				// content
 				idxR += initializeCellByField(s, row, idxR + xlsAnnotation.position(), idxC, cL, o, field,
-						xlsAnnotation.decorator());
+						xlsAnnotation);
 			}
 		}
 		return counter;
@@ -686,7 +778,7 @@ public class Engine {
 				Row contentRow = s.getRow(idxR + 1);
 				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(o, fT, f, contentCell, xlsAnnotation.decorator());
+				boolean isAppliedToBaseObject = applyBaseExcelObject(o, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
@@ -748,8 +840,7 @@ public class Engine {
 				Row contentRow = s.getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(object, fT, f, contentCell,
-						xlsAnnotation.decorator());
+				boolean isAppliedToBaseObject = applyBaseExcelObject(object, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
