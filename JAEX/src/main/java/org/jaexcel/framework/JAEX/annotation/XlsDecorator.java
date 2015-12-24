@@ -100,14 +100,14 @@ public @interface XlsDecorator {
 	 * 
 	 * @return
 	 */
-	short backgroundColor() default 0;
+	short backgroundColor() default 9;
 
 	/**
 	 * Define the foreground color of the element.
 	 * 
 	 * @return
 	 */
-	short foregroundColor() default 0;
+	short foregroundColor() default 9;
 
 	/**
 	 * Define if the text is wrapped or not at the element.
