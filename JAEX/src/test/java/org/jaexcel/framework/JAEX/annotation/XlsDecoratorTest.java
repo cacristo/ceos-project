@@ -40,6 +40,8 @@ public class XlsDecoratorTest extends TestCase {
 			XlsDecorator xlsDecorator = (XlsDecorator) annotation;
 
 			// add here the annotations attributes
+			assertEquals(xlsDecorator.fontName(), "Arial");
+			assertEquals(xlsDecorator.fontSize(), 10);
 			assertEquals(xlsDecorator.fontBold(), false);
 			assertEquals(xlsDecorator.fontItalic(), false);
 			assertEquals(xlsDecorator.alignment(), 0);
