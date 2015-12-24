@@ -457,24 +457,17 @@ public class Engine {
 	}
 
 	/**
-	 * This method has a problem which is not possible to apply a data format.
+	 * Apply cell style according the one cell style base and format mask.
 	 * 
 	 * @param wb
+	 *            the workbook
 	 * @param c
-	 * @param cs
+	 *            the cell
+	 * @param csBase
+	 *            the cell style base
 	 * @param formatMask
+	 *            the format mask
 	 */
-	private void applyCellStyleOld(Workbook wb, Cell c, CellStyle cs, String formatMask) {
-		if (cs == null) {
-			cs = initializeCellStyle(wb);
-		}
-		if (StringUtils.isNotBlank(formatMask)) {
-			DataFormat df = initializeDataFormat(wb);
-			cs.setDataFormat(df.getFormat(formatMask));
-		}
-		c.setCellStyle(cs);
-	}
-
 	private void applyCellStyle(Workbook wb, Cell c, CellStyle csBase, String formatMask) {
 		if (StringUtils.isNotBlank(formatMask) && csBase != null) {
 			// CASE : if the cell has a formatMask and cell style base
@@ -506,8 +499,10 @@ public class Engine {
 	 * Clone a cell style passed as parameter.
 	 * 
 	 * @param wb
+	 *            the workbook
 	 * @param csBase
-	 * @return
+	 *            the cell style base
+	 * @return the new cell style
 	 */
 	private CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
 		CellStyle cs = initializeCellStyle(wb);
@@ -523,16 +518,6 @@ public class Engine {
 
 		cs.setFont(wb.getFontAt(csBase.getFontIndex()));
 		return cs;
-	}
-
-	private void applyFormatMask(Workbook wb, Cell c, CellStyle cs, String formatMask) {
-		if (cs == null) {
-			cs = initializeCellStyle(wb);
-		}
-		if (StringUtils.isNotBlank(formatMask)) {
-			DataFormat df = initializeDataFormat(wb);
-			cs.setDataFormat(df.getFormat(formatMask));
-		}
 	}
 
 	/**
@@ -973,15 +958,11 @@ public class Engine {
 				String date = c.getStringCellValue();
 				if (StringUtils.isNotBlank(date)) {
 
-					// FIXME
 					String tM = xlsAnnotation.transformMask();
 					String fM = xlsAnnotation.formatMask();
 					String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DATE : fM)
 							: tM;
 
-					// SimpleDateFormat dt = new
-					// SimpleDateFormat((StringUtils.isEmpty(decorator) ?
-					// dateDecorator : decorator));
 					SimpleDateFormat dt = new SimpleDateFormat(decorator);
 					try {
 						Date dateConverted = dt.parse(date);
