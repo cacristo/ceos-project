@@ -143,11 +143,11 @@ public class SimpleExcelTest extends TestCase {
 		configuration.setBorderTop(CellStyle.BORDER_THIN);
 		configuration.setBorderBottom(CellStyle.BORDER_THIN);
 
-		configuration.setBackgroundColor(HSSFColor.DARK_RED.index);
+		configuration.setForegroundColor(HSSFColor.RED.index);
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
-		en.initializeHeaderDecorator(configuration);
+		en.setHeaderCellDecorator(configuration);
 
 		en.marshal(fastTest);
 
