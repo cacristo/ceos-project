@@ -12,7 +12,7 @@ import org.jaexcel.framework.JAEX.definition.PropagationType;
 @XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 
-	@XlsElement(title = "Date value", position = 1, decorator = "yyyyMMdd")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
 	@XlsElement(title = "String value", position = 2)
@@ -21,7 +21,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Integer value", position = 3)
 	private Integer integerAttribute = 0;
 
-	@XlsElement(title = "Double value", position = 4, decorator="0.00000")
+	@XlsElement(title = "Double value", position = 4, formatMask = "0.00000")
 	private Double doubleAttribute = 0.0;
 
 	@XlsElement(title = "Long value", position = 5)
@@ -47,6 +47,12 @@ public class MultiTypeObject {
 
 	@XlsElement(title = "address info", position = 12)
 	private AddressInfo addressInfo;
+
+	@XlsElement(title = "Float value", position = 13)
+	private Float floatAttribute = 0f;
+
+	@XlsElement(title = "Primitive float value", position = 14)
+	private float floatPrimitiveAttribute = 0f;
 
 	public MultiTypeObject() {
 	}
@@ -229,5 +235,35 @@ public class MultiTypeObject {
 	 */
 	public void setAddressInfo(AddressInfo addressInfo) {
 		this.addressInfo = addressInfo;
+	}
+
+	/**
+	 * @return the floatAttribute
+	 */
+	public Float getFloatAttribute() {
+		return floatAttribute;
+	}
+
+	/**
+	 * @param floatAttribute
+	 *            the floatAttribute to set
+	 */
+	public void setFloatAttribute(Float floatAttribute) {
+		this.floatAttribute = floatAttribute;
+	}
+
+	/**
+	 * @return the floatPrimitiveAttribute
+	 */
+	public float getFloatPrimitiveAttribute() {
+		return floatPrimitiveAttribute;
+	}
+
+	/**
+	 * @param floatPrimitiveAttribute
+	 *            the floatPrimitiveAttribute to set
+	 */
+	public void setFloatPrimitiveAttribute(float floatPrimitiveAttribute) {
+		this.floatPrimitiveAttribute = floatPrimitiveAttribute;
 	}
 }
