@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -393,7 +394,7 @@ public class Engine {
 	 * @return the {@link Workbook}.
 	 */
 	private Workbook initializeWorkbook(ExtensionFileType type) {
-		if (ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (type!=null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook();
 		} else {
 			return new XSSFWorkbook();
@@ -409,7 +410,7 @@ public class Engine {
 	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(FileInputStream inputStream, ExtensionFileType type) throws IOException {
-		if (ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (type!=null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook(inputStream);
 		} else {
 			return new XSSFWorkbook(inputStream);
@@ -1032,20 +1033,22 @@ public class Engine {
 		for (Field f : fL) {
 			// process each field from the object
 
-			// calculate index of the cell
-			int tmpIdxRow = idxR - 3;
-			// apply merge region
-			applyMergeRegion(s, null, tmpIdxRow, idxC, f, true);
-
+			if(headerRow!=null){
+				// calculate index of the cell
+				int tmpIdxRow = idxR - 3;
+				// apply merge region
+				applyMergeRegion(s, null, tmpIdxRow, idxC, f, true);
+			}
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 				// increment of the counter related to the number of fields (if
 				// new object)
 				counter++;
-				// header
-				initializeCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
-
+				if(headerRow!=null){
+					// header
+					initializeCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
+				}
 				// content
 				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
 						xlsAnnotation);
@@ -1095,15 +1098,22 @@ public class Engine {
 				// new object)
 				counter++;
 				// create the row
-				Row row = initializeRow(s, idxR + xlsAnnotation.position());
+				Row row= null;
+				if(idxR==1 && baseIdxCell==1){
+					row = initializeRow(s, idxR + xlsAnnotation.position());
+				}else{
+					row = s.getRow(idxR + xlsAnnotation.position());
+				}
 
 				// calculate index of the cell
 				int tmpIdxCell = idxC - 1;
-				// apply merge region
-				applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
-
-				// header
-				initializeCell(row, idxC, xlsAnnotation.title());
+				if(tmpIdxCell==0){
+					// apply merge region
+					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
+	
+					// header
+					initializeCell(row, idxC, xlsAnnotation.title());
+				}
 				// increment the cell position
 				idxC++;
 				// content
@@ -1319,8 +1329,72 @@ public class Engine {
 		// TODO
 	}
 
-	public void marshalAsCollection(Collection<?> collection) {
-		// TODO
+	public void marshalAsCollection(Collection<?> collection, final String filename, final ExtensionFileType extensionFileType) throws Exception {
+		
+		
+		//Temos que iniciar o config data neste ponto porque 
+		//como estamos na escritura de uma coleccao
+		//temos que ter o nome e a extensao antes de iniciar o excel
+		configData = new ConfigurationData();
+		configData.setExtensionFile(extensionFileType);
+		configData.setNameFile(filename);
+		ConfigurationData config = configData;
+		
+		// initialize Workbook
+		wb = initializeWorkbook(config.getExtensionFile());
+		Row headerRow = null, contentRow =null;
+		Sheet s = null;
+		int idxRow = 0, counter=0,idxCell= 0;
+		
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = collection.iterator();
+		
+	    while(iterator.hasNext()){
+	      Object object = iterator.next();
+	      //We get the class of the object 
+			Class<?> objectClass = object.getClass();
+			
+			// Process @XlsSheet
+			if (objectClass.isAnnotationPresent(XlsSheet.class)) {
+				XlsSheet xlsAnnotation = (XlsSheet) objectClass
+						.getAnnotation(XlsSheet.class);
+				config = initializeSheetConfiguration(xlsAnnotation);
+			}
+
+			// initialize rows according the PropagationType
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(config
+					.getPropagationType())) {
+				idxCell = config.getStartCell();
+				if (wb.getNumberOfSheets()==0 || wb.getSheet(config.getTitleSheet()) ==null){
+					s = initializeSheet(wb, config.getTitleSheet());
+					idxRow = config.getStartRow();
+					headerRow = initializeRow(s, idxRow++);
+					contentRow = initializeRow(s, idxRow++);
+				}else{
+					idxRow = s.getLastRowNum()+1;
+					headerRow = null;
+					contentRow = initializeRow(s, idxRow++);
+					
+				}
+				counter = marshalAsPropagationHorizontal(object, objectClass, s, headerRow,
+						contentRow, idxRow, idxCell, 0);
+			} else {
+				idxRow = config.getStartRow();
+				if (wb.getNumberOfSheets()==0 || wb.getSheet(config.getTitleSheet()) ==null){
+					s = initializeSheet(wb, config.getTitleSheet());
+					idxCell = config.getStartCell();
+				}else{
+					idxCell =  counter+idxCell-1;
+				}
+				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow,
+						idxCell, 0);
+
+			}
+			
+		}
+		
+		// FIXME manage return value
+		workbookFileOutputStream(wb, "D:\\excel\\" + config.getNameFile());
 	}
 
 	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
