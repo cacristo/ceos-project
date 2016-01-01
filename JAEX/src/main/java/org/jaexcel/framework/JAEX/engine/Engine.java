@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -23,7 +22,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,15 +41,6 @@ import org.jaexcel.framework.JAEX.exception.JAEXConfigurationException;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 
 public class Engine {
-	// cell decorator constants
-	private static final String CELL_DECORATOR_DATE = "date";
-	private static final String CELL_DECORATOR_BOOLEAN = "boolean";
-	private static final String CELL_DECORATOR_NUMERIC = "numeric";
-	private static final String CELL_DECORATOR_HEADER = "header";
-	// default mask decorators
-	private static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
-	private static final String MASK_DECORATOR_INTEGER = "0";
-	private static final String MASK_DECORATOR_DOUBLE = "0.00";
 
 	// TODO manage the decorator configuration
 
@@ -77,7 +66,7 @@ public class Engine {
 	 * @return the {@link CellStyle} header decorator
 	 */
 	private CellStyle initializeHeaderCellDecorator() {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		// add the alignment to the cell
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
@@ -87,8 +76,6 @@ public class Engine {
 				CellStyle.BORDER_THIN);
 
 		// add the background to the cell
-		// FIXME review setFillBackgroundColor
-		// cs.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
 		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
 		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
@@ -107,7 +94,7 @@ public class Engine {
 	 * @return the {@link CellStyle} numeric decorator
 	 */
 	private CellStyle initializeNumericCellDecorator() {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		// add the alignment to the cell
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT, (short) 0);
@@ -121,7 +108,7 @@ public class Engine {
 	 * @return the {@link CellStyle} date decorator
 	 */
 	private CellStyle initializeDateCellDecorator() {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		// add the alignment to the cell
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
@@ -135,7 +122,7 @@ public class Engine {
 	 * @return the {@link CellStyle} boolean decorator
 	 */
 	private CellStyle initializeBooleanCellDecorator() {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		// add the alignment to the cell
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
@@ -150,33 +137,37 @@ public class Engine {
 	 */
 	private void initializeCellDecorator() throws JAEXConfigurationException {
 
-		if (stylesMap.get(CELL_DECORATOR_HEADER) == null) {
-			stylesMap.put(CELL_DECORATOR_HEADER,
-					cellDecoratorMap.containsKey(CELL_DECORATOR_HEADER)
-							? initializeCellStyleByCellDecorator(cellDecoratorMap.get(CELL_DECORATOR_HEADER))
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER)
+							? initializeCellStyleByCellDecorator(
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_HEADER))
 							: initializeHeaderCellDecorator());
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CELL_DECORATOR_HEADER));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER));
 		}
-		if (stylesMap.get(CELL_DECORATOR_NUMERIC) == null) {
-			stylesMap.put(CELL_DECORATOR_NUMERIC,
-					cellDecoratorMap.containsKey(CELL_DECORATOR_NUMERIC)
-							? initializeCellStyleByCellDecorator(cellDecoratorMap.get(CELL_DECORATOR_NUMERIC))
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC)
+							? initializeCellStyleByCellDecorator(
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC))
 							: initializeNumericCellDecorator());
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CELL_DECORATOR_NUMERIC));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC));
 		}
-		if (stylesMap.get(CELL_DECORATOR_DATE) == null) {
-			stylesMap.put(CELL_DECORATOR_DATE,
-					cellDecoratorMap.containsKey(CELL_DECORATOR_DATE)
-							? initializeCellStyleByCellDecorator(cellDecoratorMap.get(CELL_DECORATOR_DATE))
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_DATE,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE)
+							? initializeCellStyleByCellDecorator(
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_DATE))
 							: initializeDateCellDecorator());
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CELL_DECORATOR_DATE));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE));
 		}
-		if (stylesMap.get(CELL_DECORATOR_BOOLEAN) == null) {
-			stylesMap.put(CELL_DECORATOR_BOOLEAN,
-					cellDecoratorMap.containsKey(CELL_DECORATOR_BOOLEAN)
-							? initializeCellStyleByCellDecorator(cellDecoratorMap.get(CELL_DECORATOR_BOOLEAN))
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN)
+							? initializeCellStyleByCellDecorator(
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
 							: initializeBooleanCellDecorator());
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CELL_DECORATOR_BOOLEAN));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
 		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
@@ -191,7 +182,7 @@ public class Engine {
 	 * @return the {@link CellStyle} decorator
 	 */
 	private CellStyle initializeCellStyleByCellDecorator(CellDecorator decorator) throws JAEXConfigurationException {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			// add the alignment to the cell
 			CellStyleUtils.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
@@ -202,8 +193,6 @@ public class Engine {
 					decorator.getBorderTop(), decorator.getBorderBottom());
 
 			// add the background to the cell
-			// FIXME review setFillBackgroundColor
-			// cs.setFillBackgroundColor(decorator.getBackgroundColor());
 			cs.setFillForegroundColor(decorator.getForegroundColor());
 			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
@@ -227,7 +216,7 @@ public class Engine {
 	 * @return the {@link CellStyle} decorator
 	 */
 	private CellStyle initializeCellStyleByXlsDecorator(XlsDecorator decorator) throws JAEXConfigurationException {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			// add the alignment to the cell
 			CellStyleUtils.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
@@ -243,8 +232,6 @@ public class Engine {
 			}
 
 			// add the background to the cell
-			// FIXME review setFillBackgroundColor
-			// cs.setFillBackgroundColor(decorator.getBackgroundColor());
 			cs.setFillForegroundColor(decorator.foregroundColor());
 			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
@@ -286,13 +273,8 @@ public class Engine {
 	 * @param decorator
 	 */
 	public void setHeaderCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CELL_DECORATOR_HEADER, decorator);
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_HEADER, decorator);
 	}
-	// public void setHeaderCellDecorator(CellDecorator decorator) throws
-	// JAEXConfigurationException {
-	// stylesMap.put(CELL_DECORATOR_HEADER,
-	// initializeCellStyleByCellDecorator(decorator));
-	// }
 
 	/**
 	 * Set the Numeric Cell Decorator.
@@ -300,13 +282,8 @@ public class Engine {
 	 * @param decorator
 	 */
 	public void setNumericCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CELL_DECORATOR_NUMERIC, decorator);
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC, decorator);
 	}
-	// public void setNumericCellDecorator(CellDecorator decorator) throws
-	// JAEXConfigurationException {
-	// stylesMap.put(CELL_DECORATOR_NUMERIC,
-	// initializeCellStyleByCellDecorator(decorator));
-	// }
 
 	/**
 	 * Set the Boolean Cell Decorator.
@@ -314,13 +291,8 @@ public class Engine {
 	 * @param decorator
 	 */
 	public void setBooleanCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CELL_DECORATOR_BOOLEAN, decorator);
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN, decorator);
 	}
-	// public void setBooleanCellDecorator(CellDecorator decorator) throws
-	// JAEXConfigurationException {
-	// stylesMap.put(CELL_DECORATOR_BOOLEAN,
-	// initializeCellStyleByCellDecorator(decorator));
-	// }
 
 	/**
 	 * Set the Date Cell Decorator.
@@ -328,13 +300,8 @@ public class Engine {
 	 * @param decorator
 	 */
 	public void setDateCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CELL_DECORATOR_DATE, decorator);
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_DATE, decorator);
 	}
-	// public void setDateCellDecorator(CellDecorator decorator) throws
-	// JAEXConfigurationException {
-	// stylesMap.put(CELL_DECORATOR_DATE,
-	// initializeCellStyleByCellDecorator(decorator));
-	// }
 
 	/**
 	 * Add a new Cell Decorator for a specific use case.
@@ -347,11 +314,6 @@ public class Engine {
 	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
 		cellDecoratorMap.put(decoratorName, decorator);
 	}
-	// public void addSpecificCellDecorator(String decoratorName, CellDecorator
-	// decorator) throws JAEXConfigurationException {
-	// stylesMap.put(decoratorName,
-	// initializeCellStyleByCellDecorator(decorator));
-	// }
 
 	/**
 	 * Add the main xls configuration.
@@ -394,7 +356,7 @@ public class Engine {
 	 * @return the {@link Workbook}.
 	 */
 	private Workbook initializeWorkbook(ExtensionFileType type) {
-		if (type!=null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook();
 		} else {
 			return new XSSFWorkbook();
@@ -410,7 +372,7 @@ public class Engine {
 	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(FileInputStream inputStream, ExtensionFileType type) throws IOException {
-		if (type!=null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook(inputStream);
 		} else {
 			return new XSSFWorkbook(inputStream);
@@ -435,91 +397,10 @@ public class Engine {
 	 *            the workbook
 	 * @return the {@link CellStyle}.
 	 */
-	private CellStyle initializeCellStyle(Workbook wb) {
-		return wb.createCellStyle();
-	}
-
-	/**
-	 * Initialize data format.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @return the {@link DataFormat}.
+	/*
+	 * private CellStyle initializeCellStyle(Workbook wb) { return
+	 * wb.createCellStyle(); }
 	 */
-	private DataFormat initializeDataFormat(Workbook wb) {
-		return wb.createDataFormat();
-	}
-
-	private void applyCellStyle(Workbook wb, Cell c, CellStyle cs) {
-		if (cs == null) {
-			cs = initializeCellStyle(wb);
-		}
-		c.setCellStyle(cs);
-	}
-
-	/**
-	 * Apply cell style according the one cell style base and format mask.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @param c
-	 *            the cell
-	 * @param csBase
-	 *            the cell style base
-	 * @param formatMask
-	 *            the format mask
-	 */
-	private void applyCellStyle(Workbook wb, Cell c, CellStyle csBase, String formatMask) {
-		if (StringUtils.isNotBlank(formatMask) && csBase != null) {
-			// CASE : if the cell has a formatMask and cell style base
-
-			// clone a cell style
-			CellStyle cs = cloneCellStyle(wb, csBase);
-
-			// apply data format
-			DataFormat df = initializeDataFormat(wb);
-			cs.setDataFormat(df.getFormat(formatMask));
-
-			// apply cell style to a cell
-			c.setCellStyle(cs);
-		} else {
-			if (csBase == null) {
-				// CASE : if the cell has no cell style base
-				csBase = initializeCellStyle(wb);
-			}
-			if (StringUtils.isNotBlank(formatMask)) {
-				// CASE : if the cell has a formatMask
-				DataFormat df = initializeDataFormat(wb);
-				csBase.setDataFormat(df.getFormat(formatMask));
-			}
-			c.setCellStyle(csBase);
-		}
-	}
-
-	/**
-	 * Clone a cell style passed as parameter.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @param csBase
-	 *            the cell style base
-	 * @return the new cell style
-	 */
-	private CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
-		CellStyle cs = initializeCellStyle(wb);
-		cs.setAlignment(csBase.getAlignment());
-		cs.setVerticalAlignment(csBase.getVerticalAlignment());
-		cs.setBorderTop(csBase.getBorderTop());
-		cs.setBorderBottom(csBase.getBorderBottom());
-		cs.setBorderLeft(csBase.getBorderLeft());
-		cs.setBorderRight(csBase.getBorderRight());
-		cs.setFillForegroundColor(csBase.getFillForegroundColor());
-		cs.setFillPattern(csBase.getFillPattern());
-		cs.setWrapText(csBase.getWrapText());
-
-		cs.setFont(wb.getFontAt(csBase.getFontIndex()));
-		return cs;
-	}
 
 	/**
 	 * Apply merge region if necessary.
@@ -563,7 +444,7 @@ public class Engine {
 			}
 
 			// initialize master header cell
-			initializeCell(r, startCell, annotation.title());
+			initializeHeaderCell(r, startCell, annotation.title());
 
 			// merge region of the master header cell
 			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
@@ -607,7 +488,7 @@ public class Engine {
 	}
 
 	/**
-	 * Initialize the basic cell.
+	 * Initialize the header cell.
 	 * 
 	 * @param r
 	 *            row to add the cell
@@ -617,10 +498,10 @@ public class Engine {
 	 *            the value of the cell content
 	 * @return the cell created
 	 */
-	private Cell initializeCell(Row r, int idxC, String value) throws Exception {
+	private Cell initializeHeaderCell(Row r, int idxC, String value) throws Exception {
 		Cell c = r.createCell(idxC);
 		c.setCellValue(value);
-		c.setCellStyle(stylesMap.get(CELL_DECORATOR_HEADER));
+		c.setCellStyle(stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER));
 		return c;
 
 	}
@@ -661,7 +542,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, xlsAnnotation);
+		boolean isAppliedToBaseObject = applyBaseExcelObjectSwitchSystem(o, fT, f, contentRow, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -709,7 +590,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, r, idxC, xlsAnnotation);
+		boolean isAppliedToBaseObject = applyBaseExcelObjectSwitchSystem(o, fT, f, r, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -741,171 +622,247 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
 	 */
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement xlsAnnotation)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
+	/*
+	 * private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r,
+	 * int idxC, XlsElement xlsAnnotation) throws IllegalArgumentException,
+	 * IllegalAccessException, JAEXConverterException { boolean isUpdated =
+	 * false;
+	 * 
+	 * System.out.println(fT.getName()); if (fT.equals(String.class)) { Cell c =
+	 * r.createCell(idxC); c.setCellValue((String) f.get(o));
+	 * 
+	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+	 * ? stylesMap.get(xlsAnnotation.decorator()) : null)); isUpdated = true;
+	 * 
+	 * } else if (fT.equals(Integer.class) || fT.isPrimitive() &&
+	 * fT.toString().equals("int")) { Cell c = r.createCell(idxC);
+	 * c.setCellValue((Integer) f.get(o)); String tM =
+	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
+	 * 
+	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+	 * ? stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
+	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM)); isUpdated
+	 * = true;
+	 * 
+	 * } else if (fT.equals(BigDecimal.class)) { Cell c = r.createCell(idxC);
+	 * 
+	 * BigDecimal bd = (BigDecimal) f.get(o);
+	 * 
+	 * // FIXME use the comment below to manage decimalScale // bd.setScale(2,
+	 * BigDecimal.ROUND_HALF_UP);
+	 * 
+	 * Double d = bd.doubleValue(); if
+	 * (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { DecimalFormat
+	 * df = new DecimalFormat(xlsAnnotation.transformMask());
+	 * c.setCellValue(df.format(d)); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)));
+	 * 
+	 * } else { c.setCellValue(d); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)),
+	 * StringUtils.isEmpty(xlsAnnotation.formatMask()) ? MASK_DECORATOR_DOUBLE :
+	 * xlsAnnotation.formatMask()); } isUpdated = true;
+	 * 
+	 * } else if (fT.equals(Double.class) || fT.isPrimitive() &&
+	 * fT.toString().equals("double")) { Cell c = r.createCell(idxC);
+	 * 
+	 * // FIXME use the comment below to manage decimalScale // Double d =
+	 * (Double) f.get(o); // BigDecimal bd = new BigDecimal(d); //
+	 * bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+	 * 
+	 * if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+	 * DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
+	 * c.setCellValue(df.format((Double) f.get(o))); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC))); } else { c.setCellValue((Double)
+	 * f.get(o)); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)),
+	 * StringUtils.isNotBlank(xlsAnnotation.formatMask()) ?
+	 * xlsAnnotation.formatMask() : MASK_DECORATOR_DOUBLE); } isUpdated = true;
+	 * 
+	 * } else if (fT.equals(Long.class) || fT.isPrimitive() &&
+	 * fT.toString().equals("long")) { Cell c = r.createCell(idxC);
+	 * c.setCellValue((Long) f.get(o)); String tM =
+	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
+	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+	 * ? stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
+	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM)); isUpdated
+	 * = true;
+	 * 
+	 * } else if (fT.equals(Float.class) || fT.isPrimitive() &&
+	 * fT.toString().equals("float")) { Cell c = r.createCell(idxC);
+	 * c.setCellValue((Float) f.get(o)); String tM =
+	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
+	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+	 * ? stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
+	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DOUBLE : fM) : tM)); isUpdated
+	 * = true;
+	 * 
+	 * } else if (fT.equals(Date.class)) { Cell c = r.createCell(idxC); Date d =
+	 * (Date) f.get(o); if (d != null) {
+	 * 
+	 * if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { // apply
+	 * transformation mask String decorator = xlsAnnotation.transformMask(); try
+	 * { SimpleDateFormat dt = new SimpleDateFormat(decorator);
+	 * 
+	 * String dateFormated = dt.format(d); if (dateFormated.equals(decorator)) {
+	 * // if date decorator do not match with a valid mask // launch exception
+	 * throw new JAEXConverterException(
+	 * JAEXExceptionMessage.JAEXConverterException_Date.getMessage()); }
+	 * c.setCellValue(dateFormated); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_DATE))); } catch (Exception e) { throw new
+	 * JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.
+	 * getMessage(), e); }
+	 * 
+	 * } else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) { // apply
+	 * format mask c.setCellValue(d); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_DATE)), xlsAnnotation.formatMask());
+	 * 
+	 * } else { // apply default date mask c.setCellValue(d); applyCellStyle(wb,
+	 * c, (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_DATE)), MASK_DECORATOR_DATE);
+	 * 
+	 * } } isUpdated = true;
+	 * 
+	 * } else if (fT.equals(Boolean.class) || fT.isPrimitive() &&
+	 * fT.toString().equals(CELL_DECORATOR_BOOLEAN)) { Cell c =
+	 * r.createCell(idxC); Boolean b = (Boolean) f.get(o); if
+	 * (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { // apply format
+	 * mask defined at transform mask String[] split =
+	 * xlsAnnotation.transformMask().split("/"); c.setCellValue((b == null ? ""
+	 * : (b ? split[0] : split[1]))); applyCellStyle(wb, c,
+	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
+	 * stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_BOOLEAN)));
+	 * 
+	 * } else { // locale mode c.setCellValue((b == null ? "" : b).toString());
+	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+	 * ? stylesMap.get(xlsAnnotation.decorator()) :
+	 * stylesMap.get(CELL_DECORATOR_BOOLEAN))); }
+	 * 
+	 * isUpdated = true; } else if (fT.isEnum()) { // TODO manage Enum
+	 * 
+	 * }
+	 * 
+	 * return isUpdated; }
+	 */
+
+	private boolean applyBaseExcelObjectSwitchSystem(Object o, Class<?> fT, Field f, Row r, int idxC,
+			XlsElement xlsAnnotation) throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 
-		if (fT.equals(String.class)) {
-			Cell c = r.createCell(idxC);
-			// String str = (String) f.get(o);
-			// c.setCellValue(StringUtils.isNumeric(str) ? "'".concat(str) :
-			// str);
-			c.setCellValue((String) f.get(o));
-			applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+		// reading mask
+		String tM = xlsAnnotation.transformMask();
+		String fM = xlsAnnotation.formatMask();
+
+		switch (fT.getName()) {
+
+		case CellValueUtils.OBJECT_DATE:
+
+			Cell cDate = r.createCell(idxC);
+
+			isUpdated = CellValueUtils.toDate(o, f, wb, cDate,
+					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE)),
+					xlsAnnotation.formatMask(), xlsAnnotation.transformMask());
+
+			break;
+
+		case CellValueUtils.OBJECT_STRING:
+			Cell cString = r.createCell(idxC);
+
+			isUpdated = CellValueUtils.toString(o, f, wb, cString, (StringUtils.isNotBlank(xlsAnnotation.decorator())
 					? stylesMap.get(xlsAnnotation.decorator()) : null));
-			isUpdated = true;
 
-		} else if (fT.equals(Integer.class) || fT.isPrimitive() && fT.toString().equals("int")) {
-			Cell c = r.createCell(idxC);
-			c.setCellValue((Integer) f.get(o));
-			String tM = xlsAnnotation.transformMask();
-			String fM = xlsAnnotation.formatMask();
+			break;
 
-			applyCellStyle(wb, c,
+		case CellValueUtils.OBJECT_INTEGER:
+		case CellValueUtils.PRIMITIVE_INTEGER:
+			Cell cInteger = r.createCell(idxC);
+
+			isUpdated = CellValueUtils.toInteger(o, f, wb, cInteger,
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
-							: stylesMap.get(CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM));
-			isUpdated = true;
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
+					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
+							: tM));
 
-		} else if (fT.equals(BigDecimal.class)) {
-			Cell c = r.createCell(idxC);
+			break;
 
-			BigDecimal bd = (BigDecimal) f.get(o);
+		case CellValueUtils.OBJECT_LONG:
+		case CellValueUtils.PRIMITIVE_LONG:
+			Cell cLong = r.createCell(idxC);
 
-			// FIXME use the comment below to manage decimalScale
-			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-			Double d = bd.doubleValue();
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
-				c.setCellValue(df.format(d));
-				applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-						? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_NUMERIC)));
-
-			} else {
-				c.setCellValue(d);
-				applyCellStyle(wb, c,
-						(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
-								: stylesMap.get(CELL_DECORATOR_NUMERIC)),
-						StringUtils.isEmpty(xlsAnnotation.formatMask()) ? MASK_DECORATOR_DOUBLE
-								: xlsAnnotation.formatMask());
-			}
-			isUpdated = true;
-
-		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
-			Cell c = r.createCell(idxC);
-
-			// FIXME use the comment below to manage decimalScale
-			// Double d = (Double) f.get(o);
-			// BigDecimal bd = new BigDecimal(d);
-			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
-				c.setCellValue(df.format((Double) f.get(o)));
-				applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-						? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_NUMERIC)));
-			} else {
-				c.setCellValue((Double) f.get(o));
-				applyCellStyle(wb, c,
-						(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
-								: stylesMap.get(CELL_DECORATOR_NUMERIC)),
-						StringUtils.isNotBlank(xlsAnnotation.formatMask()) ? xlsAnnotation.formatMask()
-								: MASK_DECORATOR_DOUBLE);
-			}
-			isUpdated = true;
-
-		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
-			Cell c = r.createCell(idxC);
-			c.setCellValue((Long) f.get(o));
-			String tM = xlsAnnotation.transformMask();
-			String fM = xlsAnnotation.formatMask();
-			applyCellStyle(wb, c,
+			isUpdated = CellValueUtils.toLong(o, f, wb, cLong,
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
-							: stylesMap.get(CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM));
-			isUpdated = true;
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
+					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
+							: tM));
 
-		} else if (fT.equals(Float.class) || fT.isPrimitive() && fT.toString().equals("float")) {
-			Cell c = r.createCell(idxC);
-			c.setCellValue((Float) f.get(o));
-			String tM = xlsAnnotation.transformMask();
-			String fM = xlsAnnotation.formatMask();
-			applyCellStyle(wb, c,
+			break;
+
+		case CellValueUtils.OBJECT_DOUBLE:
+		case CellValueUtils.PRIMITIVE_DOUBLE:
+
+			Cell cDouble = r.createCell(idxC);
+
+			isUpdated = CellValueUtils.toDouble(o, f, wb, cDouble,
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
-							: stylesMap.get(CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DOUBLE : fM) : tM));
-			isUpdated = true;
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
+					StringUtils.isNotBlank(xlsAnnotation.formatMask()) ? xlsAnnotation.formatMask()
+							: CellStyleUtils.MASK_DECORATOR_DOUBLE,
+					xlsAnnotation.transformMask());
 
-		} else if (fT.equals(Date.class)) {
-			Cell c = r.createCell(idxC);
-			Date d = (Date) f.get(o);
-			if (d != null) {
+			break;
 
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					// apply transformation mask
-					String decorator = xlsAnnotation.transformMask();
-					try {
-						SimpleDateFormat dt = new SimpleDateFormat(decorator);
+		case CellValueUtils.OBJECT_BIGDECIMAL:
+			Cell cBigDecimal = r.createCell(idxC);
 
-						String dateFormated = dt.format(d);
-						if (dateFormated.equals(decorator)) {
-							// if date decorator do not match with a valid mask
-							// launch exception
-							throw new JAEXConverterException(
-									JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
-						}
-						c.setCellValue(dateFormated);
-						applyCellStyle(wb, c,
-								(StringUtils.isNotBlank(xlsAnnotation.decorator())
-										? stylesMap.get(xlsAnnotation.decorator())
-										: stylesMap.get(CELL_DECORATOR_DATE)));
-					} catch (Exception e) {
-						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
-								e);
-					}
+			isUpdated = CellValueUtils.toBigDecimal(o, f, wb, cBigDecimal,
+					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
+					StringUtils.isEmpty(xlsAnnotation.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
+							: xlsAnnotation.formatMask(),
+					xlsAnnotation.transformMask());
+			break;
 
-				} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-					// apply format mask
-					c.setCellValue(d);
-					applyCellStyle(wb, c,
-							(StringUtils.isNotBlank(xlsAnnotation.decorator())
-									? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_DATE)),
-							xlsAnnotation.formatMask());
+		case CellValueUtils.OBJECT_FLOAT:
+		case CellValueUtils.PRIMITIVE_FLOAT:
 
-				} else {
-					// apply default date mask
-					c.setCellValue(d);
-					applyCellStyle(wb, c,
-							(StringUtils.isNotBlank(xlsAnnotation.decorator())
-									? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_DATE)),
-							MASK_DECORATOR_DATE);
+			Cell cFloat = r.createCell(idxC);
 
-				}
-			}
-			isUpdated = true;
+			isUpdated = CellValueUtils.toFloat(o, f, wb, cFloat,
+					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
+					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DOUBLE : fM)
+							: tM));
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals(CELL_DECORATOR_BOOLEAN)) {
-			Cell c = r.createCell(idxC);
-			Boolean b = (Boolean) f.get(o);
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				// apply format mask defined at transform mask
-				String[] split = xlsAnnotation.transformMask().split("/");
-				c.setCellValue((b == null ? "" : (b ? split[0] : split[1])));
-				applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-						? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_BOOLEAN)));
+			break;
 
-			} else {
-				// locale mode
-				c.setCellValue((b == null ? "" : b).toString());
-				applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-						? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CELL_DECORATOR_BOOLEAN)));
-			}
+		case CellValueUtils.OBJECT_BOOLEAN:
+		case CellValueUtils.PRIMITIVE_BOOLEAN:
+			Cell cBoolean = r.createCell(idxC);
+			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+					? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
+					xlsAnnotation.transformMask());
+			break;
 
-			isUpdated = true;
-		} else if (fT.isEnum()) {
-			// TODO manage Enum
-
+		default:
+			isUpdated = false;
+			break;
 		}
 
 		return isUpdated;
@@ -961,8 +918,8 @@ public class Engine {
 
 					String tM = xlsAnnotation.transformMask();
 					String fM = xlsAnnotation.formatMask();
-					String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DATE : fM)
-							: tM;
+					String decorator = StringUtils.isEmpty(tM)
+							? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DATE : fM) : tM;
 
 					SimpleDateFormat dt = new SimpleDateFormat(decorator);
 					try {
@@ -978,7 +935,8 @@ public class Engine {
 			}
 			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class) || fT.isPrimitive() && fT.toString().equals(CELL_DECORATOR_BOOLEAN)) {
+		} else if (fT.equals(Boolean.class)
+				|| fT.isPrimitive() && fT.toString().equals(CellStyleUtils.CELL_DECORATOR_BOOLEAN)) {
 			String bool = c.getStringCellValue();
 
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
@@ -1033,7 +991,7 @@ public class Engine {
 		for (Field f : fL) {
 			// process each field from the object
 
-			if(headerRow!=null){
+			if (headerRow != null) {
 				// calculate index of the cell
 				int tmpIdxRow = idxR - 3;
 				// apply merge region
@@ -1045,9 +1003,9 @@ public class Engine {
 				// increment of the counter related to the number of fields (if
 				// new object)
 				counter++;
-				if(headerRow!=null){
+				if (headerRow != null) {
 					// header
-					initializeCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
+					initializeHeaderCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
 				}
 				// content
 				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
@@ -1098,21 +1056,21 @@ public class Engine {
 				// new object)
 				counter++;
 				// create the row
-				Row row= null;
-				if(idxR==1 && baseIdxCell==1){
+				Row row = null;
+				if (idxR == 1 && baseIdxCell == 1) {
 					row = initializeRow(s, idxR + xlsAnnotation.position());
-				}else{
+				} else {
 					row = s.getRow(idxR + xlsAnnotation.position());
 				}
 
 				// calculate index of the cell
 				int tmpIdxCell = idxC - 1;
-				if(tmpIdxCell==0){
+				if (tmpIdxCell == 0) {
 					// apply merge region
 					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
-	
+
 					// header
-					initializeCell(row, idxC, xlsAnnotation.title());
+					initializeHeaderCell(row, idxC, xlsAnnotation.title());
 				}
 				// increment the cell position
 				idxC++;
@@ -1329,72 +1287,70 @@ public class Engine {
 		// TODO
 	}
 
-	public void marshalAsCollection(Collection<?> collection, final String filename, final ExtensionFileType extensionFileType) throws Exception {
-		
-		
-		//Temos que iniciar o config data neste ponto porque 
-		//como estamos na escritura de uma coleccao
-		//temos que ter o nome e a extensao antes de iniciar o excel
+	public void marshalAsCollection(Collection<?> collection, final String filename,
+			final ExtensionFileType extensionFileType) throws Exception {
+
+		// Temos que iniciar o config data neste ponto porque
+		// como estamos na escritura de uma coleccao
+		// temos que ter o nome e a extensao antes de iniciar o excel
 		configData = new ConfigurationData();
 		configData.setExtensionFile(extensionFileType);
 		configData.setNameFile(filename);
 		ConfigurationData config = configData;
-		
+
 		// initialize Workbook
 		wb = initializeWorkbook(config.getExtensionFile());
-		Row headerRow = null, contentRow =null;
+		Row headerRow = null, contentRow = null;
 		Sheet s = null;
-		int idxRow = 0, counter=0,idxCell= 0;
-		
+		int idxRow = 0, counter = 0, idxCell = 0;
+
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = collection.iterator();
-		
-	    while(iterator.hasNext()){
-	      Object object = iterator.next();
-	      //We get the class of the object 
+
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+			// We get the class of the object
 			Class<?> objectClass = object.getClass();
-			
+
 			// Process @XlsSheet
 			if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-				XlsSheet xlsAnnotation = (XlsSheet) objectClass
-						.getAnnotation(XlsSheet.class);
+				XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
 				config = initializeSheetConfiguration(xlsAnnotation);
 			}
 
 			// initialize rows according the PropagationType
-			if (PropagationType.PROPAGATION_HORIZONTAL.equals(config
-					.getPropagationType())) {
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
 				idxCell = config.getStartCell();
-				if (wb.getNumberOfSheets()==0 || wb.getSheet(config.getTitleSheet()) ==null){
+				if (wb.getNumberOfSheets() == 0 || wb.getSheet(config.getTitleSheet()) == null) {
 					s = initializeSheet(wb, config.getTitleSheet());
 					idxRow = config.getStartRow();
 					headerRow = initializeRow(s, idxRow++);
 					contentRow = initializeRow(s, idxRow++);
-				}else{
-					idxRow = s.getLastRowNum()+1;
+				} else {
+					idxRow = s.getLastRowNum() + 1;
 					headerRow = null;
 					contentRow = initializeRow(s, idxRow++);
-					
+
 				}
-				counter = marshalAsPropagationHorizontal(object, objectClass, s, headerRow,
-						contentRow, idxRow, idxCell, 0);
+				counter = marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell,
+						0);
 			} else {
 				idxRow = config.getStartRow();
-				if (wb.getNumberOfSheets()==0 || wb.getSheet(config.getTitleSheet()) ==null){
+				if (wb.getNumberOfSheets() == 0 || wb.getSheet(config.getTitleSheet()) == null) {
 					s = initializeSheet(wb, config.getTitleSheet());
 					idxCell = config.getStartCell();
-				}else{
-					idxCell =  counter+idxCell-1;
+				} else {
+					idxCell = counter + idxCell - 1;
 				}
-				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow,
-						idxCell, 0);
+				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
 
 			}
-			
+
 		}
-		
+
 		// FIXME manage return value
-		workbookFileOutputStream(wb, "D:\\excel\\" + config.getNameFile());
+		workbookFileOutputStream(wb,
+				"D:\\projects\\" + config.getNameFile() + config.getExtensionFile().getExtension());
 	}
 
 	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
