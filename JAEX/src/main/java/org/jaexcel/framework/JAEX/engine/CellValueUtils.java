@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 
@@ -44,15 +45,25 @@ public class CellValueUtils {
 	 *            the cell
 	 * @param cs
 	 *            the cell style
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toString(Object o, Field f, Workbook wb, Cell c, CellStyle cs) {
+	protected static boolean toString(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String comment,
+			ExtensionFileType eFT) {
 		boolean isUpdated = true;
 		try {
 
 			c.setCellValue((String) f.get(o));
 
 			CellStyleUtils.applyCellStyle(wb, c, cs);
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
+			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -76,15 +87,25 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toInteger(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask) {
+	protected static boolean toInteger(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
+			String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 		try {
 
 			c.setCellValue((Integer) f.get(o));
 
 			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
+			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -108,9 +129,14 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toLong(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask) {
+	protected static boolean toLong(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
+			String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -118,6 +144,11 @@ public class CellValueUtils {
 			c.setCellValue((Long) f.get(o));
 
 			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
+			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -143,10 +174,14 @@ public class CellValueUtils {
 	 *            the decorator mask
 	 * @param transformMask
 	 *            the transformation mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toDouble(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask) {
+			String transformMask, String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -162,6 +197,11 @@ public class CellValueUtils {
 			} else {
 				c.setCellValue((Double) f.get(o));
 				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			}
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
 			}
 
 		} catch (Exception e) {
@@ -188,10 +228,14 @@ public class CellValueUtils {
 	 *            the decorator mask
 	 * @param transformMask
 	 *            the transformation mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toBigDecimal(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask) {
+			String transformMask, String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -210,6 +254,11 @@ public class CellValueUtils {
 			} else {
 				c.setCellValue(dBigDecimal);
 				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			}
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
 			}
 
 		} catch (Exception e) {
@@ -236,10 +285,14 @@ public class CellValueUtils {
 	 *            the decorator mask
 	 * @param transformMask
 	 *            the transformation mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toDate(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask) {
+			String transformMask, String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -278,6 +331,11 @@ public class CellValueUtils {
 					CellStyleUtils.applyCellStyle(wb, c, cs, "yyyy-MM-dd");
 
 				}
+
+				if (StringUtils.isNotBlank(comment)) {
+					// apply the comment
+					CellStyleUtils.applyComment(wb, c, comment, eFT);
+				}
 			}
 
 		} catch (Exception e) {
@@ -302,15 +360,25 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toFloat(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask) {
+	protected static boolean toFloat(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
+			String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
 			c.setCellValue((Float) f.get(o));
 
 			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
+			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -335,9 +403,14 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param transformMask
 	 *            the transformation mask
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toBoolean(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String transformMask) {
+	protected static boolean toBoolean(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String transformMask,
+			String comment, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -352,6 +425,11 @@ public class CellValueUtils {
 				// locale mode
 				c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
 				CellStyleUtils.applyCellStyle(wb, c, cs);
+			}
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
 			}
 
 		} catch (Exception e) {

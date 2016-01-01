@@ -605,8 +605,27 @@ public class Engine {
 		return counter;
 	}
 
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC,
-			XlsElement xlsAnnotation) throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
+	/**
+	 * 
+	 * @param o
+	 *            the object
+	 * @param fT
+	 *            the field type
+	 * @param f
+	 *            the field
+	 * @param r
+	 *            the content row
+	 * @param idxC
+	 *            the position of the cell
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws JAEXConverterException
+	 */
+	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement xlsAnnotation)
+			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 
 		// reading mask
@@ -622,15 +641,18 @@ public class Engine {
 			isUpdated = CellValueUtils.toDate(o, f, wb, cDate,
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE)),
-					xlsAnnotation.formatMask(), xlsAnnotation.transformMask());
+					xlsAnnotation.formatMask(), xlsAnnotation.transformMask(), xlsAnnotation.comment(),
+					configData.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_STRING:
 			Cell cString = r.createCell(idxC);
 
-			isUpdated = CellValueUtils.toString(o, f, wb, cString, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-					? stylesMap.get(xlsAnnotation.decorator()) : null));
+			isUpdated = CellValueUtils.toString(o, f, wb,
+					cString, (StringUtils.isNotBlank(xlsAnnotation.decorator())
+							? stylesMap.get(xlsAnnotation.decorator()) : null),
+					xlsAnnotation.comment(), configData.getExtensionFile());
 
 			break;
 
@@ -642,7 +664,8 @@ public class Engine {
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
-							: tM));
+							: tM),
+					xlsAnnotation.comment(), configData.getExtensionFile());
 
 			break;
 
@@ -654,7 +677,8 @@ public class Engine {
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
-							: tM));
+							: tM),
+					xlsAnnotation.comment(), configData.getExtensionFile());
 
 			break;
 
@@ -668,7 +692,7 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					StringUtils.isNotBlank(xlsAnnotation.formatMask()) ? xlsAnnotation.formatMask()
 							: CellStyleUtils.MASK_DECORATOR_DOUBLE,
-					xlsAnnotation.transformMask());
+					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
 
 			break;
 
@@ -680,7 +704,7 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					StringUtils.isEmpty(xlsAnnotation.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
 							: xlsAnnotation.formatMask(),
-					xlsAnnotation.transformMask());
+					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
@@ -692,16 +716,18 @@ public class Engine {
 					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DOUBLE : fM)
-							: tM));
+							: tM),
+					xlsAnnotation.comment(), configData.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_BOOLEAN:
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 			Cell cBoolean = r.createCell(idxC);
-			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-					? stylesMap.get(xlsAnnotation.decorator()) : stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
-					xlsAnnotation.transformMask());
+			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean,
+					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
+					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
 			break;
 
 		default:
@@ -712,48 +738,33 @@ public class Engine {
 		return isUpdated;
 	}
 
+	/**
+	 * 
+	 * @param o
+	 *            the object
+	 * @param fT
+	 *            the field type
+	 * @param f
+	 *            the field
+	 * @param c
+	 *            the cell
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @return
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws JAEXConverterException
+	 */
 	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 
 		f.setAccessible(true);
 
-		if (fT.equals(String.class)) {
-			f.set(o, c.getStringCellValue());
-			isUpdated = true;
+		switch (fT.getName()) {
 
-		} else if (fT.equals(Integer.class) || fT.isPrimitive() && fT.toString().equals("int")) {
-			int intValue = ((Double) c.getNumericCellValue()).intValue();
-			f.set(o, intValue);
-			isUpdated = true;
+		case CellValueUtils.OBJECT_DATE:
 
-		} else if (fT.equals(BigDecimal.class)) {
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
-			} else {
-				f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
-			}
-			isUpdated = true;
-
-		} else if (fT.equals(Double.class) || fT.isPrimitive() && fT.toString().equals("double")) {
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
-			} else {
-				f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
-			}
-			isUpdated = true;
-
-		} else if (fT.equals(Long.class) || fT.isPrimitive() && fT.toString().equals("long")) {
-			Long longValue = ((Double) c.getNumericCellValue()).longValue();
-			f.set(o, longValue);
-			isUpdated = true;
-
-		} else if (fT.equals(Float.class) || fT.isPrimitive() && fT.toString().equals("float")) {
-			Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
-			f.set(o, floatValue);
-			isUpdated = true;
-
-		} else if (fT.equals(Date.class)) {
 			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
 				f.set(o, c.getDateCellValue());
 			} else {
@@ -777,10 +788,70 @@ public class Engine {
 					}
 				}
 			}
-			isUpdated = true;
 
-		} else if (fT.equals(Boolean.class)
-				|| fT.isPrimitive() && fT.toString().equals(CellStyleUtils.CELL_DECORATOR_BOOLEAN)) {
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_STRING:
+
+			f.set(o, c.getStringCellValue());
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_INTEGER:
+		case CellValueUtils.PRIMITIVE_INTEGER:
+
+			int intValue = ((Double) c.getNumericCellValue()).intValue();
+			f.set(o, intValue);
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_LONG:
+		case CellValueUtils.PRIMITIVE_LONG:
+
+			Long longValue = ((Double) c.getNumericCellValue()).longValue();
+			f.set(o, longValue);
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_DOUBLE:
+		case CellValueUtils.PRIMITIVE_DOUBLE:
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
+			} else {
+				f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
+			}
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_BIGDECIMAL:
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
+			} else {
+				f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
+			}
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_FLOAT:
+		case CellValueUtils.PRIMITIVE_FLOAT:
+
+			Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
+			f.set(o, floatValue);
+
+			isUpdated = true;
+			break;
+
+		case CellValueUtils.OBJECT_BOOLEAN:
+		case CellValueUtils.PRIMITIVE_BOOLEAN:
+
 			String bool = c.getStringCellValue();
 
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
@@ -794,9 +865,11 @@ public class Engine {
 			}
 
 			isUpdated = true;
-		} else if (fT.isEnum()) {
-			// TODO manage Enum
+			break;
 
+		default:
+			isUpdated = false;
+			break;
 		}
 
 		return isUpdated;
