@@ -1,5 +1,6 @@
 package org.jaexcel.framework.JAEX.engine;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -7,6 +8,15 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Workbook;
 
 public class CellStyleUtils {
+	// cell decorator constants
+	public static final String CELL_DECORATOR_DATE = "date";
+	public static final String CELL_DECORATOR_BOOLEAN = "boolean";
+	public static final String CELL_DECORATOR_NUMERIC = "numeric";
+	public static final String CELL_DECORATOR_HEADER = "header";
+	// default mask decorators
+	public static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
+	public static final String MASK_DECORATOR_INTEGER = "0";
+	public static final String MASK_DECORATOR_DOUBLE = "0.00";
 
 	/**
 	 * Initialize font.
@@ -41,8 +51,7 @@ public class CellStyleUtils {
 	 *            the cell style
 	 * @param formatMask
 	 */
-	protected static void applyDataFormat(Workbook wb, Cell c, CellStyle cs,
-			String formatMask) {
+	protected static void applyDataFormat(Workbook wb, Cell c, CellStyle cs, String formatMask) {
 		DataFormat df = initializeDataFormat(wb);
 		cs.setDataFormat(df.getFormat(formatMask));
 		c.setCellStyle(cs);
@@ -80,10 +89,10 @@ public class CellStyleUtils {
 	 *            the vertical alignment
 	 */
 	protected static void applyAlignment(CellStyle cs, short a, short vA) {
-		if(a != 0){
+		if (a != 0) {
 			cs.setAlignment(a);
 		}
-		if(vA != 0){
+		if (vA != 0) {
 			cs.setVerticalAlignment(vA);
 		}
 	}
@@ -102,8 +111,7 @@ public class CellStyleUtils {
 	 * @param bB
 	 *            the cell border bottom
 	 */
-	protected static void applyBorder(CellStyle cs, short bL, short bR, short bT,
-			short bB) {
+	protected static void applyBorder(CellStyle cs, short bL, short bR, short bT, short bB) {
 		cs.setBorderLeft(bL);
 		cs.setBorderRight(bR);
 		cs.setBorderTop(bT);
@@ -124,19 +132,84 @@ public class CellStyleUtils {
 		cs.setFillBackgroundColor(bC);
 	}
 
-	// HSSFWorkbook a;
-	// XSSFCellStyle x;
-	// XSSFWorkbook xw;
-	// XSSFFont fx = xw.createFont();
-	// fx.set
-	// HSSFCellStyle hcs = a.createCellStyle();
-	// Font f = wb.createFont();
-	// f.setBold(true);
-	// f.setItalic(true);
-	// f.setFontHeight();
-	// f.setFontName()
-	// f.setUnderline(FontUnderline.DOUBLE);
-	// cs.setFont(f);
-	// c.setCellStyle(cs);
-	// cs.set
+	/**
+	 * Initialize cell style.
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @return the {@link CellStyle}.
+	 */
+	protected static CellStyle initializeCellStyle(Workbook wb) {
+		return wb.createCellStyle();
+	}
+
+	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle cs) {
+		if (cs == null) {
+			cs = initializeCellStyle(wb);
+		}
+		c.setCellStyle(cs);
+	}
+
+	/**
+	 * Apply cell style according the one cell style base and format mask.
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @param c
+	 *            the cell
+	 * @param csBase
+	 *            the cell style base
+	 * @param formatMask
+	 *            the format mask
+	 */
+	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle csBase, String formatMask) {
+		if (StringUtils.isNotBlank(formatMask) && csBase != null) {
+			// CASE : if the cell has a formatMask and cell style base
+			// clone a cell style
+			CellStyle cs = cloneCellStyle(wb, csBase);
+
+			// apply data format
+			DataFormat df = initializeDataFormat(wb);
+			cs.setDataFormat(df.getFormat(formatMask));
+
+			// apply cell style to a cell
+			c.setCellStyle(cs);
+		} else {
+			if (csBase == null) {
+				// CASE : if the cell has no cell style base
+				csBase = initializeCellStyle(wb);
+			}
+			if (StringUtils.isNotBlank(formatMask)) {
+				// CASE : if the cell has a formatMask
+				DataFormat df = initializeDataFormat(wb);
+				csBase.setDataFormat(df.getFormat(formatMask));
+			}
+			c.setCellStyle(csBase);
+		}
+	}
+
+	/**
+	 * Clone a cell style passed as parameter.
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @param csBase
+	 *            the cell style base
+	 * @return the new cell style
+	 */
+	private static CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
+		CellStyle cs = initializeCellStyle(wb);
+		cs.setAlignment(csBase.getAlignment());
+		cs.setVerticalAlignment(csBase.getVerticalAlignment());
+		cs.setBorderTop(csBase.getBorderTop());
+		cs.setBorderBottom(csBase.getBorderBottom());
+		cs.setBorderLeft(csBase.getBorderLeft());
+		cs.setBorderRight(csBase.getBorderRight());
+		cs.setFillForegroundColor(csBase.getFillForegroundColor());
+		cs.setFillPattern(csBase.getFillPattern());
+		cs.setWrapText(csBase.getWrapText());
+
+		cs.setFont(wb.getFontAt(csBase.getFontIndex()));
+		return cs;
+	}
 }
