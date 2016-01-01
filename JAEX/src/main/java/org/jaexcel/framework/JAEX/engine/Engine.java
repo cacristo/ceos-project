@@ -542,7 +542,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseExcelObjectSwitchSystem(o, fT, f, contentRow, idxC, xlsAnnotation);
+		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -590,7 +590,7 @@ public class Engine {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseExcelObjectSwitchSystem(o, fT, f, r, idxC, xlsAnnotation);
+		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, r, idxC, xlsAnnotation);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -605,163 +605,7 @@ public class Engine {
 		return counter;
 	}
 
-	/**
-	 * 
-	 * @param o
-	 *            the object
-	 * @param fT
-	 *            the field type
-	 * @param f
-	 *            the field
-	 * @param r
-	 *            the content row
-	 * @param idxC
-	 *            the position of the cell
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
-	 */
-	/*
-	 * private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r,
-	 * int idxC, XlsElement xlsAnnotation) throws IllegalArgumentException,
-	 * IllegalAccessException, JAEXConverterException { boolean isUpdated =
-	 * false;
-	 * 
-	 * System.out.println(fT.getName()); if (fT.equals(String.class)) { Cell c =
-	 * r.createCell(idxC); c.setCellValue((String) f.get(o));
-	 * 
-	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-	 * ? stylesMap.get(xlsAnnotation.decorator()) : null)); isUpdated = true;
-	 * 
-	 * } else if (fT.equals(Integer.class) || fT.isPrimitive() &&
-	 * fT.toString().equals("int")) { Cell c = r.createCell(idxC);
-	 * c.setCellValue((Integer) f.get(o)); String tM =
-	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
-	 * 
-	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-	 * ? stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
-	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM)); isUpdated
-	 * = true;
-	 * 
-	 * } else if (fT.equals(BigDecimal.class)) { Cell c = r.createCell(idxC);
-	 * 
-	 * BigDecimal bd = (BigDecimal) f.get(o);
-	 * 
-	 * // FIXME use the comment below to manage decimalScale // bd.setScale(2,
-	 * BigDecimal.ROUND_HALF_UP);
-	 * 
-	 * Double d = bd.doubleValue(); if
-	 * (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { DecimalFormat
-	 * df = new DecimalFormat(xlsAnnotation.transformMask());
-	 * c.setCellValue(df.format(d)); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)));
-	 * 
-	 * } else { c.setCellValue(d); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)),
-	 * StringUtils.isEmpty(xlsAnnotation.formatMask()) ? MASK_DECORATOR_DOUBLE :
-	 * xlsAnnotation.formatMask()); } isUpdated = true;
-	 * 
-	 * } else if (fT.equals(Double.class) || fT.isPrimitive() &&
-	 * fT.toString().equals("double")) { Cell c = r.createCell(idxC);
-	 * 
-	 * // FIXME use the comment below to manage decimalScale // Double d =
-	 * (Double) f.get(o); // BigDecimal bd = new BigDecimal(d); //
-	 * bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-	 * 
-	 * if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-	 * DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
-	 * c.setCellValue(df.format((Double) f.get(o))); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC))); } else { c.setCellValue((Double)
-	 * f.get(o)); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)),
-	 * StringUtils.isNotBlank(xlsAnnotation.formatMask()) ?
-	 * xlsAnnotation.formatMask() : MASK_DECORATOR_DOUBLE); } isUpdated = true;
-	 * 
-	 * } else if (fT.equals(Long.class) || fT.isPrimitive() &&
-	 * fT.toString().equals("long")) { Cell c = r.createCell(idxC);
-	 * c.setCellValue((Long) f.get(o)); String tM =
-	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
-	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-	 * ? stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
-	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_INTEGER : fM) : tM)); isUpdated
-	 * = true;
-	 * 
-	 * } else if (fT.equals(Float.class) || fT.isPrimitive() &&
-	 * fT.toString().equals("float")) { Cell c = r.createCell(idxC);
-	 * c.setCellValue((Float) f.get(o)); String tM =
-	 * xlsAnnotation.transformMask(); String fM = xlsAnnotation.formatMask();
-	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-	 * ? stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_NUMERIC)), (StringUtils.isEmpty(tM) ?
-	 * (StringUtils.isEmpty(fM) ? MASK_DECORATOR_DOUBLE : fM) : tM)); isUpdated
-	 * = true;
-	 * 
-	 * } else if (fT.equals(Date.class)) { Cell c = r.createCell(idxC); Date d =
-	 * (Date) f.get(o); if (d != null) {
-	 * 
-	 * if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { // apply
-	 * transformation mask String decorator = xlsAnnotation.transformMask(); try
-	 * { SimpleDateFormat dt = new SimpleDateFormat(decorator);
-	 * 
-	 * String dateFormated = dt.format(d); if (dateFormated.equals(decorator)) {
-	 * // if date decorator do not match with a valid mask // launch exception
-	 * throw new JAEXConverterException(
-	 * JAEXExceptionMessage.JAEXConverterException_Date.getMessage()); }
-	 * c.setCellValue(dateFormated); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_DATE))); } catch (Exception e) { throw new
-	 * JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.
-	 * getMessage(), e); }
-	 * 
-	 * } else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) { // apply
-	 * format mask c.setCellValue(d); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_DATE)), xlsAnnotation.formatMask());
-	 * 
-	 * } else { // apply default date mask c.setCellValue(d); applyCellStyle(wb,
-	 * c, (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_DATE)), MASK_DECORATOR_DATE);
-	 * 
-	 * } } isUpdated = true;
-	 * 
-	 * } else if (fT.equals(Boolean.class) || fT.isPrimitive() &&
-	 * fT.toString().equals(CELL_DECORATOR_BOOLEAN)) { Cell c =
-	 * r.createCell(idxC); Boolean b = (Boolean) f.get(o); if
-	 * (StringUtils.isNotBlank(xlsAnnotation.transformMask())) { // apply format
-	 * mask defined at transform mask String[] split =
-	 * xlsAnnotation.transformMask().split("/"); c.setCellValue((b == null ? ""
-	 * : (b ? split[0] : split[1]))); applyCellStyle(wb, c,
-	 * (StringUtils.isNotBlank(xlsAnnotation.decorator()) ?
-	 * stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_BOOLEAN)));
-	 * 
-	 * } else { // locale mode c.setCellValue((b == null ? "" : b).toString());
-	 * applyCellStyle(wb, c, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-	 * ? stylesMap.get(xlsAnnotation.decorator()) :
-	 * stylesMap.get(CELL_DECORATOR_BOOLEAN))); }
-	 * 
-	 * isUpdated = true; } else if (fT.isEnum()) { // TODO manage Enum
-	 * 
-	 * }
-	 * 
-	 * return isUpdated; }
-	 */
-
-	private boolean applyBaseExcelObjectSwitchSystem(Object o, Class<?> fT, Field f, Row r, int idxC,
+	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC,
 			XlsElement xlsAnnotation) throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
 
