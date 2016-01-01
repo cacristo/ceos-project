@@ -8,6 +8,7 @@ public class CellDecorator {
 	private short fontSize = 10;
 	private boolean fontBold = false;
 	private boolean fontItalic = false;
+	// TODO private short fontUnderline = 0;
 
 	private short alignment = 0;
 	private short verticalAlignment = 0;
