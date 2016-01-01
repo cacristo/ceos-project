@@ -1,20 +1,11 @@
 package org.jaexcel.framework.JAEX;
 
-import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
@@ -25,11 +16,14 @@ import org.jaexcel.framework.JAEX.bean.AddressInfo;
 import org.jaexcel.framework.JAEX.bean.Job;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.SimpleObject;
-import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
@@ -256,16 +250,15 @@ public class CollectionMultiExcelTest extends TestCase {
 	 * Test one basic object
 	 */
 	public void testCollectionMultieExcel() throws Exception {
-		MultiTypeObject fastTest1 = buildMultiTypeObject();
-		
-		
-		MultiTypeObject fastTest2 = buildMultiTypeObject();
+		MultiTypeObject fastTest1 = buildMultiTypeObject(3);
+		MultiTypeObject fastTest2 = buildMultiTypeObject(2);
+		MultiTypeObject fastTest3 = buildMultiTypeObject(6);
 		
 
 		List<MultiTypeObject> collectionSimpleObject = new ArrayList<MultiTypeObject>();
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest3);
 		
 		
 		
@@ -295,13 +288,13 @@ public class CollectionMultiExcelTest extends TestCase {
 	 * 
 	 * @return
 	 */
-	private MultiTypeObject buildMultiTypeObject() {
+	private MultiTypeObject buildMultiTypeObject(int multiplier) {
 		MultiTypeObject mto = new MultiTypeObject();
 		mto.setDateAttribute(new Date());
 		mto.setStringAttribute("some string");
-		mto.setIntegerAttribute(46);
-		mto.setDoubleAttribute(Double.valueOf("25.3"));
-		mto.setLongAttribute(Long.valueOf("1234567890"));
+		mto.setIntegerAttribute(46 * multiplier);
+		mto.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
+		mto.setLongAttribute(Long.valueOf("1234567890") * multiplier);
 		mto.setBooleanAttribute(Boolean.FALSE);
 
 		Job job = new Job();
@@ -310,14 +303,14 @@ public class CollectionMultiExcelTest extends TestCase {
 		job.setJobName("Job Name");
 		mto.setJob(job);
 
-		mto.setIntegerPrimitiveAttribute(121);
-		mto.setDoublePrimitiveAttribute(44.6);
-		mto.setLongPrimitiveAttribute(987654321L);
+		mto.setIntegerPrimitiveAttribute(121 * multiplier);
+		mto.setDoublePrimitiveAttribute(44.6 * multiplier);
+		mto.setLongPrimitiveAttribute(987654321L * multiplier);
 		mto.setBooleanPrimitiveAttribute(true);
 
 		AddressInfo ai = new AddressInfo();
 		ai.setAddress("this is the street");
-		ai.setNumber(99);
+		ai.setNumber(1 * multiplier);
 		ai.setCity("this is the city");
 		ai.setCityCode(70065);
 		ai.setCountry("This is a Country");
