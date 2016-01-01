@@ -1,5 +1,6 @@
 package org.jaexcel.framework.JAEX;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.poi.hssf.util.HSSFColor;
@@ -80,6 +81,14 @@ public class MultiTypeObjectTest extends TestCase {
 
 		en.unmarshal(mto);
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		
+		Calendar calendarUnmarshal = Calendar.getInstance();
+		calendarUnmarshal.setTime(mto.getDateAttribute());
+		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
+		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
+		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
 		assertEquals("some string", mto.getStringAttribute());
 		assertEquals(Integer.valueOf(46), mto.getIntegerAttribute());
 		assertEquals(Double.valueOf("25.3"), mto.getDoubleAttribute());

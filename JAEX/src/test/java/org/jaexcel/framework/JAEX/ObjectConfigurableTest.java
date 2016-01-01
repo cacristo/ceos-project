@@ -1,10 +1,10 @@
 package org.jaexcel.framework.JAEX;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.jaexcel.framework.JAEX.bean.Job;
 import org.jaexcel.framework.JAEX.bean.ObjectConfigurable;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
@@ -45,14 +45,7 @@ public class ObjectConfigurableTest extends TestCase {
 		oc.setLongAttribute(98765312L);
 		oc.setStringAttribute("Some string value");
 		oc.setDateAttribute1(new Date());
-		
-		Job job = new Job();
-		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name");
-		job.setJobName("Job Name");
-		//oc.setJob(job);
-		
-		/************/
+
 		Engine en = new Engine();
 
 		CellDecorator configurationHeader = new CellDecorator();
@@ -62,23 +55,23 @@ public class ObjectConfigurableTest extends TestCase {
 		configurationHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 
 		configurationHeader.setBorder(CellStyle.BORDER_THIN);
-		
+
 		configurationHeader.setForegroundColor(HSSFColor.WHITE.index);
 		configurationHeader.setFontBold(true);
 		configurationHeader.setFontItalic(true);
 		configurationHeader.setWrapText(true);
-		//en.setHeaderCellDecorator(configurationHeader);
-		
+		// en.setHeaderCellDecorator(configurationHeader);
+
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");
 		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
 		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-		
+
 		dateDecorator.setForegroundColor(HSSFColor.ORANGE.index);
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
-		
-		//en.addSpecificCellDecorator("anotherDate", dateDecorator);
+
+		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
 
 		en.marshal(oc);
 
@@ -96,19 +89,27 @@ public class ObjectConfigurableTest extends TestCase {
 
 		en.unmarshal(oc);
 
-
-		System.out.println(oc.getDateAttribute());
-		System.out.println(oc.getStringAttribute());
-		System.out.println(oc.getIntegerAttribute());
-		System.out.println(oc.getDoubleAttribute());
-		System.out.println(oc.getLongAttribute());
-		System.out.println(oc.getBooleanAttribute());
-		System.out.println(oc.getDateAttribute1());
-
-		System.out.println(oc.getJob().getJobCode());
-		System.out.println(oc.getJob().getJobName());
-		System.out.println(oc.getJob().getJobFamily());
-		// TODO validation result
-		// assertEquals(true, false);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		
+		Calendar calendarUnmarshal = Calendar.getInstance();
+		calendarUnmarshal.setTime(oc.getDateAttribute());
+		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
+		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
+		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
+		assertEquals(Double.valueOf(22.127), oc.getDoubleAttribute());
+		assertEquals(Integer.valueOf(46), oc.getIntegerAttribute());
+		assertEquals(Long.valueOf(98765312L), oc.getLongAttribute());
+		assertEquals("Some string value", oc.getStringAttribute());
+		Calendar calendarUnmarshal1 = Calendar.getInstance();
+		calendarUnmarshal1.setTime(oc.getDateAttribute1());
+		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal1.get(Calendar.YEAR));
+		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal1.get(Calendar.MONTH));
+		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal1.get(Calendar.DAY_OF_MONTH));
+		
+		// the object is null
+		assertEquals(0, oc.getJob().getJobCode());
+		assertEquals("", oc.getJob().getJobFamily());
+		assertEquals("", oc.getJob().getJobName());
 	}
 }
