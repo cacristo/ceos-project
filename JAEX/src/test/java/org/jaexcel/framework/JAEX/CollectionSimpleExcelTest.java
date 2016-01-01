@@ -7,25 +7,18 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
-import org.jaexcel.framework.JAEX.bean.AddressInfo;
-import org.jaexcel.framework.JAEX.bean.Job;
-import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.SimpleObject;
-import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
-import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * Unit test for simple App.
