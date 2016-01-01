@@ -1,11 +1,24 @@
 package org.jaexcel.framework.JAEX.engine;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.RichTextString;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 
 public class CellStyleUtils {
 	// cell decorator constants
@@ -130,6 +143,49 @@ public class CellStyleUtils {
 	 */
 	protected static void applyBackgroundColor(Cell c, CellStyle cs, short bC) {
 		cs.setFillBackgroundColor(bC);
+	}
+
+	/**
+	 * Apply the cell comment to a cell.
+	 *  
+	 * @param wb the workbook
+	 * @param c the cell
+	 * @param t the text comment
+	 * @param e the extension file
+	 */
+	protected static void applyComment(Workbook wb, Cell c, String t, ExtensionFileType e) {
+
+		if (ExtensionFileType.XLS.equals(e)) {
+			final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<Sheet, HSSFPatriarch>();
+
+			CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
+			HSSFSheet sheet = (HSSFSheet) c.getSheet();
+			HSSFPatriarch drawingPatriarch = drawingPatriarches.get(sheet);
+			if (drawingPatriarch == null) {
+				drawingPatriarch = sheet.createDrawingPatriarch();
+				drawingPatriarches.put(sheet, drawingPatriarch);
+			}
+
+			Comment comment = drawingPatriarch
+					.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));
+			comment.setString(createHelper.createRichTextString(t));
+			
+			c.setCellComment(comment);
+			
+		} else if (ExtensionFileType.XLSX.equals(e)) {
+			CreationHelper factory = wb.getCreationHelper();
+
+			Drawing drawing = c.getSheet().createDrawingPatriarch();
+
+			ClientAnchor anchor = factory.createClientAnchor();
+
+			Comment comment = drawing.createCellComment(anchor);
+			RichTextString str = factory.createRichTextString(t);
+			comment.setString(str);
+
+			c.setCellComment(comment);
+		}
+
 	}
 
 	/**
