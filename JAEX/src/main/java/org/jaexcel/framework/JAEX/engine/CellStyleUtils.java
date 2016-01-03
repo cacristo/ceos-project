@@ -134,24 +134,26 @@ public class CellStyleUtils {
 	/**
 	 * Apply the background color to the cell style.
 	 * 
-	 * @param c
-	 *            the cell
 	 * @param cs
 	 *            the cell style
 	 * @param bC
 	 *            the background color
 	 */
-	protected static void applyBackgroundColor(Cell c, CellStyle cs, short bC) {
+	protected static void applyBackgroundColor(CellStyle cs, short bC) {
 		cs.setFillBackgroundColor(bC);
 	}
 
 	/**
 	 * Apply the cell comment to a cell.
-	 *  
-	 * @param wb the workbook
-	 * @param c the cell
-	 * @param t the text comment
-	 * @param e the extension file
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @param c
+	 *            the cell
+	 * @param t
+	 *            the text comment
+	 * @param e
+	 *            the extension file
 	 */
 	protected static void applyComment(Workbook wb, Cell c, String t, ExtensionFileType e) {
 
@@ -169,9 +171,9 @@ public class CellStyleUtils {
 			Comment comment = drawingPatriarch
 					.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));
 			comment.setString(createHelper.createRichTextString(t));
-			
+
 			c.setCellComment(comment);
-			
+
 		} else if (ExtensionFileType.XLSX.equals(e)) {
 			CreationHelper factory = wb.getCreationHelper();
 
@@ -199,6 +201,16 @@ public class CellStyleUtils {
 		return wb.createCellStyle();
 	}
 
+	/**
+	 * Apply the cell style to a cell.
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @param c
+	 *            the cell
+	 * @param cs
+	 *            the cell style
+	 */
 	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle cs) {
 		if (cs == null) {
 			cs = initializeCellStyle(wb);
