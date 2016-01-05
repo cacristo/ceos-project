@@ -82,12 +82,15 @@ public class CellStyleUtils {
 	 * @param i
 	 *            is italic format
 	 */
-	protected static void applyFont(Workbook wb, CellStyle cs, String name, short size, boolean b, boolean i) {
+	protected static void applyFont(Workbook wb, CellStyle cs, String name, short size, short c, boolean b, boolean i,
+			byte u) {
 		Font f = initializeFont(wb);
 		f.setFontName(name);
 		f.setFontHeightInPoints(size);
+		f.setColor(c);
 		f.setBold(b);
 		f.setItalic(i);
+		f.setUnderline(u);
 		cs.setFont(f);
 	}
 

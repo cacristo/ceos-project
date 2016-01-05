@@ -6,9 +6,10 @@ public class CellDecorator {
 	
 	private String fontName = "Arial";
 	private short fontSize = 10;
+	private short fontColor = 0;
 	private boolean fontBold = false;
 	private boolean fontItalic = false;
-	// TODO private short fontUnderline = 0;
+	private byte fontUnderline = 0;
 
 	private short alignment = 0;
 	private short verticalAlignment = 0;
@@ -70,6 +71,20 @@ public class CellDecorator {
 	}
 
 	/**
+	 * @return the fontColor
+	 */
+	public short getFontColor() {
+		return fontColor;
+	}
+
+	/**
+	 * @param fontColor the fontColor to set
+	 */
+	public void setFontColor(short fontColor) {
+		this.fontColor = fontColor;
+	}
+
+	/**
 	 * @return the fontBold
 	 */
 	public boolean isFontBold() {
@@ -97,6 +112,20 @@ public class CellDecorator {
 	 */
 	public void setFontItalic(boolean fontItalic) {
 		this.fontItalic = fontItalic;
+	}
+
+	/**
+	 * @return the fontUnderline
+	 */
+	public byte getFontUnderline() {
+		return fontUnderline;
+	}
+
+	/**
+	 * @param fontUnderline the fontUnderline to set
+	 */
+	public void setFontUnderline(byte fontUnderline) {
+		this.fontUnderline = fontUnderline;
 	}
 
 	/**

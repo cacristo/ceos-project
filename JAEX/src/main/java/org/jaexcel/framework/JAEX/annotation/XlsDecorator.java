@@ -1,7 +1,7 @@
 package org.jaexcel.framework.JAEX.annotation;
 
-import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
@@ -33,6 +33,13 @@ public @interface XlsDecorator {
 	short fontSize() default 10;
 	
 	/**
+	 * Define the font color at the element. By default is 0 ('Black').
+	 * 
+	 * @return
+	 */
+	short fontColor() default 0;
+	
+	/**
 	 * Define if the font is bold or not at the element.
 	 * 
 	 * @return
@@ -45,6 +52,14 @@ public @interface XlsDecorator {
 	 * @return
 	 */
 	boolean fontItalic() default false;
+
+	/**
+	 * Define the font underline at the element. By default is 0.
+	 * (default value equivalent to FontUnderline.NONE.getByteValue())
+	 * 
+	 * @return
+	 */
+	byte fontUnderline() default 0;
 
 	/**
 	 * Define the alignment of the element.
@@ -62,6 +77,7 @@ public @interface XlsDecorator {
 
 	/**
 	 * Define the border of the element.
+	 * (default value equivalent to CellStyle.BORDER_NONE)
 	 * 
 	 * @return
 	 */
@@ -69,6 +85,7 @@ public @interface XlsDecorator {
 
 	/**
 	 * Define the left border of the element.
+	 * (default value equivalent to CellStyle.BORDER_NONE)
 	 * 
 	 * @return
 	 */
@@ -76,6 +93,7 @@ public @interface XlsDecorator {
 
 	/**
 	 * Define the right border of the element.
+	 * (default value equivalent to CellStyle.BORDER_NONE)
 	 * 
 	 * @return
 	 */
@@ -83,6 +101,7 @@ public @interface XlsDecorator {
 
 	/**
 	 * Define the top border of the element.
+	 * (default value equivalent to CellStyle.BORDER_NONE)
 	 * 
 	 * @return
 	 */
@@ -90,6 +109,7 @@ public @interface XlsDecorator {
 
 	/**
 	 * Define the bottom border of the element.
+	 * (default value equivalent to CellStyle.BORDER_NONE)
 	 * 
 	 * @return
 	 */
