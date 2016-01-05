@@ -77,10 +77,18 @@ public class CellStyleUtils {
 	 *            the workbook
 	 * @param cs
 	 *            the cell style
+	 * @param name
+	 *            the font name
+	 * @param size
+	 *            the font size
+	 * @param c
+	 *            the font color
 	 * @param b
 	 *            is bold format
 	 * @param i
 	 *            is italic format
+	 * @param u
+	 *            is underline format
 	 */
 	protected static void applyFont(Workbook wb, CellStyle cs, String name, short size, short c, boolean b, boolean i,
 			byte u) {
