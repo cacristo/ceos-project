@@ -65,4 +65,19 @@ public @interface XlsElement {
 	 * @return the decimal scale to apply
 	 */
 	// FIXME int decimalScale() default 2;
+
+
+	/**
+	 * Define if the cell is a formula
+	 * 
+	 * @return by default is false
+	 */
+	boolean isFormula() default false;
+
+	/**
+	 * Define the formula to apply at the cell.
+	 * 
+	 * @return by default is empty
+	 */
+	String formula() default "";
 }
