@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -43,6 +45,8 @@ import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 public class Engine {
 
 	// TODO manage the decorator configuration
+
+	// TODO manage the internal value of an Enum
 
 	// TODO see the behavior of using only one instance of the JAEX object
 	// inside one project
@@ -83,7 +87,7 @@ public class Engine {
 		cs.setWrapText(true);
 
 		// add the font style to the cell
-		CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, true, true);
+		CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, (short) 0, true, true, FontUnderline.NONE.getByteValue());
 
 		return cs;
 	}
@@ -200,8 +204,8 @@ public class Engine {
 			cs.setWrapText(decorator.isWrapText());
 
 			// add the font style to the cell
-			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.isFontBold(),
-					decorator.isFontItalic());
+			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(), decorator.isFontBold(),
+					decorator.isFontItalic(), decorator.getFontUnderline());
 		} catch (Exception e) {
 			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
 					e);
@@ -239,8 +243,8 @@ public class Engine {
 			cs.setWrapText(decorator.wrapText());
 
 			// add the font style to the cell
-			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontBold(),
-					decorator.fontItalic());
+			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(), decorator.fontBold(),
+					decorator.fontItalic(), decorator.fontUnderline());
 		} catch (Exception e) {
 			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
 					e);
@@ -389,18 +393,6 @@ public class Engine {
 	private Sheet initializeSheet(Workbook wb, String sheetName) {
 		return wb.createSheet(sheetName);
 	}
-
-	/**
-	 * Initialize cell style.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @return the {@link CellStyle}.
-	 */
-	/*
-	 * private CellStyle initializeCellStyle(Workbook wb) { return
-	 * wb.createCellStyle(); }
-	 */
 
 	/**
 	 * Apply merge region if necessary.
@@ -617,20 +609,24 @@ public class Engine {
 	 *            the content row
 	 * @param idxC
 	 *            the position of the cell
-	 * @param xlsAnnotation
+	 * @param element
 	 *            the {@link XlsElement} annotation
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
 	 */
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement xlsAnnotation)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
+	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement element)
+			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, NoSuchMethodException,
+			SecurityException, InvocationTargetException {
 		boolean isUpdated = false;
 
 		// reading mask
-		String tM = xlsAnnotation.transformMask();
-		String fM = xlsAnnotation.formatMask();
+		String tM = element.transformMask();
+		String fM = element.formatMask();
 
 		switch (fT.getName()) {
 
@@ -639,20 +635,18 @@ public class Engine {
 			Cell cDate = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toDate(o, f, wb, cDate,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE)),
-					xlsAnnotation.formatMask(), xlsAnnotation.transformMask(), xlsAnnotation.comment(),
-					configData.getExtensionFile());
+					element.formatMask(), element.transformMask(), element.comment(), configData.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_STRING:
 			Cell cString = r.createCell(idxC);
 
-			isUpdated = CellValueUtils.toString(o, f, wb,
-					cString, (StringUtils.isNotBlank(xlsAnnotation.decorator())
-							? stylesMap.get(xlsAnnotation.decorator()) : null),
-					xlsAnnotation.comment(), configData.getExtensionFile());
+			isUpdated = CellValueUtils.toString(o, f, wb, cString,
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null),
+					element.comment(), configData.getExtensionFile());
 
 			break;
 
@@ -661,11 +655,11 @@ public class Engine {
 			Cell cInteger = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toInteger(o, f, wb, cInteger,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
 							: tM),
-					xlsAnnotation.comment(), configData.getExtensionFile());
+					element, configData.getExtensionFile());
 
 			break;
 
@@ -674,11 +668,11 @@ public class Engine {
 			Cell cLong = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toLong(o, f, wb, cLong,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
 							: tM),
-					xlsAnnotation.comment(), configData.getExtensionFile());
+					element, configData.getExtensionFile());
 
 			break;
 
@@ -688,11 +682,11 @@ public class Engine {
 			Cell cDouble = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toDouble(o, f, wb, cDouble,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					StringUtils.isNotBlank(xlsAnnotation.formatMask()) ? xlsAnnotation.formatMask()
+					StringUtils.isNotBlank(element.formatMask()) ? element.formatMask()
 							: CellStyleUtils.MASK_DECORATOR_DOUBLE,
-					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
+					element.transformMask(), element, configData.getExtensionFile());
 
 			break;
 
@@ -700,11 +694,11 @@ public class Engine {
 			Cell cBigDecimal = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toBigDecimal(o, f, wb, cBigDecimal,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					StringUtils.isEmpty(xlsAnnotation.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
-							: xlsAnnotation.formatMask(),
-					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
+					StringUtils.isEmpty(element.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
+							: element.formatMask(),
+					element.transformMask(), element, configData.getExtensionFile());
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
@@ -713,11 +707,11 @@ public class Engine {
 			Cell cFloat = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toFloat(o, f, wb, cFloat,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DOUBLE : fM)
 							: tM),
-					xlsAnnotation.comment(), configData.getExtensionFile());
+					element, configData.getExtensionFile());
 
 			break;
 
@@ -725,14 +719,23 @@ public class Engine {
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 			Cell cBoolean = r.createCell(idxC);
 			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean,
-					(StringUtils.isNotBlank(xlsAnnotation.decorator()) ? stylesMap.get(xlsAnnotation.decorator())
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
-					xlsAnnotation.transformMask(), xlsAnnotation.comment(), configData.getExtensionFile());
+					element.transformMask(), element.comment(), configData.getExtensionFile());
 			break;
 
 		default:
 			isUpdated = false;
 			break;
+		}
+		
+		if(!isUpdated && fT.isEnum()){
+			Cell cEnum = r.createCell(idxC);
+			
+			isUpdated = CellValueUtils.toEnum(o, f, wb, cEnum,
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_ENUM)),
+					element.comment(), configData.getExtensionFile());
 		}
 
 		return isUpdated;
@@ -755,6 +758,7 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
 		boolean isUpdated = false;
@@ -872,6 +876,11 @@ public class Engine {
 			break;
 		}
 
+		if(!isUpdated && fT.isEnum()){
+			f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
+			isUpdated = true;
+		}
+		
 		return isUpdated;
 	}
 
@@ -1217,6 +1226,10 @@ public class Engine {
 
 		// initialize Workbook
 		wb = initializeWorkbook(config.getExtensionFile());
+
+		// initialize style cell via default option
+		initializeCellDecorator();
+		
 		Row headerRow = null, contentRow = null;
 		Sheet s = null;
 		int idxRow = 0, counter = 0, idxCell = 0;
