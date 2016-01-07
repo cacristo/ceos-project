@@ -1,15 +1,26 @@
 package org.jaexcel.framework.JAEX.engine;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.FormulaParser;
+import org.apache.poi.ss.formula.FormulaRenderer;
+import org.apache.poi.ss.formula.FormulaType;
+import org.apache.poi.ss.formula.ptg.Ptg;
+import org.apache.poi.ss.formula.ptg.RefPtgBase;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
@@ -87,24 +98,32 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toInteger(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String comment, ExtensionFileType eFT) {
+			XlsElement element, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 		try {
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Long) toExplicitFormula(o, f));
+				}
 
-			c.setCellValue((Integer) f.get(o));
+			} else {
+				// normal manage cell
+				c.setCellValue((Integer) f.get(o));
 
-			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			}
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
@@ -129,25 +148,33 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toLong(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String comment, ExtensionFileType eFT) {
+			XlsElement element, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Long) toExplicitFormula(o, f));
+				}
 
-			c.setCellValue((Long) f.get(o));
+			} else {
+				// normal manage cell
+				c.setCellValue((Long) f.get(o));
 
-			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			}
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
@@ -174,14 +201,14 @@ public class CellValueUtils {
 	 *            the decorator mask
 	 * @param transformMask
 	 *            the transformation mask
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toDouble(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask, String comment, ExtensionFileType eFT) {
+			String transformMask, XlsElement element, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
@@ -190,18 +217,27 @@ public class CellValueUtils {
 			// BigDecimal bd = new BigDecimal(d);
 			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-			if (StringUtils.isNotBlank(transformMask)) {
-				DecimalFormat df = new DecimalFormat(transformMask);
-				c.setCellValue(df.format((Double) f.get(o)));
-				CellStyleUtils.applyCellStyle(wb, c, cs);
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Double) toExplicitFormula(o, f));
+				}
+
 			} else {
-				c.setCellValue((Double) f.get(o));
-				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				// normal manage cell
+				if (StringUtils.isNotBlank(transformMask)) {
+					DecimalFormat df = new DecimalFormat(transformMask);
+					c.setCellValue(df.format((Double) f.get(o)));
+					CellStyleUtils.applyCellStyle(wb, c, cs);
+				} else {
+					c.setCellValue((Double) f.get(o));
+					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				}
 			}
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
@@ -228,37 +264,45 @@ public class CellValueUtils {
 	 *            the decorator mask
 	 * @param transformMask
 	 *            the transformation mask
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toBigDecimal(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask, String comment, ExtensionFileType eFT) {
+			String transformMask, XlsElement element, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
-
-			BigDecimal bd = (BigDecimal) f.get(o);
-
-			// FIXME use the comment below to manage decimalScale
-			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-			Double dBigDecimal = bd.doubleValue();
-			if (StringUtils.isNotBlank(transformMask)) {
-				DecimalFormat df = new DecimalFormat(transformMask);
-				c.setCellValue(df.format(dBigDecimal));
-				CellStyleUtils.applyCellStyle(wb, c, cs);
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Double) toExplicitFormula(o, f));
+				}
 
 			} else {
-				c.setCellValue(dBigDecimal);
-				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				// normal manage cell
+				BigDecimal bd = (BigDecimal) f.get(o);
+
+				// FIXME use the comment below to manage decimalScale
+				// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+				Double dBigDecimal = bd.doubleValue();
+				if (StringUtils.isNotBlank(transformMask)) {
+					DecimalFormat df = new DecimalFormat(transformMask);
+					c.setCellValue(df.format(dBigDecimal));
+					CellStyleUtils.applyCellStyle(wb, c, cs);
+
+				} else {
+					c.setCellValue(dBigDecimal);
+					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				}
 			}
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
@@ -360,24 +404,33 @@ public class CellValueUtils {
 	 *            the cell style
 	 * @param formatMask
 	 *            the decorator mask
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
 	protected static boolean toFloat(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String comment, ExtensionFileType eFT) {
+			XlsElement element, ExtensionFileType eFT) {
 		boolean isUpdated = true;
 
 		try {
-			c.setCellValue((Float) f.get(o));
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Double) toExplicitFormula(o, f));
+				}
 
-			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			} else {
+				// normal manage cell
+				c.setCellValue((Float) f.get(o));
 
-			if (StringUtils.isNotBlank(comment)) {
+				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			}
+
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
@@ -439,4 +492,144 @@ public class CellValueUtils {
 		return isUpdated;
 	}
 
+	/**
+	 * 
+	 * Apply a enum value at the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param wb
+	 *            the workbook
+	 * @param c
+	 *            the cell
+	 * @param cs
+	 *            the cell style
+	 * @param comment
+	 *            the comment text
+	 * @param eFT
+	 *            the extension file type
+	 * @return false if problem otherwise true
+	 */
+	protected static boolean toEnum(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String comment,
+			ExtensionFileType eFT) {
+		boolean isUpdated = true;
+
+		try {
+
+			@SuppressWarnings("rawtypes")
+			Class[] argTypes = {};
+
+			String method = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+
+			Method m = o.getClass().getDeclaredMethod(method, argTypes);
+
+			Object objEnum = m.invoke(o, (Object[]) null);
+
+			if (objEnum != null) {
+				// apply the enum value
+				c.setCellValue((String) objEnum.toString());
+			}
+
+			CellStyleUtils.applyCellStyle(wb, c, cs);
+
+			if (StringUtils.isNotBlank(comment)) {
+				// apply the comment
+				CellStyleUtils.applyComment(wb, c, comment, eFT);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			isUpdated = false;
+		}
+		return isUpdated;
+	}
+
+	/**
+	 * Apply a formula value at the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param c
+	 *            the cell
+	 * @param element
+	 *            the {@link XlsElement} annotation
+	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static boolean toFormula(Object o, Field f, Cell c, XlsElement element)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		boolean isFormulaApplied = false;
+
+		if (StringUtils.isNotBlank(element.formula())) {
+			if (element.formula().contains("idx")) {
+				c.setCellFormula(element.formula().replace("idx", String.valueOf(c.getRowIndex() + 1)));
+				isFormulaApplied = true;
+
+			} else if (element.formula().contains("idy")) {
+				c.setCellFormula(element.formula().replace("idy",
+						String.valueOf(CellReference.convertNumToColString(c.getColumnIndex()))));
+				isFormulaApplied = true;
+
+			} else {
+				c.setCellFormula(element.formula());
+				isFormulaApplied = true;
+			}
+		}
+
+		return isFormulaApplied;
+	}
+
+	/**
+	 * Apply a explicit formula value at the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static Object toExplicitFormula(Object o, Field f)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		@SuppressWarnings("rawtypes")
+		Class[] argTypes = {};
+
+		String method = "formula" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+
+		Method m = o.getClass().getDeclaredMethod(method, argTypes);
+
+		return m.invoke(o, (Object[]) null);
+	}
+
+	// TODO : to review
+	// source :
+	// http://stackoverflow.com/questions/1636759/poi-excel-applying-formulas-in-a-relative-way
+	protected void aab(Workbook workbook, Cell cell) {
+		String formula = cell.getCellFormula();
+		XSSFEvaluationWorkbook workbookWrapper = XSSFEvaluationWorkbook.create((XSSFWorkbook) workbook);
+		/* parse formula */
+		Ptg[] ptgs = FormulaParser.parse(formula, workbookWrapper, FormulaType.CELL,
+				0 /* sheet index */ );
+
+		/* re-calculate cell references */
+		for (Ptg ptg : ptgs)
+			if (ptg instanceof RefPtgBase) // base class for cell reference
+											// "things"
+			{
+				RefPtgBase ref = (RefPtgBase) ptg;
+				if (ref.isColRelative())
+					ref.setColumn(ref.getColumn() + 0);
+				if (ref.isRowRelative())
+					ref.setRow(ref.getRow() + 1);
+			}
+
+		formula = FormulaRenderer.toFormulaString(workbookWrapper, ptgs);
+		cell.setCellFormula(formula);
+	}
 }
