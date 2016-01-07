@@ -24,6 +24,7 @@ public class CellStyleUtils {
 	// cell decorator constants
 	public static final String CELL_DECORATOR_DATE = "date";
 	public static final String CELL_DECORATOR_BOOLEAN = "boolean";
+	public static final String CELL_DECORATOR_ENUM = "boolean";
 	public static final String CELL_DECORATOR_NUMERIC = "numeric";
 	public static final String CELL_DECORATOR_HEADER = "header";
 	// default mask decorators
