@@ -235,8 +235,17 @@ public class ObjectsBuilderTest {
 		@XlsElement(title = "String value", position = 2)
 		private String stringAttribute;
 
-		@XlsElement(title = "Integer value", position = 3, decorator = "0.0")
+		@XlsElement(title = "Integer value", position = 3, decorator = "extendedIntDecorator")
 		private Integer integerAttribute = 0;
+
+		@XlsElement(title = "Double value 1", position = 4, formatMask = "0.000")
+		private Double doubleAttribute1 = 111.17;
+
+		@XlsElement(title = "Double value 2", position = 5, transformMask = "0.0")
+		private Double doubleAttribute2 = 97.77;
+
+		@XlsElement(title = "Sum double 1 & double 2", position = 6, isFormula = true, formula = "SUM(E3,F3)")
+		private Double sum;
 
 		public Cyclops() {
 		}
@@ -285,6 +294,51 @@ public class ObjectsBuilderTest {
 		public void setIntegerAttribute(Integer integerAttribute) {
 			this.integerAttribute = integerAttribute;
 		}
+
+		/**
+		 * @return the doubleAttribute1
+		 */
+		public Double getDoubleAttribute1() {
+			return doubleAttribute1;
+		}
+
+		/**
+		 * @param doubleAttribute1
+		 *            the doubleAttribute1 to set
+		 */
+		public void setDoubleAttribute1(Double doubleAttribute1) {
+			this.doubleAttribute1 = doubleAttribute1;
+		}
+
+		/**
+		 * @return the doubleAttribute2
+		 */
+		public Double getDoubleAttribute2() {
+			return doubleAttribute2;
+		}
+
+		/**
+		 * @param doubleAttribute2
+		 *            the doubleAttribute2 to set
+		 */
+		public void setDoubleAttribute2(Double doubleAttribute2) {
+			this.doubleAttribute2 = doubleAttribute2;
+		}
+
+		/**
+		 * @return the sum
+		 */
+		public Double getSum() {
+			return sum;
+		}
+
+		/**
+		 * @param sum
+		 *            the sum to set
+		 */
+		public void setSum(Double sum) {
+			this.sum = sum;
+		}
 	}
 
 	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL)
@@ -332,13 +386,13 @@ public class ObjectsBuilderTest {
 
 	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL)
 	public class Wolverine {
-		
+
 		@XlsMasterHeader(title = "Job details", startX = 1, endX = 3)
 		@XlsElement(title = "job", position = 1)
 		private Job job;
-		
-		Wolverine(){
-			
+
+		Wolverine() {
+
 		}
 
 		/**
@@ -349,12 +403,13 @@ public class ObjectsBuilderTest {
 		}
 
 		/**
-		 * @param job the job to set
+		 * @param job
+		 *            the job to set
 		 */
 		public void setJob(Job job) {
 			this.job = job;
 		}
-		
+
 	}
 
 	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_LEVEL_TWO)
