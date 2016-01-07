@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.bean.AddressInfo;
 import org.jaexcel.framework.JAEX.bean.Job;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
+import org.jaexcel.framework.JAEX.bean.UnitFamily;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
 
@@ -112,6 +113,8 @@ public class MultiTypeObjectTest extends TestCase {
 
 		assertEquals(14.765f, mto.getFloatAttribute());
 		assertEquals(11.1125f, mto.getFloatPrimitiveAttribute());
+
+		assertEquals(UnitFamily.COMPONENTS, mto.getUnitFamily());
 	}
 
 	/**
@@ -149,6 +152,9 @@ public class MultiTypeObjectTest extends TestCase {
 
 		mto.setFloatAttribute(14.765f);
 		mto.setFloatPrimitiveAttribute(11.1125f);
+		
+		mto.setUnitFamily(UnitFamily.COMPONENTS);
+		
 		return mto;
 	}
 

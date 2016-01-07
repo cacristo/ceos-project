@@ -10,7 +10,7 @@ public class Job {
 	@XlsElement(title = "Code", position = 2)
 	private int jobCode;
 
-	@XlsElement(title = "Family", position = 3)
+	@XlsElement(title = "Family", position = 3, comment="Family comment")
 	private String jobFamily;
 	
 	public Job() {

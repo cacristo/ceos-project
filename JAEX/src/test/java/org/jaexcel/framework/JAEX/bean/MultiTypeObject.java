@@ -8,7 +8,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 
-@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_VERTICAL)
+@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_HORIZONTAL)
 @XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 
@@ -27,7 +27,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Long value", position = 5)
 	private Long longAttribute = 0L;
 
-	@XlsElement(title = "Boolean value", position = 6)
+	@XlsElement(title = "Boolean value", position = 6, comment="boolean comment")
 	private Boolean booleanAttribute = Boolean.TRUE;
 
 	@XlsElement(title = "job", position = 7)
@@ -36,7 +36,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive int value", position = 8)
 	private int integerPrimitiveAttribute = 0;
 
-	@XlsElement(title = "Primitive double value", position = 9)
+	@XlsElement(title = "Primitive double value", position = 9, comment="double comment")
 	private double doublePrimitiveAttribute = 0;
 
 	@XlsElement(title = "Primitive long value", position = 10)
@@ -54,6 +54,12 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive float value", position = 14)
 	private float floatPrimitiveAttribute = 0f;
 
+	@XlsElement(title="some sum", position = 15, isFormula = true)
+	private Double sumVal;
+	
+	@XlsElement(title = "Unit family", position = 16)
+	private UnitFamily unitFamily;
+	
 	public MultiTypeObject() {
 	}
 
@@ -265,5 +271,40 @@ public class MultiTypeObject {
 	 */
 	public void setFloatPrimitiveAttribute(float floatPrimitiveAttribute) {
 		this.floatPrimitiveAttribute = floatPrimitiveAttribute;
+	}
+
+	/**
+	 * @return the sumVal
+	 */
+	public Double getSumVal() {
+		return sumVal;
+	}
+
+	/**
+	 * @return the sumVal
+	 */
+	public Double formulaSumVal() {
+		return doubleAttribute + doubleAttribute * 5;
+	}
+	
+	/**
+	 * @param sumVal the sumVal to set
+	 */
+	public void setSumVal(Double sumVal) {
+		this.sumVal = sumVal;
+	}
+
+	/**
+	 * @return the unitFamily
+	 */
+	public UnitFamily getUnitFamily() {
+		return unitFamily;
+	}
+
+	/**
+	 * @param unitFamily the unitFamily to set
+	 */
+	public void setUnitFamily(UnitFamily unitFamily) {
+		this.unitFamily = unitFamily;
 	}
 }
