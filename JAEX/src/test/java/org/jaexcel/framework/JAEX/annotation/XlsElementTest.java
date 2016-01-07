@@ -46,6 +46,10 @@ public class XlsElementTest extends TestCase {
 
 				assertEquals(xlsElement.comment(), "");
 				assertEquals(xlsElement.decorator(), "");
+				assertEquals(xlsElement.formatMask(), "");
+				assertEquals(xlsElement.transformMask(), "");
+				assertEquals(xlsElement.isFormula(), false);
+				assertEquals(xlsElement.formula(), "");
 			}
 		}
 	}
@@ -64,16 +68,25 @@ public class XlsElementTest extends TestCase {
 				Annotation annotation = f.getAnnotation(XlsElement.class);
 				XlsElement xlsElement = (XlsElement) annotation;
 
-				if(f.getName().equals("dateAttribute")){
+				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsElement.title(), "Date value");
-				}
-				if(f.getName().equals("stringAttribute")){
+					
+				} else if (f.getName().equals("stringAttribute")) {
 					assertEquals(xlsElement.title(), "String value");
-				}
-				if(f.getName().equals("integerAttribute")){
+					
+				} else if (f.getName().equals("integerAttribute")) {
 					assertEquals(xlsElement.title(), "Integer value");
+					
+				} else if (f.getName().equals("doubleAttribute1")) {
+					assertEquals(xlsElement.title(), "Double value 1");
+					
+				} else if (f.getName().equals("doubleAttribute2")) {
+					assertEquals(xlsElement.title(), "Double value 2");
+					
+				} else if (f.getName().equals("sum")) {
+					assertEquals(xlsElement.title(), "Sum double 1 & double 2");
+					
 				}
-
 			}
 		}
 	}
@@ -92,7 +105,7 @@ public class XlsElementTest extends TestCase {
 				Annotation annotation = f.getAnnotation(XlsElement.class);
 				XlsElement xlsElement = (XlsElement) annotation;
 
-				if(StringUtils.isNotBlank(xlsElement.comment())){
+				if (StringUtils.isNotBlank(xlsElement.comment())) {
 					assertEquals(xlsElement.comment(), "This is a comment");
 				}
 			}
@@ -113,8 +126,71 @@ public class XlsElementTest extends TestCase {
 				Annotation annotation = f.getAnnotation(XlsElement.class);
 				XlsElement xlsElement = (XlsElement) annotation;
 
-				if(StringUtils.isNotBlank(xlsElement.decorator())){
-					assertEquals(xlsElement.decorator(), "0.0");
+				if (StringUtils.isNotBlank(xlsElement.decorator())) {
+					assertEquals(xlsElement.decorator(), "extendedIntDecorator");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Test formatMask attribute.
+	 */
+	public void testFormatMaskAttribute() {
+		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsElement
+			if (f.isAnnotationPresent(XlsElement.class)) {
+
+				Annotation annotation = f.getAnnotation(XlsElement.class);
+				XlsElement xlsElement = (XlsElement) annotation;
+
+				if (StringUtils.isNotBlank(xlsElement.formatMask())) {
+					assertEquals(xlsElement.formatMask(), "0.000");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Test transformMask attribute.
+	 */
+	public void testTransformMaskAttribute() {
+		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsElement
+			if (f.isAnnotationPresent(XlsElement.class)) {
+
+				Annotation annotation = f.getAnnotation(XlsElement.class);
+				XlsElement xlsElement = (XlsElement) annotation;
+
+				if (StringUtils.isNotBlank(xlsElement.transformMask())) {
+					assertEquals(xlsElement.transformMask(), "0.0");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Test isFormula & formula attribute.
+	 */
+	public void testFormulaAttribute() {
+		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsElement
+			if (f.isAnnotationPresent(XlsElement.class)) {
+
+				Annotation annotation = f.getAnnotation(XlsElement.class);
+				XlsElement xlsElement = (XlsElement) annotation;
+
+				if (xlsElement.isFormula()) {
+					assertEquals(xlsElement.formula(), "SUM(E3,F3)");
 				}
 			}
 		}
