@@ -16,6 +16,7 @@ import org.jaexcel.framework.JAEX.bean.AddressInfo;
 import org.jaexcel.framework.JAEX.bean.Job;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.SimpleObject;
+import org.jaexcel.framework.JAEX.bean.UnitFamily;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
@@ -167,7 +168,7 @@ public class CollectionMultiExcelTest extends TestCase {
 		configuration.setBorderTop(CellStyle.BORDER_THIN);
 		configuration.setBorderBottom(CellStyle.BORDER_THIN);
 		
-		configuration.setBackgroundColor(HSSFColor.DARK_RED.index);
+		configuration.setForegroundColor(HSSFColor.DARK_RED.index);
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
@@ -315,6 +316,9 @@ public class CollectionMultiExcelTest extends TestCase {
 		ai.setCityCode(70065);
 		ai.setCountry("This is a Country");
 		mto.setAddressInfo(ai);
+		
+		mto.setUnitFamily(UnitFamily.NETWORK);
+		
 		return mto;
 	}
 }
