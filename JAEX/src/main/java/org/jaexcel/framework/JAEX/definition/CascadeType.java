@@ -8,8 +8,8 @@ package org.jaexcel.framework.JAEX.definition;
  * {@value = CascadeType.CASCADE_LEVEL_TWO } Will propagate the writing at level two at any collection of the child objects. <br>
  * {@value = CascadeType.CASCADE_FULL } Will propagate the writing fully as objects exists at any collection. <br>
  * 
- * @author cacristo
- *
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
  */
 public enum CascadeType {
 

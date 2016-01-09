@@ -12,7 +12,8 @@ import org.jaexcel.framework.JAEX.definition.PropagationType;
 /**
  * Annotation responsible to manage the basic Sheet configuration.
  * 
- * @author CristoAbreu
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
  */
 @Target(TYPE)
 @Retention(RUNTIME)
@@ -28,30 +29,34 @@ public @interface XlsSheet {
 	String title();
 
 	/**
-	 * Define the row start position.
+	 * Define the row start position.<br>
+	 * By default is 1.
 	 * 
-	 * @return by default is 1.
+	 * @return the initial row position
 	 */
 	int startRow() default 1;
 
 	/**
-	 * Define the cell start position.
+	 * Define the cell start position.<br>
+	 * By default is 1.
 	 * 
-	 * @return by default is 1.
+	 * @return the initial cell position
 	 */
 	int startCell() default 1;
 
 	/**
-	 * Define the propagation type when writing/reading at the Excel.
+	 * Define the propagation type when writing/reading at the Excel.<br>
+	 * By default is PROPAGATION_HORIZONTAL.
 	 * 
-	 * @return the {@link PropagationType}, by default is PROPAGATION_HORIZONTAL
+	 * @return the {@link PropagationType}
 	 */
 	PropagationType propagation() default PropagationType.PROPAGATION_HORIZONTAL;
 
 	/**
-	 * Define the cascade level.
+	 * Define the cascade level.<br>
+	 * By default is CASCADE_BASE.
 	 * 
-	 * @return the {@link CascadeType}, by default is CASCADE_BASE
+	 * @return the {@link CascadeType}
 	 */
 	CascadeType cascadeLevel() default CascadeType.CASCADE_BASE;
 }

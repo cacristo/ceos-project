@@ -9,24 +9,28 @@ import java.lang.annotation.Target;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 
 /**
+ * This annotation define all the attributes related to the Excel definitions.
+ * <br>
  * 
- * @author CristoAbreu
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
  */
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface XlsConfiguration {
 
 	/**
-	 * Define the file name.
+	 * Define the file name of the Excel.
 	 * 
 	 * @return the name of the file
 	 */
 	String nameFile();
-	
+
 	/**
-	 * Define the extension file.
+	 * Define the Excel extension file.<br>
+	 * By default is {@value = ExtensionFileType.XLS}.
 	 * 
-	 * @return the {@link ExtensionFileType}, by default is XLS
+	 * @return the {@link ExtensionFileType}
 	 */
 	ExtensionFileType extensionFile() default ExtensionFileType.XLS;
 }

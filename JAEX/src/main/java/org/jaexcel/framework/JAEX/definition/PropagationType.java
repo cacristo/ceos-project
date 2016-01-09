@@ -3,11 +3,11 @@ package org.jaexcel.framework.JAEX.definition;
 /**
  * This will define the propagation type when writing to the Excel. <br>
  * 
- * {@value = PropagationType.PROPAGATION_HORIZONTAL } Will propagate horizontally all the elements <br>
- * {@value = PropagationType.PROPAGATION_VERTICAL } Will propagate vertically all the elements <br>
+ * {@value = PropagationType.PROPAGATION_HORIZONTAL } Will propagate horizontally all the elements. <br>
+ * {@value = PropagationType.PROPAGATION_VERTICAL } Will propagate vertically all the elements. <br>
  * 
- * @author cacristo
- *
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
  */
 public enum PropagationType {
 
