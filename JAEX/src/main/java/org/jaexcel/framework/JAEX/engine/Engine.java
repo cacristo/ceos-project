@@ -1,5 +1,8 @@
 package org.jaexcel.framework.JAEX.engine;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,34 +37,22 @@ import org.jaexcel.framework.JAEX.annotation.XlsDecorators;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
-import org.jaexcel.framework.JAEX.configuration.ConfigurationData;
+import org.jaexcel.framework.JAEX.configuration.Configuration;
+import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.exception.JAEXConfigurationException;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
+import org.jaexcel.framework.JAEX.exception.JAEXElementException;
 
-public class Engine {
-
-	// TODO manage the decorator configuration
-
-	// TODO manage the internal value of an Enum
-
-	// TODO see the behavior of using only one instance of the JAEX object
-	// inside one project
-
-	// TODO fix numeric code like 00005 parsed to excel will maintain the same
-	// code to do it you just have to add '00005
+public class Engine implements IEngine {
 
 	Workbook wb;
-	ConfigurationData configData;
+	Configuration configuration;
 	CellDecorator headerDecorator;
 	Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
 	Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
-
-	public Engine() {
-		// initializeDefaultCellDecorator();
-	}
 
 	/**
 	 * Initialize default Header Cell Decorator.
@@ -72,21 +62,21 @@ public class Engine {
 	private CellStyle initializeHeaderCellDecorator() {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
-		// add the alignment to the cell
+		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
 
-		// add the border to the cell
+		/* add the border to the cell */
 		CellStyleUtils.applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN,
 				CellStyle.BORDER_THIN);
 
-		// add the background to the cell
+		/* add the background to the cell */
 		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
 		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
-		// add the wrap mode to the cell
+		/* add the wrap mode to the cell */
 		cs.setWrapText(true);
 
-		// add the font style to the cell
+		/* add the font style to the cell */
 		CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, (short) 0, true, true, FontUnderline.NONE.getByteValue());
 
 		return cs;
@@ -100,8 +90,8 @@ public class Engine {
 	private CellStyle initializeNumericCellDecorator() {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
-		// add the alignment to the cell
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT, (short) 0);
+		/* add the alignment to the cell */
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
 
 		return cs;
 	}
@@ -114,8 +104,8 @@ public class Engine {
 	private CellStyle initializeDateCellDecorator() {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
-		// add the alignment to the cell
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
+		/* add the alignment to the cell */
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
 
 		return cs;
 	}
@@ -128,8 +118,8 @@ public class Engine {
 	private CellStyle initializeBooleanCellDecorator() {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
-		// add the alignment to the cell
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, (short) 0);
+		/* add the alignment to the cell */
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
 
 		return cs;
 	}
@@ -188,24 +178,24 @@ public class Engine {
 	private CellStyle initializeCellStyleByCellDecorator(CellDecorator decorator) throws JAEXConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
-			// add the alignment to the cell
+			/* add the alignment to the cell */
 			CellStyleUtils.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
 
-			// add the border to the cell
+			/* add the border to the cell */
 			borderPropagationManagement(decorator);
 			CellStyleUtils.applyBorder(cs, decorator.getBorderLeft(), decorator.getBorderRight(),
 					decorator.getBorderTop(), decorator.getBorderBottom());
 
-			// add the background to the cell
+			/* add the background to the cell */
 			cs.setFillForegroundColor(decorator.getForegroundColor());
 			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
-			// add the wrap mode to the cell
+			/* add the wrap mode to the cell */
 			cs.setWrapText(decorator.isWrapText());
 
-			// add the font style to the cell
-			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(), decorator.isFontBold(),
-					decorator.isFontItalic(), decorator.getFontUnderline());
+			/* add the font style to the cell */
+			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
+					decorator.isFontBold(), decorator.isFontItalic(), decorator.getFontUnderline());
 		} catch (Exception e) {
 			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
 					e);
@@ -222,10 +212,10 @@ public class Engine {
 	private CellStyle initializeCellStyleByXlsDecorator(XlsDecorator decorator) throws JAEXConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
-			// add the alignment to the cell
+			/* add the alignment to the cell */
 			CellStyleUtils.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
 
-			// add the border to the cell
+			/* add the border to the cell */
 			if (decorator.border() != 0 && decorator.borderLeft() == 0 && decorator.borderRight() == 0
 					&& decorator.borderTop() == 0 && decorator.borderBottom() == 0) {
 				CellStyleUtils.applyBorder(cs, decorator.border(), decorator.border(), decorator.border(),
@@ -235,16 +225,16 @@ public class Engine {
 						decorator.borderBottom());
 			}
 
-			// add the background to the cell
+			/* add the background to the cell */
 			cs.setFillForegroundColor(decorator.foregroundColor());
 			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 
-			// add the wrap mode to the cell
+			/* add the wrap mode to the cell */
 			cs.setWrapText(decorator.wrapText());
 
-			// add the font style to the cell
-			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(), decorator.fontBold(),
-					decorator.fontItalic(), decorator.fontUnderline());
+			/* add the font style to the cell */
+			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
+					decorator.fontBold(), decorator.fontItalic(), decorator.fontUnderline());
 		} catch (Exception e) {
 			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
 					e);
@@ -260,10 +250,10 @@ public class Engine {
 	 *            the cell decorator
 	 */
 	private void borderPropagationManagement(CellDecorator decorator) {
-		// if specific border not configured
+		/* if specific border not configured */
 		if (decorator.getBorder() != 0 && decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0
 				&& decorator.getBorderTop() == 0 && decorator.getBorderBottom() == 0) {
-			// propagate generic border configuration to specific border
+			/* propagate generic border configuration to specific border */
 			decorator.setBorderLeft(decorator.getBorder());
 			decorator.setBorderRight(decorator.getBorder());
 			decorator.setBorderTop(decorator.getBorder());
@@ -272,38 +262,46 @@ public class Engine {
 	}
 
 	/**
-	 * Set the Header Cell Decorator.
+	 * Force the header cell decorator.
 	 * 
 	 * @param decorator
+	 *            the {@link CellDecorator} to apply
 	 */
-	public void setHeaderCellDecorator(CellDecorator decorator) {
+	@Override
+	public void overrideHeaderCellDecorator(CellDecorator decorator) {
 		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_HEADER, decorator);
 	}
 
 	/**
-	 * Set the Numeric Cell Decorator.
+	 * Force the numeric cell decorator.
 	 * 
 	 * @param decorator
+	 *            the {@link CellDecorator} to apply
 	 */
-	public void setNumericCellDecorator(CellDecorator decorator) {
+	@Override
+	public void overrideNumericCellDecorator(CellDecorator decorator) {
 		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC, decorator);
 	}
 
 	/**
-	 * Set the Boolean Cell Decorator.
+	 * Force the boolean cell decorator.
 	 * 
 	 * @param decorator
+	 *            the {@link CellDecorator} to apply
 	 */
-	public void setBooleanCellDecorator(CellDecorator decorator) {
+	@Override
+	public void overrideBooleanCellDecorator(CellDecorator decorator) {
 		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN, decorator);
 	}
 
 	/**
-	 * Set the Date Cell Decorator.
+	 * Force the date cell decorator.
 	 * 
 	 * @param decorator
+	 *            the {@link CellDecorator} to apply
 	 */
-	public void setDateCellDecorator(CellDecorator decorator) {
+	@Override
+	public void overrideDateCellDecorator(CellDecorator decorator) {
 		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_DATE, decorator);
 	}
 
@@ -315,8 +313,72 @@ public class Engine {
 	 * @param decorator
 	 *            the cell decorator
 	 */
+	@Override
 	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
 		cellDecoratorMap.put(decoratorName, decorator);
+	}
+
+	/**
+	 * Force the propagation type to apply at the Sheet.
+	 * 
+	 * @param type
+	 *            the {@link CascadeType} to apply
+	 */
+	public void overridePropagationType(PropagationType type) {
+		configuration.setPropagationType(type);
+	}
+
+	/**
+	 * Force the cascade level to apply at the Sheet.
+	 * 
+	 * @param type
+	 *            the {@link CascadeType} to apply
+	 */
+	public void overrideCascadeLevel(CascadeType type) {
+		configuration.setCascadeLevel(type);
+	}
+
+	/**
+	 * Get the runtime class of the object passed as parameter.
+	 * 
+	 * @param object
+	 *            the object
+	 * @return the runtime class
+	 * @throws JAEXElementException
+	 */
+	private Class<?> initializeRuntimeClass(Object object) throws JAEXElementException {
+		Class<?> oC = null;
+		try {
+			/* instance object class */
+			oC = object.getClass();
+		} catch (Exception e) {
+			throw new JAEXElementException(JAEXExceptionMessage.JAEXElementException_NullObject.getMessage(), e);
+		}
+		return oC;
+	}
+
+	/**
+	 * Initialize the configuration to apply at the Excel.
+	 * 
+	 * @param oC
+	 *            the {@link Class<?>}
+	 * @return
+	 */
+	private Configuration initializeConfigurationData(Class<?> oC) {
+		Configuration config = null;
+
+		/* Process @XlsConfiguration */
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
+			config = initializeConfiguration(xlsAnnotation);
+		}
+
+		/* Process @XlsSheet */
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			config = initializeSheetConfiguration(xlsAnnotation);
+		}
+		return config;
 	}
 
 	/**
@@ -325,14 +387,14 @@ public class Engine {
 	 * @param config
 	 * @return
 	 */
-	private ConfigurationData initializeConfiguration(XlsConfiguration config) {
-		if (configData == null) {
-			configData = new ConfigurationData();
+	private Configuration initializeConfiguration(XlsConfiguration config) {
+		if (configuration == null) {
+			configuration = new Configuration();
 		}
-		configData.setName(config.nameFile());
-		configData.setNameFile(config.nameFile() + config.extensionFile().getExtension());
-		configData.setExtensionFile(config.extensionFile());
-		return configData;
+		configuration.setName(config.nameFile());
+		configuration.setNameFile(config.nameFile() + config.extensionFile().getExtension());
+		configuration.setExtensionFile(config.extensionFile());
+		return configuration;
 	}
 
 	/**
@@ -341,15 +403,15 @@ public class Engine {
 	 * @param config
 	 * @return
 	 */
-	private ConfigurationData initializeSheetConfiguration(XlsSheet config) {
-		if (configData == null) {
-			configData = new ConfigurationData();
+	private Configuration initializeSheetConfiguration(XlsSheet config) {
+		if (configuration == null) {
+			configuration = new Configuration();
 		}
-		configData.setTitleSheet(config.title());
-		configData.setPropagationType(config.propagation());
-		configData.setStartRow(config.startRow());
-		configData.setStartCell(config.startCell());
-		return configData;
+		configuration.setTitleSheet(config.title());
+		configuration.setPropagationType(config.propagation());
+		configuration.setStartRow(config.startRow());
+		configuration.setStartCell(config.startCell());
+		return configuration;
 	}
 
 	/**
@@ -368,8 +430,10 @@ public class Engine {
 	}
 
 	/**
-	 * Initialize Workbook.
+	 * Initialize Workbook from FileInputStream.
 	 * 
+	 * @param inputStream
+	 *            the file input stream
 	 * @param type
 	 *            the type of workbook
 	 * @return the {@link Workbook}.
@@ -380,6 +444,24 @@ public class Engine {
 			return new HSSFWorkbook(inputStream);
 		} else {
 			return new XSSFWorkbook(inputStream);
+		}
+	}
+
+	/**
+	 * Initialize Workbook from byte[].
+	 * 
+	 * @param byteArray
+	 *            the array of bytes
+	 * @param type
+	 *            the type of workbook
+	 * @return the {@link Workbook}.
+	 * @throws IOException
+	 */
+	private Workbook initializeWorkbook(byte[] byteArray, ExtensionFileType type) throws IOException {
+		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+			return new HSSFWorkbook(new ByteArrayInputStream(byteArray));
+		} else {
+			return new XSSFWorkbook(new ByteArrayInputStream(byteArray));
 		}
 	}
 
@@ -412,18 +494,18 @@ public class Engine {
 	 *            vertically
 	 */
 	private void applyMergeRegion(Sheet s, Row r, int idxR, int idxC, Field f, boolean isPH) throws Exception {
-		// Process @XlsMasterHeader
+		/* Process @XlsMasterHeader */
 		if (f.isAnnotationPresent(XlsMasterHeader.class)) {
 			XlsMasterHeader annotation = (XlsMasterHeader) f.getAnnotation(XlsMasterHeader.class);
-			// if row null is necessary to create it
+			/* if row null is necessary to create it */
 			if (r == null) {
 				r = initializeRow(s, idxR);
 			}
 
-			// validation of configuration
+			/* validation of configuration */
 			isValidMasterHeaderConfiguration(isPH, annotation);
 
-			// prepare position rows / cells
+			/* prepare position rows / cells */
 			int startRow, endRow, startCell, endCell;
 			if (isPH) {
 				startRow = endRow = idxR;
@@ -435,10 +517,10 @@ public class Engine {
 				startCell = endCell = idxC;
 			}
 
-			// initialize master header cell
+			/* initialize master header cell */
 			initializeHeaderCell(r, startCell, annotation.title());
 
-			// merge region of the master header cell
+			/* merge region of the master header cell */
 			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
 		}
 	}
@@ -527,7 +609,7 @@ public class Engine {
 	private int initializeCellByField(Sheet s, Row headerRow, Row contentRow, int idxR, int idxC, int cL, Object o,
 			Field f, XlsElement xlsAnnotation) throws Exception {
 
-		// make the field accessible to recover the value
+		/* make the field accessible to recover the value */
 		f.setAccessible(true);
 
 		int counter = 0;
@@ -538,7 +620,7 @@ public class Engine {
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
-			// manage null objects
+			/* manage null objects */
 			if (nO == null) {
 				nO = fT.newInstance();
 			}
@@ -575,7 +657,7 @@ public class Engine {
 	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC, int cL, Object o, Field f,
 			XlsElement xlsAnnotation) throws Exception {
 
-		// make the field accessible to recover the value
+		/* make the field accessible to recover the value */
 		f.setAccessible(true);
 
 		int counter = 0;
@@ -586,7 +668,7 @@ public class Engine {
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
-			// manage null objects
+			/* manage null objects */
 			if (nO == null) {
 				nO = fT.newInstance();
 			}
@@ -622,14 +704,13 @@ public class Engine {
 	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement element)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, NoSuchMethodException,
 			SecurityException, InvocationTargetException {
+		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
-
-		// reading mask
+		/* reading mask */
 		String tM = element.transformMask();
 		String fM = element.formatMask();
 
 		switch (fT.getName()) {
-
 		case CellValueUtils.OBJECT_DATE:
 
 			Cell cDate = r.createCell(idxC);
@@ -637,7 +718,7 @@ public class Engine {
 			isUpdated = CellValueUtils.toDate(o, f, wb, cDate,
 					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE)),
-					element.formatMask(), element.transformMask(), element.comment(), configData.getExtensionFile());
+					element.formatMask(), element.transformMask(), element.comment(), configuration.getExtensionFile());
 
 			break;
 
@@ -646,11 +727,12 @@ public class Engine {
 
 			isUpdated = CellValueUtils.toString(o, f, wb, cString,
 					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null),
-					element.comment(), configData.getExtensionFile());
+					element.comment(), configuration.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_INTEGER:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
 			Cell cInteger = r.createCell(idxC);
 
@@ -659,11 +741,12 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
 							: tM),
-					element, configData.getExtensionFile());
+					element, configuration.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_LONG:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
 			Cell cLong = r.createCell(idxC);
 
@@ -672,11 +755,12 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
 							: tM),
-					element, configData.getExtensionFile());
+					element, configuration.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_DOUBLE:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
 
 			Cell cDouble = r.createCell(idxC);
@@ -686,7 +770,7 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					StringUtils.isNotBlank(element.formatMask()) ? element.formatMask()
 							: CellStyleUtils.MASK_DECORATOR_DOUBLE,
-					element.transformMask(), element, configData.getExtensionFile());
+					element.transformMask(), element, configuration.getExtensionFile());
 
 			break;
 
@@ -698,10 +782,11 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					StringUtils.isEmpty(element.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
 							: element.formatMask(),
-					element.transformMask(), element, configData.getExtensionFile());
+					element.transformMask(), element, configuration.getExtensionFile());
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
 
 			Cell cFloat = r.createCell(idxC);
@@ -711,31 +796,32 @@ public class Engine {
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
 					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DOUBLE : fM)
 							: tM),
-					element, configData.getExtensionFile());
+					element, configuration.getExtensionFile());
 
 			break;
 
 		case CellValueUtils.OBJECT_BOOLEAN:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 			Cell cBoolean = r.createCell(idxC);
 			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean,
 					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
-					element.transformMask(), element.comment(), configData.getExtensionFile());
+					element.transformMask(), element.comment(), configuration.getExtensionFile());
 			break;
 
 		default:
 			isUpdated = false;
 			break;
 		}
-		
-		if(!isUpdated && fT.isEnum()){
+
+		if (!isUpdated && fT.isEnum()) {
 			Cell cEnum = r.createCell(idxC);
-			
+
 			isUpdated = CellValueUtils.toEnum(o, f, wb, cEnum,
 					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
 							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_ENUM)),
-					element.comment(), configData.getExtensionFile());
+					element.comment(), configuration.getExtensionFile());
 		}
 
 		return isUpdated;
@@ -761,12 +847,12 @@ public class Engine {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
+		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 
 		f.setAccessible(true);
 
 		switch (fT.getName()) {
-
 		case CellValueUtils.OBJECT_DATE:
 
 			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
@@ -785,43 +871,48 @@ public class Engine {
 						Date dateConverted = dt.parse(date);
 						f.set(o, dateConverted);
 					} catch (ParseException e) {
-						// if date decorator do not match with a valid mask
-						// launch exception
+						/*
+						 * if date decorator do not match with a valid mask
+						 * launch exception
+						 */
 						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
 								e);
 					}
 				}
 			}
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_STRING:
 
 			f.set(o, c.getStringCellValue());
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_INTEGER:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
 
 			int intValue = ((Double) c.getNumericCellValue()).intValue();
 			f.set(o, intValue);
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_LONG:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
 
 			Long longValue = ((Double) c.getNumericCellValue()).longValue();
 			f.set(o, longValue);
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_DOUBLE:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
 
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
@@ -829,8 +920,8 @@ public class Engine {
 			} else {
 				f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
 			}
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
@@ -840,35 +931,37 @@ public class Engine {
 			} else {
 				f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
 			}
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
 
 			Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
 			f.set(o, floatValue);
-
 			isUpdated = true;
+
 			break;
 
 		case CellValueUtils.OBJECT_BOOLEAN:
+			/* falls through */
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 
 			String bool = c.getStringCellValue();
 
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				// apply format mask defined at transform mask
+				/* apply format mask defined at transform mask */
 				String[] split = xlsAnnotation.transformMask().split("/");
 				f.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
 
 			} else {
-				// locale mode
+				/* locale mode */
 				f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
 			}
-
 			isUpdated = true;
+
 			break;
 
 		default:
@@ -876,11 +969,11 @@ public class Engine {
 			break;
 		}
 
-		if(!isUpdated && fT.isEnum()){
+		if (!isUpdated && fT.isEnum()) {
 			f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
 			isUpdated = true;
 		}
-		
+
 		return isUpdated;
 	}
 
@@ -909,31 +1002,32 @@ public class Engine {
 	 */
 	private int marshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, Row headerRow, Row contentRow, int idxR,
 			int idxC, int cL) throws Exception {
-		// counter related to the number of fields (if new object)
+		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
-		// get declared fields
+		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
-			// process each field from the object
-
+			/* process each field from the object */
 			if (headerRow != null) {
-				// calculate index of the cell
+				/* calculate index of the cell */
 				int tmpIdxRow = idxR - 3;
-				// apply merge region
+				/* apply merge region */
 				applyMergeRegion(s, null, tmpIdxRow, idxC, f, true);
 			}
-			// Process @XlsElement
+			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if
-				// new object)
+				/*
+				 * increment of the counter related to the number of fields (if
+				 * new object)
+				 */
 				counter++;
 				if (headerRow != null) {
-					// header
+					/* header treatment */
 					initializeHeaderCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
 				}
-				// content
+				/* content treatment */
 				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
 						xlsAnnotation);
 			}
@@ -962,26 +1056,28 @@ public class Engine {
 	 */
 	private int marshalAsPropagationVertical(Object o, Class<?> oC, Sheet s, int idxR, int idxC, int cL)
 			throws Exception {
-		// counter related to the number of fields (if new object)
+		/* counter related to the number of fields (if new object) */
 		int counter = -1;
-		// backup base index of the cell
+		/* backup base index of the cell */
 		int baseIdxCell = idxC;
 
-		// get declared fields
+		/* get declared fields */
 		List<Field> fieldList = Arrays.asList(oC.getDeclaredFields());
 		for (Field field : fieldList) {
-			// process each field from the object
-
-			// restart the index of the cell
+			/* process each field from the object */
+			/* restart the index of the cell */
 			idxC = baseIdxCell;
 
-			// Process @XlsElement
+			/* Process @XlsElement */
 			if (field.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if
-				// new object)
+				/*
+				 * increment of the counter related to the number of fields (if
+				 * new object)
+				 */
 				counter++;
-				// create the row
+
+				/* create the row */
 				Row row = null;
 				if (idxR == 1 && baseIdxCell == 1) {
 					row = initializeRow(s, idxR + xlsAnnotation.position());
@@ -989,18 +1085,18 @@ public class Engine {
 					row = s.getRow(idxR + xlsAnnotation.position());
 				}
 
-				// calculate index of the cell
+				/* calculate index of the cell */
 				int tmpIdxCell = idxC - 1;
 				if (tmpIdxCell == 0) {
-					// apply merge region
+					/* apply merge region */
 					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
 
-					// header
+					/* header treatment */
 					initializeHeaderCell(row, idxC, xlsAnnotation.title());
 				}
-				// increment the cell position
+				/* increment the cell position */
 				idxC++;
-				// content
+				/* content treatment */
 				idxR += initializeCellByField(s, row, idxR + xlsAnnotation.position(), idxC, cL, o, field,
 						xlsAnnotation);
 			}
@@ -1009,7 +1105,6 @@ public class Engine {
 	}
 
 	/**
-	 * 
 	 * Convert the file to object with the PropagationType as
 	 * PROPAGATION_HORIZONTAL.
 	 * 
@@ -1030,24 +1125,25 @@ public class Engine {
 	 */
 	private int unmarshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, int idxR, int idxC)
 			throws IllegalAccessException, JAEXConverterException, InstantiationException {
-		// counter related to the number of fields (if new object)
+		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
-		// get declared fields
+		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
-			// process each field from the object
-
+			/* process each field from the object */
 			Class<?> fT = f.getType();
 
-			// Process @XlsElement
+			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if
-				// new object)
+				/*
+				 * increment of the counter related to the number of fields (if
+				 * new object)
+				 */
 				counter++;
 
-				// content row
+				/* content row */
 				Row contentRow = s.getRow(idxR + 1);
 				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
 
@@ -1061,10 +1157,10 @@ public class Engine {
 					int internalCellCounter = unmarshalAsPropagationHorizontal(subObjbect, subObjbectClass, s, idxR,
 							idxC + xlsAnnotation.position() - 1);
 
-					// add the sub object to the parent object
+					/* add the sub object to the parent object */
 					f.set(o, subObjbect);
 
-					// update the index
+					/* update the index */
 					idxC += internalCellCounter;
 				}
 			}
@@ -1093,24 +1189,25 @@ public class Engine {
 	 */
 	private int unmarshalAsPropagationVertical(Object object, Class<?> oC, Sheet s, int idxR, int idxC)
 			throws IllegalAccessException, JAEXConverterException, InstantiationException {
-		// counter related to the number of fields (if new object)
+		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
-		// get declared fields
+		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
-			// process each field from the object
-
+			/* process each field from the object */
 			Class<?> fT = f.getType();
 
-			// Process @XlsElement
+			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
-				// increment of the counter related to the number of fields (if
-				// new object)
+				/*
+				 * increment of the counter related to the number of fields (if
+				 * new object)
+				 */
 				counter++;
 
-				// content row
+				/* content row */
 				Row contentRow = s.getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
@@ -1124,10 +1221,10 @@ public class Engine {
 					int internalCellCounter = unmarshalAsPropagationVertical(subObjbect, subObjbectClass, s,
 							idxR + xlsAnnotation.position() - 1, idxC);
 
-					// add the sub object to the parent object
+					/* add the sub object to the parent object */
 					f.set(object, subObjbect);
 
-					// update the index
+					/* update the index */
 					idxR += internalCellCounter;
 				}
 			}
@@ -1153,83 +1250,143 @@ public class Engine {
 	}
 
 	/**
-	 * marshal
+	 * Generate the byte array.
 	 * 
-	 * @throws Exception
+	 * @return the byte[]
+	 * @throws IOException
 	 */
-	public void marshal(Object object) throws Exception {
-		Class<?> objectClass = object.getClass();
-		ConfigurationData config = null;
-		// Process @XlsConfiguration
-		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
-
-		}
-		// Process @XlsSheet
-		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
-
+	private byte[] workbookToByteAray() throws IOException {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			wb.write(bos);
+		} finally {
+			bos.close();
 		}
 
-		// initialize Workbook
+		return bos.toByteArray();
+	}
+
+	/* ######################## Marshal methods ########################## */
+
+	/**
+	 * Generate the workbook from the object and return the workbook generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	public Workbook marshalToWorkbook(Object object) throws Exception {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
+
+		/* initialize configuration data */
+		Configuration config = initializeConfigurationData(oC);
+
+		/* initialize Workbook */
 		wb = initializeWorkbook(config.getExtensionFile());
 
-		// initialize style cell via annotations
-		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
-			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
+		/* initialize style cell via annotations */
+		if (oC.isAnnotationPresent(XlsDecorators.class)) {
+			XlsDecorators xlsDecorators = (XlsDecorators) oC.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
 				stylesMap.put(decorator.decoratorName(), initializeCellStyleByXlsDecorator(decorator));
 			}
 		}
-		// initialize style cell via default option
+
+		/* initialize style cell via default option */
 		initializeCellDecorator();
 
-		// initialize Sheet
+		/* initialize Sheet */
 		// FIXME add loop if necessary
 		Sheet s = initializeSheet(wb, config.getTitleSheet());
 
-		// initialize Row & Cell
+		/* initialize Row & Cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
-		// initialize rows according the PropagationType
+		/* initialize rows according the PropagationType */
 		Row headerRow, contentRow;
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
 			headerRow = initializeRow(s, idxRow++);
 			contentRow = initializeRow(s, idxRow++);
 
-			marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
+			marshalAsPropagationHorizontal(object, oC, s, headerRow, contentRow, idxRow, idxCell, 0);
+
 		} else {
-			marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
+			marshalAsPropagationVertical(object, oC, s, idxRow, idxCell, 0);
 
 		}
-		// FIXME manage return value
-		workbookFileOutputStream(wb, "D:\\projects\\" + config.getNameFile());
+
+		return wb;
 	}
 
-	public void marshal(Object... objects) {
-		// TODO
+	/**
+	 * Generate the workbook from the object passed as parameter and return the
+	 * respective {@link FileOutputStream}.
+	 * 
+	 * @return the {@link Workbook} generated
+	 */
+	public byte[] marshalToByte(Object object) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		marshalToWorkbook(object);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray();
 	}
 
+	/**
+	 * Generate the workbook from the object passed as parameter and save it at
+	 * the path send as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
+	 */
+	public void marshalAndSave(Object object, String pathFile) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		marshalToWorkbook(object);
+
+		/*
+		 * check if the path terminate with the file separator, otherwise will
+		 * be added to avoid any problem
+		 */
+		if (!pathFile.endsWith(File.separator)) {
+			pathFile = pathFile.concat(File.separator);
+		}
+
+		/* Save the Workbook at a specified path (received as parameter) */
+		workbookFileOutputStream(wb, pathFile + configuration.getNameFile());
+	}
+
+	/**
+	 * Generate the workbook from the collection of objects.
+	 * 
+	 * @param collection
+	 *            the collection of objects to apply at the workbook.
+	 * @param filename
+	 *            the file name
+	 * @param extensionFileType
+	 *            the file extension
+	 * @throws Exception
+	 */
 	public void marshalAsCollection(Collection<?> collection, final String filename,
 			final ExtensionFileType extensionFileType) throws Exception {
 
 		// Temos que iniciar o config data neste ponto porque
 		// como estamos na escritura de uma coleccao
 		// temos que ter o nome e a extensao antes de iniciar o excel
-		configData = new ConfigurationData();
-		configData.setExtensionFile(extensionFileType);
-		configData.setNameFile(filename);
-		ConfigurationData config = configData;
+		configuration = new Configuration();
+		configuration.setExtensionFile(extensionFileType);
+		configuration.setNameFile(filename);
+		Configuration config = configuration;
 
 		// initialize Workbook
 		wb = initializeWorkbook(config.getExtensionFile());
 
 		// initialize style cell via default option
 		initializeCellDecorator();
-		
+
 		Row headerRow = null, contentRow = null;
 		Sheet s = null;
 		int idxRow = 0, counter = 0, idxCell = 0;
@@ -1283,29 +1440,30 @@ public class Engine {
 				"D:\\projects\\" + config.getNameFile() + config.getExtensionFile().getExtension());
 	}
 
-	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
-			JAEXConverterException, InstantiationException {
-		// instance object class
-		Class<?> oC = object.getClass();
-		ConfigurationData config = null;
+	/* ######################## Unmarshal methods ######################## */
 
-		// Process @XlsConfiguration
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
-		}
+	/**
+	 * Generate the object from the workbook passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param workbook
+	 *            the {@link Workbook} to read and pass the information to the
+	 *            object
+	 * @return the {@link Object} filled up
+	 * @throws JAEXConfigurationException
+	 */
+	public Object unmarshalFromWorkbook(Object object, Workbook workbook) throws Exception {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
 
-		// Process @XlsSheet
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
-		}
+		/* initialize configuration data */
+		Configuration config = initializeConfigurationData(oC);
 
-		FileInputStream input = new FileInputStream("D:\\projects\\" + config.getNameFile());
-		Workbook wb = initializeWorkbook(input, config.getExtensionFile());
+		wb = workbook;
 		Sheet s = wb.getSheet(config.getTitleSheet());
 
-		// initialize index row & cell
+		/* initialize index row & cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
@@ -1318,7 +1476,222 @@ public class Engine {
 		return object;
 	}
 
-	public static <T> Collection<T> unmarshalToCollection(Object object) {
-		return Collections.emptyList();
+	/**
+	 * Generate the object from the path file passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @return the {@link Object} filled up
+	 */
+	public Object unmarshalFromPath(Object object, String pathFile) throws Exception {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
+
+		/* initialize configuration data */
+		Configuration config = initializeConfigurationData(oC);
+
+		/*
+		 * check if the path terminate with the file separator, otherwise will
+		 * be added to avoid any problem
+		 */
+		if (!pathFile.endsWith(File.separator)) {
+			pathFile = pathFile.concat(File.separator);
+		}
+
+		FileInputStream input = new FileInputStream(pathFile + config.getNameFile());
+		unmarshalIntern(object, oC, config, input);
+
+		return object;
 	}
+
+	/**
+	 * Generate the object from the byte array passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param inputByte
+	 *            the byte array to read and pass the information to the object
+	 * @return the {@link Object} filled up
+	 */
+	public Object unmarshalFromByte(Object object, byte[] byteArray) throws Exception {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
+
+		/* initialize configuration data */
+		Configuration config = initializeConfigurationData(oC);
+
+		wb = initializeWorkbook(byteArray, configuration.getExtensionFile());
+		Sheet s = wb.getSheet(config.getTitleSheet());
+
+		/* initialize index row & cell */
+		int idxRow = config.getStartRow();
+		int idxCell = config.getStartCell();
+
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
+		} else {
+			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
+		}
+
+		return object;
+	}
+
+	/**
+	 * Manage the unmarshal internally.
+	 * 
+	 * @param object
+	 * @param oC
+	 * @param config
+	 * @param input
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws JAEXConverterException
+	 * @throws InstantiationException
+	 */
+	private void unmarshalIntern(Object object, Class<?> oC, Configuration config, FileInputStream input)
+			throws IOException, IllegalAccessException, JAEXConverterException, InstantiationException {
+		Workbook wb = initializeWorkbook(input, config.getExtensionFile());
+		Sheet s = wb.getSheet(config.getTitleSheet());
+
+		/* initialize index row & cell */
+		int idxRow = config.getStartRow();
+		int idxCell = config.getStartCell();
+
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
+		} else {
+			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
+		}
+	}
+
+	@Override
+	public void marshalAsCollection(Collection<?> collection) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Collection<?> unmarshalToCollection(Object object) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* ############################################# */
+	/* ################## TO REVIEW ################ */
+	/* ############################################# */
+
+	/**
+	 * marshal
+	 * 
+	 * @throws Exception
+	 */
+	@Deprecated
+	public void marshal(Object object) throws Exception {
+		Class<?> objectClass = object.getClass();
+		Configuration config = null;
+		/* Process @XlsConfiguration */
+		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
+			config = initializeConfiguration(xlsAnnotation);
+
+		}
+		/* Process @XlsSheet */
+		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
+			config = initializeSheetConfiguration(xlsAnnotation);
+
+		}
+
+		/* initialize Workbook */
+		wb = initializeWorkbook(config.getExtensionFile());
+
+		/* initialize style cell via annotations */
+		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
+			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
+			for (XlsDecorator decorator : xlsDecorators.values()) {
+				stylesMap.put(decorator.decoratorName(), initializeCellStyleByXlsDecorator(decorator));
+			}
+		}
+		/* initialize style cell via default option */
+		initializeCellDecorator();
+
+		/* initialize Sheet */
+		// FIXME add loop if necessary
+		Sheet s = initializeSheet(wb, config.getTitleSheet());
+
+		/* initialize Row & Cell */
+		int idxRow = config.getStartRow();
+		int idxCell = config.getStartCell();
+
+		/* initialize rows according the PropagationType */
+		Row headerRow, contentRow;
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+			headerRow = initializeRow(s, idxRow++);
+			contentRow = initializeRow(s, idxRow++);
+
+			marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
+		} else {
+			marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
+
+		}
+		// FIXME manage return value
+		workbookFileOutputStream(wb, "D:\\projects\\" + config.getNameFile());
+	}
+
+	@Deprecated
+	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
+			JAEXConverterException, InstantiationException, JAEXElementException {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
+		/* initialize configuration data */
+		Configuration config = initializeConfigurationData(oC);
+
+		FileInputStream input = new FileInputStream("D:\\projects\\" + config.getNameFile());
+		unmarshalIntern(object, oC, config, input);
+
+		return object;
+	}
+
+	/**
+	 * Generate the workbook from the object passed as parameter and return the
+	 * respective {@link FileOutputStream}.
+	 * 
+	 * @return the {@link Workbook} generated
+	 */
+	@Override
+	public FileOutputStream marshalToFileOutputStream(Object object) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		marshalToWorkbook(object);
+
+		/* Generate the FileOutputStream to return */
+		return workbookFileOutputStream(wb, configuration.getNameFile());
+	}
+
+	@Override
+	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws IOException,
+			IllegalArgumentException, IllegalAccessException, JAEXConverterException, InstantiationException {
+		/* instance object class */
+		Class<?> oC = object.getClass();
+		Configuration config = null;
+
+		/* Process @XlsConfiguration */
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
+			config = initializeConfiguration(xlsAnnotation);
+		}
+
+		/* Process @XlsSheet */
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			config = initializeSheetConfiguration(xlsAnnotation);
+		}
+
+		unmarshalIntern(object, oC, config, stream);
+
+		return object;
+	}
+
 }
