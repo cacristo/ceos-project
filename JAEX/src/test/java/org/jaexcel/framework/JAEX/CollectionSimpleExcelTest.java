@@ -15,6 +15,7 @@ import org.jaexcel.framework.JAEX.bean.SimpleObject;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -152,7 +153,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
 		
-		Engine en = new Engine();
+		IEngine en = new Engine();
 		/*CellDecorator configuration = new CellDecorator();
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
 		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);

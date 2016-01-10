@@ -26,6 +26,7 @@ import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 /**
  * Unit test for simple App.
@@ -133,7 +134,7 @@ public class SimpleExcelTest extends TestCase {
 		fastTest.setStringAttribute("some string");
 		fastTest.setIntegerAttribute(46);
 
-		Engine en = new Engine();
+		IEngine en = new Engine();
 		CellDecorator configuration = new CellDecorator();
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
 		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -147,7 +148,7 @@ public class SimpleExcelTest extends TestCase {
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
-		en.setHeaderCellDecorator(configuration);
+		en.overrideHeaderCellDecorator(configuration);
 
 		en.marshal(fastTest);
 

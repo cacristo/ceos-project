@@ -2,6 +2,7 @@ package org.jaexcel.framework.JAEX;
 
 import org.jaexcel.framework.JAEX.bean.ObjectFormula;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -40,7 +41,7 @@ public class ObjectFormulaTest extends TestCase {
 		of.setValueRegion(3199.99);
 		of.setValueCountry(8421.80);
 		
-		Engine en = new Engine();
+		IEngine en = new Engine();
 
 		en.marshal(of);
 

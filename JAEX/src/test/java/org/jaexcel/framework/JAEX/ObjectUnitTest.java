@@ -6,6 +6,7 @@ import java.util.List;
 import org.jaexcel.framework.JAEX.bean.ObjectUnit;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -38,7 +39,7 @@ public class ObjectUnitTest extends TestCase {
 	public void testMarshaObjectFormula() throws Exception {
 		ObjectUnit ou = new ObjectUnit("PenDrive 5GB", 4.87, 6.99, 21, 185);
 
-		Engine en = new Engine();
+		IEngine en = new Engine();
 
 		en.marshal(ou);
 
@@ -57,7 +58,7 @@ public class ObjectUnitTest extends TestCase {
 		collection.add(new ObjectUnit("Drive 500GB", 84.87, 111.99, 21, 100));
 		collection.add(new ObjectUnit("PenDrive 1TB", 164.22, 199.99, 21, 35));
 
-		Engine en = new Engine();
+		IEngine en = new Engine();
 		en.marshalAsCollection(collection, "CollectionObjectUnit" , ExtensionFileType.XLS);
 
 		assertEquals(true, true);

@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.bean.ObjectConfigurable;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -46,7 +47,7 @@ public class ObjectConfigurableTest extends TestCase {
 		oc.setStringAttribute("Some string value");
 		oc.setDateAttribute1(new Date());
 
-		Engine en = new Engine();
+		IEngine en = new Engine();
 
 		CellDecorator configurationHeader = new CellDecorator();
 		// override default header configuration
@@ -56,11 +57,11 @@ public class ObjectConfigurableTest extends TestCase {
 
 		configurationHeader.setBorder(CellStyle.BORDER_THIN);
 
-		configurationHeader.setForegroundColor(HSSFColor.WHITE.index);
+		configurationHeader.setForegroundColor(HSSFColor.BLUE.index);
 		configurationHeader.setFontBold(true);
 		configurationHeader.setFontItalic(true);
 		configurationHeader.setWrapText(true);
-		// en.setHeaderCellDecorator(configurationHeader);
+		en.overrideHeaderCellDecorator(configurationHeader);
 
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");

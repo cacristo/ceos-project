@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.jaexcel.framework.JAEX.bean.ObjectMask;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -65,7 +66,7 @@ public class ObjectMaskTest extends TestCase {
 		om.setFloatAttribute4(46.445f);
 		om.setFloatAttribute5(46.445f);
 		
-		Engine en = new Engine();
+		IEngine en = new Engine();
 
 		en.marshal(om);
 

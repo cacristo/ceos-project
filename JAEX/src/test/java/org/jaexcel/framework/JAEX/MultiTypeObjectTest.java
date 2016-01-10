@@ -11,6 +11,7 @@ import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.UnitFamily;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -44,7 +45,7 @@ public class MultiTypeObjectTest extends TestCase {
 	public void testMarshalMultiObject() throws Exception {
 		MultiTypeObject mto = buildMultiTypeObject();
 
-		Engine en = new Engine();
+		IEngine en = new Engine();
 
 		CellDecorator configuration = new CellDecorator();
 		configuration.setDecoratorName("header");
@@ -64,7 +65,7 @@ public class MultiTypeObjectTest extends TestCase {
 		anotherDate.setFontItalic(true);
 		anotherDate.setWrapText(true);
 
-		en.setHeaderCellDecorator(configuration);
+		en.overrideHeaderCellDecorator(configuration);
 		en.addSpecificCellDecorator("anotherDate", anotherDate);
 
 		en.marshal(mto);

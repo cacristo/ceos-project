@@ -21,6 +21,7 @@ import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -158,7 +159,7 @@ public class CollectionMultiExcelTest extends TestCase {
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
 		
-		Engine en = new Engine();
+		IEngine en = new Engine();
 		CellDecorator configuration = new CellDecorator();
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
 		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
@@ -172,7 +173,7 @@ public class CollectionMultiExcelTest extends TestCase {
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
-		en.setHeaderCellDecorator(configuration);
+		en.overrideHeaderCellDecorator(configuration);
 		
 		en.marshalAsCollection(collectionSimpleObject, "filename" , ExtensionFileType.XLSX);
 /*
@@ -263,7 +264,7 @@ public class CollectionMultiExcelTest extends TestCase {
 		
 		
 		
-		Engine en = new Engine();
+		IEngine en = new Engine();
 		
 		/*CellDecorator configuration = new CellDecorator();
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
