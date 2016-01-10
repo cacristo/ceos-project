@@ -11,6 +11,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 
 @XlsDecorators(values = {
+		@XlsDecorator(decoratorName = "header", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
 		@XlsDecorator(decoratorName = "numeric", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
 		@XlsDecorator(decoratorName = "extendedDate", fontItalic = true, fontBold = true),
 		@XlsDecorator(decoratorName = "extendedInteger", border = CellStyle.BORDER_MEDIUM, fontBold = true, foregroundColor = HSSFColor.BLUE.index) })
