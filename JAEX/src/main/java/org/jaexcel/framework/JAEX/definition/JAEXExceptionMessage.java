@@ -20,6 +20,8 @@ public enum JAEXExceptionMessage {
 	JAEXConverterException_Decorator("Problem while apply the decorator."),
 
 	/* declared messages of JAEXElementException */
+	JAEXElementException_NullObject("The entry object is null. Make sure you are sending a correct object."),
+	JAEXElementException_EmptyObject("The entry object is empty. Make sure you are sending a correct object."),
 	JAEXElementException_Row("Hola Mundo"),
 	JAEXElementException_Cell("Hola Mundo"),
 
