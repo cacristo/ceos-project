@@ -104,7 +104,20 @@ public class CellStyleUtils {
 	}
 
 	/**
-	 * Apply the alignment to the cell style.
+	 * Apply the horizontal alignment to the cell style.<br>
+	 * By default the vertical alignment is 0.
+	 * 
+	 * @param cs
+	 *            the cell style
+	 * @param a
+	 *            the horizontal alignment
+	 */
+	protected static void applyAlignment(CellStyle cs, short a) {
+		applyAlignment(cs, a, (short) 0);
+	}
+
+	/**
+	 * Apply the horizontal & vertical alignment to the cell style.
 	 * 
 	 * @param cs
 	 *            the cell style
