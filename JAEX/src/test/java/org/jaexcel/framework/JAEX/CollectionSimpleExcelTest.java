@@ -7,15 +7,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
-import org.jaexcel.framework.JAEX.bean.SimpleObject;
+import org.jaexcel.framework.JAEX.bean.SimpleObjectListPropHorizontal;
+import org.jaexcel.framework.JAEX.bean.SimpleObjectListPropVertical;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.Engine;
-import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -42,36 +41,20 @@ public class CollectionSimpleExcelTest extends TestCase {
 		return new TestSuite(CollectionSimpleExcelTest.class);
 	}
 
-	/**
-	 * Test the annotation {@link XlsConfiguration} XlsConfiguration
-	 */
-	public void testReadAnnotationXlsConfiguration() {
-		// Read the object
-		Class<SimpleObject> obj = SimpleObject.class;
 
-		// Process @XlsConfiguration
-		if (obj.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) obj
-					.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
-			assertEquals(xlsAnnotation.extensionFile(), ExtensionFileType.XLS);
-		//	assertEquals(xlsAnnotation.cascadeLevel(), CascadeType.CASCADE_BASE);
-		}
-	}
 
 	/**
 	 * Test the annotation {@link XlsSheet} XlsSheet
 	 */
-	public void testReadAnnotationXlsSheet() {
-		Class<SimpleObject> oC = SimpleObject.class;
+	public void testReadAnnotationXlsSheetHoriz() {
+		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC
 					.getAnnotation(XlsSheet.class);
 
-			assertEquals(xlsAnnotation.title(), "Simple object sample");
+			assertEquals(xlsAnnotation.title(), "List Simple object horizontal");
 			assertEquals(xlsAnnotation.propagation(),
 					PropagationType.PROPAGATION_HORIZONTAL);
 		}
@@ -80,8 +63,8 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsElement} XlsElement
 	 */
-	public void testReadAnnotationXlsElement() {
-		Class<SimpleObject> oC = SimpleObject.class;
+	public void testReadAnnotationXlsElementHoriz() {
+		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -104,8 +87,8 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
 	 */
-	public void testReadAnnotationXlsMasterHeader() {
-		Class<SimpleObject> oC = SimpleObject.class;
+	public void testReadAnnotationXlsMasterHeaderHoriz() {
+		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -126,50 +109,35 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
-	public void testCollectionSimpleExcel() throws Exception {
-		SimpleObject fastTest1 = new SimpleObject();
-		fastTest1.setDateAttribute(new Date());
-		fastTest1.setStringAttribute("some string");
-		fastTest1.setIntegerAttribute(46);
+	public void testCollectionSimpleExcelHorizontal() throws Exception {
+		SimpleObjectListPropHorizontal simpleObject = new SimpleObjectListPropHorizontal();
+		simpleObject.setDateAttribute(new Date());
+		simpleObject.setStringAttribute("some string");
+		simpleObject.setIntegerAttribute(46);
 		
-		SimpleObject fastTest2 = new SimpleObject();
-		fastTest2.setDateAttribute(new Date());
-		fastTest2.setStringAttribute("some string 2");
-		fastTest2.setIntegerAttribute(47);
+		SimpleObjectListPropHorizontal simpleObject2 = new SimpleObjectListPropHorizontal();
+		simpleObject2.setDateAttribute(new Date());
+		simpleObject2.setStringAttribute("some string 2");
+		simpleObject2.setIntegerAttribute(47);
 
-		List<SimpleObject> collectionSimpleObject = new ArrayList<SimpleObject>();
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
-		collectionSimpleObject.add(fastTest2);
+		List<SimpleObjectListPropHorizontal> collectionSimpleObject= new ArrayList<SimpleObjectListPropHorizontal>();
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
 		
-		IEngine en = new Engine();
-		/*CellDecorator configuration = new CellDecorator();
-		configuration.setAlignment(CellStyle.ALIGN_CENTER);
-		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-
-		configuration.setBorderLeft(CellStyle.BORDER_THIN);
-		configuration.setBorderRight(CellStyle.BORDER_THIN);
-		configuration.setBorderTop(CellStyle.BORDER_THIN);
-		configuration.setBorderBottom(CellStyle.BORDER_THIN);
-		
-		configuration.setBackgroundColor(HSSFColor.DARK_RED.index);
-		configuration.setFontBold(true);
-		configuration.setFontItalic(true);
-		configuration.setWrapText(true);
-		en.setHeaderCellDecorator(configuration);*/
-		
-		en.marshalAsCollection(collectionSimpleObject, "filename" , ExtensionFileType.XLSX);
+		Engine en = new Engine();
+		en.marshalAsCollection(collectionSimpleObject, "file_list_object_simple_horiz" , ExtensionFileType.XLSX);
 /*
 		// start validation
 		Class<SimpleObject> oC = (Class<SimpleObject>) collectionSimpleObject.getClass();
@@ -225,7 +193,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 						+ xlsAnnotation.position());
 
 				
-				for (SimpleObject fastTest : collectionSimpleObject){
+				for (SimpleObjectListPropHorizontalfastTest : collectionSimpleObject){
 					if (xlsAnnotation.position() == 1) {
 						TestUtils.validationDate(fastTest.getDateAttribute(),
 								xlsAnnotation, headerCell, contentCell);
@@ -240,6 +208,105 @@ public class CollectionSimpleExcelTest extends TestCase {
 				
 			}
 		}*/
+	}
+	
+	
+	/**
+	 * Test the annotation {@link XlsSheet} XlsSheet
+	 */
+	public void testReadAnnotationXlsSheetVert() {
+		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
+
+		// Process @XlsSheet
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC
+					.getAnnotation(XlsSheet.class);
+
+			assertEquals(xlsAnnotation.title(), "List Simple object vertical");
+			assertEquals(xlsAnnotation.propagation(),
+					PropagationType.PROPAGATION_VERTICAL);
+		}
+	}
+
+	/**
+	 * Test the annotation {@link XlsElement} XlsElement
+	 */
+	public void testReadAnnotationXlsElementVert() {
+		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsElement
+			if (f.isAnnotationPresent(XlsElement.class)) {
+				XlsElement xlsAnnotation = (XlsElement) f
+						.getAnnotation(XlsElement.class);
+
+				if (f.getName().equals("dateAttribute")) {
+					assertEquals(xlsAnnotation.title(), "Date value");
+				} else if (f.getName().equals("stringAttribute")) {
+					assertEquals(xlsAnnotation.title(), "String value");
+				} else if (f.getName().equals("integerAttribute")) {
+					assertEquals(xlsAnnotation.title(), "Integer value");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
+	 */
+	public void testReadAnnotationXlsMasterHeaderVert() {
+		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsMasterHeader
+			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
+				XlsMasterHeader xlsAnnotation = (XlsMasterHeader) f
+						.getAnnotation(XlsMasterHeader.class);
+
+				if (f.getName().equals("dateAttribute")) {
+					assertEquals(xlsAnnotation.title(), "Main info");
+					assertEquals(xlsAnnotation.startY(), 1);
+					assertEquals(xlsAnnotation.endY(), 3);
+				}
+			}
+		}
+	}
+
+	
+	/**
+	 * Test one basic object
+	 */
+	public void testCollectionSimpleExcelVertical() throws Exception {
+		SimpleObjectListPropVertical simpleObject = new SimpleObjectListPropVertical();
+		simpleObject.setDateAttribute(new Date());
+		simpleObject.setStringAttribute("some string");
+		simpleObject.setIntegerAttribute(46);
+		
+		SimpleObjectListPropVertical simpleObject2 = new SimpleObjectListPropVertical();
+		simpleObject2.setDateAttribute(new Date());
+		simpleObject2.setStringAttribute("some string 2");
+		simpleObject2.setIntegerAttribute(47);
+
+		List<SimpleObjectListPropVertical> collectionSimpleObject= new ArrayList<SimpleObjectListPropVertical>();
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		collectionSimpleObject.add(simpleObject);
+		collectionSimpleObject.add(simpleObject2);
+		
+		Engine en = new Engine();
+		en.marshalAsCollection(collectionSimpleObject, "file_list_object_simple_vertical" , ExtensionFileType.XLSX);
 	}
 	
 	

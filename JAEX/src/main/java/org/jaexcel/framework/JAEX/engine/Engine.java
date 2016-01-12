@@ -1079,21 +1079,21 @@ public class Engine implements IEngine {
 
 				/* create the row */
 				Row row = null;
-				if (idxR == 1 && baseIdxCell == 1) {
+				if (baseIdxCell == 1) {
+					int tmpIdxCell = idxC - 1;
+					/* initialize row */
 					row = initializeRow(s, idxR + xlsAnnotation.position());
-				} else {
-					row = s.getRow(idxR + xlsAnnotation.position());
-				}
-
-				/* calculate index of the cell */
-				int tmpIdxCell = idxC - 1;
-				if (tmpIdxCell == 0) {
+					
 					/* apply merge region */
 					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
 
 					/* header treatment */
 					initializeHeaderCell(row, idxC, xlsAnnotation.title());
+					
+				} else {
+					row = s.getRow(idxR + xlsAnnotation.position());
 				}
+
 				/* increment the cell position */
 				idxC++;
 				/* content treatment */
@@ -1389,7 +1389,7 @@ public class Engine implements IEngine {
 
 		Row headerRow = null, contentRow = null;
 		Sheet s = null;
-		int idxRow = 0, counter = 0, idxCell = 0;
+		int idxRow = 0, counter = 0, idxCell = 0, index=0;
 
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = collection.iterator();
@@ -1427,10 +1427,10 @@ public class Engine implements IEngine {
 					s = initializeSheet(wb, config.getTitleSheet());
 					idxCell = config.getStartCell();
 				} else {
-					idxCell = counter + idxCell - 1;
+					idxCell =index+1;
 				}
 				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
-
+				index= index+1;
 			}
 
 		}
