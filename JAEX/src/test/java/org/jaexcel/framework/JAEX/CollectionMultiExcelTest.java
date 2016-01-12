@@ -1,17 +1,27 @@
 package org.jaexcel.framework.JAEX;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
+import org.jaexcel.framework.JAEX.annotation.XlsElement;
+import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.bean.AddressInfo;
 import org.jaexcel.framework.JAEX.bean.Job;
-import org.jaexcel.framework.JAEX.bean.MultiTypeObjectListPropHorizontal;
-import org.jaexcel.framework.JAEX.bean.MultiTypeObjectListPropVertical;
+import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
+import org.jaexcel.framework.JAEX.bean.SimpleObject;
+import org.jaexcel.framework.JAEX.bean.UnitFamily;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
+import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.engine.IEngine;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -38,19 +48,36 @@ public class CollectionMultiExcelTest extends TestCase {
 		return new TestSuite(CollectionMultiExcelTest.class);
 	}
 
+	/**
+	 * Test the annotation {@link XlsConfiguration} XlsConfiguration
+	 */
+	public void testReadAnnotationXlsConfiguration() {
+		// Read the object
+		Class<SimpleObject> obj = SimpleObject.class;
+
+		// Process @XlsConfiguration
+		if (obj.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) obj
+					.getAnnotation(XlsConfiguration.class);
+
+			// add here the annotations attributes
+			assertEquals(xlsAnnotation.extensionFile(), ExtensionFileType.XLS);
+		//	assertEquals(xlsAnnotation.cascadeLevel(), CascadeType.CASCADE_BASE);
+		}
+	}
 
 	/**
 	 * Test the annotation {@link XlsSheet} XlsSheet
 	 */
-	public void testReadAnnotationXlsSheetHoriz() {
-		Class<MultiTypeObjectListPropHorizontal> oC = MultiTypeObjectListPropHorizontal.class;
+	public void testReadAnnotationXlsSheet() {
+		Class<SimpleObject> oC = SimpleObject.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC
 					.getAnnotation(XlsSheet.class);
 
-			assertEquals(xlsAnnotation.title(), "List multiple type obj horizont");
+			assertEquals(xlsAnnotation.title(), "Simple object sample");
 			assertEquals(xlsAnnotation.propagation(),
 					PropagationType.PROPAGATION_HORIZONTAL);
 		}
@@ -59,9 +86,8 @@ public class CollectionMultiExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsElement} XlsElement
 	 */
-	
-	/*public void testReadAnnotationXlsElementHoriz() {
-		Class<MultiTypeObjectListPropHorizontal> oC = MultiTypeObjectListPropHorizontal.class;
+	public void testReadAnnotationXlsElement() {
+		Class<SimpleObject> oC = SimpleObject.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -79,48 +105,183 @@ public class CollectionMultiExcelTest extends TestCase {
 				}
 			}
 		}
-	}*/
+	}
 
+	/**
+	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
+	 */
+	public void testReadAnnotationXlsMasterHeader() {
+		Class<SimpleObject> oC = SimpleObject.class;
 
-	
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsMasterHeader
+			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
+				XlsMasterHeader xlsAnnotation = (XlsMasterHeader) f
+						.getAnnotation(XlsMasterHeader.class);
+
+				if (f.getName().equals("dateAttribute")) {
+					assertEquals(xlsAnnotation.title(), "Main info");
+					assertEquals(xlsAnnotation.startX(), 1);
+					assertEquals(xlsAnnotation.endX(), 3);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Test one basic object
 	 */
-	public void testCollectionMultiExcelHoriz() throws Exception {
-		MultiTypeObjectListPropHorizontal fastTest1 = buildMultiTypeObjectHoriz();
+	public void testCollectionSimpleExcel() throws Exception {
+		SimpleObject fastTest1 = new SimpleObject();
+		fastTest1.setDateAttribute(new Date());
+		fastTest1.setStringAttribute("some string");
+		fastTest1.setIntegerAttribute(46);
 		
-		
-		MultiTypeObjectListPropHorizontal fastTest2 = buildMultiTypeObjectHoriz();
-		
+		SimpleObject fastTest2 = new SimpleObject();
+		fastTest2.setDateAttribute(new Date());
+		fastTest2.setStringAttribute("some string 2");
+		fastTest2.setIntegerAttribute(47);
 
-		List<MultiTypeObjectListPropHorizontal> collectionSimpleObject = new ArrayList<MultiTypeObjectListPropHorizontal>();
+		List<SimpleObject> collectionSimpleObject = new ArrayList<SimpleObject>();
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
 		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
+		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
+		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
+		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
+		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
+		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest2);
 		
+		IEngine en = new Engine();
+		CellDecorator configuration = new CellDecorator();
+		configuration.setAlignment(CellStyle.ALIGN_CENTER);
+		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		configuration.setBorderLeft(CellStyle.BORDER_THIN);
+		configuration.setBorderRight(CellStyle.BORDER_THIN);
+		configuration.setBorderTop(CellStyle.BORDER_THIN);
+		configuration.setBorderBottom(CellStyle.BORDER_THIN);
 		
-		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_horizontal" , ExtensionFileType.XLSX);
+		configuration.setForegroundColor(HSSFColor.DARK_RED.index);
+		configuration.setFontBold(true);
+		configuration.setFontItalic(true);
+		configuration.setWrapText(true);
+		en.overrideHeaderCellDecorator(configuration);
+		
+		en.marshalAsCollection(collectionSimpleObject, "filename" , ExtensionFileType.XLSX);
+/*
+		// start validation
+		Class<SimpleObject> oC = (Class<SimpleObject>) collectionSimpleObject.getClass();
+
+		String nameFile = "";
+		String extensionFile = "";
+		// int cascadeLevel = -1;
+		// Process @XlsConfiguration
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC
+					.getAnnotation(XlsConfiguration.class);
+
+			// add here the annotations attributes
+			nameFile = xlsAnnotation.nameFile();
+			extensionFile = xlsAnnotation.extensionFile().getExtension();
+			// cascadeLevel = xlsAnnotation.cascadeLevel().getCode();
+		}
+
+		String titleSheet = "";
+		// int propagationType = -1;
+		int idxRow = -1;
+		int idxCell = -1;
+		// Process @XlsSheet
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC
+					.getAnnotation(XlsSheet.class);
+
+			titleSheet = xlsAnnotation.title();
+			// propagationType = xlsAnnotation.propagation().getCode();
+			idxRow = xlsAnnotation.startRow();
+			idxCell = xlsAnnotation.startCell();
+		}
+
+		FileInputStream input = new FileInputStream("D:\\excel\\" + nameFile
+				+ extensionFile);
+		HSSFWorkbook wb = new HSSFWorkbook(input);
+		HSSFSheet sheet = wb.getSheet(titleSheet);
+
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
+			// Process @XlsElement
+			if (f.isAnnotationPresent(XlsElement.class)) {
+				XlsElement xlsAnnotation = (XlsElement) f
+						.getAnnotation(XlsElement.class);
+
+				// header row
+				HSSFRow headerRow = sheet.getRow(idxRow);
+				HSSFCell headerCell = headerRow.getCell(idxCell
+						+ xlsAnnotation.position());
+				// content row
+				HSSFRow contentRow = sheet.getRow(idxRow + 1);
+				HSSFCell contentCell = contentRow.getCell(idxCell
+						+ xlsAnnotation.position());
+
+				
+				for (SimpleObject fastTest : collectionSimpleObject){
+					if (xlsAnnotation.position() == 1) {
+						TestUtils.validationDate(fastTest.getDateAttribute(),
+								xlsAnnotation, headerCell, contentCell);
+					} else if (xlsAnnotation.position() == 2) {
+						TestUtils.validationString(fastTest.getStringAttribute(),
+								xlsAnnotation, headerCell, contentCell);
+					} else if (xlsAnnotation.position() == 3) {
+						TestUtils.validationNumeric(fastTest.getIntegerAttribute(),
+								xlsAnnotation, headerCell, contentCell);
+					}
+				}
+				
+			}
+		}*/
 	}
 	
 	/**
 	 * Test one basic object
 	 */
-	public void testCollectionMultiExcelVert() throws Exception {
-		MultiTypeObjectListPropVertical fastTest1 = buildMultiTypeObjectVert();
-		
-		
-		MultiTypeObjectListPropVertical fastTest2 = buildMultiTypeObjectVert();
+	public void testCollectionMultieExcel() throws Exception {
+		MultiTypeObject fastTest1 = buildMultiTypeObject(3);
+		MultiTypeObject fastTest2 = buildMultiTypeObject(2);
+		MultiTypeObject fastTest3 = buildMultiTypeObject(6);
 		
 
-		List<MultiTypeObjectListPropVertical> collectionSimpleObject = new ArrayList<MultiTypeObjectListPropVertical>();
+		List<MultiTypeObject> collectionSimpleObject = new ArrayList<MultiTypeObject>();
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
-		//collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest3);
 		
 		
-		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_vertical" , ExtensionFileType.XLSX);
+		
+		IEngine en = new Engine();
+		
+		/*CellDecorator configuration = new CellDecorator();
+		configuration.setAlignment(CellStyle.ALIGN_CENTER);
+		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		configuration.setBorderLeft(CellStyle.BORDER_THIN);
+		configuration.setBorderRight(CellStyle.BORDER_THIN);
+		configuration.setBorderTop(CellStyle.BORDER_THIN);
+		configuration.setBorderBottom(CellStyle.BORDER_THIN);
+		
+		configuration.setBackgroundColor(HSSFColor.DARK_RED.index);
+		configuration.setFontBold(true);
+		configuration.setFontItalic(true);
+		configuration.setWrapText(true);
+		en.setHeaderCellDecorator(configuration);*/
+		
+		en.marshalAsCollection(collectionSimpleObject, "filenameMulti" , ExtensionFileType.XLSX);
 	}
 	
 	
@@ -129,13 +290,13 @@ public class CollectionMultiExcelTest extends TestCase {
 	 * 
 	 * @return
 	 */
-	private MultiTypeObjectListPropHorizontal buildMultiTypeObjectHoriz() {
-		MultiTypeObjectListPropHorizontal mto = new MultiTypeObjectListPropHorizontal();
+	private MultiTypeObject buildMultiTypeObject(int multiplier) {
+		MultiTypeObject mto = new MultiTypeObject();
 		mto.setDateAttribute(new Date());
 		mto.setStringAttribute("some string");
-		mto.setIntegerAttribute(46);
-		mto.setDoubleAttribute(Double.valueOf("25.3"));
-		mto.setLongAttribute(Long.valueOf("1234567890"));
+		mto.setIntegerAttribute(46 * multiplier);
+		mto.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
+		mto.setLongAttribute(Long.valueOf("1234567890") * multiplier);
 		mto.setBooleanAttribute(Boolean.FALSE);
 
 		Job job = new Job();
@@ -144,54 +305,21 @@ public class CollectionMultiExcelTest extends TestCase {
 		job.setJobName("Job Name");
 		mto.setJob(job);
 
-		mto.setIntegerPrimitiveAttribute(121);
-		mto.setDoublePrimitiveAttribute(44.6);
-		mto.setLongPrimitiveAttribute(987654321L);
+		mto.setIntegerPrimitiveAttribute(121 * multiplier);
+		mto.setDoublePrimitiveAttribute(44.6 * multiplier);
+		mto.setLongPrimitiveAttribute(987654321L * multiplier);
 		mto.setBooleanPrimitiveAttribute(true);
 
 		AddressInfo ai = new AddressInfo();
 		ai.setAddress("this is the street");
-		ai.setNumber(99);
+		ai.setNumber(1 * multiplier);
 		ai.setCity("this is the city");
 		ai.setCityCode(70065);
 		ai.setCountry("This is a Country");
 		mto.setAddressInfo(ai);
-		return mto;
-	}
-	
-	
-	/**
-	 * Create a multi type object for tests.
-	 * 
-	 * @return
-	 */
-	private MultiTypeObjectListPropVertical buildMultiTypeObjectVert() {
-		MultiTypeObjectListPropVertical mto = new MultiTypeObjectListPropVertical();
-		mto.setDateAttribute(new Date());
-		mto.setStringAttribute("some string vert");
-		mto.setIntegerAttribute(46);
-		mto.setDoubleAttribute(Double.valueOf("26.9"));
-		mto.setLongAttribute(Long.valueOf("643565"));
-		mto.setBooleanAttribute(Boolean.FALSE);
-
-		Job job = new Job();
-		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name");
-		job.setJobName("Job Name");
-		mto.setJob(job);
-
-		mto.setIntegerPrimitiveAttribute(121);
-		mto.setDoublePrimitiveAttribute(44.6);
-		mto.setLongPrimitiveAttribute(987654321L);
-		mto.setBooleanPrimitiveAttribute(true);
-
-		AddressInfo ai = new AddressInfo();
-		ai.setAddress("this is the street");
-		ai.setNumber(99);
-		ai.setCity("this is the city");
-		ai.setCityCode(70065);
-		ai.setCountry("This is a Country");
-		mto.setAddressInfo(ai);
+		
+		mto.setUnitFamily(UnitFamily.NETWORK);
+		
 		return mto;
 	}
 }
