@@ -56,24 +56,31 @@ public class CellValueUtils {
 	 *            the cell
 	 * @param cs
 	 *            the cell style
-	 * @param comment
-	 *            the comment text
+	 * @param element
+	 *            the {@link XlsElement} annotation
 	 * @param eFT
 	 *            the extension file type
 	 * @return false if problem otherwise true
 	 */
-	protected static boolean toString(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String comment,
+	protected static boolean toString(Object o, Field f, Workbook wb, Cell c, CellStyle cs, XlsElement element,
 			ExtensionFileType eFT) {
 		boolean isUpdated = true;
 		try {
+			if (element.isFormula()) {
+				// apply the formula
+				if (!toFormula(o, f, c, element)) {
+					c.setCellValue((Long) toExplicitFormula(o, f));
+				}
 
-			c.setCellValue((String) f.get(o));
+			} else {
+				// normal manage cell
+				c.setCellValue((String) f.get(o));
 
-			CellStyleUtils.applyCellStyle(wb, c, cs);
-
-			if (StringUtils.isNotBlank(comment)) {
+				CellStyleUtils.applyCellStyle(wb, c, cs);
+			}
+			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
 
 		} catch (Exception e) {
