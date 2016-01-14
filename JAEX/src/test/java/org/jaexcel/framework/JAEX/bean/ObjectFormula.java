@@ -30,6 +30,9 @@ public class ObjectFormula {
 	@XlsElement(title = "ROI", isFormula = true, position = 8)
 	private double generateValue = 0;
 	
+	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Eidx < Fidx,\"Over Budget\", \"OK\")", position = 9)
+	private String someString;
+	
 	public ObjectFormula() {
 	}
 
@@ -158,6 +161,20 @@ public class ObjectFormula {
 	 */
 	public double formulaGenerateValue() {
 		return (1.40 * this.valueCountry / this.store + 1.14 * this.valueCountry / this.webStore ) ;
+	}
+
+	/**
+	 * @return the someString
+	 */
+	public String getSomeString() {
+		return someString;
+	}
+
+	/**
+	 * @param someString the someString to set
+	 */
+	public void setSomeString(String someString) {
+		this.someString = someString;
 	}
 
 }

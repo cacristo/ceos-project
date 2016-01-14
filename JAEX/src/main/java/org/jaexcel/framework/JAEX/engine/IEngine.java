@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
@@ -27,6 +28,16 @@ public interface IEngine {
 	 */
 	void marshalAndSave(Object object, String pathFile) throws Exception;
 
+	/**
+	 * Generate the sheet from the object and return the sheet generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+
+	Sheet marshalToSheet(Object object) throws Exception;
+	
 	/**
 	 * Generate the workbook from the object and return the workbook generated.
 	 * 
@@ -60,6 +71,19 @@ public interface IEngine {
 			throws Exception;
 
 	/* ######################## Unmarshal methods ######################## */
+
+	/**
+	 * Generate the object from the sheet passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param sheet
+	 *            the {@link Sheet} to read and pass the information to the
+	 *            object
+	 * @return the {@link Object} filled up
+	 */
+
+	Object unmarshalToSheet(Object object, Sheet sheet) throws Exception;
 
 	/**
 	 * Generate the object from the path file passed as parameter.

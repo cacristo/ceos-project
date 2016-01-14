@@ -727,7 +727,7 @@ public class Engine implements IEngine {
 
 			isUpdated = CellValueUtils.toString(o, f, wb, cString,
 					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null),
-					element.comment(), configuration.getExtensionFile());
+					element, configuration.getExtensionFile());
 
 			break;
 
@@ -1268,6 +1268,12 @@ public class Engine implements IEngine {
 
 	/* ######################## Marshal methods ########################## */
 
+	public Sheet marshalToSheet(Object object) throws Exception {
+		marshalToWorkbook(object);
+
+		/* Generate the byte array to return */
+		return wb.getSheetAt(0);
+	}
 	/**
 	 * Generate the workbook from the object and return the workbook generated.
 	 * 
@@ -1441,6 +1447,11 @@ public class Engine implements IEngine {
 	}
 
 	/* ######################## Unmarshal methods ######################## */
+	
+	public Object unmarshalToSheet(Object object, Sheet sheet) throws Exception {
+		// TODO
+		return null;
+	}
 
 	/**
 	 * Generate the object from the workbook passed as parameter.

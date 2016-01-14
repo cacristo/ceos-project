@@ -41,6 +41,8 @@ public class ObjectFormulaTest extends TestCase {
 		of.setValueRegion(3199.99);
 		of.setValueCountry(8421.80);
 		
+		of.setSomeString(null);
+		
 		IEngine en = new Engine();
 
 		en.marshal(of);
