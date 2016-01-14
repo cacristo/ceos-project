@@ -1,11 +1,41 @@
-* Manage file opened while try to generate another
-* Manage exception
-	Priority:
-		- Manage null objects
-		- Conflit configuration
-* Manage cascade LEVEL
-* Format data using mask
-* Possibility of links between sheets and/or lists
-* Decorate cells
+TODO list
 
+(1) Manage file opened while try to generate another
+(2) Manage exception
+	Priority:
+		- Conflit configuration
+(3) Manage cascade LEVEL
+(4) Possibility of links between sheets and/or lists
+(5) Manage lists
+(6) TestCase - factorizacao de codigo
+(7) 
+()
+()
+()
+()
+()
+()
+
+FIXED list
+(1) Decorator cells
+(2) Format data using mask
+(3) Manage exception Manage null objects
+(4) Add formula to String cell
+(5)
+
+Docs
+(1) User guide
+(2) Developer guide
+(3) RefCardz
+(4) Website
+(5) GitHub
+(6) Contact to POI
+
+Perfomance
+(1) Lib
+(2) Light Lib
+(3) 
+
+
+Others :..
 import org.apache.commons.lang3.tuple.Triple;

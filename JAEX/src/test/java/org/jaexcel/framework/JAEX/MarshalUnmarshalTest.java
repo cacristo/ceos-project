@@ -3,6 +3,7 @@ package org.jaexcel.framework.JAEX;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jaexcel.framework.JAEX.bean.AddressInfo;
 import org.jaexcel.framework.JAEX.bean.Job;
@@ -32,6 +33,56 @@ public class MarshalUnmarshalTest extends TestCase {
 	 */
 	public static Test suite() {
 		return new TestSuite(MarshalUnmarshalTest.class);
+	}
+
+	/**
+	 * Test the method 'marshalToSheet' to generate the Excel from the object and
+	 * return the Sheet generated.<br>
+	 * After that, test the method 'unmarshalFromSheet' reading the Excel from
+	 * the Sheet passed as parameter and bring the data to the object.
+	 */
+	public void testMarshalSheet() throws Exception {
+		MultiTypeObject mto = buildMultiTypeObject();
+
+		IEngine en = new Engine();
+		Sheet s = en.marshalToSheet(mto);
+
+		/*MultiTypeObject charger = new MultiTypeObject();
+		en.unmarshalFromWorkbook(charger, wb);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+
+		Calendar calendarUnmarshal = Calendar.getInstance();
+		calendarUnmarshal.setTime(mto.getDateAttribute());
+		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
+		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
+		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
+		assertEquals("some string", charger.getStringAttribute());
+		assertEquals(Integer.valueOf(46), charger.getIntegerAttribute());
+		assertEquals(Double.valueOf("25.3"), charger.getDoubleAttribute());
+		assertEquals(Long.valueOf("1234567890"), charger.getLongAttribute());
+		assertEquals(Boolean.FALSE, charger.getBooleanAttribute());
+
+		assertEquals(5, charger.getJob().getJobCode());
+		assertEquals("Family Job Name", charger.getJob().getJobFamily());
+		assertEquals("Job Name", charger.getJob().getJobName());
+
+		assertEquals(121, charger.getIntegerPrimitiveAttribute());
+		assertEquals(44.6, charger.getDoublePrimitiveAttribute());
+		assertEquals(987654321L, charger.getLongPrimitiveAttribute());
+		assertEquals(true, charger.isBooleanPrimitiveAttribute());
+
+		assertEquals("this is the street", charger.getAddressInfo().getAddress());
+		assertEquals(99, charger.getAddressInfo().getNumber());
+		assertEquals("this is the city", charger.getAddressInfo().getCity());
+		assertEquals(70065, charger.getAddressInfo().getCityCode());
+		assertEquals("This is a Country", charger.getAddressInfo().getCountry());
+
+		assertEquals(14.765f, charger.getFloatAttribute());
+		assertEquals(11.1125f, charger.getFloatPrimitiveAttribute());
+
+		assertEquals(UnitFamily.COMPONENTS, charger.getUnitFamily());*/
 	}
 
 	/**
