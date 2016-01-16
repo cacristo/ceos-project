@@ -73,19 +73,6 @@ public interface IEngine {
 	/* ######################## Unmarshal methods ######################## */
 
 	/**
-	 * Generate the object from the sheet passed as parameter.
-	 * 
-	 * @param object
-	 *            the object to fill up.
-	 * @param sheet
-	 *            the {@link Sheet} to read and pass the information to the
-	 *            object
-	 * @return the {@link Object} filled up
-	 */
-
-	Object unmarshalToSheet(Object object, Sheet sheet) throws Exception;
-
-	/**
 	 * Generate the object from the path file passed as parameter.
 	 * 
 	 * @param object
