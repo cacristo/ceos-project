@@ -65,13 +65,6 @@ public @interface XlsElement {
 	String transformMask() default "";
 
 	/**
-	 * Define the decimal scale of the Double / BigDecimal objects.
-	 * 
-	 * @return the decimal scale to apply
-	 */
-	// FIXME int decimalScale() default 2;
-
-	/**
 	 * Define if the cell is a formula.<br>
 	 * By default is false.
 	 * 
@@ -86,4 +79,28 @@ public @interface XlsElement {
 	 * @return the formula to apply
 	 */
 	String formula() default "";
+
+	/**
+	 * Define the name of the method which contains the customized rules to
+	 * apply at the object. By default is empty.
+	 * 
+	 * @return the name of the method
+	 */
+	String customizedRules() default "";
+
+	/**
+	 * Define the decimal scale of the Double / BigDecimal objects.<br>
+	 * Apply at version 2.0
+	 * 
+	 * @return the decimal scale to apply
+	 */
+	// FIXME int decimalScale() default 2;
+
+	/**
+	 * Define the column size to apply at the column.<br>
+	 * Apply at version 2.0
+	 * 
+	 * @return the column size to apply
+	 */
+	// FIXME int columnSize() default 10;
 }
