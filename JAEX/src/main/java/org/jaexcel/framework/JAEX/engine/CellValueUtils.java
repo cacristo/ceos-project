@@ -24,6 +24,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
+import org.jaexcel.framework.JAEX.exception.JAEXCustomizedRulesException;
 
 public class CellValueUtils {
 
@@ -75,14 +76,16 @@ public class CellValueUtils {
 			} else {
 				// normal manage cell
 				c.setCellValue((String) f.get(o));
-
-				CellStyleUtils.applyCellStyle(wb, c, cs);
 			}
+			
+			// apply style
+			CellStyleUtils.applyCellStyle(wb, c, cs);
+			
 			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
 				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
-
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
@@ -124,10 +127,11 @@ public class CellValueUtils {
 			} else {
 				// normal manage cell
 				c.setCellValue((Integer) f.get(o));
-
-				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 			}
 
+			// apply cell style
+			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			
 			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
 				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
@@ -175,9 +179,10 @@ public class CellValueUtils {
 			} else {
 				// normal manage cell
 				c.setCellValue((Long) f.get(o));
-
-				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 			}
+			
+			// apply cell style
+			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 
 			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
@@ -228,6 +233,9 @@ public class CellValueUtils {
 				// apply the formula
 				if (!toFormula(o, f, c, element)) {
 					c.setCellValue((Double) toExplicitFormula(o, f));
+
+					// apply cell style
+					CellStyleUtils.applyCellStyle(wb, c, cs);
 				}
 
 			} else {
@@ -235,9 +243,13 @@ public class CellValueUtils {
 				if (StringUtils.isNotBlank(transformMask)) {
 					DecimalFormat df = new DecimalFormat(transformMask);
 					c.setCellValue(df.format((Double) f.get(o)));
+
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs);
 				} else {
 					c.setCellValue((Double) f.get(o));
+
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 				}
 			}
@@ -286,6 +298,9 @@ public class CellValueUtils {
 				// apply the formula
 				if (!toFormula(o, f, c, element)) {
 					c.setCellValue((Double) toExplicitFormula(o, f));
+
+					// apply cell style
+					CellStyleUtils.applyCellStyle(wb, c, cs);
 				}
 
 			} else {
@@ -299,10 +314,12 @@ public class CellValueUtils {
 				if (StringUtils.isNotBlank(transformMask)) {
 					DecimalFormat df = new DecimalFormat(transformMask);
 					c.setCellValue(df.format(dBigDecimal));
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs);
 
 				} else {
 					c.setCellValue(dBigDecimal);
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 				}
 			}
@@ -365,6 +382,7 @@ public class CellValueUtils {
 									JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
 						}
 						c.setCellValue(dateFormated);
+						// apply cell style
 						CellStyleUtils.applyCellStyle(wb, c, cs);
 					} catch (Exception e) {
 						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
@@ -374,11 +392,13 @@ public class CellValueUtils {
 				} else if (StringUtils.isNotBlank(formatMask)) {
 					// apply format mask
 					c.setCellValue(dDate);
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 
 				} else {
 					// apply default date mask
 					c.setCellValue(dDate);
+					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs, "yyyy-MM-dd");
 
 				}
@@ -426,12 +446,16 @@ public class CellValueUtils {
 				// apply the formula
 				if (!toFormula(o, f, c, element)) {
 					c.setCellValue((Double) toExplicitFormula(o, f));
+					
+					// apply cell style
+					CellStyleUtils.applyCellStyle(wb, c, cs);
 				}
 
 			} else {
 				// normal manage cell
 				c.setCellValue((Float) f.get(o));
 
+				// apply cell style
 				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 			}
 
@@ -479,11 +503,15 @@ public class CellValueUtils {
 				// apply format mask defined at transform mask
 				String[] split = transformMask.split("/");
 				c.setCellValue((bBoolean == null ? "" : (bBoolean ? split[0] : split[1])));
+
+				// apply cell style
 				CellStyleUtils.applyCellStyle(wb, c, cs);
 
 			} else {
 				// locale mode
 				c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
+
+				// apply cell style
 				CellStyleUtils.applyCellStyle(wb, c, cs);
 			}
 
@@ -539,6 +567,7 @@ public class CellValueUtils {
 				c.setCellValue((String) objEnum.toString());
 			}
 
+			// apply cell style
 			CellStyleUtils.applyCellStyle(wb, c, cs);
 
 			if (StringUtils.isNotBlank(comment)) {
@@ -612,6 +641,27 @@ public class CellValueUtils {
 		Method m = o.getClass().getDeclaredMethod(method, argTypes);
 
 		return m.invoke(o, (Object[]) null);
+	}
+
+	/**
+	 * Apply a explicit formula value at the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	protected static void applyCustomizedRules(Object o, String methodRules)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, JAEXCustomizedRulesException {
+		@SuppressWarnings("rawtypes")
+		Class[] argTypes = {};
+
+		Method m = o.getClass().getDeclaredMethod(methodRules, argTypes);
+
+		m.invoke(o, (Object[]) null);
 	}
 
 	// TODO : to review
