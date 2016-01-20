@@ -346,8 +346,9 @@ public class CGen implements IGeneratorCSV {
 		case CellValueUtils.OBJECT_DATE:
 
 			// OldCode
-			//SimpleDateFormat formatDate = new SimpleDateFormat(DEFAULT_DATE);
-			//content.put(idx, (Date) f.get(o) != null ? formatDate.format((Date) f.get(o)) : EMPTY);
+			// SimpleDateFormat formatDate = new SimpleDateFormat(DEFAULT_DATE);
+			// content.put(idx, (Date) f.get(o) != null ?
+			// formatDate.format((Date) f.get(o)) : EMPTY);
 			content.put(idx, CsvUtils.toDate((Date) f.get(o), fM, tM));
 			isUpdated = true;
 			break;
@@ -378,15 +379,17 @@ public class CGen implements IGeneratorCSV {
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
 
-			content.put(idx, (Double) f.get(o) != null ? ((Double) f.get(o)).toString() : EMPTY);
-			//content.put(idx, CsvUtils.toDouble((Double) f.get(o), fM, tM));
+			// content.put(idx, (Double) f.get(o) != null ? ((Double)
+			// f.get(o)).toString() : EMPTY);
+			content.put(idx, CsvUtils.toDouble((Double) f.get(o), fM, tM));
 			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
 
 			content.put(idx, (BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : EMPTY);
-			//content.put(idx, CsvUtils.toBigDecimal((BigDecimal) f.get(o), fM, tM));
+			// content.put(idx, CsvUtils.toBigDecimal((BigDecimal) f.get(o), fM,
+			// tM));
 			isUpdated = true;
 			break;
 
@@ -453,16 +456,15 @@ public class CGen implements IGeneratorCSV {
 		case CellValueUtils.OBJECT_DATE:
 
 			// OldCode
-			//SimpleDateFormat formatDate = new SimpleDateFormat(DEFAULT_DATE);
-			//f.set(o, formatDate.parse(v[idx]));
-			
+			// SimpleDateFormat formatDate = new SimpleDateFormat(DEFAULT_DATE);
+			// f.set(o, formatDate.parse(v[idx]));
+
 			String date = v[idx];
 			if (StringUtils.isNotBlank(date)) {
 
 				String tM = xlsAnnotation.transformMask();
 				String fM = xlsAnnotation.formatMask();
-				String decorator = StringUtils.isEmpty(tM)
-						? (StringUtils.isEmpty(fM) ? DEFAULT_DATE : fM) : tM;
+				String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? DEFAULT_DATE : fM) : tM;
 
 				SimpleDateFormat dt = new SimpleDateFormat(decorator);
 				try {
@@ -470,11 +472,10 @@ public class CGen implements IGeneratorCSV {
 					f.set(o, dateConverted);
 				} catch (ParseException e) {
 					/*
-					 * if date decorator do not match with a valid mask
-					 * launch exception
+					 * if date decorator do not match with a valid mask launch
+					 * exception
 					 */
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
-							e);
+					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
 				}
 			}
 			isUpdated = true;
@@ -516,20 +517,23 @@ public class CGen implements IGeneratorCSV {
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
 
+			// OldCode
+			// String dPValue = v[idx];
+			// if (StringUtils.isNotBlank(dPValue)) {
+			// f.set(o, Double.valueOf(dPValue));
+			// }
+
 			String dPValue = v[idx];
 			if (StringUtils.isNotBlank(dPValue)) {
-				f.set(o, Double.valueOf(dPValue));
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
+				} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
+					f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
+				} else {
+					f.set(o, Double.parseDouble(dPValue));
+				}
 			}
-			
-			//if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-			//	f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
-			//} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-			//	f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
-			//} else {
-			//	f.set(o, Double.parseDouble(dPValue));
-			//}
-			
-			
+
 			isUpdated = true;
 
 			break;
@@ -588,8 +592,6 @@ public class CGen implements IGeneratorCSV {
 
 		return isUpdated;
 	}
-
-	
 
 	/* ######################## Marshal methods ########################## */
 
