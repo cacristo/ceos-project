@@ -1,6 +1,7 @@
 package org.jaexcel.framework.JAEX;
 
 import org.jaexcel.framework.JAEX.bean.ObjectFormula;
+import org.jaexcel.framework.JAEX.bean.ObjectFormulaBuilder;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
 
@@ -8,7 +9,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class ObjectFormulaTest extends TestCase {
+public class FormulaTest extends TestCase {
 
 	/**
 	 * Create the test case
@@ -16,7 +17,7 @@ public class ObjectFormulaTest extends TestCase {
 	 * @param testName
 	 *            name of the test case
 	 */
-	public ObjectFormulaTest(String testName) {
+	public FormulaTest(String testName) {
 		super(testName);
 	}
 
@@ -24,7 +25,7 @@ public class ObjectFormulaTest extends TestCase {
 	 * @return the suite of tests being tested
 	 */
 	public static Test suite() {
-		return new TestSuite(ObjectFormulaTest.class);
+		return new TestSuite(FormulaTest.class);
 	}
 
 
@@ -32,22 +33,25 @@ public class ObjectFormulaTest extends TestCase {
 	 * Test one basic object
 	 */
 	public void testMarshalObjectFormula() throws Exception {
-		ObjectFormula of = new ObjectFormula();
-
-		of.setStore(200);
-		of.setWebStore(455);
-
-		of.setValueLocal(1623.99);
-		of.setValueRegion(3199.99);
-		of.setValueCountry(8421.80);
-		
-		of.setSomeString(null);
+		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
 		
 		IEngine en = new Engine();
 
 		en.marshal(of);
+	}
+	
 
-		assertEquals(true, true);
+	/**
+	 * Test one basic object
+	 */
+	public void testUnmarshalObjectFormula() throws Exception {
+		ObjectFormula of = new ObjectFormula();
+		
+		IEngine en = new Engine();
+
+		en.unmarshalFromPath(of, "D:\\projects\\");
+		
+		ObjectFormulaBuilder.validateObjectFormula(of);
 	}
 
 }
