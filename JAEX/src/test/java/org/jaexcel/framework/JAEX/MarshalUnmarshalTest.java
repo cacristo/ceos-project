@@ -1,14 +1,8 @@
 package org.jaexcel.framework.JAEX;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.jaexcel.framework.JAEX.bean.AddressInfo;
-import org.jaexcel.framework.JAEX.bean.Job;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
-import org.jaexcel.framework.JAEX.bean.UnitFamily;
+import org.jaexcel.framework.JAEX.bean.MultiTypeObjectBuilder;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
 
@@ -36,63 +30,55 @@ public class MarshalUnmarshalTest extends TestCase {
 	}
 
 	/**
-	 * Test the method 'marshalToSheet' to generate the Excel from the object and
-	 * return the Sheet generated.<br>
+	 * Test the method 'marshalAndSave' to generate the Excel from the object
+	 * and save it at the path file indicated.
+	 */
+	public void testMarshalPath() throws Exception {
+
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
+		String outputPath = "D:\\projects\\";
+
+		IEngine en = new Engine();
+		en.marshalAndSave(mto, outputPath);
+	}
+
+	/**
+	 * Test the method 'unmarshalFromPath' reading the Excel from a specific
+	 * path file indicated and bring the data to the object.
+	 */
+	public void testUnmarshalPath() throws Exception {
+
+		MultiTypeObject charger = new MultiTypeObject();
+		String inputPath = "D:\\projects";
+
+		IEngine en = new Engine();
+		en.unmarshalFromPath(charger, inputPath);
+
+		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
+	}
+
+	/**
+	 * Test the method 'marshalToSheet' to generate the Excel from the object
+	 * and return the Sheet generated.<br>
 	 * After that, test the method 'unmarshalFromSheet' reading the Excel from
 	 * the Sheet passed as parameter and bring the data to the object.
 	 */
 	public void testMarshalSheet() throws Exception {
-		MultiTypeObject mto = buildMultiTypeObject();
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
 		IEngine en = new Engine();
-		Sheet s = en.marshalToSheet(mto);
+		en.marshalToSheet(mto);
 
-		/*MultiTypeObject charger = new MultiTypeObject();
-		en.unmarshalFromWorkbook(charger, wb);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-
-		Calendar calendarUnmarshal = Calendar.getInstance();
-		calendarUnmarshal.setTime(mto.getDateAttribute());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		assertEquals("some string", charger.getStringAttribute());
-		assertEquals(Integer.valueOf(46), charger.getIntegerAttribute());
-		assertEquals(Double.valueOf("25.3"), charger.getDoubleAttribute());
-		assertEquals(Long.valueOf("1234567890"), charger.getLongAttribute());
-		assertEquals(Boolean.FALSE, charger.getBooleanAttribute());
-
-		assertEquals(5, charger.getJob().getJobCode());
-		assertEquals("Family Job Name", charger.getJob().getJobFamily());
-		assertEquals("Job Name", charger.getJob().getJobName());
-
-		assertEquals(121, charger.getIntegerPrimitiveAttribute());
-		assertEquals(44.6, charger.getDoublePrimitiveAttribute());
-		assertEquals(987654321L, charger.getLongPrimitiveAttribute());
-		assertEquals(true, charger.isBooleanPrimitiveAttribute());
-
-		assertEquals("this is the street", charger.getAddressInfo().getAddress());
-		assertEquals(99, charger.getAddressInfo().getNumber());
-		assertEquals("this is the city", charger.getAddressInfo().getCity());
-		assertEquals(70065, charger.getAddressInfo().getCityCode());
-		assertEquals("This is a Country", charger.getAddressInfo().getCountry());
-
-		assertEquals(14.765f, charger.getFloatAttribute());
-		assertEquals(11.1125f, charger.getFloatPrimitiveAttribute());
-
-		assertEquals(UnitFamily.COMPONENTS, charger.getUnitFamily());*/
 	}
 
 	/**
-	 * Test the method 'marshalToWorkbook' to generate the Excel from the object and
-	 * return the Workbook generated.<br>
-	 * After that, test the method 'unmarshalFromWorkbook' reading the Excel from
-	 * the Workbook passed as parameter and bring the data to the object.
+	 * Test the method 'marshalToWorkbook' to generate the Excel from the object
+	 * and return the Workbook generated.<br>
+	 * After that, test the method 'unmarshalFromWorkbook' reading the Excel
+	 * from the Workbook passed as parameter and bring the data to the object.
 	 */
 	public void testMarshalUnmarshalWorkbook() throws Exception {
-		MultiTypeObject mto = buildMultiTypeObject();
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
 		IEngine en = new Engine();
 		Workbook wb = en.marshalToWorkbook(mto);
@@ -100,92 +86,7 @@ public class MarshalUnmarshalTest extends TestCase {
 		MultiTypeObject charger = new MultiTypeObject();
 		en.unmarshalFromWorkbook(charger, wb);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-
-		Calendar calendarUnmarshal = Calendar.getInstance();
-		calendarUnmarshal.setTime(mto.getDateAttribute());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		assertEquals("some string", charger.getStringAttribute());
-		assertEquals(Integer.valueOf(46), charger.getIntegerAttribute());
-		assertEquals(Double.valueOf("25.3"), charger.getDoubleAttribute());
-		assertEquals(Long.valueOf("1234567890"), charger.getLongAttribute());
-		assertEquals(Boolean.FALSE, charger.getBooleanAttribute());
-
-		assertEquals(5, charger.getJob().getJobCode());
-		assertEquals("Family Job Name", charger.getJob().getJobFamily());
-		assertEquals("Job Name", charger.getJob().getJobName());
-
-		assertEquals(121, charger.getIntegerPrimitiveAttribute());
-		assertEquals(44.6, charger.getDoublePrimitiveAttribute());
-		assertEquals(987654321L, charger.getLongPrimitiveAttribute());
-		assertEquals(true, charger.isBooleanPrimitiveAttribute());
-
-		assertEquals("this is the street", charger.getAddressInfo().getAddress());
-		assertEquals(99, charger.getAddressInfo().getNumber());
-		assertEquals("this is the city", charger.getAddressInfo().getCity());
-		assertEquals(70065, charger.getAddressInfo().getCityCode());
-		assertEquals("This is a Country", charger.getAddressInfo().getCountry());
-
-		assertEquals(14.765f, charger.getFloatAttribute());
-		assertEquals(11.1125f, charger.getFloatPrimitiveAttribute());
-
-		assertEquals(UnitFamily.COMPONENTS, charger.getUnitFamily());
-	}
-
-	/**
-	 * Test the method 'marshalAndSave' to generate the Excel from the object
-	 * and save it at the path file indicated.<br>
-	 * After that, test the method 'unmarshalFromPath' reading the Excel from a
-	 * specific path file indicated and bring the data to the object.
-	 */
-	public void testMarshalUnmarshalPath() throws Exception {
-
-		MultiTypeObject mto = buildMultiTypeObject();
-		String outputPath = "D:\\projects\\";
-		String inputPath = "D:\\projects";
-
-		IEngine en = new Engine();
-		en.marshalAndSave(mto, outputPath);
-
-		MultiTypeObject charger = new MultiTypeObject();
-		en.unmarshalFromPath(charger, inputPath);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-
-		Calendar calendarUnmarshal = Calendar.getInstance();
-		calendarUnmarshal.setTime(mto.getDateAttribute());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		assertEquals("some string", charger.getStringAttribute());
-		assertEquals(Integer.valueOf(46), charger.getIntegerAttribute());
-		assertEquals(Double.valueOf("25.3"), charger.getDoubleAttribute());
-		assertEquals(Long.valueOf("1234567890"), charger.getLongAttribute());
-		assertEquals(Boolean.FALSE, charger.getBooleanAttribute());
-
-		assertEquals(5, charger.getJob().getJobCode());
-		assertEquals("Family Job Name", charger.getJob().getJobFamily());
-		assertEquals("Job Name", charger.getJob().getJobName());
-
-		assertEquals(121, charger.getIntegerPrimitiveAttribute());
-		assertEquals(44.6, charger.getDoublePrimitiveAttribute());
-		assertEquals(987654321L, charger.getLongPrimitiveAttribute());
-		assertEquals(true, charger.isBooleanPrimitiveAttribute());
-
-		assertEquals("this is the street", charger.getAddressInfo().getAddress());
-		assertEquals(99, charger.getAddressInfo().getNumber());
-		assertEquals("this is the city", charger.getAddressInfo().getCity());
-		assertEquals(70065, charger.getAddressInfo().getCityCode());
-		assertEquals("This is a Country", charger.getAddressInfo().getCountry());
-
-		assertEquals(14.765f, charger.getFloatAttribute());
-		assertEquals(11.1125f, charger.getFloatPrimitiveAttribute());
-
-		assertEquals(UnitFamily.COMPONENTS, charger.getUnitFamily());
+		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
 	}
 
 	/**
@@ -196,7 +97,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	 */
 	public void testMarshalUnmarshalByte() throws Exception {
 
-		MultiTypeObject mto = buildMultiTypeObject();
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
 		IEngine en = new Engine();
 		byte[] generatedBytes = en.marshalToByte(mto);
@@ -204,79 +105,7 @@ public class MarshalUnmarshalTest extends TestCase {
 		MultiTypeObject charger = new MultiTypeObject();
 		en.unmarshalFromByte(charger, generatedBytes);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-
-		Calendar calendarUnmarshal = Calendar.getInstance();
-		calendarUnmarshal.setTime(mto.getDateAttribute());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		assertEquals("some string", charger.getStringAttribute());
-		assertEquals(Integer.valueOf(46), charger.getIntegerAttribute());
-		assertEquals(Double.valueOf("25.3"), charger.getDoubleAttribute());
-		assertEquals(Long.valueOf("1234567890"), charger.getLongAttribute());
-		assertEquals(Boolean.FALSE, charger.getBooleanAttribute());
-
-		assertEquals(5, charger.getJob().getJobCode());
-		assertEquals("Family Job Name", charger.getJob().getJobFamily());
-		assertEquals("Job Name", charger.getJob().getJobName());
-
-		assertEquals(121, charger.getIntegerPrimitiveAttribute());
-		assertEquals(44.6, charger.getDoublePrimitiveAttribute());
-		assertEquals(987654321L, charger.getLongPrimitiveAttribute());
-		assertEquals(true, charger.isBooleanPrimitiveAttribute());
-
-		assertEquals("this is the street", charger.getAddressInfo().getAddress());
-		assertEquals(99, charger.getAddressInfo().getNumber());
-		assertEquals("this is the city", charger.getAddressInfo().getCity());
-		assertEquals(70065, charger.getAddressInfo().getCityCode());
-		assertEquals("This is a Country", charger.getAddressInfo().getCountry());
-
-		assertEquals(14.765f, charger.getFloatAttribute());
-		assertEquals(11.1125f, charger.getFloatPrimitiveAttribute());
-
-		assertEquals(UnitFamily.COMPONENTS, charger.getUnitFamily());
+		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
 	}
 
-	/**
-	 * Create a multi type object for tests.
-	 * 
-	 * @return
-	 */
-	private MultiTypeObject buildMultiTypeObject() {
-		MultiTypeObject mto = new MultiTypeObject();
-		mto.setDateAttribute(new Date());
-		mto.setStringAttribute("some string");
-		mto.setIntegerAttribute(46);
-		mto.setDoubleAttribute(Double.valueOf("25.3"));
-		mto.setLongAttribute(Long.valueOf("1234567890"));
-		mto.setBooleanAttribute(Boolean.FALSE);
-
-		Job job = new Job();
-		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name");
-		job.setJobName("Job Name");
-		mto.setJob(job);
-
-		mto.setIntegerPrimitiveAttribute(121);
-		mto.setDoublePrimitiveAttribute(44.6);
-		mto.setLongPrimitiveAttribute(987654321L);
-		mto.setBooleanPrimitiveAttribute(true);
-
-		AddressInfo ai = new AddressInfo();
-		ai.setAddress("this is the street");
-		ai.setNumber(99);
-		ai.setCity("this is the city");
-		ai.setCityCode(70065);
-		ai.setCountry("This is a Country");
-		mto.setAddressInfo(ai);
-
-		mto.setFloatAttribute(14.765f);
-		mto.setFloatPrimitiveAttribute(11.1125f);
-
-		mto.setUnitFamily(UnitFamily.COMPONENTS);
-
-		return mto;
-	}
 }
