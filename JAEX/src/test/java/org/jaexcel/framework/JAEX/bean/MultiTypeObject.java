@@ -1,5 +1,6 @@
 package org.jaexcel.framework.JAEX.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
@@ -59,6 +60,10 @@ public class MultiTypeObject {
 	
 	@XlsElement(title = "Unit family", position = 16)
 	private UnitFamily unitFamily;
+	
+	@XlsElement(title = "BigDecimal value", position = 17)
+	private BigDecimal bigDecimalAttribute;
+	
 	
 	public MultiTypeObject() {
 	}
@@ -306,5 +311,19 @@ public class MultiTypeObject {
 	 */
 	public void setUnitFamily(UnitFamily unitFamily) {
 		this.unitFamily = unitFamily;
+	}
+
+	/**
+	 * @return the bigDecimalAttribute
+	 */
+	public BigDecimal getBigDecimalAttribute() {
+		return bigDecimalAttribute;
+	}
+
+	/**
+	 * @param bigDecimalAttribute the bigDecimalAttribute to set
+	 */
+	public void setBigDecimalAttribute(BigDecimal bigDecimalAttribute) {
+		this.bigDecimalAttribute = bigDecimalAttribute;
 	}
 }
