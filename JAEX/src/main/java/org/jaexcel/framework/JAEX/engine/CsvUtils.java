@@ -99,15 +99,15 @@ public class CsvUtils {
 			if (StringUtils.isNotBlank(transformMask)) {
 				// apply transformation mask
 				DecimalFormat df = new DecimalFormat(transformMask);
-				return df.format((Double) value);
+				return df.format((Double) value).replace(",", ".");
 
 			} else if (StringUtils.isNotBlank(formatMask)) {
 				// apply format mask
 				DecimalFormat df = new DecimalFormat(formatMask);
-				return df.format((Double) value);
+				return df.format((Double) value).replace(",", ".");
 
 			} else {
-				return value.toString(); // the exact value
+				return value.toString().replace(",", "."); // the exact value
 			}
 		}
 		return ""; // empty field
