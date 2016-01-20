@@ -600,8 +600,8 @@ public class Engine implements IEngine {
 	 *            the object
 	 * @param f
 	 *            the field
-	 * @param d
-	 *            the decorator mask
+	 * @param xlsAnnotation
+	 *            the XlsAnnotation
 	 * @return in case of the object return the number of cell created,
 	 *         otherwise 0
 	 * @throws Exception
@@ -854,7 +854,7 @@ public class Engine implements IEngine {
 
 		switch (fT.getName()) {
 		case CellValueUtils.OBJECT_DATE:
-
+			// FIXME review the management
 			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
 				f.set(o, c.getDateCellValue());
 			} else {
@@ -886,7 +886,11 @@ public class Engine implements IEngine {
 
 		case CellValueUtils.OBJECT_STRING:
 
-			f.set(o, c.getStringCellValue());
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
+			} else {
+				f.set(o, c.getStringCellValue());
+			}
 			isUpdated = true;
 
 			break;
@@ -894,9 +898,13 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_INTEGER:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
-
-			int intValue = ((Double) c.getNumericCellValue()).intValue();
-			f.set(o, intValue);
+			
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
+			} else {
+				int intValue = ((Double) c.getNumericCellValue()).intValue();
+				f.set(o, intValue);
+			}
 			isUpdated = true;
 
 			break;
@@ -904,9 +912,13 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_LONG:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
-
-			Long longValue = ((Double) c.getNumericCellValue()).longValue();
-			f.set(o, longValue);
+			
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
+			} else {
+				Long longValue = ((Double) c.getNumericCellValue()).longValue();
+				f.set(o, longValue);
+			}
 			isUpdated = true;
 
 			break;
@@ -914,22 +926,30 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_DOUBLE:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
-
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
+			
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
 			} else {
-				f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
+				} else {
+					f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
+				}
 			}
 			isUpdated = true;
 
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
-
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
+			
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
 			} else {
-				f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
+				} else {
+					f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
+				}
 			}
 			isUpdated = true;
 
@@ -938,9 +958,12 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_FLOAT:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
-
-			Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
-			f.set(o, floatValue);
+			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				// FIXME
+			} else {
+				Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
+				f.set(o, floatValue);
+			}
 			isUpdated = true;
 
 			break;
@@ -1018,6 +1041,12 @@ public class Engine implements IEngine {
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+
+				/* apply customized rules defined at the object */
+				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
+					CellValueUtils.applyCustomizedRules(o, xlsAnnotation.customizedRules());
+				}
+
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -1071,6 +1100,12 @@ public class Engine implements IEngine {
 			/* Process @XlsElement */
 			if (field.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
+
+				/* apply customized rules defined at the object */
+				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
+					CellValueUtils.applyCustomizedRules(o, xlsAnnotation.customizedRules());
+				}
+
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -1083,13 +1118,13 @@ public class Engine implements IEngine {
 					int tmpIdxCell = idxC - 1;
 					/* initialize row */
 					row = initializeRow(s, idxR + xlsAnnotation.position());
-					
+
 					/* apply merge region */
 					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
 
 					/* header treatment */
 					initializeHeaderCell(row, idxC, xlsAnnotation.title());
-					
+
 				} else {
 					row = s.getRow(idxR + xlsAnnotation.position());
 				}
@@ -1274,6 +1309,7 @@ public class Engine implements IEngine {
 		/* Generate the byte array to return */
 		return wb.getSheetAt(0);
 	}
+
 	/**
 	 * Generate the workbook from the object and return the workbook generated.
 	 * 
@@ -1322,6 +1358,8 @@ public class Engine implements IEngine {
 			marshalAsPropagationVertical(object, oC, s, idxRow, idxCell, 0);
 
 		}
+
+		// FIXME apply the column size here - if necessary
 
 		return wb;
 	}
@@ -1395,7 +1433,7 @@ public class Engine implements IEngine {
 
 		Row headerRow = null, contentRow = null;
 		Sheet s = null;
-		int idxRow = 0, counter = 0, idxCell = 0, index=0;
+		int idxRow = 0, counter = 0, idxCell = 0, index = 0;
 
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = collection.iterator();
@@ -1433,10 +1471,10 @@ public class Engine implements IEngine {
 					s = initializeSheet(wb, config.getTitleSheet());
 					idxCell = config.getStartCell();
 				} else {
-					idxCell =index+1;
+					idxCell = index + 1;
 				}
 				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
-				index= index+1;
+				index = index + 1;
 			}
 
 		}
@@ -1447,11 +1485,6 @@ public class Engine implements IEngine {
 	}
 
 	/* ######################## Unmarshal methods ######################## */
-	
-	public Object unmarshalToSheet(Object object, Sheet sheet) throws Exception {
-		// TODO
-		return null;
-	}
 
 	/**
 	 * Generate the object from the workbook passed as parameter.
