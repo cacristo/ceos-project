@@ -2,6 +2,7 @@ package org.jaexcel.framework.JAEX.bean;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
@@ -22,7 +23,7 @@ public class ObjectConfigurable {
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", position = 2)
+	@XlsElement(title = "String value", customizedRules="rules", position = 2)
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3, decorator = "extendedInteger")
@@ -165,4 +166,14 @@ public class ObjectConfigurable {
 	public void setDateAttribute1(Date dateAttribute1) {
 		this.dateAttribute1 = dateAttribute1;
 	}
+	
+	public void rules(){
+		if(StringUtils.isNotBlank(this.getStringAttribute())){
+			System.out.println("Alert! String is empty");
+		}
+		if(this.booleanAttribute){
+			System.out.println("Alert! Boolean is true");
+		}
+	}
+	
 }
