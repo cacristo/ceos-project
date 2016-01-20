@@ -1,11 +1,9 @@
 package org.jaexcel.framework.JAEX;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.bean.ObjectConfigurable;
+import org.jaexcel.framework.JAEX.bean.ObjectConfigurableBuilder;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
@@ -37,15 +35,7 @@ public class ObjectConfigurableTest extends TestCase {
 	 * Test one basic object
 	 */
 	public void testMarshalMultiObject() throws Exception {
-		ObjectConfigurable oc = new ObjectConfigurable();
-
-		oc.setBooleanAttribute(true);
-		oc.setDateAttribute(new Date());
-		oc.setDoubleAttribute(22.127);
-		oc.setIntegerAttribute(46);
-		oc.setLongAttribute(98765312L);
-		oc.setStringAttribute("Some string value");
-		oc.setDateAttribute1(new Date());
+		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
 
 		IEngine en = new Engine();
 
@@ -72,12 +62,9 @@ public class ObjectConfigurableTest extends TestCase {
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
 
-		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		en.addSpecificCellDecorator("anotherDate", dateDecorator);
 
 		en.marshal(oc);
-
-		// TODO validation result
-		// assertEquals(true, false);
 	}
 
 	/**
@@ -88,29 +75,8 @@ public class ObjectConfigurableTest extends TestCase {
 
 		Engine en = new Engine();
 
-		en.unmarshal(oc);
+		en.unmarshalFromPath(oc, "D:\\projects\\");
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		
-		Calendar calendarUnmarshal = Calendar.getInstance();
-		calendarUnmarshal.setTime(oc.getDateAttribute());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		assertEquals(Double.valueOf(22.127), oc.getDoubleAttribute());
-		assertEquals(Integer.valueOf(46), oc.getIntegerAttribute());
-		assertEquals(Long.valueOf(98765312L), oc.getLongAttribute());
-		assertEquals("Some string value", oc.getStringAttribute());
-		Calendar calendarUnmarshal1 = Calendar.getInstance();
-		calendarUnmarshal1.setTime(oc.getDateAttribute1());
-		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal1.get(Calendar.YEAR));
-		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal1.get(Calendar.MONTH));
-		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal1.get(Calendar.DAY_OF_MONTH));
-		
-		// the object is null
-		assertEquals(0, oc.getJob().getJobCode());
-		assertEquals("", oc.getJob().getJobFamily());
-		assertEquals("", oc.getJob().getJobName());
+		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
 	}
 }
