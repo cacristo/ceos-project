@@ -726,8 +726,8 @@ public class Engine implements IEngine {
 			Cell cString = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toString(o, f, wb, cString,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null),
-					element, configuration.getExtensionFile());
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null), element,
+					configuration.getExtensionFile());
 
 			break;
 
@@ -886,86 +886,54 @@ public class Engine implements IEngine {
 
 		case CellValueUtils.OBJECT_STRING:
 
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
-			} else {
-				f.set(o, c.getStringCellValue());
-			}
+			f.set(o, CellValueUtils.fromExcel(c));
 			isUpdated = true;
-
 			break;
 
 		case CellValueUtils.OBJECT_INTEGER:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
-			
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
-			} else {
-				int intValue = ((Double) c.getNumericCellValue()).intValue();
-				f.set(o, intValue);
-			}
-			isUpdated = true;
 
+			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).intValue());
+			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_LONG:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
-			
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
-			} else {
-				Long longValue = ((Double) c.getNumericCellValue()).longValue();
-				f.set(o, longValue);
-			}
-			isUpdated = true;
 
+			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).longValue());
+			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_DOUBLE:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
-			
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c).replace(",", ".")));
 			} else {
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					f.set(o, Double.parseDouble(c.getStringCellValue().replace(",", ".")));
-				} else {
-					f.set(o, ((Double) c.getNumericCellValue()).doubleValue());
-				}
+				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)));
 			}
 			isUpdated = true;
-
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
-			
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
+
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c).replace(",", "."))));
 			} else {
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					f.set(o, BigDecimal.valueOf(Double.parseDouble(c.getStringCellValue().replace(",", "."))));
-				} else {
-					f.set(o, BigDecimal.valueOf(c.getNumericCellValue()));
-				}
+				f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c))));
 			}
 			isUpdated = true;
-
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
-			if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-				// FIXME
-			} else {
-				Float floatValue = ((Double) c.getNumericCellValue()).floatValue();
-				f.set(o, floatValue);
-			}
+			
+			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).floatValue());
 			isUpdated = true;
-
 			break;
 
 		case CellValueUtils.OBJECT_BOOLEAN:
@@ -973,7 +941,6 @@ public class Engine implements IEngine {
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 
 			String bool = c.getStringCellValue();
-
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 				/* apply format mask defined at transform mask */
 				String[] split = xlsAnnotation.transformMask().split("/");
@@ -984,7 +951,6 @@ public class Engine implements IEngine {
 				f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
 			}
 			isUpdated = true;
-
 			break;
 
 		default:
