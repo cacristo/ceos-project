@@ -45,6 +45,36 @@ public class CellValueUtils {
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
 	/**
+	 * Recover the value from the Excel.
+	 * 
+	 * @param c
+	 * @return
+	 */
+	protected static String fromExcel(Cell c) {
+		if (c.getCellType() == Cell.CELL_TYPE_STRING) {
+			return c.getStringCellValue();
+
+		} else if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+			Double value = c.getNumericCellValue();
+			return value.toString();
+		} else if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+			switch (c.getCachedFormulaResultType()) {
+			case Cell.CELL_TYPE_NUMERIC:
+				Double value = c.getNumericCellValue();
+				return value.toString();
+
+			case Cell.CELL_TYPE_STRING:
+				return c.getRichStringCellValue().toString();
+
+			default:
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	/**
 	 * Apply a integer value at the Cell.
 	 * 
 	 * @param o
@@ -77,15 +107,15 @@ public class CellValueUtils {
 				// normal manage cell
 				c.setCellValue((String) f.get(o));
 			}
-			
+
 			// apply style
 			CellStyleUtils.applyCellStyle(wb, c, cs);
-			
+
 			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
 				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
 			}
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
@@ -131,7 +161,7 @@ public class CellValueUtils {
 
 			// apply cell style
 			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
-			
+
 			if (StringUtils.isNotBlank(element.comment())) {
 				// apply the comment
 				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
@@ -180,7 +210,7 @@ public class CellValueUtils {
 				// normal manage cell
 				c.setCellValue((Long) f.get(o));
 			}
-			
+
 			// apply cell style
 			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
 
@@ -309,18 +339,19 @@ public class CellValueUtils {
 
 				// FIXME use the comment below to manage decimalScale
 				// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+				if (bd != null) {
+					Double dBigDecimal = bd.doubleValue();
+					if (StringUtils.isNotBlank(transformMask)) {
+						DecimalFormat df = new DecimalFormat(transformMask);
+						c.setCellValue(df.format(dBigDecimal));
+						// apply cell style
+						CellStyleUtils.applyCellStyle(wb, c, cs);
 
-				Double dBigDecimal = bd.doubleValue();
-				if (StringUtils.isNotBlank(transformMask)) {
-					DecimalFormat df = new DecimalFormat(transformMask);
-					c.setCellValue(df.format(dBigDecimal));
-					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs);
-
-				} else {
-					c.setCellValue(dBigDecimal);
-					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+					} else {
+						c.setCellValue(dBigDecimal);
+						// apply cell style
+						CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+					}
 				}
 			}
 
@@ -446,7 +477,7 @@ public class CellValueUtils {
 				// apply the formula
 				if (!toFormula(o, f, c, element)) {
 					c.setCellValue((Double) toExplicitFormula(o, f));
-					
+
 					// apply cell style
 					CellStyleUtils.applyCellStyle(wb, c, cs);
 				}
@@ -654,8 +685,8 @@ public class CellValueUtils {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void applyCustomizedRules(Object o, String methodRules)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, JAEXCustomizedRulesException {
+	protected static void applyCustomizedRules(Object o, String methodRules) throws NoSuchMethodException,
+			IllegalAccessException, InvocationTargetException, JAEXCustomizedRulesException {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 
