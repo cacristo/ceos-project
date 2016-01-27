@@ -2,9 +2,11 @@ package org.jaexcel.framework.JAEX.bean;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
+import org.jaexcel.framework.JAEX.exception.JAEXCustomizedRulesException;
 
 @XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL)
 public class MultiTypeObjectListPropHorizontal {
@@ -12,7 +14,7 @@ public class MultiTypeObjectListPropHorizontal {
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", position = 2)
+	@XlsElement(title = "String value", customizedRules="rules", position = 2)
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3)
@@ -303,5 +305,17 @@ public class MultiTypeObjectListPropHorizontal {
 	 */
 	public void setUnitFamily(UnitFamily unitFamily) {
 		this.unitFamily = unitFamily;
+	}
+	public void rules() throws JAEXCustomizedRulesException {
+		if(StringUtils.isBlank(this.getStringAttribute())){
+			System.out.println("Alert! String is empty");
+		}
+		if(this.booleanPrimitiveAttribute){
+			System.out.println("Alert! Boolean is true");
+		}
+		if(this.integerPrimitiveAttribute > 450){
+			System.out.println("Alert! Up to 450");
+			throw new JAEXCustomizedRulesException("Pim Pam Pum!!");
+		}
 	}
 }
