@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
@@ -29,7 +29,7 @@ public class ObjectsBuilderTest {
 	@XlsConfiguration(nameFile = "DefaultConfigurationSample")
 	public class ObjectWithDefaultConfig {
 
-		@XlsMasterHeader(title = "Main info")
+		@XlsNestedHeader(title = "Main info")
 		@XlsElement(title = "Date value", position = 1)
 		private Date dateAttribute;
 
@@ -228,7 +228,7 @@ public class ObjectsBuilderTest {
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
 	public class Cyclops {
 
-		@XlsMasterHeader(title = "Main info", startX = 1, endX = 3)
+		@XlsNestedHeader(title = "Main info", startX = 1, endX = 3)
 		@XlsElement(title = "Date value", position = 1, comment = "This is a comment")
 		private Date dateAttribute;
 
@@ -343,7 +343,7 @@ public class ObjectsBuilderTest {
 
 	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL)
 	public class IronMan {
-		@XlsMasterHeader(title = "Main info", startY = 1, endY = 2)
+		@XlsNestedHeader(title = "Main info", startY = 1, endY = 2)
 		@XlsElement(title = "Date value", position = 1, comment = "This is a comment")
 		private Date dateAttribute;
 
@@ -387,7 +387,7 @@ public class ObjectsBuilderTest {
 	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL)
 	public class Wolverine {
 
-		@XlsMasterHeader(title = "Job details", startX = 1, endX = 3)
+		@XlsNestedHeader(title = "Job details", startX = 1, endX = 3)
 		@XlsElement(title = "job", position = 1)
 		private Job job;
 

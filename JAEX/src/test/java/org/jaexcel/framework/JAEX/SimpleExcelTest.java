@@ -18,7 +18,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.bean.SimpleObject;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
@@ -105,7 +105,7 @@ public class SimpleExcelTest extends TestCase {
 	}
 
 	/**
-	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
+	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
 	public void testReadAnnotationXlsMasterHeader() {
 		Class<SimpleObject> oC = SimpleObject.class;
@@ -113,8 +113,8 @@ public class SimpleExcelTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
-				XlsMasterHeader xlsAnnotation = (XlsMasterHeader) f.getAnnotation(XlsMasterHeader.class);
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
+				XlsNestedHeader xlsAnnotation = (XlsNestedHeader) f.getAnnotation(XlsNestedHeader.class);
 
 				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsAnnotation.title(), "Main info");

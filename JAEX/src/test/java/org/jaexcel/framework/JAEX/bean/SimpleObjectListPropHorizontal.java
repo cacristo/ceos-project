@@ -3,14 +3,14 @@ package org.jaexcel.framework.JAEX.bean;
 import java.util.Date;
 
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 
 @XlsSheet(title = "List Simple object horizontal", propagation=PropagationType.PROPAGATION_HORIZONTAL)
 public class SimpleObjectListPropHorizontal {
 
-	@XlsMasterHeader(title = "Main info", startX = 1, endX = 3)
+	@XlsNestedHeader(title = "Main info", startX = 1, endX = 3)
 	@XlsElement(title = "Date value", position = 1)
 	private Date dateAttribute;
 

@@ -38,10 +38,10 @@ public class XlsMasterHeaderTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsMasterHeader.class);
-				XlsMasterHeader xlsMasterHeader = (XlsMasterHeader) annotation;
+				Annotation annotation = f.getAnnotation(XlsNestedHeader.class);
+				XlsNestedHeader xlsMasterHeader = (XlsNestedHeader) annotation;
 
 				// add here the annotations attributes
 				assertEquals(xlsMasterHeader.startX(), 0);
@@ -61,10 +61,10 @@ public class XlsMasterHeaderTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsMasterHeader.class);
-				XlsMasterHeader xlsMasterHeader = (XlsMasterHeader) annotation;
+				Annotation annotation = f.getAnnotation(XlsNestedHeader.class);
+				XlsNestedHeader xlsMasterHeader = (XlsNestedHeader) annotation;
 
 				// add here the annotations attributes
 				assertEquals(xlsMasterHeader.startX(), 1);
@@ -82,10 +82,10 @@ public class XlsMasterHeaderTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsMasterHeader.class);
-				XlsMasterHeader xlsMasterHeader = (XlsMasterHeader) annotation;
+				Annotation annotation = f.getAnnotation(XlsNestedHeader.class);
+				XlsNestedHeader xlsMasterHeader = (XlsNestedHeader) annotation;
 
 				// add here the annotations attributes
 				assertEquals(xlsMasterHeader.startY(), 1);

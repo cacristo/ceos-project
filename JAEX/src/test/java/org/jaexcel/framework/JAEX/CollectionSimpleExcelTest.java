@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.bean.SimpleObjectListPropHorizontal;
 import org.jaexcel.framework.JAEX.bean.SimpleObjectListPropVertical;
@@ -85,7 +85,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	}
 
 	/**
-	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
+	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
 	public void testReadAnnotationXlsMasterHeaderHoriz() {
 		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
@@ -93,9 +93,9 @@ public class CollectionSimpleExcelTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
-				XlsMasterHeader xlsAnnotation = (XlsMasterHeader) f
-						.getAnnotation(XlsMasterHeader.class);
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
+				XlsNestedHeader xlsAnnotation = (XlsNestedHeader) f
+						.getAnnotation(XlsNestedHeader.class);
 
 				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsAnnotation.title(), "Main info");
@@ -253,7 +253,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	}
 
 	/**
-	 * Test the annotation {@link XlsMasterHeader} XlsMasterHeader
+	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
 	public void testReadAnnotationXlsMasterHeaderVert() {
 		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
@@ -261,9 +261,9 @@ public class CollectionSimpleExcelTest extends TestCase {
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
 			// Process @XlsMasterHeader
-			if (f.isAnnotationPresent(XlsMasterHeader.class)) {
-				XlsMasterHeader xlsAnnotation = (XlsMasterHeader) f
-						.getAnnotation(XlsMasterHeader.class);
+			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
+				XlsNestedHeader xlsAnnotation = (XlsNestedHeader) f
+						.getAnnotation(XlsNestedHeader.class);
 
 				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsAnnotation.title(), "Main info");

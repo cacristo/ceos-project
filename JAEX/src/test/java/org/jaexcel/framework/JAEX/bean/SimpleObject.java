@@ -4,14 +4,14 @@ import java.util.Date;
 
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 
 @XlsSheet(title = "Simple object sample")
 @XlsConfiguration(nameFile = "SimpleSample")
 public class SimpleObject {
 
-	@XlsMasterHeader(title = "Main info", startX = 1, endX = 3)
+	@XlsNestedHeader(title = "Main info", startX = 1, endX = 3)
 	@XlsElement(title = "Date value", position = 1)
 	private Date dateAttribute;
 
