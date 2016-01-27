@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  */
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface XlsMasterHeader {
+public @interface XlsNestedHeader {
 	/**
 	 * Define the master element title.
 	 * 

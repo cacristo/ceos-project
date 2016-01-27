@@ -35,7 +35,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorator;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorators;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.annotation.XlsMasterHeader;
+import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
@@ -495,15 +495,15 @@ public class Engine implements IEngine {
 	 */
 	private void applyMergeRegion(Sheet s, Row r, int idxR, int idxC, Field f, boolean isPH) throws Exception {
 		/* Process @XlsMasterHeader */
-		if (f.isAnnotationPresent(XlsMasterHeader.class)) {
-			XlsMasterHeader annotation = (XlsMasterHeader) f.getAnnotation(XlsMasterHeader.class);
+		if (f.isAnnotationPresent(XlsNestedHeader.class)) {
+			XlsNestedHeader annotation = (XlsNestedHeader) f.getAnnotation(XlsNestedHeader.class);
 			/* if row null is necessary to create it */
 			if (r == null) {
 				r = initializeRow(s, idxR);
 			}
 
 			/* validation of configuration */
-			isValidMasterHeaderConfiguration(isPH, annotation);
+			isValidNestedHeaderConfiguration(isPH, annotation);
 
 			/* prepare position rows / cells */
 			int startRow, endRow, startCell, endCell;
@@ -532,10 +532,10 @@ public class Engine implements IEngine {
 	 *            true if propagation is HORIZONTAL otherwise false to
 	 *            propagation VERTICAL
 	 * @param annotation
-	 *            the {@link XlsMasterHeader} annotation
+	 *            the {@link XlsNestedHeader} annotation
 	 * @throws JAEXConfigurationException
 	 */
-	private void isValidMasterHeaderConfiguration(boolean isPH, XlsMasterHeader annotation)
+	private void isValidNestedHeaderConfiguration(boolean isPH, XlsNestedHeader annotation)
 			throws JAEXConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
@@ -1399,7 +1399,7 @@ public class Engine implements IEngine {
 
 		Row headerRow = null, contentRow = null;
 		Sheet s = null;
-		int idxRow = 0, counter = 0, idxCell = 0, index = 0;
+		int idxRow = 0, idxCell = 0, index = 0;
 
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = collection.iterator();
@@ -1429,7 +1429,7 @@ public class Engine implements IEngine {
 					contentRow = initializeRow(s, idxRow++);
 
 				}
-				counter = marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell,
+				marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell,
 						0);
 			} else {
 				idxRow = config.getStartRow();
@@ -1439,7 +1439,7 @@ public class Engine implements IEngine {
 				} else {
 					idxCell = index + 1;
 				}
-				counter = marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
+				marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
 				index = index + 1;
 			}
 
