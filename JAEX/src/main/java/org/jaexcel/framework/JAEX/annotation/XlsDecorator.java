@@ -7,6 +7,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.jaexcel.framework.JAEX.engine.CellStyleUtils;
+
 /**
  * This annotation define all the attributes related to one cell decoration.
  * 
@@ -30,7 +32,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the font name
 	 */
-	String fontName() default "Arial";
+	String fontName() default CellStyleUtils.FONT_NAME;
 
 	/**
 	 * Define the font size at the element.<br>
@@ -38,7 +40,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the size of the font
 	 */
-	short fontSize() default 10;
+	short fontSize() default CellStyleUtils.FONT_SIZE;
 
 	/**
 	 * Define the font color at the element.<br>
@@ -46,7 +48,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the color of the font
 	 */
-	short fontColor() default 0;
+	short fontColor() default CellStyleUtils.FONT_COLOR;
 
 	/**
 	 * Define if the font is bold or not at the element.<br>
@@ -54,7 +56,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return true if the font is bold, otherwise false
 	 */
-	boolean fontBold() default false;
+	boolean fontBold() default CellStyleUtils.FONT_BOLD;
 
 	/**
 	 * Define if the font is italic or not at the element.<br>
@@ -62,7 +64,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return true if the font is italic, otherwise false
 	 */
-	boolean fontItalic() default false;
+	boolean fontItalic() default CellStyleUtils.FONT_ITALIC;
 
 	/**
 	 * Define the font underline at the element.<br>
@@ -71,7 +73,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the font underline
 	 */
-	byte fontUnderline() default 0;
+	byte fontUnderline() default CellStyleUtils.FONT_UNDERLINE;
 
 	/**
 	 * Define the alignment of the element.<br>
@@ -79,7 +81,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the alignment
 	 */
-	short alignment() default 0;
+	short alignment() default CellStyleUtils.FONT_ALIGNMENT;
 
 	/**
 	 * Define the vertical alignment of the element.<br>
@@ -87,7 +89,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the vertical alignment
 	 */
-	short verticalAlignment() default 0;
+	short verticalAlignment() default CellStyleUtils.FONT_VERTICAL_ALIGNMENT;
 
 	/**
 	 * Define the border of the element.<br>
@@ -95,7 +97,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the border
 	 */
-	short border() default 0;
+	short border() default CellStyleUtils.CELL_BORDER;
 
 	/**
 	 * Define the left border of the element.<br>
@@ -103,7 +105,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the left border
 	 */
-	short borderLeft() default 0;
+	short borderLeft() default CellStyleUtils.CELL_BORDER;
 
 	/**
 	 * Define the right border of the element.<br>
@@ -111,7 +113,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the right border
 	 */
-	short borderRight() default 0;
+	short borderRight() default CellStyleUtils.CELL_BORDER;
 
 	/**
 	 * Define the top border of the element.<br>
@@ -119,7 +121,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the top border
 	 */
-	short borderTop() default 0;
+	short borderTop() default CellStyleUtils.CELL_BORDER;
 
 	/**
 	 * Define the bottom border of the element.<br>
@@ -127,7 +129,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the type of the bottom border
 	 */
-	short borderBottom() default 0;
+	short borderBottom() default CellStyleUtils.CELL_BORDER;
 
 	/**
 	 * Define the background color of the element.<br>
@@ -135,7 +137,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the background color
 	 */
-	short backgroundColor() default 9;
+	short backgroundColor() default CellStyleUtils.CELL_BACKGROUND_COLOR;
 
 	/**
 	 * Define the foreground color of the element.<br>
@@ -143,7 +145,7 @@ public @interface XlsDecorator {
 	 * 
 	 * @return the foreground color
 	 */
-	short foregroundColor() default 9;
+	short foregroundColor() default CellStyleUtils.CELL_BACKGROUND_COLOR;
 
 	/**
 	 * Define if the text is wrapped or not at the element.<br>
@@ -151,5 +153,5 @@ public @interface XlsDecorator {
 	 * 
 	 * @return true if the text is wrapped, otherwise false
 	 */
-	boolean wrapText() default false;
+	boolean wrapText() default CellStyleUtils.CELL_WRAP_TEXT;
 }

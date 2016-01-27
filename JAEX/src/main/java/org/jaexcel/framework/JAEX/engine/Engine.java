@@ -25,7 +25,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -66,8 +65,7 @@ public class Engine implements IEngine {
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
 
 		/* add the border to the cell */
-		CellStyleUtils.applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN,
-				CellStyle.BORDER_THIN);
+		CellStyleUtils.applyBorderDefault(cs);
 
 		/* add the background to the cell */
 		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
@@ -77,7 +75,7 @@ public class Engine implements IEngine {
 		cs.setWrapText(true);
 
 		/* add the font style to the cell */
-		CellStyleUtils.applyFont(wb, cs, "Arial", (short) 10, (short) 0, true, true, FontUnderline.NONE.getByteValue());
+		CellStyleUtils.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -92,6 +90,7 @@ public class Engine implements IEngine {
 
 		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
+		CellStyleUtils.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -106,6 +105,7 @@ public class Engine implements IEngine {
 
 		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
+		CellStyleUtils.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -120,6 +120,22 @@ public class Engine implements IEngine {
 
 		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
+		CellStyleUtils.applyFontDefault(wb, cs);
+
+		return cs;
+	}
+
+	/**
+	 * Initialize default Generic Cell Decorator.
+	 * 
+	 * @return the {@link CellStyle} generic decorator
+	 */
+	private CellStyle initializeGenericCellDecorator() {
+		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+
+		/* add the alignment to the cell */
+		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_LEFT);
+		CellStyleUtils.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -162,6 +178,14 @@ public class Engine implements IEngine {
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
 							: initializeBooleanCellDecorator());
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
+		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_GENERIC,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC)
+							? initializeCellStyleByCellDecorator(
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC))
+							: initializeGenericCellDecorator());
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
 		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
@@ -726,8 +750,9 @@ public class Engine implements IEngine {
 			Cell cString = r.createCell(idxC);
 
 			isUpdated = CellValueUtils.toString(o, f, wb, cString,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : null), element,
-					configuration.getExtensionFile());
+					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
+							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC)),
+					element, configuration.getExtensionFile());
 
 			break;
 
@@ -931,7 +956,7 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_FLOAT:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
-			
+
 			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).floatValue());
 			isUpdated = true;
 			break;
@@ -1429,8 +1454,7 @@ public class Engine implements IEngine {
 					contentRow = initializeRow(s, idxRow++);
 
 				}
-				marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell,
-						0);
+				marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
 			} else {
 				idxRow = config.getStartRow();
 				if (wb.getNumberOfSheets() == 0 || wb.getSheet(config.getTitleSheet()) == null) {

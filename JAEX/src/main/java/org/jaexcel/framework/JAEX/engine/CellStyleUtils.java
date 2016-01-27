@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -24,13 +25,27 @@ public class CellStyleUtils {
 	// cell decorator constants
 	public static final String CELL_DECORATOR_DATE = "date";
 	public static final String CELL_DECORATOR_BOOLEAN = "boolean";
-	public static final String CELL_DECORATOR_ENUM = "boolean";
+	public static final String CELL_DECORATOR_ENUM = "enum";
 	public static final String CELL_DECORATOR_NUMERIC = "numeric";
 	public static final String CELL_DECORATOR_HEADER = "header";
+	public static final String CELL_DECORATOR_GENERIC = "generic";
 	// default mask decorators
 	public static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
 	public static final String MASK_DECORATOR_INTEGER = "0";
 	public static final String MASK_DECORATOR_DOUBLE = "0.00";
+	// default XlsDecorator constants
+	public static final String FONT_NAME = "Arial";
+	public static final short FONT_SIZE = 10;
+	public static final short FONT_COLOR = 0;
+	public static final boolean FONT_BOLD = false;
+	public static final boolean FONT_ITALIC = false;
+	public static final short FONT_UNDERLINE = 0;
+	public static final short FONT_ALIGNMENT = 0;
+	public static final short FONT_VERTICAL_ALIGNMENT = 0;
+	public static final short CELL_BORDER = 0;
+	public static final short CELL_BACKGROUND_COLOR = 9;
+	public static final short CELL_FOREGROUND_COLOR = 9;
+	public static final boolean CELL_WRAP_TEXT = false;
 
 	/**
 	 * Initialize font.
@@ -69,6 +84,19 @@ public class CellStyleUtils {
 		DataFormat df = initializeDataFormat(wb);
 		cs.setDataFormat(df.getFormat(formatMask));
 		c.setCellStyle(cs);
+	}
+
+	/**
+	 * Apply the font to the cell style with default values.
+	 * 
+	 * @param wb
+	 *            the workbook
+	 * @param cs
+	 *            the cell style
+	 */
+	protected static void applyFontDefault(Workbook wb, CellStyle cs) {
+		applyFont(wb, cs, CellStyleUtils.FONT_NAME, CellStyleUtils.FONT_SIZE, CellStyleUtils.FONT_COLOR,
+				CellStyleUtils.FONT_BOLD, CellStyleUtils.FONT_ITALIC, FontUnderline.NONE.getByteValue());
 	}
 
 	/**
@@ -133,6 +161,16 @@ public class CellStyleUtils {
 		if (vA != 0) {
 			cs.setVerticalAlignment(vA);
 		}
+	}
+
+	/**
+	 * Apply the border to the cell style with default values.
+	 * 
+	 * @param cs
+	 *            the cell style
+	 */
+	protected static void applyBorderDefault(CellStyle cs) {
+		applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN);
 	}
 
 	/**
