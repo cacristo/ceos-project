@@ -79,6 +79,18 @@ public class ObjectMask {
 
 	@XlsElement(title = "Float primitive with transform mask (2)", position = 23, transformMask = "0.00")
 	private float floatAttribute5;
+
+	@XlsElement(title = "Boolean primitive with transform mask (1)", position = 24, transformMask = "Yes/No")
+	private boolean booleanAttribute1;
+
+	@XlsElement(title = "Boolean with transform mask (2)", position = 25)
+	private Boolean booleanAttribute2;
+
+	@XlsElement(title = "Boolean with transform mask (3)", position = 26, transformMask = "Oui/Non")
+	private Boolean booleanAttribute3;
+
+	@XlsElement(title = "Boolean primitive with format mask (2)", position = 27, formatMask = "Bah Oui/No No")
+	private boolean booleanAttribute4;
 	
 	public ObjectMask() {
 	}
@@ -403,5 +415,61 @@ public class ObjectMask {
 	 */
 	public void setFloatAttribute5(float floatAttribute5) {
 		this.floatAttribute5 = floatAttribute5;
+	}
+
+	/**
+	 * @return the booleanAttribute1
+	 */
+	public boolean isBooleanAttribute1() {
+		return booleanAttribute1;
+	}
+
+	/**
+	 * @param booleanAttribute1 the booleanAttribute1 to set
+	 */
+	public void setBooleanAttribute1(boolean booleanAttribute1) {
+		this.booleanAttribute1 = booleanAttribute1;
+	}
+
+	/**
+	 * @return the booleanAttribute2
+	 */
+	public Boolean getBooleanAttribute2() {
+		return booleanAttribute2;
+	}
+
+	/**
+	 * @param booleanAttribute2 the booleanAttribute2 to set
+	 */
+	public void setBooleanAttribute2(Boolean booleanAttribute2) {
+		this.booleanAttribute2 = booleanAttribute2;
+	}
+
+	/**
+	 * @return the booleanAttribute3
+	 */
+	public Boolean getBooleanAttribute3() {
+		return booleanAttribute3;
+	}
+
+	/**
+	 * @param booleanAttribute3 the booleanAttribute3 to set
+	 */
+	public void setBooleanAttribute3(Boolean booleanAttribute3) {
+		this.booleanAttribute3 = booleanAttribute3;
+	}
+
+	/**
+	 * @return the booleanAttribute4
+	 */
+	public boolean isBooleanAttribute4() {
+		return booleanAttribute4;
+	}
+
+	/**
+	 * @param booleanAttribute4 the booleanAttribute4 to set
+	 */
+	public void setBooleanAttribute4(boolean booleanAttribute4) {
+		this.booleanAttribute4 = booleanAttribute4;
 	}
 }

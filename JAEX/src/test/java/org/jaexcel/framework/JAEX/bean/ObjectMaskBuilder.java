@@ -61,6 +61,11 @@ public class ObjectMaskBuilder extends TestCase {
 		toValidate.setFloatAttribute3(46.445f * multiplier);
 		toValidate.setFloatAttribute4(46.445f * multiplier);
 		toValidate.setFloatAttribute5(46.445f * multiplier);
+		// Boolean
+		toValidate.setBooleanAttribute1(true);
+		toValidate.setBooleanAttribute2(true);
+		toValidate.setBooleanAttribute3(false);
+		toValidate.setBooleanAttribute4(false);
 		// TODO add new fields below
 
 		return toValidate;
@@ -114,6 +119,10 @@ public class ObjectMaskBuilder extends TestCase {
 		assertEquals(base.getFloatAttribute3(), toValidate.getFloatAttribute3());
 		assertEquals(base.getFloatAttribute4(), toValidate.getFloatAttribute4());
 		assertEquals(base.getFloatAttribute5(), toValidate.getFloatAttribute5());
+		assertEquals(base.isBooleanAttribute1(), toValidate.isBooleanAttribute1());
+		assertEquals(base.getBooleanAttribute2(), toValidate.getBooleanAttribute2());
+		assertEquals(base.getBooleanAttribute3(), toValidate.getBooleanAttribute3());
+		assertEquals(base.isBooleanAttribute4(), toValidate.isBooleanAttribute4());
 		// TODO add new validation below
 	}
 
