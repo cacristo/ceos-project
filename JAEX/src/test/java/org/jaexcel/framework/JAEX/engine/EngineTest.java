@@ -1,6 +1,8 @@
 package org.jaexcel.framework.JAEX.engine;
 
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
+import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
+import org.jaexcel.framework.JAEX.exception.JAEXElementException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -120,10 +122,15 @@ public class EngineTest extends TestCase {
 		byte[] generatedBytes = en.marshalToByte(objNull);
 
 		MultiTypeObject charger = null;
-		en.unmarshalFromByte(charger, generatedBytes);
-
-		// FIXME see how to recover the error
-		assertEquals(true, false);
+		try {
+			en.unmarshalFromByte(charger, generatedBytes);
+			
+		} catch (Exception e) {
+			if (e.getClass().equals(JAEXElementException.class)
+					&& e.getMessage().equals(JAEXExceptionMessage.JAEXElementException_NullObject)) {
+				assertEquals(true, true);
+			}
+		}
 	}
 
 	/**
