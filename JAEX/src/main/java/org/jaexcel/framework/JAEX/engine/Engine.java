@@ -47,7 +47,7 @@ import org.jaexcel.framework.JAEX.exception.JAEXElementException;
 
 public class Engine implements IEngine {
 
-	Workbook wb;
+	// Workbook wb;
 	Configuration configuration;
 	CellDecorator headerDecorator;
 	Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
@@ -56,9 +56,11 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize default Header Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} header decorator
 	 */
-	private CellStyle initializeHeaderCellDecorator() {
+	private CellStyle initializeHeaderCellDecorator(Workbook wb) {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
@@ -83,9 +85,11 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize default Numeric Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} numeric decorator
 	 */
-	private CellStyle initializeNumericCellDecorator() {
+	private CellStyle initializeNumericCellDecorator(Workbook wb) {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
@@ -98,9 +102,11 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize default Date Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} date decorator
 	 */
-	private CellStyle initializeDateCellDecorator() {
+	private CellStyle initializeDateCellDecorator(Workbook wb) {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
@@ -113,9 +119,11 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize default Boolean Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} boolean decorator
 	 */
-	private CellStyle initializeBooleanCellDecorator() {
+	private CellStyle initializeBooleanCellDecorator(Workbook wb) {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
@@ -128,9 +136,11 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize default Generic Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} generic decorator
 	 */
-	private CellStyle initializeGenericCellDecorator() {
+	private CellStyle initializeGenericCellDecorator(Workbook wb) {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
@@ -143,63 +153,69 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize Cell Decorator system.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @throws JAEXConfigurationException
 	 */
-	private void initializeCellDecorator() throws JAEXConfigurationException {
+	private void initializeCellDecorator(Workbook wb) throws JAEXConfigurationException {
 
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
 					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER)
-							? initializeCellStyleByCellDecorator(
+							? initializeCellStyleByCellDecorator(wb,
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_HEADER))
-							: initializeHeaderCellDecorator());
+							: initializeHeaderCellDecorator(wb));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER));
 		}
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC,
 					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC)
-							? initializeCellStyleByCellDecorator(
+							? initializeCellStyleByCellDecorator(wb,
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC))
-							: initializeNumericCellDecorator());
+							: initializeNumericCellDecorator(wb));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC));
 		}
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_DATE,
 					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE)
-							? initializeCellStyleByCellDecorator(
+							? initializeCellStyleByCellDecorator(wb,
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_DATE))
-							: initializeDateCellDecorator());
+							: initializeDateCellDecorator(wb));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE));
 		}
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN,
 					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN)
-							? initializeCellStyleByCellDecorator(
+							? initializeCellStyleByCellDecorator(wb,
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
-							: initializeBooleanCellDecorator());
+							: initializeBooleanCellDecorator(wb));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
 		}
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_GENERIC,
 					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC)
-							? initializeCellStyleByCellDecorator(
+							? initializeCellStyleByCellDecorator(wb,
 									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC))
-							: initializeGenericCellDecorator());
+							: initializeGenericCellDecorator(wb));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
 		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
-			stylesMap.put(object.getKey(), initializeCellStyleByCellDecorator(object.getValue()));
+			stylesMap.put(object.getKey(), initializeCellStyleByCellDecorator(wb, object.getValue()));
 		}
 	}
 
 	/**
 	 * Initialize {@link CellStyle} by Cell Decorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @param decorator
+	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
 	 */
-	private CellStyle initializeCellStyleByCellDecorator(CellDecorator decorator) throws JAEXConfigurationException {
+	private CellStyle initializeCellStyleByCellDecorator(Workbook wb, CellDecorator decorator)
+			throws JAEXConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
@@ -230,10 +246,14 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize {@link CellStyle} by XlsDecorator.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
 	 * @param decorator
+	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
 	 */
-	private CellStyle initializeCellStyleByXlsDecorator(XlsDecorator decorator) throws JAEXConfigurationException {
+	private CellStyle initializeCellStyleByXlsDecorator(Workbook wb, XlsDecorator decorator)
+			throws JAEXConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
@@ -271,7 +291,7 @@ public class Engine implements IEngine {
 	 * to specific border.
 	 * 
 	 * @param decorator
-	 *            the cell decorator
+	 *            the {@link CellDecorator} to use
 	 */
 	private void borderPropagationManagement(CellDecorator decorator) {
 		/* if specific border not configured */
@@ -335,7 +355,7 @@ public class Engine implements IEngine {
 	 * @param decoratorName
 	 *            the decorator name
 	 * @param decorator
-	 *            the cell decorator
+	 *            the {@link CellDecorator} to apply
 	 */
 	@Override
 	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
@@ -346,7 +366,7 @@ public class Engine implements IEngine {
 	 * Force the propagation type to apply at the Sheet.
 	 * 
 	 * @param type
-	 *            the {@link CascadeType} to apply
+	 *            the {@link PropagationType} to apply
 	 */
 	public void overridePropagationType(PropagationType type) {
 		configuration.setPropagationType(type);
@@ -409,6 +429,7 @@ public class Engine implements IEngine {
 	 * Add the main xls configuration.
 	 * 
 	 * @param config
+	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
 	private Configuration initializeConfiguration(XlsConfiguration config) {
@@ -425,6 +446,7 @@ public class Engine implements IEngine {
 	 * Add the sheet configuration.
 	 * 
 	 * @param config
+	 *            the {@link XlsSheet}
 	 * @return
 	 */
 	private Configuration initializeSheetConfiguration(XlsSheet config) {
@@ -442,7 +464,7 @@ public class Engine implements IEngine {
 	 * Initialize Workbook.
 	 * 
 	 * @param type
-	 *            the type of workbook
+	 *            the {@link ExtensionFileType} of workbook
 	 * @return the {@link Workbook}.
 	 */
 	private Workbook initializeWorkbook(ExtensionFileType type) {
@@ -459,8 +481,8 @@ public class Engine implements IEngine {
 	 * @param inputStream
 	 *            the file input stream
 	 * @param type
-	 *            the type of workbook
-	 * @return the {@link Workbook}.
+	 *            the {@link ExtensionFileType} of workbook
+	 * @return the {@link Workbook} created
 	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(FileInputStream inputStream, ExtensionFileType type) throws IOException {
@@ -477,8 +499,8 @@ public class Engine implements IEngine {
 	 * @param byteArray
 	 *            the array of bytes
 	 * @param type
-	 *            the type of workbook
-	 * @return the {@link Workbook}.
+	 *            the {@link ExtensionFileType} of workbook
+	 * @return the {@link Workbook} created
 	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(byte[] byteArray, ExtensionFileType type) throws IOException {
@@ -493,8 +515,10 @@ public class Engine implements IEngine {
 	 * Initialize Sheet.
 	 * 
 	 * @param wb
+	 *            the {@link Workbook} to use
 	 * @param sheetName
-	 * @return the {@link Sheet}.
+	 *            the name of the sheet
+	 * @return the {@link Sheet} created
 	 */
 	private Sheet initializeSheet(Workbook wb, String sheetName) {
 		return wb.createSheet(sheetName);
@@ -503,27 +527,27 @@ public class Engine implements IEngine {
 	/**
 	 * Apply merge region if necessary.
 	 * 
-	 * @param s
-	 *            the sheet
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param r
-	 *            the row
+	 *            the {@link Row}
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
 	 *            the position of the cell
-	 * @param f
-	 *            the field
 	 * @param isPH
 	 *            true if propagation horizontally, false if propagation
 	 *            vertically
 	 */
-	private void applyMergeRegion(Sheet s, Row r, int idxR, int idxC, Field f, boolean isPH) throws Exception {
-		/* Process @XlsMasterHeader */
-		if (f.isAnnotationPresent(XlsNestedHeader.class)) {
-			XlsNestedHeader annotation = (XlsNestedHeader) f.getAnnotation(XlsNestedHeader.class);
+	private void applyMergeRegion(ConfigCriteria configCriteria, Row r, int idxR, int idxC, boolean isPH)
+			throws Exception {
+		/* Process @XlsNestedHeader */
+		if (configCriteria.getField().isAnnotationPresent(XlsNestedHeader.class)) {
+			XlsNestedHeader annotation = (XlsNestedHeader) configCriteria.getField()
+					.getAnnotation(XlsNestedHeader.class);
 			/* if row null is necessary to create it */
 			if (r == null) {
-				r = initializeRow(s, idxR);
+				r = initializeRow(configCriteria.getSheet(), idxR);
 			}
 
 			/* validation of configuration */
@@ -545,7 +569,7 @@ public class Engine implements IEngine {
 			initializeHeaderCell(r, startCell, annotation.title());
 
 			/* merge region of the master header cell */
-			s.addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
+			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
 		}
 	}
 
@@ -576,10 +600,10 @@ public class Engine implements IEngine {
 	 * Initialize an row.
 	 * 
 	 * @param s
-	 *            sheet to add the row
+	 *            the {@link Sheet} to add the row
 	 * @param idxR
 	 *            position of the new row
-	 * @return the row created
+	 * @return the {@link Row} created
 	 */
 	private Row initializeRow(Sheet s, int idxR) {
 		return s.createRow(idxR);
@@ -589,7 +613,7 @@ public class Engine implements IEngine {
 	 * Initialize the header cell.
 	 * 
 	 * @param r
-	 *            row to add the cell
+	 *            {@link Row} to add the cell
 	 * @param idxC
 	 *            position of the new cell
 	 * @param value
@@ -608,49 +632,41 @@ public class Engine implements IEngine {
 	 * Initialize an cell according the type of field and the PropagationType is
 	 * PROPAGATION_HORIZONTAL.
 	 * 
-	 * @param s
-	 *            the sheet
-	 * @param headerRow
-	 *            the header row
-	 * @param contentRow
-	 *            the content row
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @param o
+	 *            the object
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @param o
-	 *            the object
-	 * @param f
-	 *            the field
-	 * @param xlsAnnotation
-	 *            the XlsAnnotation
 	 * @return in case of the object return the number of cell created,
 	 *         otherwise 0
 	 * @throws Exception
 	 */
-	private int initializeCellByField(Sheet s, Row headerRow, Row contentRow, int idxR, int idxC, int cL, Object o,
-			Field f, XlsElement xlsAnnotation) throws Exception {
+	private int initializeCellByFieldHorizontal(ConfigCriteria configCriteria, Object o, int idxR, int idxC, int cL)
+			throws Exception {
 
 		/* make the field accessible to recover the value */
-		f.setAccessible(true);
+		configCriteria.getField().setAccessible(true);
 
 		int counter = 0;
 
-		Class<?> fT = f.getType();
+		Class<?> fT = configCriteria.getField().getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, contentRow, idxC, xlsAnnotation);
+		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, idxC);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-			Object nO = f.get(o);
+			Object nO = configCriteria.getField().get(o);
 			/* manage null objects */
 			if (nO == null) {
 				nO = fT.newInstance();
 			}
 			Class<?> oC = nO.getClass();
 
-			counter = marshalAsPropagationHorizontal(nO, oC, s, headerRow, contentRow, idxR, idxC - 1, cL + 1);
+			counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
 		}
 		return counter;
 	}
@@ -659,8 +675,10 @@ public class Engine implements IEngine {
 	 * Initialize an cell according the type of field and the PropagationType is
 	 * PROPAGATION_VERTICAL.
 	 * 
-	 * @param s
-	 *            the sheet
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @param o
+	 *            the object
 	 * @param r
 	 *            the content row
 	 * @param idxR
@@ -669,54 +687,47 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @param o
-	 *            the object
-	 * @param f
-	 *            the field
-	 * @param d
-	 *            the decorator mask
 	 * @return
 	 * @throws Exception
 	 */
-	private int initializeCellByField(Sheet s, Row r, int idxR, int idxC, int cL, Object o, Field f,
-			XlsElement xlsAnnotation) throws Exception {
+	private int initializeCellByFieldVertical(ConfigCriteria configCriteria, Object o, Row r, int idxR, int idxC,
+			int cL) throws Exception {
 
 		/* make the field accessible to recover the value */
-		f.setAccessible(true);
+		configCriteria.getField().setAccessible(true);
 
 		int counter = 0;
 
-		Class<?> fT = f.getType();
+		Class<?> fT = configCriteria.getField().getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, r, idxC, xlsAnnotation);
+		configCriteria.setRow(r);
+
+		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, idxC);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-			Object nO = f.get(o);
+			Object nO = configCriteria.getField().get(o);
 			/* manage null objects */
 			if (nO == null) {
 				nO = fT.newInstance();
 			}
 			Class<?> oC = nO.getClass();
 
-			counter = marshalAsPropagationVertical(nO, oC, s, idxR - 1, idxC - 1, cL + 1);
+			counter = marshalAsPropagationVertical(configCriteria, nO, oC, idxR - 1, idxC - 1, cL + 1);
 		}
 		return counter;
 	}
 
 	/**
+	 * Apply the base object to cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param fT
 	 *            the field type
-	 * @param f
-	 *            the field
-	 * @param r
-	 *            the content row
 	 * @param idxC
 	 *            the position of the cell
-	 * @param element
-	 *            the {@link XlsElement} annotation
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
@@ -725,114 +736,63 @@ public class Engine implements IEngine {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	private boolean applyBaseObject(Object o, Class<?> fT, Field f, Row r, int idxC, XlsElement element)
+	private boolean applyBaseObject(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
 			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, NoSuchMethodException,
 			SecurityException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
-		/* reading mask */
-		String tM = element.transformMask();
-		String fM = element.formatMask();
+		/* initialize cell */
+		Cell cell = null;
 
 		switch (fT.getName()) {
 		case CellValueUtils.OBJECT_DATE:
-
-			Cell cDate = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toDate(o, f, wb, cDate,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE)),
-					element.formatMask(), element.transformMask(), element.comment(), configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toDate(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_STRING:
-			Cell cString = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toString(o, f, wb, cString,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC)),
-					element, configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toString(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_INTEGER:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
-			Cell cInteger = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toInteger(o, f, wb, cInteger,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
-							: tM),
-					element, configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toInteger(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_LONG:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
-			Cell cLong = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toLong(o, f, wb, cLong,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_INTEGER : fM)
-							: tM),
-					element, configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toLong(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_DOUBLE:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
-
-			Cell cDouble = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toDouble(o, f, wb, cDouble,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					StringUtils.isNotBlank(element.formatMask()) ? element.formatMask()
-							: CellStyleUtils.MASK_DECORATOR_DOUBLE,
-					element.transformMask(), element, configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toDouble(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
-			Cell cBigDecimal = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toBigDecimal(o, f, wb, cBigDecimal,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					StringUtils.isEmpty(element.formatMask()) ? CellStyleUtils.MASK_DECORATOR_DOUBLE
-							: element.formatMask(),
-					element.transformMask(), element, configuration.getExtensionFile());
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toBigDecimal(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_FLOAT:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
-
-			Cell cFloat = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toFloat(o, f, wb, cFloat,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC)),
-					(StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DOUBLE : fM)
-							: tM),
-					element, configuration.getExtensionFile());
-
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toFloat(configCriteria, o, cell);
 			break;
 
 		case CellValueUtils.OBJECT_BOOLEAN:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
-			Cell cBoolean = r.createCell(idxC);
-			isUpdated = CellValueUtils.toBoolean(o, f, wb, cBoolean,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN)),
-					element.transformMask(), element.comment(), configuration.getExtensionFile());
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toBoolean(configCriteria, o, cell);
 			break;
 
 		default:
@@ -841,18 +801,15 @@ public class Engine implements IEngine {
 		}
 
 		if (!isUpdated && fT.isEnum()) {
-			Cell cEnum = r.createCell(idxC);
-
-			isUpdated = CellValueUtils.toEnum(o, f, wb, cEnum,
-					(StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator())
-							: stylesMap.get(CellStyleUtils.CELL_DECORATOR_ENUM)),
-					element.comment(), configuration.getExtensionFile());
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellValueUtils.toEnum(configCriteria, o, cell);
 		}
 
 		return isUpdated;
 	}
 
 	/**
+	 * Apply the base object from cell.
 	 * 
 	 * @param o
 	 *            the object
@@ -910,45 +867,50 @@ public class Engine implements IEngine {
 			break;
 
 		case CellValueUtils.OBJECT_STRING:
-
-			f.set(o, CellValueUtils.fromExcel(c));
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				f.set(o, CellValueUtils.fromExcel(c));
+			}
 			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_INTEGER:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_INTEGER:
-
-			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).intValue());
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).intValue());
+			}
 			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_LONG:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_LONG:
-
-			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).longValue());
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).longValue());
+			}
 			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_DOUBLE:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_DOUBLE:
-
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c).replace(",", ".")));
-			} else {
-				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)));
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					f.set(o, Double.valueOf(CellValueUtils.fromExcel(c).replace(",", ".")));
+				} else {
+					f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)));
+				}
 			}
 			isUpdated = true;
 			break;
 
 		case CellValueUtils.OBJECT_BIGDECIMAL:
-
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c).replace(",", "."))));
-			} else {
-				f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c))));
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c).replace(",", "."))));
+				} else {
+					f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c))));
+				}
 			}
 			isUpdated = true;
 			break;
@@ -956,8 +918,9 @@ public class Engine implements IEngine {
 		case CellValueUtils.OBJECT_FLOAT:
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_FLOAT:
-
-			f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).floatValue());
+			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
+				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).floatValue());
+			}
 			isUpdated = true;
 			break;
 
@@ -965,15 +928,18 @@ public class Engine implements IEngine {
 			/* falls through */
 		case CellValueUtils.PRIMITIVE_BOOLEAN:
 
-			String bool = c.getStringCellValue();
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				/* apply format mask defined at transform mask */
-				String[] split = xlsAnnotation.transformMask().split("/");
-				f.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
+			String booleanValue = c.getStringCellValue();
+			if (StringUtils.isNotBlank(booleanValue)) {
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					/* apply format mask defined at transform mask */
+					String[] split = xlsAnnotation.transformMask().split("/");
+					f.set(o, StringUtils.isNotBlank(booleanValue) ? (split[0].equals(booleanValue) ? true : false)
+							: null);
 
-			} else {
-				/* locale mode */
-				f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+				} else {
+					/* locale mode */
+					f.set(o, StringUtils.isNotBlank(booleanValue) ? Boolean.valueOf(booleanValue) : null);
+				}
 			}
 			isUpdated = true;
 			break;
@@ -984,7 +950,9 @@ public class Engine implements IEngine {
 		}
 
 		if (!isUpdated && fT.isEnum()) {
-			f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
+			if (StringUtils.isNotBlank(c.getStringCellValue())) {
+				f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
+			}
 			isUpdated = true;
 		}
 
@@ -995,16 +963,12 @@ public class Engine implements IEngine {
 	 * Convert the object to file with the PropagationType as
 	 * PROPAGATION_HORIZONTAL.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
 	 *            the object class
-	 * @param s
-	 *            the sheet
-	 * @param headerRow
-	 *            the row related to the header
-	 * @param contentRow
-	 *            the row related to the content value
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
@@ -1014,24 +978,30 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws IllegalAccessException
 	 */
-	private int marshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, Row headerRow, Row contentRow, int idxR,
-			int idxC, int cL) throws Exception {
+	private int marshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC,
+			int cL) throws Exception {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
+			/* update field at ConfigCriteria */
+			configCriteria.setField(f);
+
 			/* process each field from the object */
-			if (headerRow != null) {
+			if (configCriteria.getRowHeader() != null) {
 				/* calculate index of the cell */
 				int tmpIdxRow = idxR - 3;
 				/* apply merge region */
-				applyMergeRegion(s, null, tmpIdxRow, idxC, f, true);
+				applyMergeRegion(configCriteria, null, tmpIdxRow, idxC, true);
 			}
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+
+				/* update annotation at ConfigCriteria */
+				configCriteria.setElement(xlsAnnotation);
 
 				/* apply customized rules defined at the object */
 				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
@@ -1043,13 +1013,13 @@ public class Engine implements IEngine {
 				 * new object)
 				 */
 				counter++;
-				if (headerRow != null) {
+				if (configCriteria.getRowHeader() != null) {
 					/* header treatment */
-					initializeHeaderCell(headerRow, idxC + xlsAnnotation.position(), xlsAnnotation.title());
+					initializeHeaderCell(configCriteria.getRowHeader(), idxC + xlsAnnotation.position(),
+							xlsAnnotation.title());
 				}
 				/* content treatment */
-				idxC += initializeCellByField(s, headerRow, contentRow, idxR, idxC + xlsAnnotation.position(), cL, o, f,
-						xlsAnnotation);
+				idxC += initializeCellByFieldHorizontal(configCriteria, o, idxR, idxC + xlsAnnotation.position(), cL);
 			}
 		}
 		return counter;
@@ -1059,12 +1029,12 @@ public class Engine implements IEngine {
 	 * Convert the object to file with the PropagationType as
 	 * PROPAGATION_VERTICAL.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
 	 *            the object class
-	 * @param s
-	 *            the sheet
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
@@ -1074,8 +1044,8 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws Exception
 	 */
-	private int marshalAsPropagationVertical(Object o, Class<?> oC, Sheet s, int idxR, int idxC, int cL)
-			throws Exception {
+	private int marshalAsPropagationVertical(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC,
+			int cL) throws Exception {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		/* backup base index of the cell */
@@ -1085,12 +1055,15 @@ public class Engine implements IEngine {
 		List<Field> fieldList = Arrays.asList(oC.getDeclaredFields());
 		for (Field field : fieldList) {
 			/* process each field from the object */
+			configCriteria.setField(field);
+
 			/* restart the index of the cell */
 			idxC = baseIdxCell;
 
 			/* Process @XlsElement */
 			if (field.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
+				configCriteria.setElement(xlsAnnotation);
 
 				/* apply customized rules defined at the object */
 				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
@@ -1108,23 +1081,23 @@ public class Engine implements IEngine {
 				if (baseIdxCell == 1) {
 					int tmpIdxCell = idxC - 1;
 					/* initialize row */
-					row = initializeRow(s, idxR + xlsAnnotation.position());
+					row = initializeRow(configCriteria.getSheet(), idxR + xlsAnnotation.position());
 
 					/* apply merge region */
-					applyMergeRegion(s, row, idxR, tmpIdxCell, field, false);
+					applyMergeRegion(configCriteria, row, idxR, tmpIdxCell, false);
 
 					/* header treatment */
 					initializeHeaderCell(row, idxC, xlsAnnotation.title());
 
 				} else {
-					row = s.getRow(idxR + xlsAnnotation.position());
+					row = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
 				}
 
 				/* increment the cell position */
 				idxC++;
 				/* content treatment */
-				idxR += initializeCellByField(s, row, idxR + xlsAnnotation.position(), idxC, cL, o, field,
-						xlsAnnotation);
+				idxR += initializeCellByFieldVertical(configCriteria, o, row, idxR + xlsAnnotation.position(), idxC,
+						cL);
 			}
 		}
 		return counter;
@@ -1134,12 +1107,12 @@ public class Engine implements IEngine {
 	 * Convert the file to object with the PropagationType as
 	 * PROPAGATION_HORIZONTAL.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
 	 *            the object class
-	 * @param s
-	 *            the sheet
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
@@ -1149,8 +1122,8 @@ public class Engine implements IEngine {
 	 * @throws JAEXConverterException
 	 * @throws InstantiationException
 	 */
-	private int unmarshalAsPropagationHorizontal(Object o, Class<?> oC, Sheet s, int idxR, int idxC)
-			throws IllegalAccessException, JAEXConverterException, InstantiationException {
+	private int unmarshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR,
+			int idxC) throws IllegalAccessException, JAEXConverterException, InstantiationException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -1170,7 +1143,7 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* content row */
-				Row contentRow = s.getRow(idxR + 1);
+				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
 				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
 
 				boolean isAppliedToBaseObject = applyBaseExcelObject(o, fT, f, contentCell, xlsAnnotation);
@@ -1180,8 +1153,8 @@ public class Engine implements IEngine {
 					Object subObjbect = fT.newInstance();
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshalAsPropagationHorizontal(subObjbect, subObjbectClass, s, idxR,
-							idxC + xlsAnnotation.position() - 1);
+					int internalCellCounter = unmarshalAsPropagationHorizontal(configCriteria, subObjbect,
+							subObjbectClass, idxR, idxC + xlsAnnotation.position() - 1);
 
 					/* add the sub object to the parent object */
 					f.set(o, subObjbect);
@@ -1198,12 +1171,12 @@ public class Engine implements IEngine {
 	 * Convert the file to object with the PropagationType as
 	 * PROPAGATION_VERTICAL.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
 	 *            the object class
-	 * @param s
-	 *            the sheet
 	 * @param idxR
 	 *            the position of the row
 	 * @param idxC
@@ -1213,8 +1186,8 @@ public class Engine implements IEngine {
 	 * @throws JAEXConverterException
 	 * @throws InstantiationException
 	 */
-	private int unmarshalAsPropagationVertical(Object object, Class<?> oC, Sheet s, int idxR, int idxC)
-			throws IllegalAccessException, JAEXConverterException, InstantiationException {
+	private int unmarshalAsPropagationVertical(ConfigCriteria configCriteria, Object object, Class<?> oC, int idxR,
+			int idxC) throws IllegalAccessException, JAEXConverterException, InstantiationException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -1234,7 +1207,7 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* content row */
-				Row contentRow = s.getRow(idxR + xlsAnnotation.position());
+				Row contentRow = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
 				boolean isAppliedToBaseObject = applyBaseExcelObject(object, fT, f, contentCell, xlsAnnotation);
@@ -1244,8 +1217,8 @@ public class Engine implements IEngine {
 					Object subObjbect = fT.newInstance();
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshalAsPropagationVertical(subObjbect, subObjbectClass, s,
-							idxR + xlsAnnotation.position() - 1, idxC);
+					int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
+							subObjbectClass, idxR + xlsAnnotation.position() - 1, idxC);
 
 					/* add the sub object to the parent object */
 					f.set(object, subObjbect);
@@ -1262,7 +1235,7 @@ public class Engine implements IEngine {
 	 * Generate file output stream.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook}
 	 * @param name
 	 *            the name
 	 * @return
@@ -1278,10 +1251,12 @@ public class Engine implements IEngine {
 	/**
 	 * Generate the byte array.
 	 * 
+	 * @param wb
+	 *            the {@link Workbook}
 	 * @return the byte[]
 	 * @throws IOException
 	 */
-	private byte[] workbookToByteAray() throws IOException {
+	private byte[] workbookToByteAray(Workbook wb) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			wb.write(bos);
@@ -1294,10 +1269,18 @@ public class Engine implements IEngine {
 
 	/* ######################## Marshal methods ########################## */
 
+	/**
+	 * Generate the sheet from the object and return the sheet generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
 	public Sheet marshalToSheet(Object object) throws Exception {
-		marshalToWorkbook(object);
+		/* Generate the workbook from the object passed as parameter */
+		Workbook wb = marshalToWorkbook(object);
 
-		/* Generate the byte array to return */
+		/* Generate the sheet to return */
 		return wb.getSheetAt(0);
 	}
 
@@ -1315,58 +1298,63 @@ public class Engine implements IEngine {
 		/* initialize configuration data */
 		Configuration config = initializeConfigurationData(oC);
 
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+
 		/* initialize Workbook */
-		wb = initializeWorkbook(config.getExtensionFile());
+		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
 		/* initialize style cell via annotations */
 		if (oC.isAnnotationPresent(XlsDecorators.class)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) oC.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
-				stylesMap.put(decorator.decoratorName(), initializeCellStyleByXlsDecorator(decorator));
+				stylesMap.put(decorator.decoratorName(),
+						initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
 			}
 		}
 
 		/* initialize style cell via default option */
-		initializeCellDecorator();
+		configCriteria.setStylesMap(stylesMap);
+		initializeCellDecorator(configCriteria.getWorkbook());
 
 		/* initialize Sheet */
-		// FIXME add loop if necessary
-		Sheet s = initializeSheet(wb, config.getTitleSheet());
+		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
 
 		/* initialize Row & Cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
 		/* initialize rows according the PropagationType */
-		Row headerRow, contentRow;
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-			headerRow = initializeRow(s, idxRow++);
-			contentRow = initializeRow(s, idxRow++);
-
-			marshalAsPropagationHorizontal(object, oC, s, headerRow, contentRow, idxRow, idxCell, 0);
+			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
+			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
+			marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		} else {
-			marshalAsPropagationVertical(object, oC, s, idxRow, idxCell, 0);
+			marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		}
 
 		// FIXME apply the column size here - if necessary
 
-		return wb;
+		return configCriteria.getWorkbook();
 	}
 
 	/**
 	 * Generate the workbook from the object passed as parameter and return the
 	 * respective {@link FileOutputStream}.
 	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 */
 	public byte[] marshalToByte(Object object) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
-		marshalToWorkbook(object);
+		Workbook wb = marshalToWorkbook(object);
 
 		/* Generate the byte array to return */
-		return workbookToByteAray();
+		return workbookToByteAray(wb);
 	}
 
 	/**
@@ -1380,7 +1368,7 @@ public class Engine implements IEngine {
 	 */
 	public void marshalAndSave(Object object, String pathFile) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
-		marshalToWorkbook(object);
+		Workbook wb = marshalToWorkbook(object);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1416,14 +1404,17 @@ public class Engine implements IEngine {
 		configuration.setNameFile(filename);
 		Configuration config = configuration;
 
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+
 		// initialize Workbook
-		wb = initializeWorkbook(config.getExtensionFile());
+		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
 		// initialize style cell via default option
-		initializeCellDecorator();
+		initializeCellDecorator(configCriteria.getWorkbook());
+		configCriteria.setStylesMap(stylesMap);
 
-		Row headerRow = null, contentRow = null;
-		Sheet s = null;
 		int idxRow = 0, idxCell = 0, index = 0;
 
 		@SuppressWarnings("rawtypes")
@@ -1443,34 +1434,36 @@ public class Engine implements IEngine {
 			// initialize rows according the PropagationType
 			if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
 				idxCell = config.getStartCell();
-				if (wb.getNumberOfSheets() == 0 || wb.getSheet(config.getTitleSheet()) == null) {
-					s = initializeSheet(wb, config.getTitleSheet());
+				if (configCriteria.getWorkbook().getNumberOfSheets() == 0
+						|| configCriteria.getWorkbook().getSheet(config.getTitleSheet()) == null) {
+					configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
 					idxRow = config.getStartRow();
-					headerRow = initializeRow(s, idxRow++);
-					contentRow = initializeRow(s, idxRow++);
+					configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
+					configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 				} else {
-					idxRow = s.getLastRowNum() + 1;
-					headerRow = null;
-					contentRow = initializeRow(s, idxRow++);
+					idxRow = configCriteria.getSheet().getLastRowNum() + 1;
+					configCriteria.setRowHeader(null);
+					configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 
 				}
-				marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
+				marshalAsPropagationHorizontal(configCriteria, object, objectClass, idxRow, idxCell, 0);
 			} else {
 				idxRow = config.getStartRow();
-				if (wb.getNumberOfSheets() == 0 || wb.getSheet(config.getTitleSheet()) == null) {
-					s = initializeSheet(wb, config.getTitleSheet());
+				if (configCriteria.getWorkbook().getNumberOfSheets() == 0
+						|| configCriteria.getWorkbook().getSheet(config.getTitleSheet()) == null) {
+					configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
 					idxCell = config.getStartCell();
 				} else {
 					idxCell = index + 1;
 				}
-				marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
+				marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
 				index = index + 1;
 			}
 
 		}
 
 		// FIXME manage return value
-		workbookFileOutputStream(wb,
+		workbookFileOutputStream(configCriteria.getWorkbook(),
 				"D:\\projects\\" + config.getNameFile() + config.getExtensionFile().getExtension());
 	}
 
@@ -1494,17 +1487,20 @@ public class Engine implements IEngine {
 		/* initialize configuration data */
 		Configuration config = initializeConfigurationData(oC);
 
-		wb = workbook;
-		Sheet s = wb.getSheet(config.getTitleSheet());
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+		configCriteria.setWorkbook(workbook);
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
 
 		/* initialize index row & cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
-			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
 		}
 
 		return object;
@@ -1557,17 +1553,20 @@ public class Engine implements IEngine {
 		/* initialize configuration data */
 		Configuration config = initializeConfigurationData(oC);
 
-		wb = initializeWorkbook(byteArray, configuration.getExtensionFile());
-		Sheet s = wb.getSheet(config.getTitleSheet());
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+		configCriteria.setWorkbook(initializeWorkbook(byteArray, configuration.getExtensionFile()));
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
 
 		/* initialize index row & cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
-			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
 		}
 
 		return object;
@@ -1577,9 +1576,13 @@ public class Engine implements IEngine {
 	 * Manage the unmarshal internally.
 	 * 
 	 * @param object
+	 *            the object to fill up.
 	 * @param oC
+	 *            the obect class
 	 * @param config
+	 *            the {@link Configuration} to use
 	 * @param input
+	 *            the {@link FileInputStream} to use
 	 * @throws IOException
 	 * @throws IllegalAccessException
 	 * @throws JAEXConverterException
@@ -1587,17 +1590,21 @@ public class Engine implements IEngine {
 	 */
 	private void unmarshalIntern(Object object, Class<?> oC, Configuration config, FileInputStream input)
 			throws IOException, IllegalAccessException, JAEXConverterException, InstantiationException {
-		Workbook wb = initializeWorkbook(input, config.getExtensionFile());
-		Sheet s = wb.getSheet(config.getTitleSheet());
+
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+		configCriteria.setWorkbook(initializeWorkbook(input, config.getExtensionFile()));
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
 
 		/* initialize index row & cell */
 		int idxRow = config.getStartRow();
 		int idxCell = config.getStartCell();
 
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-			unmarshalAsPropagationHorizontal(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
-			unmarshalAsPropagationVertical(object, oC, s, idxRow, idxCell);
+			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
 		}
 	}
 
@@ -1639,22 +1646,28 @@ public class Engine implements IEngine {
 
 		}
 
+		// FIXME criteria
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.setPropagation(config.getPropagationType());
+		configCriteria.setExtension(config.getExtensionFile());
+
 		/* initialize Workbook */
-		wb = initializeWorkbook(config.getExtensionFile());
+		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
 		/* initialize style cell via annotations */
 		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
-				stylesMap.put(decorator.decoratorName(), initializeCellStyleByXlsDecorator(decorator));
+				stylesMap.put(decorator.decoratorName(),
+						initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
 			}
 		}
 		/* initialize style cell via default option */
-		initializeCellDecorator();
+		initializeCellDecorator(configCriteria.getWorkbook());
 
 		/* initialize Sheet */
 		// FIXME add loop if necessary
-		Sheet s = initializeSheet(wb, config.getTitleSheet());
+		Sheet s = initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet());
 
 		/* initialize Row & Cell */
 		int idxRow = config.getStartRow();
@@ -1666,13 +1679,25 @@ public class Engine implements IEngine {
 			headerRow = initializeRow(s, idxRow++);
 			contentRow = initializeRow(s, idxRow++);
 
-			marshalAsPropagationHorizontal(object, objectClass, s, headerRow, contentRow, idxRow, idxCell, 0);
+			// FIXME criteria
+			configCriteria.setStylesMap(stylesMap);
+			configCriteria.setSheet(s);
+			configCriteria.setRowHeader(headerRow);
+			configCriteria.setRow(contentRow);
+
+			marshalAsPropagationHorizontal(configCriteria, object, objectClass, idxRow, idxCell, 0);
 		} else {
-			marshalAsPropagationVertical(object, objectClass, s, idxRow, idxCell, 0);
+
+			// FIXME criteria
+			configCriteria.setStylesMap(stylesMap);
+			configCriteria.setSheet(s);
+			// configCriteria.setRowHeader(headerRow);
+			// configCriteria.setRow(contentRow);
+			marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
 
 		}
 		// FIXME manage return value
-		workbookFileOutputStream(wb, "D:\\projects\\" + config.getNameFile());
+		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + config.getNameFile());
 	}
 
 	@Deprecated
@@ -1698,7 +1723,7 @@ public class Engine implements IEngine {
 	@Override
 	public FileOutputStream marshalToFileOutputStream(Object object) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
-		marshalToWorkbook(object);
+		Workbook wb = marshalToWorkbook(object);
 
 		/* Generate the FileOutputStream to return */
 		return workbookFileOutputStream(wb, configuration.getNameFile());

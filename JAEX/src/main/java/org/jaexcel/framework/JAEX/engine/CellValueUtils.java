@@ -20,8 +20,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jaexcel.framework.JAEX.annotation.XlsElement;
-import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
 import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
 import org.jaexcel.framework.JAEX.exception.JAEXCustomizedRulesException;
@@ -77,48 +75,43 @@ public class CellValueUtils {
 	/**
 	 * Apply a integer value at the Cell.
 	 * 
-	 * @param o
-	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the object
+	 * @param c
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toString(Object o, Field f, Workbook wb, Cell c, CellStyle cs, XlsElement element,
-			ExtensionFileType eFT) {
+	protected static boolean toString(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 		try {
-			if (element.isFormula()) {
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Long) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
 
 			} else {
 				// normal manage cell
-				c.setCellValue((String) f.get(o));
+				c.setCellValue((String) configCriteria.getField().get(o));
 			}
 
 			// apply style
-			CellStyleUtils.applyCellStyle(wb, c, cs);
+			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
+					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_GENERIC));
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_String.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -126,50 +119,44 @@ public class CellValueUtils {
 	/**
 	 * Apply a integer value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toInteger(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			XlsElement element, ExtensionFileType eFT) {
+	protected static boolean toInteger(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 		try {
-			if (element.isFormula()) {
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Long) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
 
 			} else {
 				// normal manage cell
-				c.setCellValue((Integer) f.get(o));
+				c.setCellValue((Integer) configCriteria.getField().get(o));
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
+					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC),
+					configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_INTEGER));
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Integer.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -177,51 +164,45 @@ public class CellValueUtils {
 	/**
 	 * Apply a double value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toLong(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			XlsElement element, ExtensionFileType eFT) {
+	protected static boolean toLong(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
 		try {
-			if (element.isFormula()) {
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Long) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
 
 			} else {
 				// normal manage cell
-				c.setCellValue((Long) f.get(o));
+				c.setCellValue((Long) configCriteria.getField().get(o));
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
+					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC),
+					configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_INTEGER));
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Long.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -229,28 +210,16 @@ public class CellValueUtils {
 	/**
 	 * Apply a double value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param transformMask
-	 *            the transformation mask
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toDouble(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask, XlsElement element, ExtensionFileType eFT) {
+	protected static boolean toDouble(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
 		try {
@@ -259,39 +228,44 @@ public class CellValueUtils {
 			// BigDecimal bd = new BigDecimal(d);
 			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
-			if (element.isFormula()) {
+			CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
+
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Double) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
 
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
 
 			} else {
 				// normal manage cell
-				if (StringUtils.isNotBlank(transformMask)) {
-					DecimalFormat df = new DecimalFormat(transformMask);
-					c.setCellValue(df.format((Double) f.get(o)));
+				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+					c.setCellValue(df.format((Double) configCriteria.getField().get(o)));
 
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				} else {
-					c.setCellValue((Double) f.get(o));
+					c.setCellValue((Double) configCriteria.getField().get(o));
 
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
+							configCriteria.getFormatMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 				}
 			}
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Double.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -299,70 +273,64 @@ public class CellValueUtils {
 	/**
 	 * Apply a big decimal value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param transformMask
-	 *            the transformation mask
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toBigDecimal(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask, XlsElement element, ExtensionFileType eFT) {
+	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c)
+			throws JAEXConverterException {
 		boolean isUpdated = true;
 
+		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
+
 		try {
-			if (element.isFormula()) {
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Double) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
 
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
 
 			} else {
 				// normal manage cell
-				BigDecimal bd = (BigDecimal) f.get(o);
+				BigDecimal bd = (BigDecimal) configCriteria.getField().get(o);
 
 				// FIXME use the comment below to manage decimalScale
 				// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 				if (bd != null) {
 					Double dBigDecimal = bd.doubleValue();
-					if (StringUtils.isNotBlank(transformMask)) {
-						DecimalFormat df = new DecimalFormat(transformMask);
+					if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+						DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
 						c.setCellValue(df.format(dBigDecimal));
 						// apply cell style
-						CellStyleUtils.applyCellStyle(wb, c, cs);
+						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 
 					} else {
 						c.setCellValue(dBigDecimal);
 						// apply cell style
-						CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
+								configCriteria.getFormatMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 					}
 				}
 			}
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_BigDecimal.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -370,38 +338,27 @@ public class CellValueUtils {
 	/**
 	 * Apply a date value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param transformMask
-	 *            the transformation mask
-	 * @param comment
-	 *            the comment text
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toDate(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			String transformMask, String comment, ExtensionFileType eFT) {
+	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
+		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_DATE);
 		try {
 
-			Date dDate = (Date) f.get(o);
+			Date dDate = (Date) configCriteria.getField().get(o);
 			if (dDate != null) {
 
-				if (StringUtils.isNotBlank(transformMask)) {
+				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					// apply transformation mask
-					String decorator = transformMask;
+					String decorator = configCriteria.getElement().transformMask();
 					try {
 						SimpleDateFormat dt = new SimpleDateFormat(decorator);
 
@@ -414,35 +371,39 @@ public class CellValueUtils {
 						}
 						c.setCellValue(dateFormated);
 						// apply cell style
-						CellStyleUtils.applyCellStyle(wb, c, cs);
+						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 					} catch (Exception e) {
 						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
 								e);
 					}
 
-				} else if (StringUtils.isNotBlank(formatMask)) {
+				} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
 					// apply format mask
 					c.setCellValue(dDate);
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
+							configCriteria.getElement().formatMask());
 
 				} else {
 					// apply default date mask
 					c.setCellValue(dDate);
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs, "yyyy-MM-dd");
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
+							CellStyleUtils.MASK_DECORATOR_DATE);
 
 				}
 
-				if (StringUtils.isNotBlank(comment)) {
+				if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 					// apply the comment
-					CellStyleUtils.applyComment(wb, c, comment, eFT);
+					CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+							configCriteria.getExtension());
 				}
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -450,54 +411,48 @@ public class CellValueUtils {
 	/**
 	 * Apply a float value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param formatMask
-	 *            the decorator mask
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toFloat(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String formatMask,
-			XlsElement element, ExtensionFileType eFT) {
+	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
+		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
 		try {
-			if (element.isFormula()) {
+			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
-				if (!toFormula(o, f, c, element)) {
-					c.setCellValue((Double) toExplicitFormula(o, f));
+				if (!toFormula(configCriteria, o, c)) {
+					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
 
 					// apply cell style
-					CellStyleUtils.applyCellStyle(wb, c, cs);
+					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
 
 			} else {
 				// normal manage cell
-				c.setCellValue((Float) f.get(o));
+				c.setCellValue((Float) configCriteria.getField().get(o));
 
 				// apply cell style
-				CellStyleUtils.applyCellStyle(wb, c, cs, formatMask);
+				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
+						configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 			}
 
-			if (StringUtils.isNotBlank(element.comment())) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, element.comment(), eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Float.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -506,54 +461,47 @@ public class CellValueUtils {
 	 * 
 	 * Apply a boolean value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param transformMask
-	 *            the transformation mask
-	 * @param comment
-	 *            the comment text
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toBoolean(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String transformMask,
-			String comment, ExtensionFileType eFT) {
+	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
+		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_BOOLEAN);
 		try {
-			Boolean bBoolean = (Boolean) f.get(o);
-			if (StringUtils.isNotBlank(transformMask)) {
+			Boolean bBoolean = (Boolean) configCriteria.getField().get(o);
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 				// apply format mask defined at transform mask
-				String[] split = transformMask.split("/");
+				String[] split = configCriteria.getElement().transformMask().split("/");
 				c.setCellValue((bBoolean == null ? "" : (bBoolean ? split[0] : split[1])));
 
 				// apply cell style
-				CellStyleUtils.applyCellStyle(wb, c, cs);
+				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 
 			} else {
 				// locale mode
 				c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
 
 				// apply cell style
-				CellStyleUtils.applyCellStyle(wb, c, cs);
+				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 			}
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Boolean.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -562,24 +510,16 @@ public class CellValueUtils {
 	 * 
 	 * Apply a enum value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
-	 * @param wb
-	 *            the workbook
 	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 * @param comment
-	 *            the comment text
-	 * @param eFT
-	 *            the extension file type
+	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
+	 * @throws JAEXConverterException
 	 */
-	protected static boolean toEnum(Object o, Field f, Workbook wb, Cell c, CellStyle cs, String comment,
-			ExtensionFileType eFT) {
+	protected static boolean toEnum(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
 		boolean isUpdated = true;
 
 		try {
@@ -587,7 +527,8 @@ public class CellValueUtils {
 			@SuppressWarnings("rawtypes")
 			Class[] argTypes = {};
 
-			String method = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+			String method = "get" + configCriteria.getField().getName().substring(0, 1).toUpperCase()
+					+ configCriteria.getField().getName().substring(1);
 
 			Method m = o.getClass().getDeclaredMethod(method, argTypes);
 
@@ -599,16 +540,19 @@ public class CellValueUtils {
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(wb, c, cs);
+			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
+					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_ENUM));
 
-			if (StringUtils.isNotBlank(comment)) {
+			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
-				CellStyleUtils.applyComment(wb, c, comment, eFT);
+				CellStyleUtils.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
+						configCriteria.getExtension());
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
+			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Boolean.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -616,34 +560,33 @@ public class CellValueUtils {
 	/**
 	 * Apply a formula value at the Cell.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} object
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
 	 * @param c
-	 *            the cell
-	 * @param element
-	 *            the {@link XlsElement} annotation
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private static boolean toFormula(Object o, Field f, Cell c, XlsElement element)
+	private static boolean toFormula(ConfigCriteria configCriteria, Object o, Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		boolean isFormulaApplied = false;
 
-		if (StringUtils.isNotBlank(element.formula())) {
-			if (element.formula().contains("idx")) {
-				c.setCellFormula(element.formula().replace("idx", String.valueOf(c.getRowIndex() + 1)));
+		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
+			if (configCriteria.getElement().formula().contains("idx")) {
+				c.setCellFormula(
+						configCriteria.getElement().formula().replace("idx", String.valueOf(c.getRowIndex() + 1)));
 				isFormulaApplied = true;
 
-			} else if (element.formula().contains("idy")) {
-				c.setCellFormula(element.formula().replace("idy",
+			} else if (configCriteria.getElement().formula().contains("idy")) {
+				c.setCellFormula(configCriteria.getElement().formula().replace("idy",
 						String.valueOf(CellReference.convertNumToColString(c.getColumnIndex()))));
 				isFormulaApplied = true;
 
 			} else {
-				c.setCellFormula(element.formula());
+				c.setCellFormula(configCriteria.getElement().formula());
 				isFormulaApplied = true;
 			}
 		}
@@ -679,8 +622,8 @@ public class CellValueUtils {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
-	 *            the field
+	 * @param methodRules
+	 *            the method rules to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
