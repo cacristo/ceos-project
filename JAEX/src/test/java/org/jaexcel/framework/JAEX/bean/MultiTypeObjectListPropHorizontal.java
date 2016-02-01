@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
-import org.jaexcel.framework.JAEX.exception.JAEXCustomizedRulesException;
+import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
 
 @XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL)
 public class MultiTypeObjectListPropHorizontal {
@@ -306,7 +306,7 @@ public class MultiTypeObjectListPropHorizontal {
 	public void setUnitFamily(UnitFamily unitFamily) {
 		this.unitFamily = unitFamily;
 	}
-	public void rules() throws JAEXCustomizedRulesException {
+	public void rules() throws CustomizedRulesException {
 		if(StringUtils.isBlank(this.getStringAttribute())){
 			System.out.println("Alert! String is empty");
 		}
@@ -315,7 +315,7 @@ public class MultiTypeObjectListPropHorizontal {
 		}
 		if(this.integerPrimitiveAttribute > 450){
 			System.out.println("Alert! Up to 450");
-			throw new JAEXCustomizedRulesException("Pim Pam Pum!!");
+			throw new CustomizedRulesException("Pim Pam Pum!!");
 		}
 	}
 }

@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
-import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
+import org.jaexcel.framework.JAEX.exception.ConverterException;
 
 public class CsvUtils {
 
@@ -39,9 +39,9 @@ public class CsvUtils {
 	 * @param transformMask
 	 *            the transformation mask
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static String toDate(Date value, String formatMask, String transformMask) throws JAEXConverterException {
+	protected static String toDate(Date value, String formatMask, String transformMask) throws ConverterException {
 		if (value != null) {
 			if (StringUtils.isNotBlank(transformMask)) {
 				// apply transformation mask
@@ -51,12 +51,12 @@ public class CsvUtils {
 					if (dateFormated.equals(transformMask)) {
 						// if date decorator do not match with a valid mask
 						// launch exception
-						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
 					}
 					return dateFormated;
 
 				} catch (Exception e) {
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 				}
 
 			} else if (StringUtils.isNotBlank(formatMask)) {
@@ -67,12 +67,12 @@ public class CsvUtils {
 					if (dateFormated.equals(formatMask)) {
 						// if date decorator do not match with a valid mask
 						// launch exception
-						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
 					}
 					return dateFormated;
 
 				} catch (Exception e) {
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 				}
 
 			} else {

@@ -39,11 +39,11 @@ import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
-import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
-import org.jaexcel.framework.JAEX.exception.JAEXConfigurationException;
-import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
-import org.jaexcel.framework.JAEX.exception.JAEXElementException;
+import org.jaexcel.framework.JAEX.exception.ConfigurationException;
+import org.jaexcel.framework.JAEX.exception.ConverterException;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public class Engine implements IEngine {
 
@@ -155,9 +155,9 @@ public class Engine implements IEngine {
 	 * 
 	 * @param wb
 	 *            the {@link Workbook} in use
-	 * @throws JAEXConfigurationException
+	 * @throws ConfigurationException
 	 */
-	private void initializeCellDecorator(Workbook wb) throws JAEXConfigurationException {
+	private void initializeCellDecorator(Workbook wb) throws ConfigurationException {
 
 		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
 			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
@@ -215,7 +215,7 @@ public class Engine implements IEngine {
 	 * @return the {@link CellStyle} decorator
 	 */
 	private CellStyle initializeCellStyleByCellDecorator(Workbook wb, CellDecorator decorator)
-			throws JAEXConfigurationException {
+			throws ConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
@@ -237,7 +237,7 @@ public class Engine implements IEngine {
 			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
 					decorator.isFontBold(), decorator.isFontItalic(), decorator.getFontUnderline());
 		} catch (Exception e) {
-			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Missing.getMessage(),
 					e);
 		}
 		return cs;
@@ -253,7 +253,7 @@ public class Engine implements IEngine {
 	 * @return the {@link CellStyle} decorator
 	 */
 	private CellStyle initializeCellStyleByXlsDecorator(Workbook wb, XlsDecorator decorator)
-			throws JAEXConfigurationException {
+			throws ConfigurationException {
 		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
@@ -280,7 +280,7 @@ public class Engine implements IEngine {
 			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
 					decorator.fontBold(), decorator.fontItalic(), decorator.fontUnderline());
 		} catch (Exception e) {
-			throw new JAEXConfigurationException(JAEXExceptionMessage.JAEXConfigurationException_Missing.getMessage(),
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Missing.getMessage(),
 					e);
 		}
 		return cs;
@@ -388,15 +388,15 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object
 	 * @return the runtime class
-	 * @throws JAEXElementException
+	 * @throws ElementException
 	 */
-	private Class<?> initializeRuntimeClass(Object object) throws JAEXElementException {
+	private Class<?> initializeRuntimeClass(Object object) throws ElementException {
 		Class<?> oC = null;
 		try {
 			/* instance object class */
 			oC = object.getClass();
 		} catch (Exception e) {
-			throw new JAEXElementException(JAEXExceptionMessage.JAEXElementException_NullObject.getMessage(), e);
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage(), e);
 		}
 		return oC;
 	}
@@ -581,18 +581,18 @@ public class Engine implements IEngine {
 	 *            propagation VERTICAL
 	 * @param annotation
 	 *            the {@link XlsNestedHeader} annotation
-	 * @throws JAEXConfigurationException
+	 * @throws ConfigurationException
 	 */
 	private void isValidNestedHeaderConfiguration(boolean isPH, XlsNestedHeader annotation)
-			throws JAEXConfigurationException {
+			throws ConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
-			throw new JAEXConfigurationException(
-					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
+			throw new ConfigurationException(
+					ExceptionMessage.ConfigurationException_Incompatible.getMessage());
 
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
-			throw new JAEXConfigurationException(
-					JAEXExceptionMessage.JAEXConfigurationException_Incompatible.getMessage());
+			throw new ConfigurationException(
+					ExceptionMessage.ConfigurationException_Incompatible.getMessage());
 		}
 	}
 
@@ -731,13 +731,13 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
 	private boolean applyBaseObject(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, NoSuchMethodException,
+			throws IllegalArgumentException, IllegalAccessException, ConverterException, NoSuchMethodException,
 			SecurityException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
@@ -824,11 +824,11 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException {
+			throws IllegalArgumentException, IllegalAccessException, ConverterException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 
@@ -857,7 +857,7 @@ public class Engine implements IEngine {
 						 * if date decorator do not match with a valid mask
 						 * launch exception
 						 */
-						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(),
 								e);
 					}
 				}
@@ -1119,11 +1119,11 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @return
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws InstantiationException
 	 */
 	private int unmarshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR,
-			int idxC) throws IllegalAccessException, JAEXConverterException, InstantiationException {
+			int idxC) throws IllegalAccessException, ConverterException, InstantiationException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -1183,11 +1183,11 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @return
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws InstantiationException
 	 */
 	private int unmarshalAsPropagationVertical(ConfigCriteria configCriteria, Object object, Class<?> oC, int idxR,
-			int idxC) throws IllegalAccessException, JAEXConverterException, InstantiationException {
+			int idxC) throws IllegalAccessException, ConverterException, InstantiationException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -1478,7 +1478,7 @@ public class Engine implements IEngine {
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
 	 * @return the {@link Object} filled up
-	 * @throws JAEXConfigurationException
+	 * @throws ConfigurationException
 	 */
 	public Object unmarshalFromWorkbook(Object object, Workbook workbook) throws Exception {
 		/* initialize the runtime class of the object */
@@ -1585,11 +1585,11 @@ public class Engine implements IEngine {
 	 *            the {@link FileInputStream} to use
 	 * @throws IOException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws InstantiationException
 	 */
 	private void unmarshalIntern(Object object, Class<?> oC, Configuration config, FileInputStream input)
-			throws IOException, IllegalAccessException, JAEXConverterException, InstantiationException {
+			throws IOException, IllegalAccessException, ConverterException, InstantiationException {
 
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.setPropagation(config.getPropagationType());
@@ -1702,7 +1702,7 @@ public class Engine implements IEngine {
 
 	@Deprecated
 	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
-			JAEXConverterException, InstantiationException, JAEXElementException {
+			ConverterException, InstantiationException, ElementException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 		/* initialize configuration data */
@@ -1731,7 +1731,7 @@ public class Engine implements IEngine {
 
 	@Override
 	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws IOException,
-			IllegalArgumentException, IllegalAccessException, JAEXConverterException, InstantiationException {
+			IllegalArgumentException, IllegalAccessException, ConverterException, InstantiationException {
 		/* instance object class */
 		Class<?> oC = object.getClass();
 		Configuration config = null;

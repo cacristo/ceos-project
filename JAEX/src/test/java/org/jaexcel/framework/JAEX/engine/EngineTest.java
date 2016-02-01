@@ -1,8 +1,8 @@
 package org.jaexcel.framework.JAEX.engine;
 
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
-import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
-import org.jaexcel.framework.JAEX.exception.JAEXElementException;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -126,8 +126,8 @@ public class EngineTest extends TestCase {
 			en.unmarshalFromByte(charger, generatedBytes);
 			
 		} catch (Exception e) {
-			if (e.getClass().equals(JAEXElementException.class)
-					&& e.getMessage().equals(JAEXExceptionMessage.JAEXElementException_NullObject)) {
+			if (e.getClass().equals(ElementException.class)
+					&& e.getMessage().equals(ExceptionMessage.ElementException_NullObject)) {
 				assertEquals(true, true);
 			}
 		}

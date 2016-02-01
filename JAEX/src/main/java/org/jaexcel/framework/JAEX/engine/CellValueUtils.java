@@ -20,9 +20,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
-import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
-import org.jaexcel.framework.JAEX.exception.JAEXCustomizedRulesException;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
+import org.jaexcel.framework.JAEX.exception.ConverterException;
+import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
 
 public class CellValueUtils {
 
@@ -82,9 +82,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toString(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toString(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -111,7 +111,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_String.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_String.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -126,9 +126,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toInteger(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toInteger(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -156,7 +156,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Integer.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -171,9 +171,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toLong(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toLong(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		try {
@@ -202,7 +202,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Long.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Long.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -217,9 +217,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toDouble(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toDouble(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		try {
@@ -265,7 +265,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Double.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Double.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -280,10 +280,10 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
 	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c)
-			throws JAEXConverterException {
+			throws ConverterException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
@@ -330,7 +330,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_BigDecimal.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_BigDecimal.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -345,9 +345,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_DATE);
@@ -366,14 +366,14 @@ public class CellValueUtils {
 						if (dateFormated.equals(decorator)) {
 							// if date decorator do not match with a valid mask
 							// launch exception
-							throw new JAEXConverterException(
-									JAEXExceptionMessage.JAEXConverterException_Date.getMessage());
+							throw new ConverterException(
+									ExceptionMessage.ConverterException_Date.getMessage());
 						}
 						c.setCellValue(dateFormated);
 						// apply cell style
 						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 					} catch (Exception e) {
-						throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(),
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(),
 								e);
 					}
 
@@ -403,7 +403,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -418,9 +418,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
@@ -452,7 +452,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Float.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Float.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -468,9 +468,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_BOOLEAN);
@@ -501,7 +501,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -517,9 +517,9 @@ public class CellValueUtils {
 	 * @param c
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 */
-	protected static boolean toEnum(ConfigCriteria configCriteria, Object o, Cell c) throws JAEXConverterException {
+	protected static boolean toEnum(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		try {
@@ -552,7 +552,7 @@ public class CellValueUtils {
 		} catch (Exception e) {
 			// TODO: handle exception
 			isUpdated = false;
-			throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
 		return isUpdated;
 	}
@@ -629,7 +629,7 @@ public class CellValueUtils {
 	 * @throws InvocationTargetException
 	 */
 	protected static void applyCustomizedRules(Object o, String methodRules) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException, JAEXCustomizedRulesException {
+			IllegalAccessException, InvocationTargetException, CustomizedRulesException {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 

@@ -23,9 +23,9 @@ import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
-import org.jaexcel.framework.JAEX.definition.JAEXExceptionMessage;
-import org.jaexcel.framework.JAEX.exception.JAEXConverterException;
-import org.jaexcel.framework.JAEX.exception.JAEXElementException;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
+import org.jaexcel.framework.JAEX.exception.ConverterException;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public class CGen implements IGeneratorCSV {
 
@@ -46,15 +46,15 @@ public class CGen implements IGeneratorCSV {
 	 * @param object
 	 *            the object
 	 * @return the runtime class
-	 * @throws JAEXElementException
+	 * @throws ElementException
 	 */
-	private Class<?> initializeRuntimeClass(Object object) throws JAEXElementException {
+	private Class<?> initializeRuntimeClass(Object object) throws ElementException {
 		Class<?> oC = null;
 		try {
 			/* instance object class */
 			oC = object.getClass();
 		} catch (Exception e) {
-			throw new JAEXElementException(JAEXExceptionMessage.JAEXElementException_NullObject.getMessage(), e);
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage(), e);
 		}
 		return oC;
 	}
@@ -263,13 +263,13 @@ public class CGen implements IGeneratorCSV {
 	 *            the index of the field
 	 * @return the number of fields read
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws InstantiationException
 	 * @throws IllegalArgumentException
 	 * @throws ParseException
 	 */
 	private int unmarshal(Object o, Class<?> oC, String[] v, int idx) throws IllegalAccessException,
-			JAEXConverterException, InstantiationException, IllegalArgumentException, ParseException {
+			ConverterException, InstantiationException, IllegalArgumentException, ParseException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -327,13 +327,13 @@ public class CGen implements IGeneratorCSV {
 	 * @return true if the field has been updated, otherwise false
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
 	 * @throws InvocationTargetException
 	 */
 	private boolean applyBaseObject(Object o, Class<?> fT, Field f, XlsElement element, int idx)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, NoSuchMethodException,
+			throws IllegalArgumentException, IllegalAccessException, ConverterException, NoSuchMethodException,
 			SecurityException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
@@ -441,12 +441,12 @@ public class CGen implements IGeneratorCSV {
 	 * @return true if the field has been updated, otherwise false
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws JAEXConverterException
+	 * @throws ConverterException
 	 * @throws ParseException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private boolean applyBaseCsvObject(Object o, Class<?> fT, Field f, XlsElement xlsAnnotation, String[] v, int idx)
-			throws IllegalArgumentException, IllegalAccessException, JAEXConverterException, ParseException {
+			throws IllegalArgumentException, IllegalAccessException, ConverterException, ParseException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 
@@ -475,7 +475,7 @@ public class CGen implements IGeneratorCSV {
 					 * if date decorator do not match with a valid mask launch
 					 * exception
 					 */
-					throw new JAEXConverterException(JAEXExceptionMessage.JAEXConverterException_Date.getMessage(), e);
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 				}
 			}
 			isUpdated = true;
