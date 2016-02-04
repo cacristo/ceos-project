@@ -45,7 +45,6 @@ public class ObjectConfigurable {
 	private Date dateAttribute1;
 
 	public ObjectConfigurable() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
