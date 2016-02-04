@@ -109,7 +109,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_String.getMessage(), e);
 		}
@@ -154,7 +153,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
 		}
@@ -200,7 +198,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Long.getMessage(), e);
 		}
@@ -263,7 +260,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Double.getMessage(), e);
 		}
@@ -282,8 +278,7 @@ public class CellValueUtils {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 */
-	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c)
-			throws ConverterException {
+	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
@@ -328,7 +323,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_BigDecimal.getMessage(), e);
 		}
@@ -366,15 +360,13 @@ public class CellValueUtils {
 						if (dateFormated.equals(decorator)) {
 							// if date decorator do not match with a valid mask
 							// launch exception
-							throw new ConverterException(
-									ExceptionMessage.ConverterException_Date.getMessage());
+							throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
 						}
 						c.setCellValue(dateFormated);
 						// apply cell style
 						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 					} catch (Exception e) {
-						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(),
-								e);
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 					}
 
 				} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
@@ -401,7 +393,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 		}
@@ -450,7 +441,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Float.getMessage(), e);
 		}
@@ -499,7 +489,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
@@ -550,7 +539,6 @@ public class CellValueUtils {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			isUpdated = false;
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
@@ -628,8 +616,8 @@ public class CellValueUtils {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void applyCustomizedRules(Object o, String methodRules) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException, CustomizedRulesException {
+	protected static void applyCustomizedRules(Object o, String methodRules)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, CustomizedRulesException {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 
