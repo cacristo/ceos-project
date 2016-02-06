@@ -13,7 +13,7 @@ import org.jaexcel.framework.JAEX.definition.PropagationType;
 @XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 
-	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator="anotherDate")
 	private Date dateAttribute;
 
 	@XlsElement(title = "String value", position = 2)
