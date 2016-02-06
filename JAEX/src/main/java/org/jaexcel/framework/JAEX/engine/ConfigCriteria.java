@@ -10,25 +10,184 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
+import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
+import org.jaexcel.framework.JAEX.exception.ConfigurationException;
 
-class ConfigCriteria {
+/**
+ * This will define all the configuration criteria to be used internally by the
+ * framework. <br>
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
+public class ConfigCriteria {
 
+	/* workbook parameters */
 	private Workbook workbook;
 	private Sheet sheet;
+	private String titleSheet;
 	private Row rowHeader;
 	private Row row;
+	private int startRow;
+	private int startCell;
 
+	/* element parameters */
 	private XlsElement element;
 	private Field field;
 
+	/* workbook file parameters */
+	private String fileName;
+	private String completeFileName;
 	private PropagationType propagation;
+	private PropagationType overridePropagation;
 	private ExtensionFileType extension;
+	private ExtensionFileType overrideExtension;
+	private CascadeType cascadeLevel;
+	private CascadeType overrideCascadeLevel;
 
+	/* cell style parameters */
 	private Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
 	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
 
+	/**
+	 * Force the header cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public void overrideHeaderCellDecorator(CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_HEADER, decorator);
+	}
+
+	/**
+	 * Force the numeric cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public void overrideNumericCellDecorator(CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC, decorator);
+	}
+
+	/**
+	 * Force the boolean cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public void overrideBooleanCellDecorator(CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN, decorator);
+	}
+
+	/**
+	 * Force the date cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public void overrideDateCellDecorator(CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_DATE, decorator);
+	}
+
+	/**
+	 * Add a new Cell Decorator for a specific use case.
+	 * 
+	 * @param decoratorName
+	 *            the decorator name
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
+		cellDecoratorMap.put(decoratorName, decorator);
+	}
+
+	/**
+	 * Force the propagation type to apply at the Sheet.
+	 * 
+	 * @param type
+	 *            the {@link PropagationType} to apply
+	 */
+	public void overridePropagationType(PropagationType type) {
+		overridePropagation = type;
+	}
+
+	/**
+	 * Force the extension type to apply at the Sheet.
+	 * 
+	 * @param type
+	 *            the {@link ExtensionFileType} to apply
+	 */
+	public void overrideExtensionType(ExtensionFileType type) {
+		overrideExtension = type;
+	}
+
+	/**
+	 * Force the cascade level to apply at the Sheet.
+	 * 
+	 * @param type
+	 *            the {@link CascadeType} to apply
+	 */
+	public void overrideCascadeLevel(CascadeType type) {
+		overrideCascadeLevel = type;
+	}
+
+	/**
+	 * Initialize Cell Decorator system.
+	 * 
+	 * @param wb
+	 *            the {@link Workbook} in use
+	 * @throws ConfigurationException
+	 */
+	protected void initializeCellDecorator() throws ConfigurationException {
+
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_HEADER))
+							: CellStyleUtils.initializeHeaderCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER));
+		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC))
+							: CellStyleUtils.initializeNumericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC));
+		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_DATE,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_DATE))
+							: CellStyleUtils.initializeDateCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE));
+		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
+							: CellStyleUtils.initializeBooleanCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
+		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_GENERIC,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC))
+							: CellStyleUtils.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
+		}
+
+		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
+			stylesMap.put(object.getKey(), CellStyleUtils.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+		}
+	}
+	
 	/**
 	 * @return the workbook
 	 */
@@ -57,6 +216,21 @@ class ConfigCriteria {
 	 */
 	protected void setSheet(Sheet sheet) {
 		this.sheet = sheet;
+	}
+
+	/**
+	 * @return the titleSheet
+	 */
+	protected String getTitleSheet() {
+		return titleSheet;
+	}
+
+	/**
+	 * @param titleSheet
+	 *            the titleSheet to set
+	 */
+	protected void setTitleSheet(String titleSheet) {
+		this.titleSheet = titleSheet;
 	}
 
 	/**
@@ -90,6 +264,36 @@ class ConfigCriteria {
 	}
 
 	/**
+	 * @return the startRow
+	 */
+	protected int getStartRow() {
+		return startRow;
+	}
+
+	/**
+	 * @param startRow
+	 *            the startRow to set
+	 */
+	protected void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	/**
+	 * @return the startCell
+	 */
+	protected int getStartCell() {
+		return startCell;
+	}
+
+	/**
+	 * @param startCell
+	 *            the startCell to set
+	 */
+	protected void setStartCell(int startCell) {
+		this.startCell = startCell;
+	}
+
+	/**
 	 * @return the field
 	 */
 	protected Field getField() {
@@ -105,10 +309,44 @@ class ConfigCriteria {
 	}
 
 	/**
+	 * @return the fileName
+	 */
+	protected String getFileName() {
+		return fileName;
+	}
+
+	/**
+	 * @param fileName
+	 *            the fileName to set
+	 */
+	protected void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	/**
+	 * @return the completeFileName
+	 */
+	protected String getCompleteFileName() {
+		return completeFileName;
+	}
+
+	/**
+	 * @param completeFileName
+	 *            the completeFileName to set
+	 */
+	protected void setCompleteFileName(String completeFileName) {
+		this.completeFileName = completeFileName;
+	}
+
+	/**
 	 * @return the propagation
 	 */
 	protected PropagationType getPropagation() {
-		return propagation;
+		if(overridePropagation != null){
+			return overridePropagation;
+		} else {
+			return propagation;
+		}
 	}
 
 	/**
@@ -123,7 +361,11 @@ class ConfigCriteria {
 	 * @return the extension
 	 */
 	protected ExtensionFileType getExtension() {
-		return extension;
+		if(overrideExtension != null){
+			return overrideExtension;
+		} else {
+			return extension;
+		}
 	}
 
 	/**
@@ -132,6 +374,25 @@ class ConfigCriteria {
 	 */
 	protected void setExtension(ExtensionFileType extension) {
 		this.extension = extension;
+	}
+
+	/**
+	 * @return the cascadeLevel
+	 */
+	protected CascadeType getCascadeLevel() {
+		if(overrideCascadeLevel != null){
+			return overrideCascadeLevel;
+		} else {
+			return cascadeLevel;
+		}
+	}
+
+	/**
+	 * @param cascadeLevel
+	 *            the cascadeLevel to set
+	 */
+	protected void setCascadeLevel(CascadeType cascadeLevel) {
+		this.cascadeLevel = cascadeLevel;
 	}
 
 	/**
