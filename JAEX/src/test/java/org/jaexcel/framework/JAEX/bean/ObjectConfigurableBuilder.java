@@ -86,8 +86,8 @@ public class ObjectConfigurableBuilder extends TestCase {
 
 		// TODO the object is null : review
 		assertEquals(0, toValidate.getJob().getJobCode());
-		assertEquals("", toValidate.getJob().getJobFamily());
-		assertEquals("", toValidate.getJob().getJobName());
+		assertEquals(null, toValidate.getJob().getJobFamily());
+		assertEquals(null, toValidate.getJob().getJobName());
 		// TODO add new validation below
 	}
 
