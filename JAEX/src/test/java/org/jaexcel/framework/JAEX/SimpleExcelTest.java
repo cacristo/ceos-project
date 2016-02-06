@@ -25,6 +25,7 @@ import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
+import org.jaexcel.framework.JAEX.engine.ConfigCriteria;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
 
@@ -148,9 +149,11 @@ public class SimpleExcelTest extends TestCase {
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
-		en.overrideHeaderCellDecorator(configuration);
 
-		en.marshal(fastTest);
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.overrideHeaderCellDecorator(configuration);
+		
+		en.marshalAndSave(configCriteria, fastTest, "D:\\projects");
 
 		// start validation
 		Class<SimpleObject> oC = SimpleObject.class;

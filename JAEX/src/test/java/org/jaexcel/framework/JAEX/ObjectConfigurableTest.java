@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.bean.ObjectConfigurable;
 import org.jaexcel.framework.JAEX.bean.ObjectConfigurableBuilder;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
+import org.jaexcel.framework.JAEX.engine.ConfigCriteria;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
 
@@ -39,6 +40,8 @@ public class ObjectConfigurableTest extends TestCase {
 
 		IEngine en = new Engine();
 
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		
 		CellDecorator configurationHeader = new CellDecorator();
 		// override default header configuration
 		configurationHeader.setDecoratorName("header");
@@ -51,20 +54,23 @@ public class ObjectConfigurableTest extends TestCase {
 		configurationHeader.setFontBold(true);
 		configurationHeader.setFontItalic(true);
 		configurationHeader.setWrapText(true);
-		en.overrideHeaderCellDecorator(configurationHeader);
-
+		//en.overrideHeaderCellDecorator(configurationHeader);
+		configCriteria.overrideHeaderCellDecorator(configurationHeader);
+		
+		
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");
 		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
 		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 
-		dateDecorator.setForegroundColor(HSSFColor.ORANGE.index);
+		dateDecorator.setForegroundColor(HSSFColor.RED.index);
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
 
-		en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		//en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
 
-		en.marshal(oc);
+		en.marshalAndSave(configCriteria, oc, "D:\\projects");
 	}
 
 	/**

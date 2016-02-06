@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObjectBuilder;
 import org.jaexcel.framework.JAEX.engine.CellDecorator;
+import org.jaexcel.framework.JAEX.engine.ConfigCriteria;
 import org.jaexcel.framework.JAEX.engine.Engine;
 import org.jaexcel.framework.JAEX.engine.IEngine;
 
@@ -47,7 +48,7 @@ public class MultiTypeAttributesTest extends TestCase {
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
 		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		configuration.setBorder(CellStyle.BORDER_DOTTED);
-		configuration.setForegroundColor(HSSFColor.ORANGE.index);
+		configuration.setForegroundColor(HSSFColor.YELLOW.index);
 		configuration.setFontBold(true);
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
@@ -56,14 +57,15 @@ public class MultiTypeAttributesTest extends TestCase {
 		anotherDate.setDecoratorName("anotherDate");
 		anotherDate.setAlignment(CellStyle.ALIGN_CENTER);
 		anotherDate.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-		anotherDate.setForegroundColor(HSSFColor.ORANGE.index);
+		anotherDate.setForegroundColor(HSSFColor.LIGHT_GREEN.index);
 		anotherDate.setFontItalic(true);
 		anotherDate.setWrapText(true);
 
-		en.overrideHeaderCellDecorator(configuration);
-		en.addSpecificCellDecorator("anotherDate", anotherDate);
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.overrideHeaderCellDecorator(configuration);
+		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
 
-		en.marshal(mto);
+		en.marshalAndSave(configCriteria, mto, "D:\\projects");
 
 		assertEquals(true, true);
 	}
