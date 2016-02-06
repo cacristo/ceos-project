@@ -7,15 +7,51 @@ import java.util.Collection;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.jaexcel.framework.JAEX.definition.CascadeType;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
-import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public interface IEngine {
 
 	/* ######################## Marshal methods ########################## */
+
+	/**
+	 * Generate the sheet from the object and return the sheet generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+	Sheet marshalToSheet(Object object) throws Exception;
+	/**
+	 * Generate the sheet from the object and return the sheet generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+	Sheet marshalToSheet(ConfigCriteria configCriteria, Object object) throws Exception;
+
+	/**
+	 * Generate the workbook from the object and return the workbook generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	Workbook marshalToWorkbook(Object object) throws Exception;
+	/**
+	 * Generate the workbook from the object and return the workbook generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object) throws Exception;
 
 	/**
 	 * Generate the workbook from the object passed as parameter and save it at
@@ -27,25 +63,18 @@ public interface IEngine {
 	 *            the file path where will be the file saved
 	 */
 	void marshalAndSave(Object object, String pathFile) throws Exception;
-
 	/**
-	 * Generate the sheet from the object and return the sheet generated.
+	 * Generate the workbook from the object passed as parameter and save it at
+	 * the path send as parameter.
 	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @return the {@link Sheet} generated
+	 * @param pathFile
+	 *            the file path where will be the file saved
 	 */
-
-	Sheet marshalToSheet(Object object) throws Exception;
-	
-	/**
-	 * Generate the workbook from the object and return the workbook generated.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link Workbook} generated
-	 */
-	Workbook marshalToWorkbook(Object object) throws Exception;
+	void marshalAndSave(ConfigCriteria configCriteria, Object object, String pathFile) throws Exception;
 
 	/**
 	 * Generate the workbook from the object and return the byte[] generated.
@@ -99,14 +128,13 @@ public interface IEngine {
 	/**
 	 * Generate the object from the byte array passed as parameter.
 	 * 
-	 * @param object the object to fill up.
-	 * @param inputByte the byte array to read and pass the information to the
-	 *            object
+	 * @param object
+	 *            the object to fill up.
+	 * @param inputByte
+	 *            the byte array to read and pass the information to the object
 	 * @return the {@link Object} filled up
 	 */
 	Object unmarshalFromByte(Object object, byte[] byteArray) throws Exception;
-
-
 
 	Collection<?> unmarshalToCollection(Object object);
 
@@ -115,66 +143,6 @@ public interface IEngine {
 	 * @param collection
 	 */
 	void marshalAsCollection(Collection<?> collection);
-
-	/* ####################### Configuration methods ##################### */
-
-	/**
-	 * Force the header cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	void overrideHeaderCellDecorator(CellDecorator decorator);
-
-	/**
-	 * Force the numeric cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	void overrideNumericCellDecorator(CellDecorator decorator);
-
-	/**
-	 * Force the boolean cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	void overrideBooleanCellDecorator(CellDecorator decorator);
-
-	/**
-	 * Force the date cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	void overrideDateCellDecorator(CellDecorator decorator);
-
-	/**
-	 * Add a new cell decorator for a specific use case.
-	 * 
-	 * @param decoratorName
-	 *            the decorator name
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	void addSpecificCellDecorator(String decoratorName, CellDecorator decorator);
-
-	/**
-	 * Force the propagation type to apply at the Sheet.
-	 * 
-	 * @param type
-	 *            the {@link PropagationType} to apply
-	 */
-	void overridePropagationType(PropagationType type);
-
-	/**
-	 * Force the cascade level to apply at the Sheet.
-	 * 
-	 * @param type
-	 *            the {@link CascadeType} to apply
-	 */
-	void overrideCascadeLevel(CascadeType type);
 
 	/* ############################################# */
 	/* ################## TO REVIEW ################ */
@@ -192,7 +160,7 @@ public interface IEngine {
 
 	Object unmarshal(Object obecjt) throws IOException, IllegalArgumentException, IllegalAccessException,
 			ConverterException, InstantiationException, ElementException;
-	
+
 	/**
 	 * Generate the workbook from the object and return the FileOutputStream
 	 * generated.

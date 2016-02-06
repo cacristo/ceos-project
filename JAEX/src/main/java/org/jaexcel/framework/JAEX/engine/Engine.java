@@ -14,17 +14,12 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,9 +32,8 @@ import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
-import org.jaexcel.framework.JAEX.definition.CascadeType;
-import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
+import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
@@ -48,339 +42,12 @@ import org.jaexcel.framework.JAEX.exception.ElementException;
 public class Engine implements IEngine {
 
 	// Workbook wb;
+	@Deprecated
 	Configuration configuration;
-	CellDecorator headerDecorator;
-	Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
-	Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
-
-	/**
-	 * Initialize default Header Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @return the {@link CellStyle} header decorator
-	 */
-	private CellStyle initializeHeaderCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-
-		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
-
-		/* add the border to the cell */
-		CellStyleUtils.applyBorderDefault(cs);
-
-		/* add the background to the cell */
-		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-
-		/* add the wrap mode to the cell */
-		cs.setWrapText(true);
-
-		/* add the font style to the cell */
-		CellStyleUtils.applyFontDefault(wb, cs);
-
-		return cs;
-	}
-
-	/**
-	 * Initialize default Numeric Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @return the {@link CellStyle} numeric decorator
-	 */
-	private CellStyle initializeNumericCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-
-		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
-		CellStyleUtils.applyFontDefault(wb, cs);
-
-		return cs;
-	}
-
-	/**
-	 * Initialize default Date Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @return the {@link CellStyle} date decorator
-	 */
-	private CellStyle initializeDateCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-
-		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
-		CellStyleUtils.applyFontDefault(wb, cs);
-
-		return cs;
-	}
-
-	/**
-	 * Initialize default Boolean Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @return the {@link CellStyle} boolean decorator
-	 */
-	private CellStyle initializeBooleanCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-
-		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
-		CellStyleUtils.applyFontDefault(wb, cs);
-
-		return cs;
-	}
-
-	/**
-	 * Initialize default Generic Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @return the {@link CellStyle} generic decorator
-	 */
-	private CellStyle initializeGenericCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-
-		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_LEFT);
-		CellStyleUtils.applyFontDefault(wb, cs);
-
-		return cs;
-	}
-
-	/**
-	 * Initialize Cell Decorator system.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @throws ConfigurationException
-	 */
-	private void initializeCellDecorator(Workbook wb) throws ConfigurationException {
-
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER)
-							? initializeCellStyleByCellDecorator(wb,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_HEADER))
-							: initializeHeaderCellDecorator(wb));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER));
-		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC)
-							? initializeCellStyleByCellDecorator(wb,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC))
-							: initializeNumericCellDecorator(wb));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC));
-		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_DATE,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE)
-							? initializeCellStyleByCellDecorator(wb,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_DATE))
-							: initializeDateCellDecorator(wb));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE));
-		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN)
-							? initializeCellStyleByCellDecorator(wb,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
-							: initializeBooleanCellDecorator(wb));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
-		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_GENERIC,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC)
-							? initializeCellStyleByCellDecorator(wb,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC))
-							: initializeGenericCellDecorator(wb));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
-		}
-
-		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
-			stylesMap.put(object.getKey(), initializeCellStyleByCellDecorator(wb, object.getValue()));
-		}
-	}
-
-	/**
-	 * Initialize {@link CellStyle} by Cell Decorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @param decorator
-	 *            the {@link CellDecorator} to use
-	 * @return the {@link CellStyle} decorator
-	 */
-	private CellStyle initializeCellStyleByCellDecorator(Workbook wb, CellDecorator decorator)
-			throws ConfigurationException {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-		try {
-			/* add the alignment to the cell */
-			CellStyleUtils.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
-
-			/* add the border to the cell */
-			borderPropagationManagement(decorator);
-			CellStyleUtils.applyBorder(cs, decorator.getBorderLeft(), decorator.getBorderRight(),
-					decorator.getBorderTop(), decorator.getBorderBottom());
-
-			/* add the background to the cell */
-			cs.setFillForegroundColor(decorator.getForegroundColor());
-			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-
-			/* add the wrap mode to the cell */
-			cs.setWrapText(decorator.isWrapText());
-
-			/* add the font style to the cell */
-			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
-					decorator.isFontBold(), decorator.isFontItalic(), decorator.getFontUnderline());
-		} catch (Exception e) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Missing.getMessage(),
-					e);
-		}
-		return cs;
-	}
-
-	/**
-	 * Initialize {@link CellStyle} by XlsDecorator.
-	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
-	 * @param decorator
-	 *            the {@link CellDecorator} to use
-	 * @return the {@link CellStyle} decorator
-	 */
-	private CellStyle initializeCellStyleByXlsDecorator(Workbook wb, XlsDecorator decorator)
-			throws ConfigurationException {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
-		try {
-			/* add the alignment to the cell */
-			CellStyleUtils.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
-
-			/* add the border to the cell */
-			if (decorator.border() != 0 && decorator.borderLeft() == 0 && decorator.borderRight() == 0
-					&& decorator.borderTop() == 0 && decorator.borderBottom() == 0) {
-				CellStyleUtils.applyBorder(cs, decorator.border(), decorator.border(), decorator.border(),
-						decorator.border());
-			} else {
-				CellStyleUtils.applyBorder(cs, decorator.borderLeft(), decorator.borderRight(), decorator.borderTop(),
-						decorator.borderBottom());
-			}
-
-			/* add the background to the cell */
-			cs.setFillForegroundColor(decorator.foregroundColor());
-			cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-
-			/* add the wrap mode to the cell */
-			cs.setWrapText(decorator.wrapText());
-
-			/* add the font style to the cell */
-			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
-					decorator.fontBold(), decorator.fontItalic(), decorator.fontUnderline());
-		} catch (Exception e) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Missing.getMessage(),
-					e);
-		}
-		return cs;
-	}
-
-	/**
-	 * if specific border not configured, propagate generic border configuration
-	 * to specific border.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to use
-	 */
-	private void borderPropagationManagement(CellDecorator decorator) {
-		/* if specific border not configured */
-		if (decorator.getBorder() != 0 && decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0
-				&& decorator.getBorderTop() == 0 && decorator.getBorderBottom() == 0) {
-			/* propagate generic border configuration to specific border */
-			decorator.setBorderLeft(decorator.getBorder());
-			decorator.setBorderRight(decorator.getBorder());
-			decorator.setBorderTop(decorator.getBorder());
-			decorator.setBorderBottom(decorator.getBorder());
-		}
-	}
-
-	/**
-	 * Force the header cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	@Override
-	public void overrideHeaderCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_HEADER, decorator);
-	}
-
-	/**
-	 * Force the numeric cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	@Override
-	public void overrideNumericCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC, decorator);
-	}
-
-	/**
-	 * Force the boolean cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	@Override
-	public void overrideBooleanCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN, decorator);
-	}
-
-	/**
-	 * Force the date cell decorator.
-	 * 
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	@Override
-	public void overrideDateCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_DATE, decorator);
-	}
-
-	/**
-	 * Add a new Cell Decorator for a specific use case.
-	 * 
-	 * @param decoratorName
-	 *            the decorator name
-	 * @param decorator
-	 *            the {@link CellDecorator} to apply
-	 */
-	@Override
-	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
-		cellDecoratorMap.put(decoratorName, decorator);
-	}
-
-	/**
-	 * Force the propagation type to apply at the Sheet.
-	 * 
-	 * @param type
-	 *            the {@link PropagationType} to apply
-	 */
-	public void overridePropagationType(PropagationType type) {
-		configuration.setPropagationType(type);
-	}
-
-	/**
-	 * Force the cascade level to apply at the Sheet.
-	 * 
-	 * @param type
-	 *            the {@link CascadeType} to apply
-	 */
-	public void overrideCascadeLevel(CascadeType type) {
-		configuration.setCascadeLevel(type);
-	}
+	// CellDecorator headerDecorator;
+	// Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
+	// Map<String, CellDecorator> cellDecoratorMap = new HashMap<String,
+	// CellDecorator>();
 
 	/**
 	 * Get the runtime class of the object passed as parameter.
@@ -408,6 +75,58 @@ public class Engine implements IEngine {
 	 *            the {@link Class<?>}
 	 * @return
 	 */
+	private void initializeConfigurationData(ConfigCriteria configCriteria, Class<?> oC) {
+		/* Process @XlsConfiguration */
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
+			initializeConfiguration(configCriteria, xlsAnnotation);
+		}
+		/* Process @XlsSheet */
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			initializeSheetConfiguration(configCriteria, xlsAnnotation);
+		}
+	}
+
+	/**
+	 * Add the main xls configuration.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @param annotation
+	 *            the {@link XlsConfiguration}
+	 * @return
+	 */
+	private void initializeConfiguration(ConfigCriteria configCriteria, XlsConfiguration annotation) {
+		configCriteria.setFileName(annotation.nameFile());
+		configCriteria.setCompleteFileName(annotation.nameFile() + annotation.extensionFile().getExtension());
+		configCriteria.setExtension(annotation.extensionFile());
+	}
+
+	/**
+	 * Add the sheet configuration.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @param annotation
+	 *            the {@link XlsSheet}
+	 * @return
+	 */
+	private void initializeSheetConfiguration(ConfigCriteria configCriteria, XlsSheet annotation) {
+		configCriteria.setTitleSheet(annotation.title());
+		configCriteria.setPropagation(annotation.propagation());
+		configCriteria.setStartRow(annotation.startRow());
+		configCriteria.setStartCell(annotation.startCell());
+	}
+
+	/**
+	 * Initialize the configuration to apply at the Excel.
+	 * 
+	 * @param oC
+	 *            the {@link Class<?>}
+	 * @return
+	 */
+	@Deprecated
 	private Configuration initializeConfigurationData(Class<?> oC) {
 		Configuration config = null;
 
@@ -432,6 +151,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
+	@Deprecated
 	private Configuration initializeConfiguration(XlsConfiguration config) {
 		if (configuration == null) {
 			configuration = new Configuration();
@@ -449,6 +169,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsSheet}
 	 * @return
 	 */
+	@Deprecated
 	private Configuration initializeSheetConfiguration(XlsSheet config) {
 		if (configuration == null) {
 			configuration = new Configuration();
@@ -525,6 +246,27 @@ public class Engine implements IEngine {
 	}
 
 	/**
+	 * Validate if the master header configuration is valid.
+	 * 
+	 * @param isPH
+	 *            true if propagation is HORIZONTAL otherwise false to
+	 *            propagation VERTICAL
+	 * @param annotation
+	 *            the {@link XlsNestedHeader} annotation
+	 * @throws ConfigurationException
+	 */
+	private void isValidNestedHeaderConfiguration(boolean isPH, XlsNestedHeader annotation)
+			throws ConfigurationException {
+
+		if (isPH && annotation.startX() == annotation.endX()) {
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Incompatible.getMessage());
+
+		} else if (!isPH && annotation.startY() == annotation.endY()) {
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Incompatible.getMessage());
+		}
+	}
+
+	/**
 	 * Apply merge region if necessary.
 	 * 
 	 * @param configCriteria
@@ -566,33 +308,10 @@ public class Engine implements IEngine {
 			}
 
 			/* initialize master header cell */
-			initializeHeaderCell(r, startCell, annotation.title());
+			CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), r, startCell, annotation.title());
 
 			/* merge region of the master header cell */
 			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
-		}
-	}
-
-	/**
-	 * Validate if the master header configuration is valid.
-	 * 
-	 * @param isPH
-	 *            true if propagation is HORIZONTAL otherwise false to
-	 *            propagation VERTICAL
-	 * @param annotation
-	 *            the {@link XlsNestedHeader} annotation
-	 * @throws ConfigurationException
-	 */
-	private void isValidNestedHeaderConfiguration(boolean isPH, XlsNestedHeader annotation)
-			throws ConfigurationException {
-
-		if (isPH && annotation.startX() == annotation.endX()) {
-			throw new ConfigurationException(
-					ExceptionMessage.ConfigurationException_Incompatible.getMessage());
-
-		} else if (!isPH && annotation.startY() == annotation.endY()) {
-			throw new ConfigurationException(
-					ExceptionMessage.ConfigurationException_Incompatible.getMessage());
 		}
 	}
 
@@ -607,25 +326,6 @@ public class Engine implements IEngine {
 	 */
 	private Row initializeRow(Sheet s, int idxR) {
 		return s.createRow(idxR);
-	}
-
-	/**
-	 * Initialize the header cell.
-	 * 
-	 * @param r
-	 *            {@link Row} to add the cell
-	 * @param idxC
-	 *            position of the new cell
-	 * @param value
-	 *            the value of the cell content
-	 * @return the cell created
-	 */
-	private Cell initializeHeaderCell(Row r, int idxC, String value) throws Exception {
-		Cell c = r.createCell(idxC);
-		c.setCellValue(value);
-		c.setCellStyle(stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER));
-		return c;
-
 	}
 
 	/**
@@ -649,16 +349,19 @@ public class Engine implements IEngine {
 	private int initializeCellByFieldHorizontal(ConfigCriteria configCriteria, Object o, int idxR, int idxC, int cL)
 			throws Exception {
 
+		int counter = 0;
+
+		// FIXME uncomment line to activate cascade level
+		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+
 		/* make the field accessible to recover the value */
 		configCriteria.getField().setAccessible(true);
 
-		int counter = 0;
-
 		Class<?> fT = configCriteria.getField().getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, idxC);
+		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
-		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+		if (!isAppliedObject && !fT.isPrimitive()) {
 			Object nO = configCriteria.getField().get(o);
 			/* manage null objects */
 			if (nO == null) {
@@ -668,6 +371,9 @@ public class Engine implements IEngine {
 
 			counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
 		}
+
+		// FIXME uncomment line to activate cascade level
+		// }
 		return counter;
 	}
 
@@ -693,18 +399,21 @@ public class Engine implements IEngine {
 	private int initializeCellByFieldVertical(ConfigCriteria configCriteria, Object o, Row r, int idxR, int idxC,
 			int cL) throws Exception {
 
+		int counter = 0;
+
+		// FIXME uncomment line to activate cascade level
+		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+
 		/* make the field accessible to recover the value */
 		configCriteria.getField().setAccessible(true);
-
-		int counter = 0;
 
 		Class<?> fT = configCriteria.getField().getType();
 
 		configCriteria.setRow(r);
 
-		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, idxC);
+		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
-		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+		if (!isAppliedObject && !fT.isPrimitive()) {
 			Object nO = configCriteria.getField().get(o);
 			/* manage null objects */
 			if (nO == null) {
@@ -714,6 +423,9 @@ public class Engine implements IEngine {
 
 			counter = marshalAsPropagationVertical(configCriteria, nO, oC, idxR - 1, idxC - 1, cL + 1);
 		}
+
+		// FIXME uncomment line to activate cascade level
+		// }
 		return counter;
 	}
 
@@ -736,7 +448,7 @@ public class Engine implements IEngine {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	private boolean applyBaseObject(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
+	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
 			throws IllegalArgumentException, IllegalAccessException, ConverterException, NoSuchMethodException,
 			SecurityException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
@@ -827,7 +539,7 @@ public class Engine implements IEngine {
 	 * @throws ConverterException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private boolean applyBaseExcelObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
+	private boolean toObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
 			throws IllegalArgumentException, IllegalAccessException, ConverterException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
@@ -857,8 +569,7 @@ public class Engine implements IEngine {
 						 * if date decorator do not match with a valid mask
 						 * launch exception
 						 */
-						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(),
-								e);
+						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 					}
 				}
 			}
@@ -1015,8 +726,8 @@ public class Engine implements IEngine {
 				counter++;
 				if (configCriteria.getRowHeader() != null) {
 					/* header treatment */
-					initializeHeaderCell(configCriteria.getRowHeader(), idxC + xlsAnnotation.position(),
-							xlsAnnotation.title());
+					CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
+							idxC + xlsAnnotation.position(), xlsAnnotation.title());
 				}
 				/* content treatment */
 				idxC += initializeCellByFieldHorizontal(configCriteria, o, idxR, idxC + xlsAnnotation.position(), cL);
@@ -1087,7 +798,8 @@ public class Engine implements IEngine {
 					applyMergeRegion(configCriteria, row, idxR, tmpIdxCell, false);
 
 					/* header treatment */
-					initializeHeaderCell(row, idxC, xlsAnnotation.title());
+					CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), row, idxC,
+							xlsAnnotation.title());
 
 				} else {
 					row = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
@@ -1146,7 +858,7 @@ public class Engine implements IEngine {
 				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
 				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(o, fT, f, contentCell, xlsAnnotation);
+				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
@@ -1210,7 +922,7 @@ public class Engine implements IEngine {
 				Row contentRow = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
-				boolean isAppliedToBaseObject = applyBaseExcelObject(object, fT, f, contentCell, xlsAnnotation);
+				boolean isAppliedToBaseObject = toObject(object, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
@@ -1285,6 +997,23 @@ public class Engine implements IEngine {
 	}
 
 	/**
+	 * Generate the sheet from the object and return the sheet generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+	public Sheet marshalToSheet(ConfigCriteria configCriteria, Object object) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		Workbook wb = marshalToWorkbook(configCriteria, object);
+
+		/* Generate the sheet to return */
+		return wb.getSheetAt(0);
+	}
+
+	/**
 	 * Generate the workbook from the object and return the workbook generated.
 	 * 
 	 * @param object
@@ -1292,41 +1021,55 @@ public class Engine implements IEngine {
 	 * @return the {@link Workbook} generated
 	 */
 	public Workbook marshalToWorkbook(Object object) throws Exception {
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		marshalToWorkbook(configCriteria, object);
+
+		return configCriteria.getWorkbook();
+	}
+
+	/**
+	 * Generate the workbook from the object and return the workbook generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	public Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object) throws Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
-
-		ConfigCriteria configCriteria = new ConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
+		// ConfigCriteria configCriteria = new ConfigCriteria();
+		initializeConfigurationData(configCriteria, oC);
 
 		/* initialize Workbook */
-		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
+		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
 
 		/* initialize style cell via annotations */
 		if (oC.isAnnotationPresent(XlsDecorators.class)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) oC.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
-				stylesMap.put(decorator.decoratorName(),
-						initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
+				configCriteria.getStylesMap().put(decorator.decoratorName(),
+						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
 			}
 		}
 
 		/* initialize style cell via default option */
-		configCriteria.setStylesMap(stylesMap);
-		initializeCellDecorator(configCriteria.getWorkbook());
+		configCriteria.initializeCellDecorator();
+		// configCriteria.setStylesMap(stylesMap);
 
 		/* initialize Sheet */
-		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
+		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 
 		/* initialize Row & Cell */
-		int idxRow = config.getStartRow();
-		int idxCell = config.getStartCell();
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
 
 		/* initialize rows according the PropagationType */
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
 			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 			marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
@@ -1368,7 +1111,24 @@ public class Engine implements IEngine {
 	 */
 	public void marshalAndSave(Object object, String pathFile) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(object);
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		marshalAndSave(configCriteria, object, pathFile);
+	}
+
+	/**
+	 * Generate the workbook from the object passed as parameter and save it at
+	 * the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
+	 */
+	public void marshalAndSave(ConfigCriteria configCriteria, Object object, String pathFile) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		Workbook wb = marshalToWorkbook(configCriteria, object);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1379,7 +1139,7 @@ public class Engine implements IEngine {
 		}
 
 		/* Save the Workbook at a specified path (received as parameter) */
-		workbookFileOutputStream(wb, pathFile + configuration.getNameFile());
+		workbookFileOutputStream(wb, pathFile + configCriteria.getCompleteFileName());
 	}
 
 	/**
@@ -1412,8 +1172,8 @@ public class Engine implements IEngine {
 		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
 		// initialize style cell via default option
-		initializeCellDecorator(configCriteria.getWorkbook());
-		configCriteria.setStylesMap(stylesMap);
+		configCriteria.initializeCellDecorator();
+		// configCriteria.setStylesMap(stylesMap);
 
 		int idxRow = 0, idxCell = 0, index = 0;
 
@@ -1485,19 +1245,17 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
-
 		ConfigCriteria configCriteria = new ConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
+		initializeConfigurationData(configCriteria, oC);
+
 		configCriteria.setWorkbook(workbook);
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
 		/* initialize index row & cell */
-		int idxRow = config.getStartRow();
-		int idxCell = config.getStartCell();
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
 
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
 			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
@@ -1521,7 +1279,8 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		initializeConfigurationData(configCriteria, oC);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1531,8 +1290,8 @@ public class Engine implements IEngine {
 			pathFile = pathFile.concat(File.separator);
 		}
 
-		FileInputStream input = new FileInputStream(pathFile + config.getNameFile());
-		unmarshalIntern(object, oC, config, input);
+		FileInputStream input = new FileInputStream(pathFile + configCriteria.getCompleteFileName());
+		unmarshalIntern(object, oC, configCriteria, input);
 
 		return object;
 	}
@@ -1551,19 +1310,17 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
-
 		ConfigCriteria configCriteria = new ConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
-		configCriteria.setWorkbook(initializeWorkbook(byteArray, configuration.getExtensionFile()));
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
+		initializeConfigurationData(configCriteria, oC);
+
+		configCriteria.setWorkbook(initializeWorkbook(byteArray, configCriteria.getExtension()));
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
 		/* initialize index row & cell */
-		int idxRow = config.getStartRow();
-		int idxCell = config.getStartCell();
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
 
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
 			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
@@ -1588,20 +1345,17 @@ public class Engine implements IEngine {
 	 * @throws ConverterException
 	 * @throws InstantiationException
 	 */
-	private void unmarshalIntern(Object object, Class<?> oC, Configuration config, FileInputStream input)
+	private void unmarshalIntern(Object object, Class<?> oC, ConfigCriteria configCriteria, FileInputStream input)
 			throws IOException, IllegalAccessException, ConverterException, InstantiationException {
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
-		configCriteria.setWorkbook(initializeWorkbook(input, config.getExtensionFile()));
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(config.getTitleSheet()));
+		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
 		/* initialize index row & cell */
-		int idxRow = config.getStartRow();
-		int idxCell = config.getStartCell();
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
 
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
 			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
@@ -1632,72 +1386,54 @@ public class Engine implements IEngine {
 	@Deprecated
 	public void marshal(Object object) throws Exception {
 		Class<?> objectClass = object.getClass();
-		Configuration config = null;
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
 		/* Process @XlsConfiguration */
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
-
+			initializeConfiguration(configCriteria, xlsAnnotation);
 		}
+
 		/* Process @XlsSheet */
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
-
+			initializeSheetConfiguration(configCriteria, xlsAnnotation);
 		}
 
-		// FIXME criteria
-		ConfigCriteria configCriteria = new ConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
-
 		/* initialize Workbook */
-		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
+		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
 
 		/* initialize style cell via annotations */
 		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
-				stylesMap.put(decorator.decoratorName(),
-						initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
+				configCriteria.getStylesMap().put(decorator.decoratorName(),
+						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
 			}
 		}
 		/* initialize style cell via default option */
-		initializeCellDecorator(configCriteria.getWorkbook());
+		configCriteria.initializeCellDecorator();
 
 		/* initialize Sheet */
 		// FIXME add loop if necessary
-		Sheet s = initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet());
+		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 
 		/* initialize Row & Cell */
-		int idxRow = config.getStartRow();
-		int idxCell = config.getStartCell();
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
 
 		/* initialize rows according the PropagationType */
-		Row headerRow, contentRow;
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-			headerRow = initializeRow(s, idxRow++);
-			contentRow = initializeRow(s, idxRow++);
-
-			// FIXME criteria
-			configCriteria.setStylesMap(stylesMap);
-			configCriteria.setSheet(s);
-			configCriteria.setRowHeader(headerRow);
-			configCriteria.setRow(contentRow);
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
+			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 
 			marshalAsPropagationHorizontal(configCriteria, object, objectClass, idxRow, idxCell, 0);
 		} else {
-
-			// FIXME criteria
-			configCriteria.setStylesMap(stylesMap);
-			configCriteria.setSheet(s);
-			// configCriteria.setRowHeader(headerRow);
-			// configCriteria.setRow(contentRow);
 			marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
 
 		}
 		// FIXME manage return value
-		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + config.getNameFile());
+		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + configCriteria.getFileName());
 	}
 
 	@Deprecated
@@ -1709,7 +1445,7 @@ public class Engine implements IEngine {
 		Configuration config = initializeConfigurationData(oC);
 
 		FileInputStream input = new FileInputStream("D:\\projects\\" + config.getNameFile());
-		unmarshalIntern(object, oC, config, input);
+		unmarshalIntern(object, oC, new ConfigCriteria(), input);
 
 		return object;
 	}
@@ -1734,21 +1470,21 @@ public class Engine implements IEngine {
 			IllegalArgumentException, IllegalAccessException, ConverterException, InstantiationException {
 		/* instance object class */
 		Class<?> oC = object.getClass();
-		Configuration config = null;
+		ConfigCriteria configCriteria = new ConfigCriteria();
 
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
+			initializeConfiguration(configCriteria, xlsAnnotation);
 		}
 
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
+			initializeSheetConfiguration(configCriteria, xlsAnnotation);
 		}
 
-		unmarshalIntern(object, oC, config, stream);
+		unmarshalIntern(object, oC, configCriteria, stream);
 
 		return object;
 	}
