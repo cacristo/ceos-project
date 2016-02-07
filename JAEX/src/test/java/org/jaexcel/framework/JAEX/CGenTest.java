@@ -16,6 +16,8 @@ import junit.framework.TestSuite;
 
 public class CGenTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects\\";
+
 	/**
 	 * Create the test case
 	 * 
@@ -40,11 +42,11 @@ public class CGenTest extends TestCase {
 		fastTest.setIntegerAttribute(46);
 
 		IGeneratorCSV en = new CGen();
-		en.marshalAndSave(fastTest, "D:\\projects\\", "csvTest.csv");
+		en.marshalAndSave(fastTest, WORKING_DIR, "csvTest.csv");
 
 		SimpleObject fastTestReader = new SimpleObject();
 
-		en.unmarshalFromPath(fastTestReader, "D:\\projects\\");
+		en.unmarshalFromPath(fastTestReader, WORKING_DIR);
 
 		// TODO add validator
 	}
@@ -56,11 +58,11 @@ public class CGenTest extends TestCase {
 
 		List listMulti = MultiTypeObjectBuilder.buildListOfMultiTypeObject(10000);
 
-		en.marshalAsCollectionAndSave(listMulti, "D:\\projects\\", "Boom");
+		en.marshalAsCollectionAndSave(listMulti, WORKING_DIR, "Boom");
 
 		List<Object> listReader = new ArrayList<>();
 
-		en.unmarshalAsCollectionFromPath(listReader, "D:\\projects\\", "csvTestList");
+		en.unmarshalAsCollectionFromPath(listReader, WORKING_DIR, "csvTestList");
 
 	}
 
@@ -68,11 +70,11 @@ public class CGenTest extends TestCase {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
 		IGeneratorCSV en = new CGen();
-		en.marshalAndSave(mto, "D:\\projects\\", "csvMultiTest.csv");
+		en.marshalAndSave(mto, WORKING_DIR, "csvMultiTest.csv");
 
 		MultiTypeObject mtoReader = new MultiTypeObject();
 
-		en.unmarshalFromPath(mtoReader, "D:\\projects\\");
+		en.unmarshalFromPath(mtoReader, WORKING_DIR);
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(mtoReader);
 	}
