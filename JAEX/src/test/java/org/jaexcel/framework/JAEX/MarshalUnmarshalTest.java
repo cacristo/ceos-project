@@ -12,6 +12,8 @@ import junit.framework.TestSuite;
 
 public class MarshalUnmarshalTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects";
+
 	/**
 	 * Create the test case
 	 * 
@@ -36,7 +38,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	public void testMarshalPath() throws Exception {
 
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
-		String outputPath = "D:\\projects\\";
+		String outputPath = WORKING_DIR + "\\";
 
 		IEngine en = new Engine();
 		en.marshalAndSave(mto, outputPath);
@@ -49,7 +51,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	public void testUnmarshalPath() throws Exception {
 
 		MultiTypeObject charger = new MultiTypeObject();
-		String inputPath = "D:\\projects";
+		String inputPath = WORKING_DIR;
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(charger, inputPath);

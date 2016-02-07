@@ -14,6 +14,8 @@ import junit.framework.TestSuite;
  */
 public class ObjectNullAttributesTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects\\";
+
 	/**
 	 * Create the test case
 	 * 
@@ -52,7 +54,7 @@ public class ObjectNullAttributesTest extends TestCase {
 
 		Engine en = new Engine();
 
-		en.unmarshalFromPath(mto, "D:\\projects\\");
+		en.unmarshalFromPath(mto, WORKING_DIR);
 
 		//ObjectNullBuilder.validateObjectNull(mto);
 		

@@ -11,6 +11,8 @@ import junit.framework.TestSuite;
 
 public class ObjectMaskTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects\\";
+
 	/**
 	 * Create the test case
 	 * 
@@ -39,7 +41,7 @@ public class ObjectMaskTest extends TestCase {
 
 		// TODO validation result
 		ObjectMask charger = new ObjectMask();
-		en.unmarshalFromPath(charger, "D:\\projects\\");
+		en.unmarshalFromPath(charger, WORKING_DIR);
 		
 		ObjectMaskBuilder.validateObjectMask(charger);
 	}

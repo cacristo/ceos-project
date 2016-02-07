@@ -11,6 +11,9 @@ import junit.framework.TestSuite;
 
 public class FormulaTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects\\";
+
+
 	/**
 	 * Create the test case
 	 * 
@@ -49,7 +52,7 @@ public class FormulaTest extends TestCase {
 		
 		IEngine en = new Engine();
 
-		en.unmarshalFromPath(of, "D:\\projects\\");
+		en.unmarshalFromPath(of, WORKING_DIR);
 		
 		ObjectFormulaBuilder.validateObjectFormula(of);
 	}

@@ -15,6 +15,8 @@ import junit.framework.TestSuite;
 
 public class ObjectConfigurableTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects";
+
 	/**
 	 * Create the test case
 	 * 
@@ -70,7 +72,7 @@ public class ObjectConfigurableTest extends TestCase {
 		//en.addSpecificCellDecorator("anotherDate", dateDecorator);
 		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
 
-		en.marshalAndSave(configCriteria, oc, "D:\\projects");
+		en.marshalAndSave(configCriteria, oc, WORKING_DIR);
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class ObjectConfigurableTest extends TestCase {
 
 		Engine en = new Engine();
 
-		en.unmarshalFromPath(oc, "D:\\projects\\");
+		en.unmarshalFromPath(oc, WORKING_DIR + "\\");
 
 		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
 	}

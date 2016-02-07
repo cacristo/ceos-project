@@ -18,6 +18,8 @@ import junit.framework.TestSuite;
  */
 public class MultiTypeAttributesTest extends TestCase {
 
+	private static final String WORKING_DIR = "D:\\projects";
+
 	/**
 	 * Create the test case
 	 * 
@@ -65,7 +67,7 @@ public class MultiTypeAttributesTest extends TestCase {
 		configCriteria.overrideHeaderCellDecorator(configuration);
 		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
 
-		en.marshalAndSave(configCriteria, mto, "D:\\projects");
+		en.marshalAndSave(configCriteria, mto, WORKING_DIR);
 
 		assertEquals(true, true);
 	}
@@ -78,7 +80,7 @@ public class MultiTypeAttributesTest extends TestCase {
 
 		Engine en = new Engine();
 
-		en.unmarshalFromPath(mto, "D:\\projects\\");
+		en.unmarshalFromPath(mto, WORKING_DIR + "\\");
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(mto);
 		

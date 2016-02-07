@@ -33,6 +33,8 @@ import org.jaexcel.framework.JAEX.engine.IEngine;
  * Unit test for simple App.
  */
 public class SimpleExcelTest extends TestCase {
+	private static final String WORKING_DIR = "D:\\projects";
+
 	/**
 	 * Create the test case
 	 * 
@@ -153,7 +155,7 @@ public class SimpleExcelTest extends TestCase {
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.overrideHeaderCellDecorator(configuration);
 		
-		en.marshalAndSave(configCriteria, fastTest, "D:\\projects");
+		en.marshalAndSave(configCriteria, fastTest, WORKING_DIR);
 
 		// start validation
 		Class<SimpleObject> oC = SimpleObject.class;
