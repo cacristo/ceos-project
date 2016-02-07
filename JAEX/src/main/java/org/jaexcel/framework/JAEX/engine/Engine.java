@@ -38,6 +38,7 @@ import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
+import org.jaexcel.framework.JAEX.exception.SheetException;
 
 public class Engine implements IEngine {
 
@@ -74,17 +75,23 @@ public class Engine implements IEngine {
 	 * @param oC
 	 *            the {@link Class<?>}
 	 * @return
+	 * @throws ConfigurationException
 	 */
-	private void initializeConfigurationData(ConfigCriteria configCriteria, Class<?> oC) {
+	private void initializeConfigurationData(ConfigCriteria configCriteria, Class<?> oC) throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
 			initializeConfiguration(configCriteria, xlsAnnotation);
+		} else {
+			throw new ConfigurationException(
+					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
 		}
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			initializeSheetConfiguration(configCriteria, xlsAnnotation);
+		} else {
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage());
 		}
 	}
 
@@ -240,13 +247,20 @@ public class Engine implements IEngine {
 	 * @param sheetName
 	 *            the name of the sheet
 	 * @return the {@link Sheet} created
+	 * @throws SheetException
 	 */
-	private Sheet initializeSheet(Workbook wb, String sheetName) {
-		return wb.createSheet(sheetName);
+	private Sheet initializeSheet(Workbook wb, String sheetName) throws SheetException {
+		Sheet s = null;
+		try {
+			s = wb.createSheet(sheetName);
+		} catch (Exception e) {
+			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage(), e);
+		}
+		return s;
 	}
 
 	/**
-	 * Validate if the master header configuration is valid.
+	 * Validate if the nested header configuration is valid.
 	 * 
 	 * @param isPH
 	 *            true if propagation is HORIZONTAL otherwise false to
@@ -259,10 +273,10 @@ public class Engine implements IEngine {
 			throws ConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Incompatible.getMessage());
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Incompatible.getMessage());
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 		}
 	}
 
@@ -979,65 +993,23 @@ public class Engine implements IEngine {
 		return bos.toByteArray();
 	}
 
-	/* ######################## Marshal methods ########################## */
+	/* ######################## engine methods ########################## */
 
 	/**
-	 * Generate the sheet from the object and return the sheet generated.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link Sheet} generated
-	 */
-	public Sheet marshalToSheet(Object object) throws Exception {
-		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(object);
-
-		/* Generate the sheet to return */
-		return wb.getSheetAt(0);
-	}
-
-	/**
-	 * Generate the sheet from the object and return the sheet generated.
+	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * passed as parameters.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link ConfigCriteria} to use.
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @return the {@link Sheet} generated
+	 * @throws ElementException
+	 * @throws ConfigurationException
+	 * @throws SheetException
+	 * @throws Exception
 	 */
-	public Sheet marshalToSheet(ConfigCriteria configCriteria, Object object) throws Exception {
-		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(configCriteria, object);
-
-		/* Generate the sheet to return */
-		return wb.getSheetAt(0);
-	}
-
-	/**
-	 * Generate the workbook from the object and return the workbook generated.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link Workbook} generated
-	 */
-	public Workbook marshalToWorkbook(Object object) throws Exception {
-		ConfigCriteria configCriteria = new ConfigCriteria();
-
-		marshalToWorkbook(configCriteria, object);
-
-		return configCriteria.getWorkbook();
-	}
-
-	/**
-	 * Generate the workbook from the object and return the workbook generated.
-	 * 
-	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link Workbook} generated
-	 */
-	public Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object) throws Exception {
+	private void marshalEngine(ConfigCriteria configCriteria, Object object)
+			throws ElementException, ConfigurationException, SheetException, Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -1080,7 +1052,81 @@ public class Engine implements IEngine {
 		}
 
 		// FIXME apply the column size here - if necessary
+	}
 
+	/* ######################## Marshal methods ########################## */
+
+	/**
+	 * Generate the sheet based at the object passed as parameter and return the
+	 * sheet generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+	public Sheet marshalToSheet(Object object) throws Exception {
+		/* Initialize a basic ConfigCriteria */
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		/* Generate the workbook based at the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Return the Sheet generated */
+		return configCriteria.getWorkbook().getSheetAt(0);
+	}
+
+	/**
+	 * Generate the sheet based at the {@link ConfigCriteria} and the object
+	 * passed as parameters and return the sheet generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 */
+	public Sheet marshalToSheet(ConfigCriteria configCriteria, Object object) throws Exception {
+		/* Generate the workbook based at the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Return the Sheet generated */
+		return configCriteria.getWorkbook().getSheetAt(0);
+	}
+
+	/**
+	 * Generate the workbook based at the object passed as parameter and return
+	 * the workbook generated.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	public Workbook marshalToWorkbook(Object object) throws Exception {
+		/* Initialize a basic ConfigCriteria */
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		/* Generate the workbook based at the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Return the Workbook generated */
+		return configCriteria.getWorkbook();
+	}
+
+	/**
+	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * passed as parameters and return the workbook generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 */
+	public Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object) throws Exception {
+		/* Generate the workbook from the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Return the Workbook generated */
 		return configCriteria.getWorkbook();
 	}
 
@@ -1093,16 +1139,19 @@ public class Engine implements IEngine {
 	 * @return the {@link Workbook} generated
 	 */
 	public byte[] marshalToByte(Object object) throws Exception {
+		/* Initialize a basic ConfigCriteria */
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
 		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(object);
+		marshalEngine(configCriteria, object);
 
 		/* Generate the byte array to return */
-		return workbookToByteAray(wb);
+		return workbookToByteAray(configCriteria.getWorkbook());
 	}
 
 	/**
-	 * Generate the workbook from the object passed as parameter and save it at
-	 * the path send as parameter.
+	 * Generate the workbook based at the object passed as parameters and save
+	 * it at the path send as parameter.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
@@ -1112,12 +1161,13 @@ public class Engine implements IEngine {
 	public void marshalAndSave(Object object, String pathFile) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
 		ConfigCriteria configCriteria = new ConfigCriteria();
+
 		marshalAndSave(configCriteria, object, pathFile);
 	}
 
 	/**
-	 * Generate the workbook from the object passed as parameter and save it at
-	 * the path send as parameter.
+	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * passed as parameters and save it at the path send as parameter.
 	 * 
 	 * @param configCriteria
 	 *            the {@link ConfigCriteria} to use
@@ -1128,7 +1178,7 @@ public class Engine implements IEngine {
 	 */
 	public void marshalAndSave(ConfigCriteria configCriteria, Object object, String pathFile) throws Exception {
 		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(configCriteria, object);
+		marshalEngine(configCriteria, object);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1139,7 +1189,7 @@ public class Engine implements IEngine {
 		}
 
 		/* Save the Workbook at a specified path (received as parameter) */
-		workbookFileOutputStream(wb, pathFile + configCriteria.getCompleteFileName());
+		workbookFileOutputStream(configCriteria.getWorkbook(), pathFile + configCriteria.getCompleteFileName());
 	}
 
 	/**
@@ -1344,13 +1394,18 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 * @throws InstantiationException
+	 * @throws SheetException
 	 */
 	private void unmarshalIntern(Object object, Class<?> oC, ConfigCriteria configCriteria, FileInputStream input)
-			throws IOException, IllegalAccessException, ConverterException, InstantiationException {
+			throws IOException, IllegalAccessException, ConverterException, InstantiationException, SheetException {
 
 		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
 		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
+		// FIXME add manage sheet null
+		if (configCriteria.getSheet() == null) {
+			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage());
+		}
 		/* initialize index row & cell */
 		int idxRow = configCriteria.getStartRow();
 		int idxCell = configCriteria.getStartCell();
@@ -1438,7 +1493,7 @@ public class Engine implements IEngine {
 
 	@Deprecated
 	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
-			ConverterException, InstantiationException, ElementException {
+			ConverterException, InstantiationException, ElementException, SheetException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 		/* initialize configuration data */
@@ -1466,8 +1521,9 @@ public class Engine implements IEngine {
 	}
 
 	@Override
-	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws IOException,
-			IllegalArgumentException, IllegalAccessException, ConverterException, InstantiationException {
+	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream)
+			throws IOException, IllegalArgumentException, IllegalAccessException, ConverterException,
+			InstantiationException, SheetException {
 		/* instance object class */
 		Class<?> oC = object.getClass();
 		ConfigCriteria configCriteria = new ConfigCriteria();
