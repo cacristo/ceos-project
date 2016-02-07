@@ -8,10 +8,13 @@ package org.jaexcel.framework.JAEX.definition;
  */
 public enum ExceptionMessage {
 	/* declared messages of ConfigurationException incompatible */
-	ConfigurationException_Missing("Header configuration is missing. Review your configuration."),
+	ConfigurationException_XlsConfigurationMissing("The annotation XlsConfiguration is missing. Review your configuration."),
+	ConfigurationException_XlsSheetMissing("The annotation XlsSheet is missing. Review your configuration."),
+	ConfigurationException_CellStyleMissing("Cell style configuration is missing. Review your configuration."),
+	ConfigurationException_Conflict("Conflict at the configuration. Review your configuration."),
+	// TODO see the below message will be applied (remove if not)
 	ConfigurationException_Incompatible("Incompatible configuration. Review your configuration."),
-	ConfigurationException_Conflit("Conflit at the configuration. Review your configuration."),
-
+	
 	/* declared messages of ConverterException */
 	ConverterException_Default("Problem while convert the element."),
 	ConverterException_String("Problem while convert the string element."),
@@ -27,13 +30,12 @@ public enum ExceptionMessage {
 	/* declared messages of ElementException */
 	ElementException_NullObject("The entry object is null. Make sure you are sending a correct object."),
 	ElementException_EmptyObject("The entry object is empty. Make sure you are sending a correct object."),
-	ElementException_Row("Hola Mundo"),
-	ElementException_Cell("Hola Mundo"),
 
 	/* declared messages of SheetException */
-	SheetException_CreationWorkbook("Problem while creating the Workbook."),
+	SheetException_CreationWorkbook("Problem while creating the Workbook. Review your configuration."),
+	SheetException_CreationSheet("Problem while creating the Sheet. Review your configuration."),
+	// TODO see the below messages will be applied (remove if not)
 	SheetException_SaveWorkbook("Problem while saving the Workbook."),
-	SheetException_CreationSheet("Problem while creating the Sheet."),
 	SheetException_UpdateSheet("Problem while add a new Sheet.");
 
 	private String message;
