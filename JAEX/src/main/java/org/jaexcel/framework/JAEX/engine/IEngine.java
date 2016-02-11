@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
+import org.jaexcel.framework.JAEX.exception.SheetException;
 
 public interface IEngine {
 
@@ -159,7 +160,7 @@ public interface IEngine {
 	void marshal(Object object) throws Exception;
 
 	Object unmarshal(Object obecjt) throws IOException, IllegalArgumentException, IllegalAccessException,
-			ConverterException, InstantiationException, ElementException;
+			ConverterException, InstantiationException, ElementException, SheetException;
 
 	/**
 	 * Generate the workbook from the object and return the FileOutputStream
@@ -171,6 +172,5 @@ public interface IEngine {
 	 */
 	FileOutputStream marshalToFileOutputStream(Object object) throws Exception;
 
-	Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws IOException,
-			IllegalArgumentException, IllegalAccessException, ConverterException, InstantiationException;
+	Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws Exception;
 }
