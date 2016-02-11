@@ -1054,6 +1054,33 @@ public class Engine implements IEngine {
 		// FIXME apply the column size here - if necessary
 	}
 
+	/**
+	 * Extract from the workbook based at the {@link ConfigCriteria} and the
+	 * object passed as parameters.
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria} to use.
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param oC
+	 *            the object class
+	 * @throws Exception
+	 */
+	private void unmarshalEngine(ConfigCriteria configCriteria, Object object, Class<?> oC) throws Exception {
+		/* initialize sheet */
+		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
+
+		/* initialize index row & cell */
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
+
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
+		} else {
+			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
+		}
+	}
+
 	/* ######################## Marshal methods ########################## */
 
 	/**
@@ -1298,18 +1325,11 @@ public class Engine implements IEngine {
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
+		/* set workbook */
 		configCriteria.setWorkbook(workbook);
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
-		/* initialize index row & cell */
-		int idxRow = configCriteria.getStartRow();
-		int idxCell = configCriteria.getStartCell();
-
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
-		} else {
-			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
-		}
+		/* Extract from the workbook to the object passed as parameter */
+		unmarshalEngine(configCriteria, object, oC);
 
 		return object;
 	}
@@ -1341,7 +1361,12 @@ public class Engine implements IEngine {
 		}
 
 		FileInputStream input = new FileInputStream(pathFile + configCriteria.getCompleteFileName());
-		unmarshalIntern(object, oC, configCriteria, input);
+
+		/* set workbook */
+		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
+
+		/* Extract from the workbook to the object passed as parameter */
+		unmarshalEngine(configCriteria, object, oC);
 
 		return object;
 	}
@@ -1363,18 +1388,11 @@ public class Engine implements IEngine {
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
+		/* set workbook */
 		configCriteria.setWorkbook(initializeWorkbook(byteArray, configCriteria.getExtension()));
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
-		/* initialize index row & cell */
-		int idxRow = configCriteria.getStartRow();
-		int idxCell = configCriteria.getStartCell();
-
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
-		} else {
-			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
-		}
+		/* Extract from the workbook to the object passed as parameter */
+		unmarshalEngine(configCriteria, object, oC);
 
 		return object;
 	}
@@ -1509,38 +1527,44 @@ public class Engine implements IEngine {
 	 * Generate the workbook from the object passed as parameter and return the
 	 * respective {@link FileOutputStream}.
 	 * 
-	 * @return the {@link Workbook} generated
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link FileOutputStream} generated
 	 */
 	@Override
 	public FileOutputStream marshalToFileOutputStream(Object object) throws Exception {
-		/* Generate the workbook from the object passed as parameter */
-		Workbook wb = marshalToWorkbook(object);
-
-		/* Generate the FileOutputStream to return */
-		return workbookFileOutputStream(wb, configuration.getNameFile());
-	}
-
-	@Override
-	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream)
-			throws IOException, IllegalArgumentException, IllegalAccessException, ConverterException,
-			InstantiationException, SheetException {
-		/* instance object class */
-		Class<?> oC = object.getClass();
+		/* Initialize a basic ConfigCriteria */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
-		/* Process @XlsConfiguration */
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			initializeConfiguration(configCriteria, xlsAnnotation);
-		}
+		/* Generate the workbook from the object passed as parameter */
+		marshalEngine(configCriteria, object);
 
-		/* Process @XlsSheet */
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			initializeSheetConfiguration(configCriteria, xlsAnnotation);
-		}
+		/* Generate the FileOutputStream to return */
+		return workbookFileOutputStream(configCriteria.getWorkbook(), configCriteria.getFileName());
+	}
 
-		unmarshalIntern(object, oC, configCriteria, stream);
+	/**
+	 * Generate the object from the {@link FileInputStream} passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param stream
+	 *            the {@link FileInputStream} to read
+	 * @return the {@link Object} filled up
+	 */
+	@Override
+	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws Exception {
+		/* instance object class */
+		Class<?> oC = object.getClass();
+
+		/* initialize configuration data */
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		initializeConfigurationData(configCriteria, oC);
+
+		/* set workbook */
+		configCriteria.setWorkbook(initializeWorkbook(stream, configCriteria.getExtension()));
+
+		unmarshalEngine(configCriteria, object, oC);
 
 		return object;
 	}
