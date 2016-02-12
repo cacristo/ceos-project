@@ -29,6 +29,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorator;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorators;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
+import org.jaexcel.framework.JAEX.annotation.XlsFreeElement;
 import org.jaexcel.framework.JAEX.annotation.XlsNestedHeader;
 import org.jaexcel.framework.JAEX.annotation.XlsSheet;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
@@ -340,6 +341,34 @@ public class Engine implements IEngine {
 	 */
 	private Row initializeRow(Sheet s, int idxR) {
 		return s.createRow(idxR);
+	}
+
+	private void initializeCellByField(ConfigCriteria configCriteria, XlsFreeElement xlsAnnotation, Object o,
+			Field field, int idxR, int idxC, int cL) throws Exception {
+
+		// FIXME uncomment line to activate cascade level
+		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+
+		/* make the field accessible to recover the value */
+		field.setAccessible(true);
+
+		Class<?> fT = field.getType();
+
+		if (configCriteria.getSheet().getRow(xlsAnnotation.row()) != null) {
+			configCriteria.setRow(configCriteria.getSheet().getRow(xlsAnnotation.row()));
+		} else {
+			configCriteria.setRow(configCriteria.getSheet().createRow(xlsAnnotation.row()));
+		}
+		configCriteria.setField(field);
+
+		// initialize Element
+		configCriteria.setElement(XlsElementFactory.build(xlsAnnotation));
+
+		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+
+		if (!isAppliedObject && !fT.isPrimitive()) {
+			throw new ElementException("Complex objects are not allowed for this type!");
+		}
 	}
 
 	/**
@@ -746,6 +775,14 @@ public class Engine implements IEngine {
 				/* content treatment */
 				idxC += initializeCellByFieldHorizontal(configCriteria, o, idxR, idxC + xlsAnnotation.position(), cL);
 			}
+
+			/* Process @XlsFreeElement */
+			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+				XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+				initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
+						xlsAnnotation.cell() - 1, cL);
+			}
 		}
 		return counter;
 	}
@@ -777,17 +814,17 @@ public class Engine implements IEngine {
 		int baseIdxCell = idxC;
 
 		/* get declared fields */
-		List<Field> fieldList = Arrays.asList(oC.getDeclaredFields());
-		for (Field field : fieldList) {
+		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		for (Field f : fL) {
 			/* process each field from the object */
-			configCriteria.setField(field);
+			configCriteria.setField(f);
 
 			/* restart the index of the cell */
 			idxC = baseIdxCell;
 
 			/* Process @XlsElement */
-			if (field.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
+			if (f.isAnnotationPresent(XlsElement.class)) {
+				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 				configCriteria.setElement(xlsAnnotation);
 
 				/* apply customized rules defined at the object */
@@ -824,6 +861,14 @@ public class Engine implements IEngine {
 				/* content treatment */
 				idxR += initializeCellByFieldVertical(configCriteria, o, row, idxR + xlsAnnotation.position(), idxC,
 						cL);
+			}
+
+			/* Process @XlsFreeElement */
+			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+				XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+				initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
+						xlsAnnotation.cell() - 1, cL);
 			}
 		}
 		return counter;
