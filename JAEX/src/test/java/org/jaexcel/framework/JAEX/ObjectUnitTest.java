@@ -14,7 +14,6 @@ import junit.framework.TestSuite;
 
 public class ObjectUnitTest extends TestCase {
 
-
 	/**
 	 * Create the test case
 	 * 
@@ -31,7 +30,6 @@ public class ObjectUnitTest extends TestCase {
 	public static Test suite() {
 		return new TestSuite(ObjectUnitTest.class);
 	}
-
 
 	/**
 	 * Test one basic object
@@ -59,7 +57,7 @@ public class ObjectUnitTest extends TestCase {
 		collection.add(new ObjectUnit("PenDrive 1TB", 164.22, 199.99, 21, 35));
 
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, "CollectionObjectUnit" , ExtensionFileType.XLS);
+		en.marshalAsCollection(collection, "CollectionObjectUnit", ExtensionFileType.XLS);
 
 		assertEquals(true, true);
 	}

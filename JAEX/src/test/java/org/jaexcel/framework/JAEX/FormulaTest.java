@@ -40,7 +40,7 @@ public class FormulaTest extends TestCase {
 		
 		IEngine en = new Engine();
 
-		en.marshal(of);
+		en.marshalAndSave(of, WORKING_DIR);
 	}
 	
 

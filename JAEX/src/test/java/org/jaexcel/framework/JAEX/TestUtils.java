@@ -9,6 +9,10 @@ import org.jaexcel.framework.JAEX.annotation.XlsElement;
 
 public class TestUtils {
 
+	public static final String WORKING_DIR_GENERATED_I = "D:\\projects\\generated";
+	public static final String WORKING_DIR_GENERATED_II = "D:\\projects\\generated\\";
+	public static final String WORKING_DIR_MANUALLY = "D:\\projects\\manually\\";
+	
 	public static void validationString(String string,
 			XlsElement xlsAnnotation, HSSFCell headerCell, HSSFCell contentCell) {
 		assertEquals(xlsAnnotation.title(), headerCell.getStringCellValue());

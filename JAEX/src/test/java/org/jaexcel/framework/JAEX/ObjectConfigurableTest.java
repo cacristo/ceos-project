@@ -15,8 +15,6 @@ import junit.framework.TestSuite;
 
 public class ObjectConfigurableTest extends TestCase {
 
-	private static final String WORKING_DIR = "D:\\projects";
-
 	/**
 	 * Create the test case
 	 * 
@@ -43,7 +41,7 @@ public class ObjectConfigurableTest extends TestCase {
 		IEngine en = new Engine();
 
 		ConfigCriteria configCriteria = new ConfigCriteria();
-		
+
 		CellDecorator configurationHeader = new CellDecorator();
 		// override default header configuration
 		configurationHeader.setDecoratorName("header");
@@ -56,10 +54,9 @@ public class ObjectConfigurableTest extends TestCase {
 		configurationHeader.setFontBold(true);
 		configurationHeader.setFontItalic(true);
 		configurationHeader.setWrapText(true);
-		//en.overrideHeaderCellDecorator(configurationHeader);
+		// en.overrideHeaderCellDecorator(configurationHeader);
 		configCriteria.overrideHeaderCellDecorator(configurationHeader);
-		
-		
+
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");
 		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
@@ -69,10 +66,10 @@ public class ObjectConfigurableTest extends TestCase {
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
 
-		//en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
 		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
 
-		en.marshalAndSave(configCriteria, oc, WORKING_DIR);
+		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
 	}
 
 	/**
@@ -83,7 +80,7 @@ public class ObjectConfigurableTest extends TestCase {
 
 		Engine en = new Engine();
 
-		en.unmarshalFromPath(oc, WORKING_DIR + "\\");
+		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
 
 		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
 	}
