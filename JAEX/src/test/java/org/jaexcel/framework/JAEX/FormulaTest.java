@@ -11,9 +11,6 @@ import junit.framework.TestSuite;
 
 public class FormulaTest extends TestCase {
 
-	private static final String WORKING_DIR = "D:\\projects\\";
-
-
 	/**
 	 * Create the test case
 	 * 
@@ -31,29 +28,27 @@ public class FormulaTest extends TestCase {
 		return new TestSuite(FormulaTest.class);
 	}
 
-
 	/**
 	 * Test one basic object
 	 */
 	public void testMarshalObjectFormula() throws Exception {
 		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
-		
+
 		IEngine en = new Engine();
 
-		en.marshalAndSave(of, WORKING_DIR);
+		en.marshalAndSave(of, TestUtils.WORKING_DIR_GENERATED_II);
 	}
-	
 
 	/**
 	 * Test one basic object
 	 */
 	public void testUnmarshalObjectFormula() throws Exception {
 		ObjectFormula of = new ObjectFormula();
-		
+
 		IEngine en = new Engine();
 
-		en.unmarshalFromPath(of, WORKING_DIR);
-		
+		en.unmarshalFromPath(of, TestUtils.WORKING_DIR_GENERATED_II);
+
 		ObjectFormulaBuilder.validateObjectFormula(of);
 	}
 

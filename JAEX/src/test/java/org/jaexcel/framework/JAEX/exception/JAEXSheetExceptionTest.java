@@ -1,5 +1,6 @@
 package org.jaexcel.framework.JAEX.exception;
 
+import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.bean.XlsSheetEmptyTitle;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.engine.Engine;
@@ -10,8 +11,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class JAEXSheetExceptionTest extends TestCase {
-
-	private static final String WORKING_DIR = "D:\\projects\\";
 
 	/**
 	 * Create the test case
@@ -39,7 +38,7 @@ public class JAEXSheetExceptionTest extends TestCase {
 		IEngine en = new Engine();
 
 		try {
-			en.marshalAndSave(emptyTitle, WORKING_DIR);
+			en.marshalAndSave(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(SheetException.class)
 					&& e.getMessage().equals(ExceptionMessage.SheetException_CreationSheet.getMessage()))) {
@@ -57,7 +56,7 @@ public class JAEXSheetExceptionTest extends TestCase {
 		IEngine en = new Engine();
 
 		try {
-			en.unmarshalFromPath(emptyTitle, WORKING_DIR);
+			en.unmarshalFromPath(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(SheetException.class)
 					&& e.getMessage().equals(ExceptionMessage.SheetException_CreationSheet.getMessage()))) {

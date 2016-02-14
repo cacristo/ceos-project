@@ -35,7 +35,7 @@ public class ObjectMaskTest extends TestCase {
 		ObjectMask om = ObjectMaskBuilder.buildObjectMask();
 
 		IEngine en = new Engine();
-		en.marshal(om);
+		en.marshalAndSave(om, TestUtils.WORKING_DIR_GENERATED_I);
 
 		// TODO validation result
 		ObjectMask charger = new ObjectMask();

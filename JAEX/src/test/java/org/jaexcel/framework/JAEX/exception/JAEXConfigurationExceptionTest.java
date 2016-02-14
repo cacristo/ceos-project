@@ -1,5 +1,6 @@
 package org.jaexcel.framework.JAEX.exception;
 
+import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.bean.BasicObject;
 import org.jaexcel.framework.JAEX.bean.BasicObjectBuilder;
 import org.jaexcel.framework.JAEX.bean.XlsConfigurationAbsent;
@@ -17,8 +18,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class JAEXConfigurationExceptionTest extends TestCase {
-	
-	private static final String WORKING_DIR = "D:\\projects\\";
 
 	/**
 	 * Create the test case
@@ -46,7 +45,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.marshalAndSave(missingConfig, WORKING_DIR);
+			en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class) && e.getMessage()
 					.equals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage()))) {
@@ -64,7 +63,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.unmarshalFromPath(missingConfig, WORKING_DIR);
+			en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class) && e.getMessage()
 					.equals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage()))) {
@@ -82,7 +81,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.marshalAndSave(missingConfig, WORKING_DIR);
+			en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage()))) {
@@ -100,7 +99,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.unmarshalFromPath(missingConfig, WORKING_DIR);
+			en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage()))) {
@@ -117,7 +116,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.marshalAndSave(incompatibleConfig, WORKING_DIR);
+			en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_Conflict.getMessage()))) {
@@ -134,7 +133,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 
 		IEngine en = new Engine();
 		try {
-			en.marshalAndSave(incompatibleConfig, WORKING_DIR);
+			en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_Conflict.getMessage()))) {
@@ -158,7 +157,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		cc.overrideHeaderCellDecorator(decorator);
 
 		try {
-			en.marshalAndSave(cc, missingConfig, WORKING_DIR);
+			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
@@ -182,7 +181,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		cc.overrideNumericCellDecorator(decorator);
 
 		try {
-			en.marshalAndSave(cc, missingConfig, WORKING_DIR);
+			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
@@ -206,7 +205,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		cc.overrideBooleanCellDecorator(decorator);
 
 		try {
-			en.marshalAndSave(cc, missingConfig, WORKING_DIR);
+			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
@@ -230,7 +229,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		cc.overrideDateCellDecorator(decorator);
 
 		try {
-			en.marshalAndSave(cc, missingConfig, WORKING_DIR);
+			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
 			if (!(e.getClass().equals(ConfigurationException.class)
 					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {

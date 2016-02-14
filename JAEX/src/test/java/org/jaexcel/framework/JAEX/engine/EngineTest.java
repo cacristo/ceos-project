@@ -3,6 +3,7 @@ package org.jaexcel.framework.JAEX.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.bean.BasicObject;
 import org.jaexcel.framework.JAEX.bean.BasicObjectBuilder;
 import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
@@ -37,8 +38,6 @@ public class EngineTest extends TestCase {
 	 * same code to do it you just have to add '00005
 	 */
 
-	private static final String WORKING_DIR = "D:\\projects\\";
-
 	/**
 	 * Create the test case
 	 * 
@@ -63,11 +62,11 @@ public class EngineTest extends TestCase {
 		BasicObject bO = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
-		en.marshalAndSave(bO, WORKING_DIR);
+		en.marshalAndSave(bO, TestUtils.WORKING_DIR_GENERATED_I);
 		
 		BasicObject charger = new BasicObject();
 		
-		en.unmarshalFromPath(charger, WORKING_DIR);
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 		BasicObjectBuilder.validateBasicObject(charger);
 	}
 
@@ -79,11 +78,11 @@ public class EngineTest extends TestCase {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
 		IEngine en = new Engine();
-		en.marshalAndSave(pHO, WORKING_DIR);
+		en.marshalAndSave(pHO, TestUtils.WORKING_DIR_GENERATED_I);
 		
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();
 		
-		en.unmarshalFromPath(charger, WORKING_DIR);
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
 		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
 	}
 
@@ -94,11 +93,11 @@ public class EngineTest extends TestCase {
 		PropagationVerticalObject pVO = PropagationVerticalObjectBuilder.buildPropagationVerticalObject();
 
 		IEngine en = new Engine();
-		en.marshalAndSave(pVO, WORKING_DIR);
+		en.marshalAndSave(pVO, TestUtils.WORKING_DIR_GENERATED_II);
 		
 		PropagationVerticalObject charger = new PropagationVerticalObject();
 		
-		en.unmarshalFromPath(charger, WORKING_DIR);
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 		PropagationVerticalObjectBuilder.validatePropagationVerticalObject(charger);
 	}
 

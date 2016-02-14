@@ -12,6 +12,7 @@ import org.jaexcel.framework.JAEX.bean.MultiTypeObjectListPropVertical;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.engine.Engine;
+import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -86,21 +87,29 @@ public class CollectionMultiExcelTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
-	public void testCollectionMultiExcelHoriz() throws Exception {
-		MultiTypeObjectListPropHorizontal fastTest1 = buildMultiTypeObjectHoriz();
+	public void testCollectionMultiExcelHoriz() {
+		MultiTypeObjectListPropHorizontal fastTest1 = buildMultiTypeObjectHoriz(2);
 		
-		
-		MultiTypeObjectListPropHorizontal fastTest2 = buildMultiTypeObjectHoriz();
+
+		MultiTypeObjectListPropHorizontal fastTest2 = buildMultiTypeObjectHoriz(35);
+		MultiTypeObjectListPropHorizontal fastTest3 = buildMultiTypeObjectHoriz(9);
 		
 
 		List<MultiTypeObjectListPropHorizontal> collectionSimpleObject = new ArrayList<MultiTypeObjectListPropHorizontal>();
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
-		collectionSimpleObject.add(fastTest1);
+		collectionSimpleObject.add(fastTest3);
 		
 		
 		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_horizontal" , ExtensionFileType.XLSX);
+		try {
+			en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_horizontal" , ExtensionFileType.XLSX);	
+		} catch (CustomizedRulesException e) {
+			assertEquals(e.getCause().getMessage(), "Pim Pam Pum!!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -129,12 +138,14 @@ public class CollectionMultiExcelTest extends TestCase {
 	 * 
 	 * @return
 	 */
-	private MultiTypeObjectListPropHorizontal buildMultiTypeObjectHoriz() {
+	private MultiTypeObjectListPropHorizontal buildMultiTypeObjectHoriz(int xx) {
 		MultiTypeObjectListPropHorizontal mto = new MultiTypeObjectListPropHorizontal();
 		mto.setDateAttribute(new Date());
-		mto.setStringAttribute("some string");
+		if(xx < 10){
+			mto.setStringAttribute("some string");
+		}
 		mto.setIntegerAttribute(46);
-		mto.setDoubleAttribute(Double.valueOf("25.3"));
+		mto.setDoubleAttribute(Double.valueOf("25.3") * xx);
 		mto.setLongAttribute(Long.valueOf("1234567890"));
 		mto.setBooleanAttribute(Boolean.FALSE);
 
@@ -144,7 +155,7 @@ public class CollectionMultiExcelTest extends TestCase {
 		job.setJobName("Job Name");
 		mto.setJob(job);
 
-		mto.setIntegerPrimitiveAttribute(121);
+		mto.setIntegerPrimitiveAttribute(121*xx);
 		mto.setDoublePrimitiveAttribute(44.6);
 		mto.setLongPrimitiveAttribute(987654321L);
 		mto.setBooleanPrimitiveAttribute(true);

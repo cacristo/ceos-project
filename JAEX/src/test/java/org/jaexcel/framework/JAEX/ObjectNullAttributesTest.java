@@ -38,7 +38,7 @@ public class ObjectNullAttributesTest extends TestCase {
 		ObjectNull mto = ObjectNullBuilder.buildObjectNull();
 
 		IEngine en = new Engine();
-		en.marshal(mto);
+		en.marshalAndSave(mto, TestUtils.WORKING_DIR_GENERATED_I);
 		
 		//ObjectNull charger = new ObjectNull();
 		//ObjectNullBuilder.validateObjectNull(charger);

@@ -39,7 +39,7 @@ public class ObjectUnitTest extends TestCase {
 
 		IEngine en = new Engine();
 
-		en.marshal(ou);
+		en.marshalAndSave(ou, TestUtils.WORKING_DIR_GENERATED_II);
 
 		assertEquals(true, true);
 	}
