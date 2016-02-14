@@ -30,6 +30,9 @@ public enum ExceptionMessage {
 	/* declared messages of ElementException */
 	ElementException_NullObject("The entry object is null. Make sure you are sending a correct object."),
 	ElementException_EmptyObject("The entry object is empty. Make sure you are sending a correct object."),
+	ElementException_ComplexObject("Complex objects are not allowed for this type! Review your configuration."),
+	ElementException_OverwriteCell("The element entry is trying to be set at one position already used. Review your configuration."),
+	ElementException_InvalidPosition("The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration."),
 
 	/* declared messages of SheetException */
 	SheetException_CreationWorkbook("Problem while creating the Workbook. Review your configuration."),
