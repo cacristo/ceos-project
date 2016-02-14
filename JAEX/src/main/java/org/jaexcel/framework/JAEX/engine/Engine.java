@@ -36,6 +36,7 @@ import org.jaexcel.framework.JAEX.configuration.Configuration;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
+import org.jaexcel.framework.JAEX.definition.TitleOrientationType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
@@ -343,6 +344,44 @@ public class Engine implements IEngine {
 		return s.createRow(idxR);
 	}
 
+	/**
+	 * Initialize the cell position based at the title orientation.
+	 * 
+	 * @param positionCell
+	 *            the cell position defined at the element
+	 * @param orientation
+	 *            the {@link TitleOrientationType} of the element
+	 * @return the cell position
+	 */
+	private int initializeHeaderCellPosition(int positionCell, TitleOrientationType orientation) {
+		int idxCell = positionCell - 1;
+		if (TitleOrientationType.LEFT == orientation) {
+			idxCell -= 1;
+		} else if (TitleOrientationType.RIGHT == orientation) {
+			idxCell += 1;
+		}
+		return idxCell;
+	}
+
+	/**
+	 * initialize the row position based at the title orientation.
+	 * 
+	 * @param positionRow
+	 *            the row position defined at the element
+	 * @param orientation
+	 *            the {@link TitleOrientationType} of the element
+	 * @return the row position
+	 */
+	private int initializeHeaderRowPosition(int positionRow, TitleOrientationType orientation) {
+		int idxRow = positionRow;
+		if (TitleOrientationType.TOP == orientation) {
+			idxRow -= 1;
+		} else if (TitleOrientationType.BOTTOM == orientation) {
+			idxRow += 1;
+		}
+		return idxRow;
+	}
+
 	private void initializeCellByField(ConfigCriteria configCriteria, XlsFreeElement xlsAnnotation, Object o,
 			Field field, int idxR, int idxC, int cL) throws Exception {
 
@@ -367,7 +406,7 @@ public class Engine implements IEngine {
 		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
 		if (!isAppliedObject && !fT.isPrimitive()) {
-			throw new ElementException("Complex objects are not allowed for this type!");
+			throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
 		}
 	}
 
@@ -490,14 +529,23 @@ public class Engine implements IEngine {
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
 			throws IllegalArgumentException, IllegalAccessException, ConverterException, NoSuchMethodException,
-			SecurityException, InvocationTargetException {
+			SecurityException, InvocationTargetException, ElementException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 		/* initialize cell */
 		Cell cell = null;
+
+		/*
+		 * check if the cell to be applied the element is empty otherwise one
+		 * exception will be launched
+		 */
+		if (configCriteria.getRow().getCell(idxC) != null) {
+			throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
+		}
 
 		switch (fT.getName()) {
 		case CellValueUtils.OBJECT_DATE:
@@ -754,6 +802,11 @@ public class Engine implements IEngine {
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
+				/* validate the position of the element */
+				if (xlsAnnotation.position() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
+
 				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
@@ -777,12 +830,7 @@ public class Engine implements IEngine {
 			}
 
 			/* Process @XlsFreeElement */
-			if (f.isAnnotationPresent(XlsFreeElement.class)) {
-				XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
-
-				initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
-						xlsAnnotation.cell() - 1, cL);
-			}
+			processXlsFreeElement(configCriteria, o, cL, f);
 		}
 		return counter;
 	}
@@ -825,6 +873,13 @@ public class Engine implements IEngine {
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+
+				/* validate the position of the element */
+				if (xlsAnnotation.position() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
+
+				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
 				/* apply customized rules defined at the object */
@@ -864,14 +919,63 @@ public class Engine implements IEngine {
 			}
 
 			/* Process @XlsFreeElement */
-			if (f.isAnnotationPresent(XlsFreeElement.class)) {
-				XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
-
-				initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
-						xlsAnnotation.cell() - 1, cL);
-			}
+			processXlsFreeElement(configCriteria, o, cL, f);
 		}
 		return counter;
+	}
+
+	/**
+	 * Process the annotation {@link XlsFreeElement}
+	 * 
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @param o
+	 *            the object
+	 * @param oC
+	 *            the object class
+	 * @param f
+	 *            the field
+	 * @throws ElementException
+	 * @throws Exception
+	 */
+	private void processXlsFreeElement(ConfigCriteria configCriteria, Object o, int cL, Field f)
+			throws ElementException, Exception {
+
+		if (f.isAnnotationPresent(XlsFreeElement.class)) {
+			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+			/* validate the row/cell of the element */
+			if (xlsAnnotation.row() < 1 || xlsAnnotation.cell() < 1) {
+				throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+			}
+
+			/* header treatment */
+			if (xlsAnnotation.showTitle()) {
+				/* initialize the row position */
+				int idxRow = initializeHeaderRowPosition(xlsAnnotation.row(), xlsAnnotation.titleOrientation());
+				/* initialize the cell position */
+				int idxCell = initializeHeaderCellPosition(xlsAnnotation.cell(), xlsAnnotation.titleOrientation());
+				/* obtain/initialize the row */
+				Row row = configCriteria.getSheet().getRow(idxRow);
+				if (row == null) {
+					row = initializeRow(configCriteria.getSheet(), idxRow);
+				}
+
+				/*
+				 * check if the cell to be applied the element is empty
+				 * otherwise one exception will be launched
+				 */
+				if (row.getCell(idxCell) != null) {
+					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
+				}
+
+				CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell, xlsAnnotation.title());
+			}
+
+			/* content treatment */
+			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
+					xlsAnnotation.cell() - 1, cL);
+		}
 	}
 
 	/**
@@ -892,9 +996,10 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 * @throws InstantiationException
+	 * @throws ElementException
 	 */
 	private int unmarshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR,
-			int idxC) throws IllegalAccessException, ConverterException, InstantiationException {
+			int idxC) throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -907,6 +1012,11 @@ public class Engine implements IEngine {
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+
+				/* validate the position of the element */
+				if (xlsAnnotation.position() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -934,6 +1044,29 @@ public class Engine implements IEngine {
 					idxC += internalCellCounter;
 				}
 			}
+
+			/* Process @XlsFreeElement */
+			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+				XlsFreeElement xlsFreeAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+				/* validate the row/cell of the element */
+				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
+
+				/* content row */
+				Row contentRow = configCriteria.getSheet().getRow(xlsFreeAnnotation.row());
+				Cell contentCell = contentRow.getCell(xlsFreeAnnotation.cell() - 1);
+
+				// initialize Element
+				XlsElement xlsAnnotation = XlsElementFactory.build(xlsFreeAnnotation);
+
+				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
+
+				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+					throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+				}
+			}
 		}
 		return counter;
 	}
@@ -956,9 +1089,10 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 * @throws InstantiationException
+	 * @throws ElementException
 	 */
-	private int unmarshalAsPropagationVertical(ConfigCriteria configCriteria, Object object, Class<?> oC, int idxR,
-			int idxC) throws IllegalAccessException, ConverterException, InstantiationException {
+	private int unmarshalAsPropagationVertical(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC)
+			throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 
@@ -971,6 +1105,12 @@ public class Engine implements IEngine {
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+
+				/* validate the position of the element */
+				if (xlsAnnotation.position() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
+
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -981,7 +1121,7 @@ public class Engine implements IEngine {
 				Row contentRow = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
-				boolean isAppliedToBaseObject = toObject(object, fT, f, contentCell, xlsAnnotation);
+				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
@@ -992,10 +1132,33 @@ public class Engine implements IEngine {
 							subObjbectClass, idxR + xlsAnnotation.position() - 1, idxC);
 
 					/* add the sub object to the parent object */
-					f.set(object, subObjbect);
+					f.set(o, subObjbect);
 
 					/* update the index */
 					idxR += internalCellCounter;
+				}
+			}
+
+			/* Process @XlsFreeElement */
+			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+				XlsFreeElement xlsFreeAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+				/* validate the row/cell of the element */
+				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
+					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				}
+
+				/* content row */
+				Row contentRow = configCriteria.getSheet().getRow(xlsFreeAnnotation.row());
+				Cell contentCell = contentRow.getCell(xlsFreeAnnotation.cell() - 1);
+
+				// initialize Element
+				XlsElement xlsAnnotation = XlsElementFactory.build(xlsFreeAnnotation);
+
+				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
+
+				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+					throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
 				}
 			}
 		}
@@ -1458,9 +1621,11 @@ public class Engine implements IEngine {
 	 * @throws ConverterException
 	 * @throws InstantiationException
 	 * @throws SheetException
+	 * @throws ElementException
 	 */
 	private void unmarshalIntern(Object object, Class<?> oC, ConfigCriteria configCriteria, FileInputStream input)
-			throws IOException, IllegalAccessException, ConverterException, InstantiationException, SheetException {
+			throws IOException, IllegalAccessException, ConverterException, InstantiationException, SheetException,
+			ElementException {
 
 		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
 		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
