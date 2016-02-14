@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.annotation.XlsConfiguration;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorator;
 import org.jaexcel.framework.JAEX.annotation.XlsDecorators;
@@ -1509,7 +1510,7 @@ public class Engine implements IEngine {
 
 		// FIXME manage return value
 		workbookFileOutputStream(configCriteria.getWorkbook(),
-				"D:\\projects\\" + config.getNameFile() + config.getExtensionFile().getExtension());
+				TestUtils.WORKING_DIR_GENERATED_II + config.getNameFile() + config.getExtensionFile().getExtension());
 	}
 
 	/* ######################## Unmarshal methods ######################## */
