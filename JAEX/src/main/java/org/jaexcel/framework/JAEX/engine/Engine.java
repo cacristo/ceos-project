@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -524,17 +523,10 @@ public class Engine implements IEngine {
 	 * @param idxC
 	 *            the position of the cell
 	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 * @throws ElementException
+	 * @throws Exception
 	 */
 	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
-			throws IllegalArgumentException, IllegalAccessException, ConverterException, NoSuchMethodException,
-			SecurityException, InvocationTargetException, ElementException {
+			throws Exception {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 		/* initialize cell */
