@@ -3,6 +3,8 @@ package org.jaexcel.framework.JAEX.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.bean.BasicObject;
 import org.jaexcel.framework.JAEX.bean.BasicObjectBuilder;
@@ -78,7 +80,18 @@ public class EngineTest extends TestCase {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
 		IEngine en = new Engine();
-		en.marshalAndSave(pHO, TestUtils.WORKING_DIR_GENERATED_I);
+		CellDecorator anotherDate = new CellDecorator();
+		anotherDate.setDecoratorName("anotherDate");
+		anotherDate.setAlignment(CellStyle.ALIGN_CENTER);
+		anotherDate.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		anotherDate.setForegroundColor(HSSFColor.LIGHT_GREEN.index);
+		anotherDate.setFontItalic(true);
+		anotherDate.setWrapText(true);
+
+		ConfigCriteria configCriteria = new ConfigCriteria();
+		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
+		
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
 		
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();
 		
