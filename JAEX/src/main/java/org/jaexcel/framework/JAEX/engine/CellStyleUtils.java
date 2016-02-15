@@ -277,12 +277,12 @@ public class CellStyleUtils {
 	 * @param formatMask
 	 *            the format mask
 	 */
-	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle csBase, String formatMask) {
-		if (StringUtils.isNotBlank(formatMask) && csBase != null) {
+	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle cs, String formatMask) {
+		if (StringUtils.isNotBlank(formatMask) && cs != null) {
 			// CASE : if the cell has a formatMask and cell style base
 			// clone a cell style
-			CellStyle cs = cloneCellStyle(wb, csBase);
-
+			//CellStyle csNew = cloneCellStyle(wb, cs);
+						
 			// apply data format
 			DataFormat df = initializeDataFormat(wb);
 			cs.setDataFormat(df.getFormat(formatMask));
@@ -290,16 +290,16 @@ public class CellStyleUtils {
 			// apply cell style to a cell
 			c.setCellStyle(cs);
 		} else {
-			if (csBase == null) {
+			if (cs == null) {
 				// CASE : if the cell has no cell style base
-				csBase = initializeCellStyle(wb);
+				cs = initializeCellStyle(wb);
 			}
 			if (StringUtils.isNotBlank(formatMask)) {
 				// CASE : if the cell has a formatMask
 				DataFormat df = initializeDataFormat(wb);
-				csBase.setDataFormat(df.getFormat(formatMask));
+				cs.setDataFormat(df.getFormat(formatMask));
 			}
-			c.setCellStyle(csBase);
+			c.setCellStyle(cs);
 		}
 	}
 
@@ -528,6 +528,7 @@ public class CellStyleUtils {
 	 *            the cell style base
 	 * @return the new cell style
 	 */
+	@SuppressWarnings("unused")
 	private static CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
 		CellStyle cs = initializeCellStyle(wb);
 		cs.setAlignment(csBase.getAlignment());
