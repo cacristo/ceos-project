@@ -23,6 +23,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
 import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public class CellValueUtils {
 
@@ -277,8 +278,10 @@ public class CellValueUtils {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws ElementException
 	 */
-	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
+	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c)
+			throws ConverterException, ElementException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
@@ -340,8 +343,10 @@ public class CellValueUtils {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws ElementException
 	 */
-	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
+	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c)
+			throws ConverterException, ElementException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_DATE);
@@ -410,8 +415,10 @@ public class CellValueUtils {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws ElementException
 	 */
-	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
+	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c)
+			throws ConverterException, ElementException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
@@ -459,8 +466,10 @@ public class CellValueUtils {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws ElementException
 	 */
-	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
+	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c)
+			throws ConverterException, ElementException {
 		boolean isUpdated = true;
 
 		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_BOOLEAN);
@@ -507,8 +516,10 @@ public class CellValueUtils {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws ElementException
 	 */
-	protected static boolean toEnum(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
+	protected static boolean toEnum(ConfigCriteria configCriteria, Object o, Cell c)
+			throws ConverterException, ElementException {
 		boolean isUpdated = true;
 
 		try {
