@@ -11,9 +11,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.jaexcel.framework.JAEX.annotation.XlsElement;
 import org.jaexcel.framework.JAEX.definition.CascadeType;
+import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 /**
  * This will define all the configuration criteria to be used internally by the
@@ -182,12 +184,21 @@ public class ConfigCriteria {
 							: CellStyleUtils.initializeGenericCellDecorator(workbook));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
 		}
+		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_ENUM) == null) {
+			stylesMap.put(CellStyleUtils.CELL_DECORATOR_ENUM,
+					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_ENUM)
+							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_ENUM))
+							: CellStyleUtils.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_ENUM));
+		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
-			stylesMap.put(object.getKey(), CellStyleUtils.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+			stylesMap.put(object.getKey(),
+					CellStyleUtils.initializeCellStyleByCellDecorator(workbook, object.getValue()));
 		}
 	}
-	
+
 	/**
 	 * @return the workbook
 	 */
@@ -342,7 +353,7 @@ public class ConfigCriteria {
 	 * @return the propagation
 	 */
 	protected PropagationType getPropagation() {
-		if(overridePropagation != null){
+		if (overridePropagation != null) {
 			return overridePropagation;
 		} else {
 			return propagation;
@@ -361,7 +372,7 @@ public class ConfigCriteria {
 	 * @return the extension
 	 */
 	protected ExtensionFileType getExtension() {
-		if(overrideExtension != null){
+		if (overrideExtension != null) {
 			return overrideExtension;
 		} else {
 			return extension;
@@ -380,7 +391,7 @@ public class ConfigCriteria {
 	 * @return the cascadeLevel
 	 */
 	protected CascadeType getCascadeLevel() {
-		if(overrideCascadeLevel != null){
+		if (overrideCascadeLevel != null) {
 			return overrideCascadeLevel;
 		} else {
 			return cascadeLevel;
@@ -446,8 +457,12 @@ public class ConfigCriteria {
 	 * @param type
 	 *            the {@link CellStyleUtils} type
 	 * @return
+	 * @throws ElementException 
 	 */
-	protected CellStyle getCellStyle(String type) {
+	protected CellStyle getCellStyle(String type) throws ElementException {
+		if(StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null){
+			throw new ElementException(ExceptionMessage.ConfigurationException_XlsDecoratorMissing.getMessage());
+		}
 		return StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : stylesMap.get(type);
 	}
 
