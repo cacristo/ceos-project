@@ -13,6 +13,7 @@ import org.jaexcel.framework.JAEX.bean.PropagationHorizontalObject;
 import org.jaexcel.framework.JAEX.bean.PropagationHorizontalObjectBuilder;
 import org.jaexcel.framework.JAEX.bean.PropagationVerticalObject;
 import org.jaexcel.framework.JAEX.bean.PropagationVerticalObjectBuilder;
+import org.jaexcel.framework.JAEX.bean.SimpleObject;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.exception.ElementException;
@@ -65,16 +66,17 @@ public class EngineTest extends TestCase {
 
 		IEngine en = new Engine();
 		en.marshalAndSave(bO, TestUtils.WORKING_DIR_GENERATED_I);
-		
+
 		BasicObject charger = new BasicObject();
-		
+
 		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 		BasicObjectBuilder.validateBasicObject(charger);
 	}
 
 	/**
 	 * Test with propagation type is HORIZONTAL
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void testPropagationTypeHorizontal() throws Exception {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
@@ -90,11 +92,11 @@ public class EngineTest extends TestCase {
 
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
-		
+
 		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
-		
+
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();
-		
+
 		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
 		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
 	}
@@ -107,9 +109,9 @@ public class EngineTest extends TestCase {
 
 		IEngine en = new Engine();
 		en.marshalAndSave(pVO, TestUtils.WORKING_DIR_GENERATED_II);
-		
+
 		PropagationVerticalObject charger = new PropagationVerticalObject();
-		
+
 		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 		PropagationVerticalObjectBuilder.validatePropagationVerticalObject(charger);
 	}
@@ -170,7 +172,25 @@ public class EngineTest extends TestCase {
 		MultiTypeObject charger = null;
 		try {
 			en.unmarshalFromByte(charger, generatedBytes);
-			
+
+		} catch (Exception e) {
+			if (e.getClass().equals(ElementException.class)
+					&& e.getMessage().equals(ExceptionMessage.ElementException_NullObject)) {
+				assertEquals(true, true);
+			}
+		}
+	}
+
+	/**
+	 * Test an null list
+	 */
+	public void testListNull() throws Exception {
+
+		List<Object> collectionNull = null;
+
+		IEngine en = new Engine();
+		try {
+			en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
 		} catch (Exception e) {
 			if (e.getClass().equals(ElementException.class)
 					&& e.getMessage().equals(ExceptionMessage.ElementException_NullObject)) {
@@ -187,21 +207,37 @@ public class EngineTest extends TestCase {
 	public void testListEmpty() throws Exception {
 
 		List<Object> collectionEmpty = new ArrayList<Object>();
-		
+
 		IEngine en = new Engine();
-		en.marshalAsCollection(collectionEmpty, "CollectionEmpty" , ExtensionFileType.XLSX);
-		// FIXME ??? add error ???
+		try {
+			en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLSX);
+		} catch (Exception e) {
+			if (e.getClass().equals(ElementException.class)
+					&& e.getMessage().equals(ExceptionMessage.ElementException_EmptyObject)) {
+				assertEquals(true, true);
+			}
+		}
 	}
 
 	/**
-	 * Test an null list
+	 * Test an empty list
+	 * 
+	 * @throws Exception
 	 */
-	public void testListNull() throws Exception {
+	public void testListWithObjectEmpty() throws Exception {
 
-		List<Object> collectionNull = null;
+		List<Object> collection = new ArrayList<Object>();
+		SimpleObject so = null;
+		collection.add(so);
 		
 		IEngine en = new Engine();
-		en.marshalAsCollection(collectionNull, "CollectionNull" , ExtensionFileType.XLS);
-		// FIXME ??? add error ???
+		try {
+			en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
+		} catch (Exception e) {
+			if (e.getClass().equals(ElementException.class)
+					&& e.getMessage().equals(ExceptionMessage.ElementException_EmptyObject)) {
+				assertEquals(true, true);
+			}
+		}
 	}
 }
