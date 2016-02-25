@@ -15,7 +15,6 @@ import org.apache.poi.ss.formula.FormulaType;
 import org.apache.poi.ss.formula.ptg.Ptg;
 import org.apache.poi.ss.formula.ptg.RefPtgBase;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
@@ -26,6 +25,12 @@ import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public class CellValueUtils {
+
+	/* Possible news features */
+	// (1) Manage decimalScale
+	// Double d = (Double) f.get(o);
+	// BigDecimal bd = new BigDecimal(d);
+	// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
 	// object type
 	public static final String OBJECT_DATE = "java.util.Date";
@@ -89,19 +94,17 @@ public class CellValueUtils {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
-				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
+					// apply the formula
 					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
-
 			} else {
-				// normal manage cell
+				// apply the value
 				c.setCellValue((String) configCriteria.getField().get(o));
 			}
 
-			// apply style
-			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
-					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_GENERIC));
+			// apply the style
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_GENERIC, null);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -132,20 +135,18 @@ public class CellValueUtils {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
-				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
+					// apply the formula
 					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
-
 			} else {
-				// normal manage cell
+				// apply the value
 				c.setCellValue((Integer) configCriteria.getField().get(o));
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
-					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC),
-					configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_INTEGER));
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					CellStyleUtils.MASK_DECORATOR_INTEGER);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -174,23 +175,20 @@ public class CellValueUtils {
 	 */
 	protected static boolean toLong(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
-
 		try {
 			if (configCriteria.getElement().isFormula()) {
-				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
+					// apply the formula
 					c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 				}
-
 			} else {
-				// normal manage cell
+				// apply the value
 				c.setCellValue((Long) configCriteria.getField().get(o));
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
-					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC),
-					configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_INTEGER));
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					CellStyleUtils.MASK_DECORATOR_INTEGER);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -219,40 +217,25 @@ public class CellValueUtils {
 	 */
 	protected static boolean toDouble(ConfigCriteria configCriteria, Object o, Cell c) throws ConverterException {
 		boolean isUpdated = true;
-
 		try {
-			// FIXME use the comment below to manage decimalScale
-			// Double d = (Double) f.get(o);
-			// BigDecimal bd = new BigDecimal(d);
-			// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-			CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
-
 			if (configCriteria.getElement().isFormula()) {
-				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
+					// apply the formula
 					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
-
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
-
 			} else {
 				// normal manage cell
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
 					c.setCellValue(df.format((Double) configCriteria.getField().get(o)));
-
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				} else {
 					c.setCellValue((Double) configCriteria.getField().get(o));
-
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
-							configCriteria.getFormatMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 				}
 			}
+
+			// apply cell style
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					CellStyleUtils.MASK_DECORATOR_DOUBLE);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -283,41 +266,30 @@ public class CellValueUtils {
 	protected static boolean toBigDecimal(ConfigCriteria configCriteria, Object o, Cell c)
 			throws ConverterException, ElementException {
 		boolean isUpdated = true;
-
-		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
-
 		try {
 			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
 					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
-
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
-
 			} else {
 				// normal manage cell
 				BigDecimal bd = (BigDecimal) configCriteria.getField().get(o);
 
-				// FIXME use the comment below to manage decimalScale
-				// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 				if (bd != null) {
 					Double dBigDecimal = bd.doubleValue();
 					if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 						DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
 						c.setCellValue(df.format(dBigDecimal));
-						// apply cell style
-						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
-
 					} else {
 						c.setCellValue(dBigDecimal);
-						// apply cell style
-						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
-								configCriteria.getFormatMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 					}
 				}
 			}
+
+			// apply cell style
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					CellStyleUtils.MASK_DECORATOR_DOUBLE);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -348,13 +320,9 @@ public class CellValueUtils {
 	protected static boolean toDate(ConfigCriteria configCriteria, Object o, Cell c)
 			throws ConverterException, ElementException {
 		boolean isUpdated = true;
-
-		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_DATE);
 		try {
-
 			Date dDate = (Date) configCriteria.getField().get(o);
 			if (dDate != null) {
-
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					// apply transformation mask
 					String decorator = configCriteria.getElement().transformMask();
@@ -368,27 +336,21 @@ public class CellValueUtils {
 							throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
 						}
 						c.setCellValue(dateFormated);
-						// apply cell style
-						CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
+
 					} catch (Exception e) {
 						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 					}
-
 				} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
 					// apply format mask
 					c.setCellValue(dDate);
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
-							configCriteria.getElement().formatMask());
-
 				} else {
 					// apply default date mask
 					c.setCellValue(dDate);
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
-							CellStyleUtils.MASK_DECORATOR_DATE);
-
 				}
+
+				// apply cell style
+				CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_DATE,
+						CellStyleUtils.MASK_DECORATOR_DATE);
 
 				if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 					// apply the comment
@@ -420,26 +382,20 @@ public class CellValueUtils {
 	protected static boolean toFloat(ConfigCriteria configCriteria, Object o, Cell c)
 			throws ConverterException, ElementException {
 		boolean isUpdated = true;
-
-		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_NUMERIC);
 		try {
 			if (configCriteria.getElement().isFormula()) {
 				// apply the formula
 				if (!toFormula(configCriteria, o, c)) {
 					c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
-
-					// apply cell style
-					CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 				}
-
 			} else {
 				// normal manage cell
 				c.setCellValue((Float) configCriteria.getField().get(o));
-
-				// apply cell style
-				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs,
-						configCriteria.getMask(CellStyleUtils.MASK_DECORATOR_DOUBLE));
 			}
+
+			// apply cell style
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_NUMERIC,
+					CellStyleUtils.MASK_DECORATOR_DOUBLE);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -471,8 +427,6 @@ public class CellValueUtils {
 	protected static boolean toBoolean(ConfigCriteria configCriteria, Object o, Cell c)
 			throws ConverterException, ElementException {
 		boolean isUpdated = true;
-
-		CellStyle cs = configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_BOOLEAN);
 		try {
 			Boolean bBoolean = (Boolean) configCriteria.getField().get(o);
 			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
@@ -480,16 +434,13 @@ public class CellValueUtils {
 				String[] split = configCriteria.getElement().transformMask().split("/");
 				c.setCellValue((bBoolean == null ? "" : (bBoolean ? split[0] : split[1])));
 
-				// apply cell style
-				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
-
 			} else {
 				// locale mode
 				c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
-
-				// apply cell style
-				CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c, cs);
 			}
+
+			// apply cell style
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_BOOLEAN, null);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
@@ -540,8 +491,7 @@ public class CellValueUtils {
 			}
 
 			// apply cell style
-			CellStyleUtils.applyCellStyle(configCriteria.getWorkbook(), c,
-					configCriteria.getCellStyle(CellStyleUtils.CELL_DECORATOR_ENUM));
+			CellStyleUtils.applyCellStyle(configCriteria, c, CellStyleUtils.CELL_DECORATOR_ENUM, null);
 
 			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 				// apply the comment
