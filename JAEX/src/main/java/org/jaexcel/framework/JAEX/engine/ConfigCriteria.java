@@ -53,6 +53,8 @@ public class ConfigCriteria {
 	private Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
 	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
 
+	private Map<String, CellStyle> cellStyleManager = new HashMap<String, CellStyle>();
+
 	/**
 	 * Force the header cell decorator.
 	 * 
@@ -437,6 +439,20 @@ public class ConfigCriteria {
 	}
 
 	/**
+	 * @return the cellStyleManager
+	 */
+	protected Map<String, CellStyle> getCellStyleManager() {
+		return cellStyleManager;
+	}
+
+	/**
+	 * @param cellStyleManager the cellStyleManager to set
+	 */
+	protected void setCellStyleManager(Map<String, CellStyle> cellStyleManager) {
+		this.cellStyleManager = cellStyleManager;
+	}
+
+	/**
 	 * @return the cellDecoratorMap
 	 */
 	protected Map<String, CellDecorator> getCellDecoratorMap() {
@@ -457,10 +473,10 @@ public class ConfigCriteria {
 	 * @param type
 	 *            the {@link CellStyleUtils} type
 	 * @return
-	 * @throws ElementException 
+	 * @throws ElementException
 	 */
 	protected CellStyle getCellStyle(String type) throws ElementException {
-		if(StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null){
+		if (StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null) {
 			throw new ElementException(ExceptionMessage.ConfigurationException_XlsDecoratorMissing.getMessage());
 		}
 		return StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : stylesMap.get(type);
@@ -474,7 +490,7 @@ public class ConfigCriteria {
 	 * @return
 	 */
 	protected String getFormatMask(String maskDecoratorType) {
-		return StringUtils.isEmpty(element.formatMask()) ? maskDecoratorType : element.formatMask();
+		return StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType;
 	}
 
 	/**
@@ -485,7 +501,7 @@ public class ConfigCriteria {
 	 * @return
 	 */
 	protected String getTransformMask(String maskDecoratorType) {
-		return StringUtils.isEmpty(element.transformMask()) ? maskDecoratorType : element.transformMask();
+		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask() : maskDecoratorType;
 	}
 
 	/**
@@ -497,8 +513,14 @@ public class ConfigCriteria {
 	 * @return
 	 */
 	protected String getMask(String maskDecoratorType) {
-		return StringUtils.isEmpty(element.transformMask())
-				? (StringUtils.isEmpty(element.formatMask()) ? maskDecoratorType : element.formatMask())
-				: element.transformMask();
+		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
+				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
+	}
+
+	protected String generateCellStyleKey(String cellDecoratorType, String maskDecoratorType) {
+		String mask = StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
+				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
+		String decorator = StringUtils.isNotBlank(element.decorator()) ? element.decorator() : cellDecoratorType;
+		return mask.concat(decorator);
 	}
 }
