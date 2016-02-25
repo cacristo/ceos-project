@@ -83,7 +83,7 @@ public class Engine implements IEngine {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			initializeConfiguration(configCriteria, xlsAnnotation);
+			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		} else {
 			throw new ConfigurationException(
 					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
@@ -91,7 +91,7 @@ public class Engine implements IEngine {
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			initializeSheetConfiguration(configCriteria, xlsAnnotation);
+			initializeXlsSheet(configCriteria, xlsAnnotation);
 		} else {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage());
 		}
@@ -106,7 +106,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
-	private void initializeConfiguration(ConfigCriteria configCriteria, XlsConfiguration annotation) {
+	private void initializeXlsConfiguration(ConfigCriteria configCriteria, XlsConfiguration annotation) {
 		configCriteria.setFileName(annotation.nameFile());
 		configCriteria.setCompleteFileName(annotation.nameFile() + annotation.extensionFile().getExtension());
 		configCriteria.setExtension(annotation.extensionFile());
@@ -121,7 +121,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsSheet}
 	 * @return
 	 */
-	private void initializeSheetConfiguration(ConfigCriteria configCriteria, XlsSheet annotation) {
+	private void initializeXlsSheet(ConfigCriteria configCriteria, XlsSheet annotation) {
 		configCriteria.setTitleSheet(annotation.title());
 		configCriteria.setPropagation(annotation.propagation());
 		configCriteria.setStartRow(annotation.startRow());
@@ -129,65 +129,27 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Initialize the configuration to apply at the Excel.
+	 * initialize style cell via annotation {@link XlsDecorators}
 	 * 
-	 * @param oC
-	 *            the {@link Class<?>}
-	 * @return
+	 * @param objectClass
+	 *            the object class
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
+	 * @throws ConfigurationException
 	 */
-	@Deprecated
-	private Configuration initializeConfigurationData(Class<?> oC) {
-		Configuration config = null;
-
-		/* Process @XlsConfiguration */
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
+	private void initializeCellStyleViaAnnotation(Class<?> objectClass, ConfigCriteria configCriteria)
+			throws ConfigurationException {
+		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
+			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
+			for (XlsDecorator decorator : xlsDecorators.values()) {
+				if (configCriteria.getStylesMap().containsKey(decorator.decoratorName())) {
+					throw new ConfigurationException(
+							ExceptionMessage.ConfigurationException_CellStyleDuplicated.getMessage());
+				}
+				configCriteria.getStylesMap().put(decorator.decoratorName(),
+						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
+			}
 		}
-
-		/* Process @XlsSheet */
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
-		}
-		return config;
-	}
-
-	/**
-	 * Add the main xls configuration.
-	 * 
-	 * @param config
-	 *            the {@link XlsConfiguration}
-	 * @return
-	 */
-	@Deprecated
-	private Configuration initializeConfiguration(XlsConfiguration config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setName(config.nameFile());
-		configuration.setNameFile(config.nameFile() + config.extensionFile().getExtension());
-		configuration.setExtensionFile(config.extensionFile());
-		return configuration;
-	}
-
-	/**
-	 * Add the sheet configuration.
-	 * 
-	 * @param config
-	 *            the {@link XlsSheet}
-	 * @return
-	 */
-	@Deprecated
-	private Configuration initializeSheetConfiguration(XlsSheet config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setTitleSheet(config.title());
-		configuration.setPropagationType(config.propagation());
-		configuration.setStartRow(config.startRow());
-		configuration.setStartCell(config.startCell());
-		return configuration;
 	}
 
 	/**
@@ -525,8 +487,7 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC)
-			throws Exception {
+	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC) throws Exception {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 		/* initialize cell */
@@ -1222,13 +1183,7 @@ public class Engine implements IEngine {
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
 
 		/* initialize style cell via annotations */
-		if (oC.isAnnotationPresent(XlsDecorators.class)) {
-			XlsDecorators xlsDecorators = (XlsDecorators) oC.getAnnotation(XlsDecorators.class);
-			for (XlsDecorator decorator : xlsDecorators.values()) {
-				configCriteria.getStylesMap().put(decorator.decoratorName(),
-						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
-			}
-		}
+		initializeCellStyleViaAnnotation(oC, configCriteria);
 
 		/* initialize style cell via default option */
 		configCriteria.initializeCellDecorator();
@@ -1434,6 +1389,7 @@ public class Engine implements IEngine {
 	public void marshalAsCollection(Collection<?> collection, final String filename,
 			final ExtensionFileType extensionFileType) throws Exception {
 
+		// FIXME apply the ConfigCriteria, then remove cofiguration
 		// Temos que iniciar o config data neste ponto porque
 		// como estamos na escritura de uma coleccao
 		// temos que ter o nome e a extensao antes de iniciar o excel
@@ -1449,6 +1405,23 @@ public class Engine implements IEngine {
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
+		if (collection == null) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
+
+		try {
+			/* initialize style cell via annotations */
+			//Class<?> oC = collection.iterator().next().getClass();
+
+			/* initialize the runtime class of the object */
+			Class<?> oC = initializeRuntimeClass(collection.iterator().next());
+			initializeCellStyleViaAnnotation(oC, configCriteria);
+		} catch (Exception e) {
+			throw new ElementException(ExceptionMessage.ElementException_EmptyObject.getMessage(), e);
+		}
+
+
+		
 		// initialize style cell via default option
 		configCriteria.initializeCellDecorator();
 		// configCriteria.setStylesMap(stylesMap);
@@ -1667,26 +1640,21 @@ public class Engine implements IEngine {
 		/* Process @XlsConfiguration */
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
-			initializeConfiguration(configCriteria, xlsAnnotation);
+			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		}
 
 		/* Process @XlsSheet */
 		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
-			initializeSheetConfiguration(configCriteria, xlsAnnotation);
+			initializeXlsSheet(configCriteria, xlsAnnotation);
 		}
 
 		/* initialize Workbook */
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
 
 		/* initialize style cell via annotations */
-		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
-			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
-			for (XlsDecorator decorator : xlsDecorators.values()) {
-				configCriteria.getStylesMap().put(decorator.decoratorName(),
-						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
-			}
-		}
+		initializeCellStyleViaAnnotation(objectClass, configCriteria);
+
 		/* initialize style cell via default option */
 		configCriteria.initializeCellDecorator();
 
@@ -1770,6 +1738,68 @@ public class Engine implements IEngine {
 		unmarshalEngine(configCriteria, object, oC);
 
 		return object;
+	}
+
+	/**
+	 * Initialize the configuration to apply at the Excel.
+	 * 
+	 * @param oC
+	 *            the {@link Class<?>}
+	 * @return
+	 */
+	@Deprecated
+	private Configuration initializeConfigurationData(Class<?> oC) {
+		Configuration config = null;
+
+		/* Process @XlsConfiguration */
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
+			config = initializeConfiguration(xlsAnnotation);
+		}
+
+		/* Process @XlsSheet */
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			config = initializeSheetConfiguration(xlsAnnotation);
+		}
+		return config;
+	}
+
+	/**
+	 * Add the main xls configuration.
+	 * 
+	 * @param config
+	 *            the {@link XlsConfiguration}
+	 * @return
+	 */
+	@Deprecated
+	private Configuration initializeConfiguration(XlsConfiguration config) {
+		if (configuration == null) {
+			configuration = new Configuration();
+		}
+		configuration.setName(config.nameFile());
+		configuration.setNameFile(config.nameFile() + config.extensionFile().getExtension());
+		configuration.setExtensionFile(config.extensionFile());
+		return configuration;
+	}
+
+	/**
+	 * Add the sheet configuration.
+	 * 
+	 * @param config
+	 *            the {@link XlsSheet}
+	 * @return
+	 */
+	@Deprecated
+	private Configuration initializeSheetConfiguration(XlsSheet config) {
+		if (configuration == null) {
+			configuration = new Configuration();
+		}
+		configuration.setTitleSheet(config.title());
+		configuration.setPropagationType(config.propagation());
+		configuration.setStartRow(config.startRow());
+		configuration.setStartCell(config.startCell());
+		return configuration;
 	}
 
 }
