@@ -26,6 +26,7 @@ import org.jaexcel.framework.JAEX.annotation.XlsDecorator;
 import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
 import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
+import org.jaexcel.framework.JAEX.exception.ElementException;
 
 public class CellStyleUtils {
 	// cell decorator constants
@@ -249,55 +250,55 @@ public class CellStyleUtils {
 	}
 
 	/**
-	 * Apply the cell style to a cell.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @param c
-	 *            the cell
-	 * @param cs
-	 *            the cell style
-	 */
-	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle cs) {
-		if (cs == null) {
-			cs = initializeCellStyle(wb);
-		}
-		c.setCellStyle(cs);
-	}
-
-	/**
 	 * Apply cell style according the one cell style base and format mask.
 	 * 
-	 * @param wb
-	 *            the workbook
+	 * @param configCriteria
+	 *            the {@link ConfigCriteria}
 	 * @param c
-	 *            the cell
-	 * @param csBase
-	 *            the cell style base
-	 * @param formatMask
-	 *            the format mask
+	 *            the {@link Cell}
+	 * @param cellDecoratorType
+	 *            the cell decorator by default
+	 * @param maskDecoratorType
+	 *            the format mask by default
+	 * @throws ElementException
 	 */
-	protected static void applyCellStyle(Workbook wb, Cell c, CellStyle cs, String formatMask) {
-		if (StringUtils.isNotBlank(formatMask) && cs != null) {
-			// CASE : if the cell has a formatMask and cell style base
-			// clone a cell style
-			//CellStyle csNew = cloneCellStyle(wb, cs);
-						
-			// apply data format
-			DataFormat df = initializeDataFormat(wb);
-			cs.setDataFormat(df.getFormat(formatMask));
+	protected static void applyCellStyle(ConfigCriteria configCriteria, Cell c, String cellDecoratorType,
+			String maskDecoratorType) throws ElementException {
 
-			// apply cell style to a cell
+		CellStyle cs = configCriteria.getCellStyle(cellDecoratorType);
+
+		if (maskDecoratorType != null && StringUtils.isNotBlank(configCriteria.getMask(maskDecoratorType))
+				&& cs != null) {
+
+			/* generate a key based : formatMask + decorator */
+			String key = configCriteria.generateCellStyleKey(cellDecoratorType, maskDecoratorType);
+
+			if (!configCriteria.getCellStyleManager().containsKey(key)) {
+				/* clone a cell style */
+				CellStyle csNew = cloneCellStyle(configCriteria.getWorkbook(), cs);
+				/* initialize/apply a data format */
+				DataFormat df = initializeDataFormat(configCriteria.getWorkbook());
+				csNew.setDataFormat(df.getFormat(configCriteria.getMask(maskDecoratorType)));
+
+				configCriteria.getCellStyleManager().put(key, csNew);
+
+				cs = csNew;
+
+			} else {
+				cs = configCriteria.getCellStyleManager().get(key);
+			}
+			/* apply cell style to a cell */
 			c.setCellStyle(cs);
+
 		} else {
 			if (cs == null) {
-				// CASE : if the cell has no cell style base
-				cs = initializeCellStyle(wb);
+				/* CASE : if the cell has no cell style base */
+				cs = initializeCellStyle(configCriteria.getWorkbook());
 			}
-			if (StringUtils.isNotBlank(formatMask)) {
-				// CASE : if the cell has a formatMask
-				DataFormat df = initializeDataFormat(wb);
-				cs.setDataFormat(df.getFormat(formatMask));
+			if (maskDecoratorType != null && StringUtils.isNotBlank(configCriteria.getMask(maskDecoratorType))) {
+				/* CASE : if the cell has a formatMask */
+				DataFormat df = initializeDataFormat(configCriteria.getWorkbook());
+				cs.setDataFormat(df.getFormat(configCriteria.getMask(maskDecoratorType)));
 			}
 			c.setCellStyle(cs);
 		}
@@ -314,13 +315,14 @@ public class CellStyleUtils {
 	 *            the value of the cell content
 	 * @return the cell created
 	 */
-	protected static Cell initializeHeaderCell(Map<String, CellStyle> stylesMap, Row r, int idxC, String value) throws Exception {
+	protected static Cell initializeHeaderCell(Map<String, CellStyle> stylesMap, Row r, int idxC, String value)
+			throws Exception {
 		Cell c = r.createCell(idxC);
 		c.setCellValue(value);
 		c.setCellStyle(stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER));
 		return c;
 	}
-	
+
 	/**
 	 * Initialize default Header Cell Decorator.
 	 * 
@@ -363,6 +365,8 @@ public class CellStyleUtils {
 		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
 		CellStyleUtils.applyFontDefault(wb, cs);
+		//DataFormat df = initializeDataFormat(wb);
+		//cs.setDataFormat(df.getFormat(CellStyleUtils.MASK_DECORATOR_INTEGER));
 
 		return cs;
 	}
@@ -380,6 +384,8 @@ public class CellStyleUtils {
 		/* add the alignment to the cell */
 		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
 		CellStyleUtils.applyFontDefault(wb, cs);
+		//DataFormat df = initializeDataFormat(wb);
+		//cs.setDataFormat(df.getFormat(CellStyleUtils.MASK_DECORATOR_DATE));
 
 		return cs;
 	}
@@ -528,7 +534,6 @@ public class CellStyleUtils {
 	 *            the cell style base
 	 * @return the new cell style
 	 */
-	@SuppressWarnings("unused")
 	private static CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
 		CellStyle cs = initializeCellStyle(wb);
 		cs.setAlignment(csBase.getAlignment());
