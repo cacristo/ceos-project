@@ -11,6 +11,7 @@ public enum ExceptionMessage {
 	ConfigurationException_XlsConfigurationMissing("The annotation XlsConfiguration is missing. Review your configuration."),
 	ConfigurationException_XlsSheetMissing("The annotation XlsSheet is missing. Review your configuration."),
 	ConfigurationException_CellStyleMissing("Cell style configuration is missing. Review your configuration."),
+	ConfigurationException_CellStyleDuplicated("Cell style configuration is duplicated. Review your configuration."),
 	ConfigurationException_XlsDecoratorMissing("There is one XlsDecorator missing. Review your configuration."),
 	ConfigurationException_Conflict("Conflict at the configuration. Review your configuration."),
 	// TODO see the below message will be applied (remove if not)
