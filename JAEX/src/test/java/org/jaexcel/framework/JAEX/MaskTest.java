@@ -9,7 +9,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class ObjectMaskTest extends TestCase {
+public class MaskTest extends TestCase {
 
 	/**
 	 * Create the test case
@@ -17,7 +17,7 @@ public class ObjectMaskTest extends TestCase {
 	 * @param testName
 	 *            name of the test case
 	 */
-	public ObjectMaskTest(String testName) {
+	public MaskTest(String testName) {
 		super(testName);
 	}
 
@@ -25,7 +25,7 @@ public class ObjectMaskTest extends TestCase {
 	 * @return the suite of tests being tested
 	 */
 	public static Test suite() {
-		return new TestSuite(ObjectMaskTest.class);
+		return new TestSuite(MaskTest.class);
 	}
 
 	/**
