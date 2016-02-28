@@ -39,6 +39,7 @@ import org.jaexcel.framework.JAEX.definition.PropagationType;
 import org.jaexcel.framework.JAEX.definition.TitleOrientationType;
 import org.jaexcel.framework.JAEX.exception.ConfigurationException;
 import org.jaexcel.framework.JAEX.exception.ConverterException;
+import org.jaexcel.framework.JAEX.exception.CustomizedRulesException;
 import org.jaexcel.framework.JAEX.exception.ElementException;
 import org.jaexcel.framework.JAEX.exception.SheetException;
 
@@ -766,7 +767,11 @@ public class Engine implements IEngine {
 
 				/* apply customized rules defined at the object */
 				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
+					try{
 					CellValueUtils.applyCustomizedRules(o, xlsAnnotation.customizedRules());
+					} catch (NoSuchMethodException e){
+						throw new CustomizedRulesException(ExceptionMessage.CustomizedRulesException_NoSuchMethod.getMessage(), e);
+					}
 				}
 
 				/*
@@ -1172,6 +1177,11 @@ public class Engine implements IEngine {
 	 */
 	private void marshalEngine(ConfigCriteria configCriteria, Object object)
 			throws ElementException, ConfigurationException, SheetException, Exception {
+
+		if (object == null) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
+
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -1223,7 +1233,11 @@ public class Engine implements IEngine {
 	 * @throws Exception
 	 */
 	private void unmarshalEngine(ConfigCriteria configCriteria, Object object, Class<?> oC) throws Exception {
+
 		/* initialize sheet */
+		if (StringUtils.isBlank(configCriteria.getTitleSheet())) {
+			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage());
+		}
 		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
 		/* initialize index row & cell */
@@ -1411,7 +1425,7 @@ public class Engine implements IEngine {
 
 		try {
 			/* initialize style cell via annotations */
-			//Class<?> oC = collection.iterator().next().getClass();
+			// Class<?> oC = collection.iterator().next().getClass();
 
 			/* initialize the runtime class of the object */
 			Class<?> oC = initializeRuntimeClass(collection.iterator().next());
@@ -1420,8 +1434,6 @@ public class Engine implements IEngine {
 			throw new ElementException(ExceptionMessage.ElementException_EmptyObject.getMessage(), e);
 		}
 
-
-		
 		// initialize style cell via default option
 		configCriteria.initializeCellDecorator();
 		// configCriteria.setStylesMap(stylesMap);
