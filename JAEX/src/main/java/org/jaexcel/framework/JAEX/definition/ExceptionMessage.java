@@ -41,8 +41,12 @@ public enum ExceptionMessage {
 	SheetException_CreationSheet("Problem while creating the Sheet. Review your configuration."),
 	// TODO see the below messages will be applied (remove if not)
 	SheetException_SaveWorkbook("Problem while saving the Workbook."),
-	SheetException_UpdateSheet("Problem while add a new Sheet.");
+	SheetException_UpdateSheet("Problem while add a new Sheet."),
 
+	/* declared messages of SheetException */
+	CustomizedRulesException_NoSuchMethod("The customized method entry does not exist. Review your configuration.");
+	
+	
 	private String message;
 
 	private ExceptionMessage(String msg) {
