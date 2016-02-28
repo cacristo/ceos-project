@@ -59,6 +59,11 @@ public interface XlsElementFactory {
 			public String comment() {
 				return xlsAnnotation.comment();
 			}
+
+			@Override
+			public String commentRules() {
+				return "";
+			}
 		};
 	}
 }
