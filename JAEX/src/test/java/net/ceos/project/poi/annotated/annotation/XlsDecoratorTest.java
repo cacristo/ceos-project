@@ -1,11 +1,8 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import java.lang.annotation.Annotation;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
 public class XlsDecoratorTest extends TestCase {
@@ -36,8 +33,7 @@ public class XlsDecoratorTest extends TestCase {
 		// Process @XlsDecorator
 		if (o.isAnnotationPresent(XlsDecorator.class)) {
 
-			Annotation annotation = o.getAnnotation(XlsDecorator.class);
-			XlsDecorator xlsDecorator = (XlsDecorator) annotation;
+			XlsDecorator xlsDecorator = (XlsDecorator) o.getAnnotation(XlsDecorator.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsDecorator.fontName(), "Arial");

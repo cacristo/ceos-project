@@ -1,11 +1,8 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import java.lang.annotation.Annotation;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
@@ -37,8 +34,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.startRow(), 1);
@@ -57,8 +53,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.title(), "Default configuration sample");
@@ -74,8 +69,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_VERTICAL);
@@ -91,8 +85,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_HORIZONTAL);
@@ -108,8 +101,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_BASE);
@@ -125,8 +117,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_LEVEL_ONE);
@@ -142,8 +133,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_LEVEL_TWO);
@@ -159,8 +149,7 @@ public class XlsSheetTest extends TestCase {
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
-			Annotation annotation = oC.getAnnotation(XlsSheet.class);
-			XlsSheet xlsSheet = (XlsSheet) annotation;
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_FULL);

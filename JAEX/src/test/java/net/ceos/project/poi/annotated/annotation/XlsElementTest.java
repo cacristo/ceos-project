@@ -1,6 +1,5 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -10,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
 public class XlsElementTest extends TestCase {
@@ -42,15 +40,16 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				assertEquals(xlsElement.comment(), "");
+				assertEquals(xlsElement.commentRules(), "");
 				assertEquals(xlsElement.decorator(), "");
 				assertEquals(xlsElement.formatMask(), "");
 				assertEquals(xlsElement.transformMask(), "");
 				assertEquals(xlsElement.isFormula(), false);
 				assertEquals(xlsElement.formula(), "");
+				assertEquals(xlsElement.customizedRules(), "");
 			}
 		}
 	}
@@ -66,27 +65,26 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsElement.title(), "Date value");
-					
+
 				} else if (f.getName().equals("stringAttribute")) {
 					assertEquals(xlsElement.title(), "String value");
-					
+
 				} else if (f.getName().equals("integerAttribute")) {
 					assertEquals(xlsElement.title(), "Integer value");
-					
+
 				} else if (f.getName().equals("doubleAttribute1")) {
 					assertEquals(xlsElement.title(), "Double value 1");
-					
+
 				} else if (f.getName().equals("doubleAttribute2")) {
 					assertEquals(xlsElement.title(), "Double value 2");
-					
+
 				} else if (f.getName().equals("sum")) {
 					assertEquals(xlsElement.title(), "Sum double 1 & double 2");
-					
+
 				}
 			}
 		}
@@ -103,8 +101,7 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (StringUtils.isNotBlank(xlsElement.comment())) {
 					assertEquals(xlsElement.comment(), "This is a comment");
@@ -124,8 +121,7 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (StringUtils.isNotBlank(xlsElement.decorator())) {
 					assertEquals(xlsElement.decorator(), "extendedIntDecorator");
@@ -145,8 +141,7 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (StringUtils.isNotBlank(xlsElement.formatMask())) {
 					assertEquals(xlsElement.formatMask(), "0.000");
@@ -166,8 +161,7 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (StringUtils.isNotBlank(xlsElement.transformMask())) {
 					assertEquals(xlsElement.transformMask(), "0.0");
@@ -187,8 +181,7 @@ public class XlsElementTest extends TestCase {
 			// Process @XlsElement
 			if (f.isAnnotationPresent(XlsElement.class)) {
 
-				Annotation annotation = f.getAnnotation(XlsElement.class);
-				XlsElement xlsElement = (XlsElement) annotation;
+				XlsElement xlsElement = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				if (xlsElement.isFormula()) {
 					assertEquals(xlsElement.formula(), "SUM(E3,F3)");

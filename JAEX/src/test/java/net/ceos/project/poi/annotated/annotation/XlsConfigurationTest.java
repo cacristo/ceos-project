@@ -1,11 +1,8 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import java.lang.annotation.Annotation;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
@@ -36,8 +33,7 @@ public class XlsConfigurationTest extends TestCase {
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
-			Annotation annotation = o.getAnnotation(XlsConfiguration.class);
-			XlsConfiguration xlsConfig = (XlsConfiguration) annotation;
+			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLS);
@@ -53,8 +49,7 @@ public class XlsConfigurationTest extends TestCase {
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
-			Annotation annotation = o.getAnnotation(XlsConfiguration.class);
-			XlsConfiguration xlsConfig = (XlsConfiguration) annotation;
+			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsConfig.nameFile(), "DefaultConfigurationSample");
@@ -70,8 +65,7 @@ public class XlsConfigurationTest extends TestCase {
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
-			Annotation annotation = o.getAnnotation(XlsConfiguration.class);
-			XlsConfiguration xlsConfig = (XlsConfiguration) annotation;
+			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
 
 			// add here the annotations attributes
 			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLSX);

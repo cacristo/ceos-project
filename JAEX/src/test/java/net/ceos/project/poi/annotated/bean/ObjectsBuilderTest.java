@@ -4,11 +4,13 @@ import java.util.Date;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
+import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
+import net.ceos.project.poi.annotated.definition.TitleOrientationType;
 
 public class ObjectsBuilderTest {
 
@@ -211,6 +213,222 @@ public class ObjectsBuilderTest {
 		 */
 		public void setAnotherStringAttribute(String anotherStringAttribute) {
 			this.anotherStringAttribute = anotherStringAttribute;
+		}
+	}
+
+	/**
+	 * Configuration : <br>
+	 * Sheet title : Simple object sample <br>
+	 * File name : SimpleSample <br>
+	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
+	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
+	 * {@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE <br>
+	 * 
+	 * @author CristoAbreu
+	 */
+	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, startRow = 4, startCell = 1)
+	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
+	public class ProfessorX {
+
+		@XlsFreeElement(title = "String free element 1", row = 1, cell = 1)
+		private String stringFreeAttribute1;
+
+		@XlsFreeElement(title = "String free element 2", row = 1, cell = 2, titleOrientation = TitleOrientationType.BOTTOM, showTitle = true)
+		private String stringFreeAttribute2;
+
+		@XlsFreeElement(title = "String free element 3", row = 1, cell = 3, comment = "Free element with sample comment")
+		private String stringFreeAttribute3;
+
+		@XlsFreeElement(title = "String free element 4", row = 1, cell = 4, titleOrientation = TitleOrientationType.RIGHT, showTitle = true)
+		private String stringFreeAttribute4;
+
+		@XlsFreeElement(title = "Integer free element", row = 2, cell = 3, formatMask = "0.0", decorator="myDecorator")
+		private Integer integerFreeAttribute = 666;
+
+		@XlsFreeElement(title = "Double free element", row = 2, cell = 3, transformMask = "0.00")
+		private double doubleFreeAttribute = 115.78;
+
+		@XlsElement(title = "String value", position = 1)
+		private String stringAttribute;
+
+		@XlsElement(title = "Integer value", position = 2, decorator = "extendedIntDecorator")
+		private Integer integerAttribute = 0;
+
+		@XlsElement(title = "Double value 1", position = 3, formatMask = "0.000")
+		private Double doubleAttribute1 = 111.17;
+
+		@XlsElement(title = "Double value 2", position = 4, transformMask = "0.0")
+		private Double doubleAttribute2 = 97.77;
+
+		@XlsElement(title = "Sum double 1 & double 2", position = 6, isFormula = true, formula = "SUM(E3,F3)")
+		private Double sum;
+
+		public ProfessorX() {
+		}
+
+		/**
+		 * @return the stringFreeAttribute1
+		 */
+		public String getStringFreeAttribute1() {
+			return stringFreeAttribute1;
+		}
+
+		/**
+		 * @param stringFreeAttribute1
+		 *            the stringFreeAttribute1 to set
+		 */
+		public void setStringFreeAttribute1(String stringFreeAttribute1) {
+			this.stringFreeAttribute1 = stringFreeAttribute1;
+		}
+
+		/**
+		 * @return the stringFreeAttribute2
+		 */
+		public String getStringFreeAttribute2() {
+			return stringFreeAttribute2;
+		}
+
+		/**
+		 * @param stringFreeAttribute2
+		 *            the stringFreeAttribute2 to set
+		 */
+		public void setStringFreeAttribute2(String stringFreeAttribute2) {
+			this.stringFreeAttribute2 = stringFreeAttribute2;
+		}
+
+		/**
+		 * @return the stringFreeAttribute3
+		 */
+		public String getStringFreeAttribute3() {
+			return stringFreeAttribute3;
+		}
+
+		/**
+		 * @param stringFreeAttribute3
+		 *            the stringFreeAttribute3 to set
+		 */
+		public void setStringFreeAttribute3(String stringFreeAttribute3) {
+			this.stringFreeAttribute3 = stringFreeAttribute3;
+		}
+
+		/**
+		 * @return the stringFreeAttribute4
+		 */
+		public String getStringFreeAttribute4() {
+			return stringFreeAttribute4;
+		}
+
+		/**
+		 * @param stringFreeAttribute4
+		 *            the stringFreeAttribute4 to set
+		 */
+		public void setStringFreeAttribute4(String stringFreeAttribute4) {
+			this.stringFreeAttribute4 = stringFreeAttribute4;
+		}
+
+		/**
+		 * @return the integerFreeAttribute
+		 */
+		public Integer getIntegerFreeAttribute() {
+			return integerFreeAttribute;
+		}
+
+		/**
+		 * @param integerFreeAttribute
+		 *            the integerFreeAttribute to set
+		 */
+		public void setIntegerFreeAttribute(Integer integerFreeAttribute) {
+			this.integerFreeAttribute = integerFreeAttribute;
+		}
+
+		/**
+		 * @return the doubleFreeAttribute
+		 */
+		public double getDoubleFreeAttribute() {
+			return doubleFreeAttribute;
+		}
+
+		/**
+		 * @param doubleFreeAttribute
+		 *            the doubleFreeAttribute to set
+		 */
+		public void setDoubleFreeAttribute(double doubleFreeAttribute) {
+			this.doubleFreeAttribute = doubleFreeAttribute;
+		}
+
+		/**
+		 * @return the stringAttribute
+		 */
+		public String getStringAttribute() {
+			return stringAttribute;
+		}
+
+		/**
+		 * @param stringAttribute
+		 *            the stringAttribute to set
+		 */
+		public void setStringAttribute(String stringAttribute) {
+			this.stringAttribute = stringAttribute;
+		}
+
+		/**
+		 * @return the integerAttribute
+		 */
+		public Integer getIntegerAttribute() {
+			return integerAttribute;
+		}
+
+		/**
+		 * @param integerAttribute
+		 *            the integerAttribute to set
+		 */
+		public void setIntegerAttribute(Integer integerAttribute) {
+			this.integerAttribute = integerAttribute;
+		}
+
+		/**
+		 * @return the doubleAttribute1
+		 */
+		public Double getDoubleAttribute1() {
+			return doubleAttribute1;
+		}
+
+		/**
+		 * @param doubleAttribute1
+		 *            the doubleAttribute1 to set
+		 */
+		public void setDoubleAttribute1(Double doubleAttribute1) {
+			this.doubleAttribute1 = doubleAttribute1;
+		}
+
+		/**
+		 * @return the doubleAttribute2
+		 */
+		public Double getDoubleAttribute2() {
+			return doubleAttribute2;
+		}
+
+		/**
+		 * @param doubleAttribute2
+		 *            the doubleAttribute2 to set
+		 */
+		public void setDoubleAttribute2(Double doubleAttribute2) {
+			this.doubleAttribute2 = doubleAttribute2;
+		}
+
+		/**
+		 * @return the sum
+		 */
+		public Double getSum() {
+			return sum;
+		}
+
+		/**
+		 * @param sum
+		 *            the sum to set
+		 */
+		public void setSum(Double sum) {
+			this.sum = sum;
 		}
 	}
 
