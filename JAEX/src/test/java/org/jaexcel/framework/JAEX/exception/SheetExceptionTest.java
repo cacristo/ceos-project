@@ -10,7 +10,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class JAEXSheetExceptionTest extends TestCase {
+public class SheetExceptionTest extends TestCase {
+	private Class<?> c = null;
+	private String message = "";
+
+	private void reset() {
+		this.c = null;
+		this.message = "";
+	}
 
 	/**
 	 * Create the test case
@@ -18,7 +25,7 @@ public class JAEXSheetExceptionTest extends TestCase {
 	 * @param testName
 	 *            name of the test case
 	 */
-	public JAEXSheetExceptionTest(String testName) {
+	public SheetExceptionTest(String testName) {
 		super(testName);
 	}
 
@@ -26,7 +33,13 @@ public class JAEXSheetExceptionTest extends TestCase {
 	 * @return the suite of tests being tested
 	 */
 	public static Test suite() {
-		return new TestSuite(JAEXSheetExceptionTest.class);
+		return new TestSuite(SheetExceptionTest.class);
+	}
+
+	@Override
+	protected void setUp() throws Exception {
+		reset();
+		super.setUp();
 	}
 
 	/**
@@ -35,16 +48,15 @@ public class JAEXSheetExceptionTest extends TestCase {
 	public void testEmptyTitleSheetMarshalSheetException() {
 		XlsSheetEmptyTitle emptyTitle = new XlsSheetEmptyTitle();
 
-		IEngine en = new Engine();
-
 		try {
+			IEngine en = new Engine();
 			en.marshalAndSave(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(SheetException.class)
-					&& e.getMessage().equals(ExceptionMessage.SheetException_CreationSheet.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(SheetException.class, this.c);
+		assertEquals(ExceptionMessage.SheetException_CreationSheet.getMessage(), this.message);
 	}
 
 	/**
@@ -53,15 +65,14 @@ public class JAEXSheetExceptionTest extends TestCase {
 	public void testEmptyTitleSheetUnmarshalSheetException() throws Exception {
 		XlsSheetEmptyTitle emptyTitle = new XlsSheetEmptyTitle();
 
-		IEngine en = new Engine();
-
 		try {
+			IEngine en = new Engine();
 			en.unmarshalFromPath(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(SheetException.class)
-					&& e.getMessage().equals(ExceptionMessage.SheetException_CreationSheet.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(SheetException.class, this.c);
+		assertEquals(ExceptionMessage.SheetException_CreationSheet.getMessage(), this.message);
 	}
 }

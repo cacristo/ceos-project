@@ -17,7 +17,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class JAEXConfigurationExceptionTest extends TestCase {
+public class ConfigurationExceptionTest extends TestCase {
+	private Class<?> c = null;
+	private String message = "";
+
+	private void reset() {
+		this.c = null;
+		this.message = "";
+	}
 
 	/**
 	 * Create the test case
@@ -25,7 +32,7 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	 * @param testName
 	 *            name of the test case
 	 */
-	public JAEXConfigurationExceptionTest(String testName) {
+	public ConfigurationExceptionTest(String testName) {
 		super(testName);
 	}
 
@@ -33,9 +40,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	 * @return the suite of tests being tested
 	 */
 	public static Test suite() {
-		return new TestSuite(JAEXConfigurationExceptionTest.class);
+		return new TestSuite(ConfigurationExceptionTest.class);
 	}
 
+	@Override
+	protected void setUp() throws Exception {
+		reset();
+		super.setUp();
+	}
+	
 	/**
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
@@ -43,15 +56,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testMarshalMissingXlsConfigurationException() throws Exception {
 		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class) && e.getMessage()
-					.equals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -61,15 +74,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testUnmarshalMissingXlsConfigurationException() throws Exception {
 		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class) && e.getMessage()
-					.equals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -79,15 +92,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testMarshalMissingXlsSheetException() throws Exception {
 		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -97,15 +110,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testUnmarshalMissingXlsSheetException() throws Exception {
 		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -114,15 +127,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testHorizontalConflictConfigurationException() {
 		XlsNestedHeaderHorizIncompatible incompatibleConfig = new XlsNestedHeaderHorizIncompatible();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_Conflict.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_Conflict.getMessage(), this.message);
 	}
 
 	/**
@@ -131,15 +144,15 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 	public void testVerticalConflictConfigurationException() {
 		XlsNestedHeaderVertiIncompatible incompatibleConfig = new XlsNestedHeaderVertiIncompatible();
 
-		IEngine en = new Engine();
 		try {
+			IEngine en = new Engine();
 			en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_Conflict.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_Conflict.getMessage(), this.message);
 	}
 
 	/**
@@ -150,7 +163,6 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
-
 		ConfigCriteria cc = new ConfigCriteria();
 
 		CellDecorator decorator = null;
@@ -159,11 +171,11 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		try {
 			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -174,7 +186,6 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
-
 		ConfigCriteria cc = new ConfigCriteria();
 
 		CellDecorator decorator = null;
@@ -183,11 +194,11 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		try {
 			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -198,7 +209,6 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
-
 		ConfigCriteria cc = new ConfigCriteria();
 
 		CellDecorator decorator = null;
@@ -207,11 +217,11 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		try {
 			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), this.message);
 	}
 
 	/**
@@ -222,7 +232,6 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
-
 		ConfigCriteria cc = new ConfigCriteria();
 
 		CellDecorator decorator = null;
@@ -231,10 +240,10 @@ public class JAEXConfigurationExceptionTest extends TestCase {
 		try {
 			en.marshalAndSave(cc, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 		} catch (Exception e) {
-			if (!(e.getClass().equals(ConfigurationException.class)
-					&& e.getMessage().equals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage()))) {
-				assertEquals(true, false);
-			}
+			this.c = e.getClass();
+			this.message = e.getMessage();
 		}
+		assertEquals(ConfigurationException.class, this.c);
+		assertEquals(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), this.message);
 	}
 }
