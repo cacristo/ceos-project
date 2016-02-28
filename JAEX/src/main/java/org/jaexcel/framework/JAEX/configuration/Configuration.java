@@ -1,8 +1,8 @@
 package org.jaexcel.framework.JAEX.configuration;
 
-import org.jaexcel.framework.JAEX.definition.CascadeType;
-import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
-import org.jaexcel.framework.JAEX.definition.PropagationType;
+import net.ceos.project.poi.annotated.definition.CascadeType;
+import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * This will define all the configuration to be used internally by the
