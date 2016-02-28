@@ -1,22 +1,14 @@
 package org.jaexcel.framework.JAEX.engine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.jaexcel.framework.JAEX.TestUtils;
 import org.jaexcel.framework.JAEX.bean.BasicObject;
 import org.jaexcel.framework.JAEX.bean.BasicObjectBuilder;
-import org.jaexcel.framework.JAEX.bean.MultiTypeObject;
 import org.jaexcel.framework.JAEX.bean.PropagationHorizontalObject;
 import org.jaexcel.framework.JAEX.bean.PropagationHorizontalObjectBuilder;
 import org.jaexcel.framework.JAEX.bean.PropagationVerticalObject;
 import org.jaexcel.framework.JAEX.bean.PropagationVerticalObjectBuilder;
-import org.jaexcel.framework.JAEX.bean.SimpleObject;
-import org.jaexcel.framework.JAEX.definition.ExceptionMessage;
-import org.jaexcel.framework.JAEX.definition.ExtensionFileType;
-import org.jaexcel.framework.JAEX.exception.ElementException;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -146,98 +138,5 @@ public class EngineTest extends TestCase {
 	public void testCascadeTypeFull() {
 		// FIXME apply test case
 		assertEquals(true, false);
-	}
-
-	/**
-	 * Test an empty object
-	 */
-	public void testObjectEmpty() {
-		// FIXME apply test case
-		assertEquals(true, false);
-	}
-
-	/**
-	 * Test an null object
-	 * 
-	 * @throws Exception
-	 */
-	public void testObjectNull() throws Exception {
-
-		MultiTypeObject objNull = new MultiTypeObject();
-
-		IEngine en = new Engine();
-
-		byte[] generatedBytes = en.marshalToByte(objNull);
-
-		MultiTypeObject charger = null;
-		try {
-			en.unmarshalFromByte(charger, generatedBytes);
-
-		} catch (Exception e) {
-			if (e.getClass().equals(ElementException.class)
-					&& e.getMessage().equals(ExceptionMessage.ElementException_NullObject)) {
-				assertEquals(true, true);
-			}
-		}
-	}
-
-	/**
-	 * Test an null list
-	 */
-	public void testListNull() throws Exception {
-
-		List<Object> collectionNull = null;
-
-		IEngine en = new Engine();
-		try {
-			en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
-		} catch (Exception e) {
-			if (e.getClass().equals(ElementException.class)
-					&& e.getMessage().equals(ExceptionMessage.ElementException_NullObject)) {
-				assertEquals(true, true);
-			}
-		}
-	}
-
-	/**
-	 * Test an empty list
-	 * 
-	 * @throws Exception
-	 */
-	public void testListEmpty() throws Exception {
-
-		List<Object> collectionEmpty = new ArrayList<Object>();
-
-		IEngine en = new Engine();
-		try {
-			en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLSX);
-		} catch (Exception e) {
-			if (e.getClass().equals(ElementException.class)
-					&& e.getMessage().equals(ExceptionMessage.ElementException_EmptyObject)) {
-				assertEquals(true, true);
-			}
-		}
-	}
-
-	/**
-	 * Test an empty list
-	 * 
-	 * @throws Exception
-	 */
-	public void testListWithObjectEmpty() throws Exception {
-
-		List<Object> collection = new ArrayList<Object>();
-		SimpleObject so = null;
-		collection.add(so);
-		
-		IEngine en = new Engine();
-		try {
-			en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
-		} catch (Exception e) {
-			if (e.getClass().equals(ElementException.class)
-					&& e.getMessage().equals(ExceptionMessage.ElementException_EmptyObject)) {
-				assertEquals(true, true);
-			}
-		}
 	}
 }
