@@ -1,26 +1,12 @@
 package net.ceos.project.poi.annotated.core;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
-import net.ceos.project.poi.annotated.annotation.XlsElement;
-import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
-import net.ceos.project.poi.annotated.annotation.XlsSheet;
-import net.ceos.project.poi.annotated.bean.SimpleObject;
-import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.ConfigCriteria;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
-import net.ceos.project.poi.annotated.definition.CascadeType;
-import net.ceos.project.poi.annotated.definition.ExtensionFileType;
-import net.ceos.project.poi.annotated.definition.PropagationType;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -28,33 +14,26 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.testng.annotations.Test;
+
+import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
+import net.ceos.project.poi.annotated.annotation.XlsElement;
+import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
+import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.bean.SimpleObject;
+import net.ceos.project.poi.annotated.definition.CascadeType;
+import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Unit test for simple App.
  */
-public class SimpleExcelTest extends TestCase {
-	
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public SimpleExcelTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(SimpleExcelTest.class);
-	}
+public class SimpleExcelTest {
 
 	/**
 	 * Test the annotation {@link XlsConfiguration} XlsConfiguration
 	 */
+	@Test
 	public void testReadAnnotationXlsConfiguration() {
 		// Read the object
 		Class<SimpleObject> obj = SimpleObject.class;
@@ -71,6 +50,7 @@ public class SimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsSheet} XlsSheet
 	 */
+	@Test
 	public void testReadAnnotationXlsSheet() {
 		Class<SimpleObject> oC = SimpleObject.class;
 
@@ -87,6 +67,7 @@ public class SimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsElement} XlsElement
 	 */
+	@Test
 	public void testReadAnnotationXlsElement() {
 		Class<SimpleObject> oC = SimpleObject.class;
 
@@ -110,6 +91,7 @@ public class SimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
+	@Test
 	public void testReadAnnotationXlsMasterHeader() {
 		Class<SimpleObject> oC = SimpleObject.class;
 
@@ -131,6 +113,7 @@ public class SimpleExcelTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testSimpleExcel() throws Exception {
 		SimpleObject fastTest = new SimpleObject();
 		fastTest.setDateAttribute(new Date());
@@ -154,7 +137,7 @@ public class SimpleExcelTest extends TestCase {
 
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.overrideHeaderCellDecorator(configuration);
-		
+
 		en.marshalAndSave(configCriteria, fastTest, TestUtils.WORKING_DIR_GENERATED_II);
 
 		// start validation
@@ -206,7 +189,8 @@ public class SimpleExcelTest extends TestCase {
 
 				if (xlsAnnotation.position() == 1) {
 					// FIXME
-					//TestUtils.validationString(fastTest.getDateAttribute(), xlsAnnotation, headerCell, contentCell);
+					// TestUtils.validationString(fastTest.getDateAttribute(),
+					// xlsAnnotation, headerCell, contentCell);
 				} else if (xlsAnnotation.position() == 2) {
 					TestUtils.validationString(fastTest.getStringAttribute(), xlsAnnotation, headerCell, contentCell);
 				} else if (xlsAnnotation.position() == 3) {

@@ -1,10 +1,12 @@
 package net.ceos.project.poi.annotated.exception;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.Date;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesMultipleMethods;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNoSuchMethod;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNumeric;
@@ -13,9 +15,8 @@ import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
-import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
-public class CustomizedRulesExceptionTest extends TestCase {
+public class CustomizedRulesExceptionTest {
 	private boolean exceptionDetected = false;
 
 	private void reset() {
@@ -23,27 +24,9 @@ public class CustomizedRulesExceptionTest extends TestCase {
 
 	}
 
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public CustomizedRulesExceptionTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(CustomizedRulesExceptionTest.class);
-	}
-
-	@Override
+	@BeforeMethod
 	protected void setUp() throws Exception {
 		reset();
-		super.setUp();
 	}
 
 	/**
@@ -51,6 +34,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleAtNumeric() throws Exception {
 		XlsElementCustomizedRulesNumeric custom = new XlsElementCustomizedRulesNumeric();
 		custom.setStringAttribute("Touch down to this team!");
@@ -71,6 +55,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleAtString() throws Exception {
 		XlsElementCustomizedRulesString custom = new XlsElementCustomizedRulesString();
 		custom.setStringAttribute("Touch down to this team!");
@@ -90,6 +75,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleAtMultipleMethods1() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -111,6 +97,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleAtMultipleMethods2() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -132,6 +119,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleAtMultipleMethods3() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -153,6 +141,7 @@ public class CustomizedRulesExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testCustomizedRuleNoSuchMethod() throws Exception {
 		XlsElementCustomizedRulesNoSuchMethod custom = new XlsElementCustomizedRulesNoSuchMethod();
 		custom.setDateAttribute(new Date());

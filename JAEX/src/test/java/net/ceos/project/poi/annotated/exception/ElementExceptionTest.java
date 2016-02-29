@@ -3,9 +3,8 @@ package net.ceos.project.poi.annotated.exception;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
@@ -18,98 +17,46 @@ import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidPositionRow;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
-import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
-import net.ceos.project.poi.annotated.exception.ElementException;
 
-public class ElementExceptionTest extends TestCase {
-	private Class<?> c = null;
-	private String message = "";
-
-	private void reset() {
-		this.c = null;
-		this.message = "";
-	}
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public ElementExceptionTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(ElementExceptionTest.class);
-	}
-
-	@Override
-	protected void setUp() throws Exception {
-		reset();
-		super.setUp();
-	}
+public class ElementExceptionTest {
 
 	/**
 	 * Test an null object
 	 * 
 	 * @throws Exception
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
 	public void testMarsharObjectNull() throws Exception {
 		MultiTypeObject objNull = null;
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToByte(objNull);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_NullObject.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToByte(objNull);
 	}
 
 	/**
 	 * Test an empty object
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
 	public void testUnmarshalObjectNull() throws Exception {
 		MultiTypeObject objEmpty = new MultiTypeObject();
 
 		IEngine en = new Engine();
-
 		byte[] generatedBytes = en.marshalToByte(objEmpty);
 
 		MultiTypeObject charger = null;
-		try {
-			en.unmarshalFromByte(charger, generatedBytes);
-
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_NullObject.getMessage(), this.message);
+		en.unmarshalFromByte(charger, generatedBytes);
 	}
 
 	/**
 	 * Test an null list
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
 	public void testMarshalListNull() throws Exception {
 		List<Object> collectionNull = null;
 
-		try {
-			IEngine en = new Engine();
-			en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_NullObject.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
 	}
 
 	/**
@@ -117,18 +64,12 @@ public class ElementExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
 	public void testMarshalListEmpty() throws Exception {
 		List<Object> collectionEmpty = new ArrayList<Object>();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLSX);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_EmptyObject.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLSX);
 	}
 
 	/**
@@ -136,121 +77,79 @@ public class ElementExceptionTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
 	public void testMarshalListWithObjectEmpty() throws Exception {
 		List<Object> collection = new ArrayList<Object>();
 		SimpleObject so = null;
 		collection.add(so);
 
-		try {
-			IEngine en = new Engine();
-			en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_EmptyObject.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
 	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying use a complex object
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Complex objects are not allowed for this type! Review your configuration.")
 	public void testMarshalXlsFreeElementInvalidObject() throws Exception {
 		XlsFreeElementInvalidObject complexObject = new XlsFreeElementInvalidObject();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(complexObject);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_ComplexObject.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToSheet(complexObject);
 	}
 
 	/**
 	 * Test a {@link XlsElement} trying write at one cell already used
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
 	public void testMarshalXlsElementOverwriteCell() throws Exception {
 		XlsElementOverwriteCell overwrite = new XlsElementOverwriteCell();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToWorkbook(overwrite);
-		} catch (Exception e) {
-			this.c = e.getClass();
-			this.message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_OverwriteCell.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToWorkbook(overwrite);
 	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying write at one cell already used
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
 	public void testMarshalXlsFreeElementOverwriteCell() throws Exception {
 		XlsFreeElementOverwriteCell overwrite = new XlsFreeElementOverwriteCell();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(overwrite);
-		} catch (Exception e) {
-			c = e.getClass();
-			message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_OverwriteCell.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToSheet(overwrite);
 	}
 
 	/**
 	 * Test a {@link XlsElement} trying write at invalid position
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
 	public void testMarshalXlsElementInvalidPosition() throws Exception {
 		XlsElementInvalidPosition invalidPosition = new XlsElementInvalidPosition();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToFileOutputStream(invalidPosition);
-		} catch (Exception e) {
-			c = e.getClass();
-			message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_InvalidPosition.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToFileOutputStream(invalidPosition);
 	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying write at invalid cell position
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
 	public void testMarshalXlsFreeElementInvalidPositionCell() throws Exception {
 		XlsFreeElementInvalidPositionCell overwrite = new XlsFreeElementInvalidPositionCell();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(overwrite);
-		} catch (Exception e) {
-			c = e.getClass();
-			message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_InvalidPosition.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToSheet(overwrite);
 	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying write at invalid row position
 	 */
+	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
 	public void testMarshalXlsFreeElementInvalidPositionRow() throws Exception {
 		XlsFreeElementInvalidPositionRow overwrite = new XlsFreeElementInvalidPositionRow();
 
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(overwrite);
-		} catch (Exception e) {
-			c = e.getClass();
-			message = e.getMessage();
-		}
-		assertEquals(ElementException.class, this.c);
-		assertEquals(ExceptionMessage.ElementException_InvalidPosition.getMessage(), this.message);
+		IEngine en = new Engine();
+		en.marshalToSheet(overwrite);
 	}
 }

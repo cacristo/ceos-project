@@ -1,13 +1,13 @@
 package net.ceos.project.poi.annotated.bean;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import junit.framework.TestCase;
-
-public class ObjectFormulaBuilder extends TestCase {
+public class ObjectFormulaBuilder {
 
 	/**
 	 * Create a ObjectFormula for tests.
@@ -69,7 +69,7 @@ public class ObjectFormulaBuilder extends TestCase {
 		assertEquals(base.getValueRegion(), toValidate.getValueRegion());
 		assertEquals(base.getValueCountry(), toValidate.getValueCountry());
 		// FIXME review how get formula result
-		//assertEquals(base.getSomeString(), toValidate.getSomeString());
+		// assertEquals(base.getSomeString(), toValidate.getSomeString());
 		assertEquals("0.0", toValidate.getSomeString());
 		// TODO add new validation below
 	}

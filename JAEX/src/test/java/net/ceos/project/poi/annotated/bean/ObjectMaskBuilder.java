@@ -1,5 +1,7 @@
 package net.ceos.project.poi.annotated.bean;
 
+import static org.testng.Assert.assertEquals;
+
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -11,10 +13,9 @@ import java.util.List;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import junit.framework.TestCase;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 
-public class ObjectMaskBuilder extends TestCase {
+public class ObjectMaskBuilder {
 
 	/**
 	 * Create a SimpleObject for tests.
@@ -102,18 +103,21 @@ public class ObjectMaskBuilder extends TestCase {
 		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
 		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
 		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
-		
+
 		assertEquals(base.getDoubleAttribute1(), toValidate.getDoubleAttribute1());
 		assertEquals(base.getDoubleAttribute2(), toValidate.getDoubleAttribute2());
 		assertEquals(base.getDoubleAttribute3(), toValidate.getDoubleAttribute3());
-		assertEquals(transformValuesToValidate("doubleAttribute4", base.getDoubleAttribute4()) , toValidate.getDoubleAttribute4());
+		assertEquals(transformValuesToValidate("doubleAttribute4", base.getDoubleAttribute4()),
+				toValidate.getDoubleAttribute4());
 		assertEquals(base.getDoubleAttribute5(), toValidate.getDoubleAttribute5());
 		assertEquals(base.getBigDecimalAttribute1(), toValidate.getBigDecimalAttribute1());
 		assertEquals(base.getBigDecimalAttribute2(), toValidate.getBigDecimalAttribute2());
 		assertEquals(base.getBigDecimalAttribute3(), toValidate.getBigDecimalAttribute3());
-		assertEquals(transformValuesToValidate("bigDecimalAttribute4", base.getBigDecimalAttribute4()) , toValidate.getBigDecimalAttribute4());
+		assertEquals(transformValuesToValidate("bigDecimalAttribute4", base.getBigDecimalAttribute4()),
+				toValidate.getBigDecimalAttribute4());
 		assertEquals(base.getBigDecimalAttribute5(), toValidate.getBigDecimalAttribute5());
-		assertEquals(transformValuesToValidate("bigDecimalAttribute6", base.getBigDecimalAttribute6()) , toValidate.getBigDecimalAttribute6());
+		assertEquals(transformValuesToValidate("bigDecimalAttribute6", base.getBigDecimalAttribute6()),
+				toValidate.getBigDecimalAttribute6());
 		assertEquals(base.getFloatAttribute1(), toValidate.getFloatAttribute1());
 		assertEquals(base.getFloatAttribute2(), toValidate.getFloatAttribute2());
 		assertEquals(base.getFloatAttribute3(), toValidate.getFloatAttribute3());
@@ -133,9 +137,9 @@ public class ObjectMaskBuilder extends TestCase {
 	 * @param value
 	 * @return
 	 */
-	private static Double transformValuesToValidate(String fieldName, Double value){
+	private static Double transformValuesToValidate(String fieldName, Double value) {
 		ObjectMask a = new ObjectMask();
-		
+
 		try {
 			Field f = a.getClass().getDeclaredField(fieldName);
 
@@ -144,17 +148,17 @@ public class ObjectMaskBuilder extends TestCase {
 
 				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 					DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
-					String formattedValue = df.format((Double) value);	
+					String formattedValue = df.format((Double) value);
 					value = Double.valueOf(formattedValue.replace(",", "."));
 				}
 			}
-			
+
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
 		}
 		return value;
 	}
-	
+
 	/**
 	 * Transform BigDecimal values to validate.
 	 * 
@@ -162,7 +166,7 @@ public class ObjectMaskBuilder extends TestCase {
 	 * @param value
 	 * @return
 	 */
-	private static BigDecimal transformValuesToValidate(String fieldName, BigDecimal value){
+	private static BigDecimal transformValuesToValidate(String fieldName, BigDecimal value) {
 		ObjectMask a = new ObjectMask();
 		try {
 			Field f = a.getClass().getDeclaredField(fieldName);
@@ -172,11 +176,11 @@ public class ObjectMaskBuilder extends TestCase {
 
 				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 					DecimalFormat df = new DecimalFormat(xlsAnnotation.transformMask());
-					String formattedValue = df.format((BigDecimal) value);	
+					String formattedValue = df.format((BigDecimal) value);
 					value = BigDecimal.valueOf(Double.valueOf(formattedValue.replace(",", ".")));
 				}
 			}
-			
+
 		} catch (NoSuchFieldException | SecurityException e) {
 			e.printStackTrace();
 		}

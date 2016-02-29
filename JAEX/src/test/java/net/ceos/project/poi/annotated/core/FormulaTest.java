@@ -1,35 +1,19 @@
 package net.ceos.project.poi.annotated.core;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.ObjectFormula;
 import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 
-public class FormulaTest extends TestCase {
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public FormulaTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(FormulaTest.class);
-	}
+public class FormulaTest {
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshalObjectFormula() throws Exception {
 		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
 
@@ -41,6 +25,7 @@ public class FormulaTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testUnmarshalObjectFormula() throws Exception {
 		ObjectFormula of = new ObjectFormula();
 

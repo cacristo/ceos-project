@@ -1,37 +1,22 @@
 package net.ceos.project.poi.annotated.annotation;
 
+import static org.testng.Assert.assertEquals;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
-public class XlsElementTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public XlsElementTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(XlsElementTest.class);
-	}
-
+public class XlsElementTest {
+	
 	/**
 	 * Test default configuration.
 	 */
+	@Test
 	public void testDefaultConfiguration() {
 		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
 
@@ -57,6 +42,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test title attribute.
 	 */
+	@Test
 	public void testTitleAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -93,6 +79,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test comment attribute.
 	 */
+	@Test
 	public void testCommentAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -113,6 +100,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test decorator attribute.
 	 */
+	@Test
 	public void testDecoratorAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -133,6 +121,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test formatMask attribute.
 	 */
+	@Test
 	public void testFormatMaskAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -153,6 +142,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test transformMask attribute.
 	 */
+	@Test
 	public void testTransformMaskAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -173,6 +163,7 @@ public class XlsElementTest extends TestCase {
 	/**
 	 * Test isFormula & formula attribute.
 	 */
+	@Test
 	public void testFormulaAttribute() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 

@@ -3,36 +3,17 @@ package net.ceos.project.poi.annotated.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.ObjectUnit;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
-public class ObjectUnitTest extends TestCase {
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public ObjectUnitTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(ObjectUnitTest.class);
-	}
+public class ObjectUnitTest {
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshaObjectFormula() throws Exception {
 		ObjectUnit ou = new ObjectUnit("PenDrive 5GB", 4.87, 6.99, 21, 185);
 
@@ -40,12 +21,12 @@ public class ObjectUnitTest extends TestCase {
 
 		en.marshalAndSave(ou, TestUtils.WORKING_DIR_GENERATED_II);
 
-		assertEquals(true, true);
 	}
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshaListObjectFormula() throws Exception {
 		List<ObjectUnit> collection = new ArrayList<ObjectUnit>();
 		collection.add(new ObjectUnit("PenDrive 5GB", 4.87, 6.99, 21, 185));
@@ -58,6 +39,5 @@ public class ObjectUnitTest extends TestCase {
 		IEngine en = new Engine();
 		en.marshalAsCollection(collection, "CollectionObjectUnit", ExtensionFileType.XLS);
 
-		assertEquals(true, true);
 	}
 }

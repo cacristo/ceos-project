@@ -1,38 +1,23 @@
 package net.ceos.project.poi.annotated.annotation;
 
+import static org.testng.Assert.assertEquals;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.TitleOrientationType;
 
-public class XlsFreeElementTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public XlsFreeElementTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(XlsFreeElementTest.class);
-	}
+public class XlsFreeElementTest {
 
 	/**
 	 * Test default configuration.
 	 */
+	@Test
 	public void testDefaultConfiguration() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 
@@ -63,6 +48,7 @@ public class XlsFreeElementTest extends TestCase {
 	/**
 	 * Test title attribute.
 	 */
+	@Test
 	public void testTitleAttribute() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 
@@ -85,8 +71,8 @@ public class XlsFreeElementTest extends TestCase {
 					assertEquals(xlsFreeElement.title(), "String free element 2");
 					assertEquals(xlsFreeElement.row(), 1);
 					assertEquals(xlsFreeElement.cell(), 2);
-					
-				}else if (f.getName().equals("stringFreeAttribute3")) {
+
+				} else if (f.getName().equals("stringFreeAttribute3")) {
 					assertEquals(xlsFreeElement.showTitle(), false);
 					assertEquals(xlsFreeElement.title(), "String free element 3");
 					assertEquals(xlsFreeElement.row(), 1);
@@ -98,7 +84,7 @@ public class XlsFreeElementTest extends TestCase {
 					assertEquals(xlsFreeElement.title(), "String free element 4");
 					assertEquals(xlsFreeElement.row(), 1);
 					assertEquals(xlsFreeElement.cell(), 4);
-				} 
+				}
 			}
 		}
 	}
@@ -106,6 +92,7 @@ public class XlsFreeElementTest extends TestCase {
 	/**
 	 * Test comment attribute.
 	 */
+	@Test
 	public void testCommentAttribute() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 
@@ -116,8 +103,7 @@ public class XlsFreeElementTest extends TestCase {
 
 				XlsFreeElement xlsFreeElement = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
-				if (f.getName().equals("stringFreeAttribute3")
-						&& StringUtils.isNotBlank(xlsFreeElement.comment())) {
+				if (f.getName().equals("stringFreeAttribute3") && StringUtils.isNotBlank(xlsFreeElement.comment())) {
 					assertEquals(xlsFreeElement.comment(), "Free element with sample comment");
 				}
 			}
@@ -127,6 +113,7 @@ public class XlsFreeElementTest extends TestCase {
 	/**
 	 * Test decorator attribute.
 	 */
+	@Test
 	public void testDecoratorAttribute() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 
@@ -137,8 +124,7 @@ public class XlsFreeElementTest extends TestCase {
 
 				XlsFreeElement xlsFreeElement = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
-				if (f.getName().equals("integerFreeAttribute")
-						&& StringUtils.isNotBlank(xlsFreeElement.decorator())) {
+				if (f.getName().equals("integerFreeAttribute") && StringUtils.isNotBlank(xlsFreeElement.decorator())) {
 					assertEquals(xlsFreeElement.decorator(), "myDecorator");
 				}
 			}
@@ -148,6 +134,7 @@ public class XlsFreeElementTest extends TestCase {
 	/**
 	 * Test formatMask attribute.
 	 */
+	@Test
 	public void testFormatMaskAttribute() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 
@@ -158,8 +145,7 @@ public class XlsFreeElementTest extends TestCase {
 
 				XlsFreeElement xlsFreeElement = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
-				if (f.getName().equals("integerFreeAttribute")
-						&& StringUtils.isNotBlank(xlsFreeElement.formatMask())) {
+				if (f.getName().equals("integerFreeAttribute") && StringUtils.isNotBlank(xlsFreeElement.formatMask())) {
 					assertEquals(xlsFreeElement.formatMask(), "0.0");
 				}
 			}
@@ -169,6 +155,7 @@ public class XlsFreeElementTest extends TestCase {
 	/**
 	 * Test transformMask attribute.
 	 */
+	@Test
 	public void testTransformMaskAttribute() {
 		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
 

@@ -1,38 +1,18 @@
 package net.ceos.project.poi.annotated.core;
 
 import org.apache.poi.ss.usermodel.Workbook;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
 
-public class MarshalUnmarshalTest extends TestCase {
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public MarshalUnmarshalTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(MarshalUnmarshalTest.class);
-	}
+public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalAndSave' to generate the Excel from the object
 	 * and save it at the path file indicated.
 	 */
+	@Test
 	public void testMarshalPath() throws Exception {
 
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
@@ -46,6 +26,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	 * Test the method 'unmarshalFromPath' reading the Excel from a specific
 	 * path file indicated and bring the data to the object.
 	 */
+	@Test
 	public void testUnmarshalPath() throws Exception {
 
 		MultiTypeObject charger = new MultiTypeObject();
@@ -62,6 +43,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	 * After that, test the method 'unmarshalFromSheet' reading the Excel from
 	 * the Sheet passed as parameter and bring the data to the object.
 	 */
+	@Test
 	public void testMarshalSheet() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
@@ -76,6 +58,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	 * After that, test the method 'unmarshalFromWorkbook' reading the Excel
 	 * from the Workbook passed as parameter and bring the data to the object.
 	 */
+	@Test
 	public void testMarshalUnmarshalWorkbook() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
@@ -94,6 +77,7 @@ public class MarshalUnmarshalTest extends TestCase {
 	 * After that, test the method 'unmarshalFromByte' reading the Excel from
 	 * the byte[] passed as parameter and bring the data to the object.
 	 */
+	@Test
 	public void testMarshalUnmarshalByte() throws Exception {
 
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();

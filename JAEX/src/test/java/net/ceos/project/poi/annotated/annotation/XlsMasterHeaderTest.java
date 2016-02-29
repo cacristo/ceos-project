@@ -1,35 +1,21 @@
 package net.ceos.project.poi.annotated.annotation;
 
+import static org.testng.Assert.assertEquals;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
-public class XlsMasterHeaderTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public XlsMasterHeaderTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(XlsMasterHeaderTest.class);
-	}
+public class XlsMasterHeaderTest {
 
 	/**
 	 * Test default configuration.
 	 */
+	@Test
 	public void testDefaultConfiguration() {
 		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
 
@@ -52,6 +38,7 @@ public class XlsMasterHeaderTest extends TestCase {
 	/**
 	 * Test cell configuration.
 	 */
+	@Test
 	public void testCellConfiguration() {
 		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
 
@@ -72,6 +59,7 @@ public class XlsMasterHeaderTest extends TestCase {
 	/**
 	 * Test row configuration.
 	 */
+	@Test
 	public void testRowConfiguration() {
 		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
 

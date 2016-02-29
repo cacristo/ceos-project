@@ -1,33 +1,19 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-public class XlsSheetTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public XlsSheetTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(XlsSheetTest.class);
-	}
+public class XlsSheetTest {
 
 	/**
 	 * Test default configuration.
 	 */
+	@Test
 	public void testDefaultConfigurationAttibutes() {
 		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
 
@@ -47,6 +33,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test default configuration.
 	 */
+	@Test
 	public void testTitleAttibute() {
 		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
 
@@ -63,6 +50,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test propagation attribute with type PROPAGATION_VERTICAL.
 	 */
+	@Test
 	public void testPropagationVerticalAttibute() {
 		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
 
@@ -79,6 +67,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test propagation attribute with type PROPAGATION_HORIZONTAL.
 	 */
+	@Test
 	public void testPropagationHorizontalAttibute() {
 		Class<ObjectsBuilderTest.Thor> oC = ObjectsBuilderTest.Thor.class;
 
@@ -95,6 +84,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test cascade level attribute with type CASCADE_BASE.
 	 */
+	@Test
 	public void testCascadeLevelBaseAttibute() {
 		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
 
@@ -111,6 +101,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test cascade level attribute with type CASCADE_LEVEL_ONE.
 	 */
+	@Test
 	public void testCascadeLevelOneAttibute() {
 		Class<ObjectsBuilderTest.Wolverine> oC = ObjectsBuilderTest.Wolverine.class;
 
@@ -127,6 +118,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test cascade level attribute with type CASCADE_LEVEL_TWO.
 	 */
+	@Test
 	public void testCascadeLevelTwoAttibute() {
 		Class<ObjectsBuilderTest.SpiderMan> oC = ObjectsBuilderTest.SpiderMan.class;
 
@@ -143,6 +135,7 @@ public class XlsSheetTest extends TestCase {
 	/**
 	 * Test cascade level attribute with type CASCADE_FULL.
 	 */
+	@Test
 	public void testCascadeLevelFullAttibute() {
 		Class<ObjectsBuilderTest.DoctorX> oC = ObjectsBuilderTest.DoctorX.class;
 

@@ -2,42 +2,20 @@ package net.ceos.project.poi.annotated.core;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
-import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.ConfigCriteria;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
 
 /**
  * Unit test for simple App.
  */
-public class MultiTypeAttributesTest extends TestCase {
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public MultiTypeAttributesTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(MultiTypeAttributesTest.class);
-	}
+public class MultiTypeAttributesTest {
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshalMultiObject() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
@@ -67,12 +45,12 @@ public class MultiTypeAttributesTest extends TestCase {
 
 		en.marshalAndSave(configCriteria, mto, TestUtils.WORKING_DIR_GENERATED_I);
 
-		assertEquals(true, true);
 	}
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testUnmarshalMultiObject() throws Exception {
 		MultiTypeObject mto = new MultiTypeObject();
 
@@ -81,6 +59,6 @@ public class MultiTypeAttributesTest extends TestCase {
 		en.unmarshalFromPath(mto, TestUtils.WORKING_DIR_GENERATED_I + "\\");
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(mto);
-		
+
 	}
 }

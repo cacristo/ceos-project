@@ -1,40 +1,21 @@
 package net.ceos.project.poi.annotated.core;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.FreeElementAdvancedObject;
 import net.ceos.project.poi.annotated.bean.FreeElementAdvancedObjectBuilder;
 import net.ceos.project.poi.annotated.bean.FreeElementObject;
 import net.ceos.project.poi.annotated.bean.FreeElementObjectBuilder;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
 
 /**
  * Unit test for simple App.
  */
-public class FreeElementTest extends TestCase {
-
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public FreeElementTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(FreeElementTest.class);
-	}
+public class FreeElementTest {
 
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshalFreeElementObject() throws Exception {
 		FreeElementObject fe = FreeElementObjectBuilder.buildFreeElementObject();
 
@@ -46,6 +27,7 @@ public class FreeElementTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testUnmarshalFreeElementObject() throws Exception {
 		FreeElementObject fe = new FreeElementObject();
 
@@ -59,6 +41,7 @@ public class FreeElementTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testMarshalFreeElementAdvancedObject() throws Exception {
 		FreeElementAdvancedObject fea = FreeElementAdvancedObjectBuilder.buildFreeElementAdvancedObject();
 
@@ -70,6 +53,7 @@ public class FreeElementTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testUnmarshalFreeElementAdvancedObject() throws Exception {
 		FreeElementAdvancedObject fea = new FreeElementAdvancedObject();
 

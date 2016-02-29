@@ -1,23 +1,19 @@
 package net.ceos.project.poi.annotated.core;
 
+import static org.testng.Assert.assertEquals;
+
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.testng.annotations.Test;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObject;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObjectBuilder;
-import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.ConfigCriteria;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
 
-public class EngineTest extends TestCase {
+public class EngineTest {
 
 	/*
 	 * TODO (1) see the behavior of using only one instance of the JAEX object
@@ -37,25 +33,9 @@ public class EngineTest extends TestCase {
 	 */
 
 	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public EngineTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(EngineTest.class);
-	}
-
-	/**
 	 * Test with default settings
 	 */
+	@Test
 	public void testBasicConfiguration() throws Exception {
 		BasicObject bO = BasicObjectBuilder.buildBasicObject();
 
@@ -73,6 +53,7 @@ public class EngineTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
+	@Test
 	public void testPropagationTypeHorizontal() throws Exception {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
@@ -99,6 +80,7 @@ public class EngineTest extends TestCase {
 	/**
 	 * Test with propagation type is VERTICAL
 	 */
+	@Test
 	public void testPropagationTypeVertical() throws Exception {
 		PropagationVerticalObject pVO = PropagationVerticalObjectBuilder.buildPropagationVerticalObject();
 
@@ -114,6 +96,7 @@ public class EngineTest extends TestCase {
 	/**
 	 * Test with different ROW & CELL
 	 */
+	@Test
 	public void testRowCellSpecified() {
 		// FIXME apply test case
 		assertEquals(true, false);
@@ -122,6 +105,7 @@ public class EngineTest extends TestCase {
 	/**
 	 * Test with cascade type is CASCADE_LEVEL_ONE
 	 */
+	@Test
 	public void testCascadeTypeLevelOne() {
 		// FIXME apply test case
 		assertEquals(true, false);
@@ -130,6 +114,7 @@ public class EngineTest extends TestCase {
 	/**
 	 * Test with cascade type is CASCADE_LEVEL_TWO
 	 */
+	@Test
 	public void testCascadeTypeLevelTwo() {
 		// FIXME apply test case
 		assertEquals(true, false);
@@ -138,6 +123,7 @@ public class EngineTest extends TestCase {
 	/**
 	 * Test with cascade type is CASCADE_FULL
 	 */
+	@Test
 	public void testCascadeTypeFull() {
 		// FIXME apply test case
 		assertEquals(true, false);

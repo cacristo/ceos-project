@@ -4,34 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
-import net.ceos.project.poi.annotated.core.CGen;
-import net.ceos.project.poi.annotated.core.IGeneratorCSV;
 
-public class CGenTest extends TestCase {
+public class CGenTest {
 
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public CGenTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(CGenTest.class);
-	}
-
+	@Test
 	public void testMarshalUnmarshalSimple() throws Exception {
 		SimpleObject fastTest = new SimpleObject();
 		fastTest.setDateAttribute(new Date());
@@ -48,9 +29,10 @@ public class CGenTest extends TestCase {
 		// TODO add validator
 	}
 
+	@Test
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void testMarshalUnmarshalAsCollectionSimple() throws Exception {
-		
+
 		IGeneratorCSV en = new CGen();
 
 		List listMulti = MultiTypeObjectBuilder.buildListOfMultiTypeObject(10000);
@@ -63,6 +45,7 @@ public class CGenTest extends TestCase {
 
 	}
 
+	@Test
 	public void testMarshalUnmarshalMulti() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 

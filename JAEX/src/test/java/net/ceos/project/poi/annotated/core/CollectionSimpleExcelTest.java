@@ -1,5 +1,6 @@
 package net.ceos.project.poi.annotated.core;
 
+import static org.testng.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -7,44 +8,25 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.testng.annotations.Test;
+
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.bean.SimpleObjectListPropHorizontal;
 import net.ceos.project.poi.annotated.bean.SimpleObjectListPropVertical;
-import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Unit test for simple App.
  */
-public class CollectionSimpleExcelTest extends TestCase {
-	/**
-	 * Create the test case
-	 * 
-	 * @param testName
-	 *            name of the test case
-	 */
-	public CollectionSimpleExcelTest(String testName) {
-		super(testName);
-	}
-
-	/**
-	 * @return the suite of tests being tested
-	 */
-	public static Test suite() {
-		return new TestSuite(CollectionSimpleExcelTest.class);
-	}
-
-
-
+public class CollectionSimpleExcelTest {
+	
 	/**
 	 * Test the annotation {@link XlsSheet} XlsSheet
 	 */
+	@Test
 	public void testReadAnnotationXlsSheetHoriz() {
 		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
@@ -62,6 +44,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsElement} XlsElement
 	 */
+	@Test
 	public void testReadAnnotationXlsElementHoriz() {
 		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
@@ -86,6 +69,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
+	@Test
 	public void testReadAnnotationXlsMasterHeaderHoriz() {
 		Class<SimpleObjectListPropHorizontal> oC = SimpleObjectListPropHorizontal.class;
 
@@ -108,6 +92,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testCollectionSimpleExcelHorizontal() throws Exception {
 		SimpleObjectListPropHorizontal simpleObject = new SimpleObjectListPropHorizontal();
 		simpleObject.setDateAttribute(new Date());
@@ -213,6 +198,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsSheet} XlsSheet
 	 */
+	@Test
 	public void testReadAnnotationXlsSheetVert() {
 		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
 
@@ -230,6 +216,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsElement} XlsElement
 	 */
+	@Test
 	public void testReadAnnotationXlsElementVert() {
 		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
 
@@ -254,6 +241,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test the annotation {@link XlsNestedHeader} XlsMasterHeader
 	 */
+	@Test
 	public void testReadAnnotationXlsMasterHeaderVert() {
 		Class<SimpleObjectListPropVertical> oC = SimpleObjectListPropVertical.class;
 
@@ -277,6 +265,7 @@ public class CollectionSimpleExcelTest extends TestCase {
 	/**
 	 * Test one basic object
 	 */
+	@Test
 	public void testCollectionSimpleExcelVertical() throws Exception {
 		SimpleObjectListPropVertical simpleObject = new SimpleObjectListPropVertical();
 		simpleObject.setDateAttribute(new Date());

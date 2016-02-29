@@ -1,5 +1,7 @@
 package net.ceos.project.poi.annotated.bean;
 
+import static org.testng.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,9 +9,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import junit.framework.TestCase;
-
-public class ObjectConfigurableBuilder extends TestCase {
+public class ObjectConfigurableBuilder {
 
 	/**
 	 * Create a SimpleObject for tests.
@@ -27,7 +27,7 @@ public class ObjectConfigurableBuilder extends TestCase {
 	 */
 	public static ObjectConfigurable buildObjectConfigurable(int multiplier) {
 		ObjectConfigurable toValidate = new ObjectConfigurable();
-		
+
 		toValidate.setBooleanAttribute(true);
 		toValidate.setDateAttribute(new Date());
 		toValidate.setDoubleAttribute(22.127 * multiplier);

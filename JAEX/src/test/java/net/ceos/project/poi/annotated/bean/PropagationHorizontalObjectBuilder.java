@@ -1,5 +1,7 @@
 package net.ceos.project.poi.annotated.bean;
 
+import static org.testng.Assert.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,9 +10,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
-import junit.framework.TestCase;
-
-public class PropagationHorizontalObjectBuilder extends TestCase {
+public class PropagationHorizontalObjectBuilder {
 
 	/**
 	 * Create a PropagationHorizontalObject for tests.
