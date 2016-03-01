@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
-public class XlsMasterHeaderTest {
+public class XlsNestedHeaderTest {
 
 	/**
 	 * Test default configuration.
