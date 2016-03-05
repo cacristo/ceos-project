@@ -6,6 +6,12 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 
+/**
+ * Test the annotation {@link XlsDecorator}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class XlsDecoratorTest {
 
 	/**

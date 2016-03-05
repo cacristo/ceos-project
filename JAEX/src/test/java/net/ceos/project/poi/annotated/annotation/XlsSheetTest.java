@@ -8,6 +8,12 @@ import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
+/**
+ * Test the annotation {@link XlsNestedHeader}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class XlsSheetTest {
 
 	/**
@@ -31,7 +37,7 @@ public class XlsSheetTest {
 	}
 
 	/**
-	 * Test default configuration.
+	 * Test title attribute.
 	 */
 	@Test
 	public void testTitleAttibute() {

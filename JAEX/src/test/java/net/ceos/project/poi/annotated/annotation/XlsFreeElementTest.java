@@ -12,6 +12,12 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
 import net.ceos.project.poi.annotated.definition.TitleOrientationType;
 
+/**
+ * Test the annotation {@link XlsFreeElement}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class XlsFreeElementTest {
 
 	/**
