@@ -19,6 +19,12 @@ import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
+/**
+ * Test the {@link ElementException}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class ElementExceptionTest {
 
 	/**

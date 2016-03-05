@@ -7,6 +7,12 @@ import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
 
+/**
+ * Test the {@link SheetException}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class SheetExceptionTest {
 
 	/**

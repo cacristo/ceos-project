@@ -15,6 +15,12 @@ import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
 
+/**
+ * Test the {@link CustomizedRulesException}
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class CustomizedRulesExceptionTest {
 	private boolean exceptionDetected = false;
 
