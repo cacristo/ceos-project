@@ -7,12 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,13 +43,11 @@ import net.ceos.project.poi.annotated.exception.SheetException;
 
 public class Engine implements IEngine {
 
-	// Workbook wb;
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	Configuration configuration;
-	// CellDecorator headerDecorator;
-	// Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
-	// Map<String, CellDecorator> cellDecoratorMap = new HashMap<String,
-	// CellDecorator>();
 
 	/**
 	 * Get the runtime class of the object passed as parameter.
@@ -61,7 +57,7 @@ public class Engine implements IEngine {
 	 * @return the runtime class
 	 * @throws ElementException
 	 */
-	private Class<?> initializeRuntimeClass(Object object) throws ElementException {
+	private Class<?> initializeRuntimeClass(final Object object) throws ElementException {
 		Class<?> oC = null;
 		try {
 			/* instance object class */
@@ -80,7 +76,8 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws ConfigurationException
 	 */
-	private void initializeConfigurationData(ConfigCriteria configCriteria, Class<?> oC) throws ConfigurationException {
+	private void initializeConfigurationData(final ConfigCriteria configCriteria, final Class<?> oC)
+			throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
@@ -107,7 +104,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
-	private void initializeXlsConfiguration(ConfigCriteria configCriteria, XlsConfiguration annotation) {
+	private void initializeXlsConfiguration(final ConfigCriteria configCriteria, final XlsConfiguration annotation) {
 		configCriteria.setFileName(annotation.nameFile());
 		configCriteria.setCompleteFileName(annotation.nameFile() + annotation.extensionFile().getExtension());
 		configCriteria.setExtension(annotation.extensionFile());
@@ -122,7 +119,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsSheet}
 	 * @return
 	 */
-	private void initializeXlsSheet(ConfigCriteria configCriteria, XlsSheet annotation) {
+	private void initializeXlsSheet(final ConfigCriteria configCriteria, final XlsSheet annotation) {
 		configCriteria.setTitleSheet(annotation.title());
 		configCriteria.setPropagation(annotation.propagation());
 		configCriteria.setStartRow(annotation.startRow());
@@ -138,7 +135,7 @@ public class Engine implements IEngine {
 	 *            the {@link ConfigCriteria}
 	 * @throws ConfigurationException
 	 */
-	private void initializeCellStyleViaAnnotation(Class<?> objectClass, ConfigCriteria configCriteria)
+	private void initializeCellStyleViaAnnotation(final Class<?> objectClass, final ConfigCriteria configCriteria)
 			throws ConfigurationException {
 		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
@@ -148,7 +145,7 @@ public class Engine implements IEngine {
 							ExceptionMessage.ConfigurationException_CellStyleDuplicated.getMessage());
 				}
 				configCriteria.getStylesMap().put(decorator.decoratorName(),
-						CellStyleUtils.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
+						CellStyleHandler.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
 			}
 		}
 	}
@@ -160,7 +157,7 @@ public class Engine implements IEngine {
 	 *            the {@link ExtensionFileType} of workbook
 	 * @return the {@link Workbook}.
 	 */
-	private Workbook initializeWorkbook(ExtensionFileType type) {
+	private Workbook initializeWorkbook(final ExtensionFileType type) {
 		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook();
 		} else {
@@ -178,7 +175,8 @@ public class Engine implements IEngine {
 	 * @return the {@link Workbook} created
 	 * @throws IOException
 	 */
-	private Workbook initializeWorkbook(FileInputStream inputStream, ExtensionFileType type) throws IOException {
+	private Workbook initializeWorkbook(final FileInputStream inputStream, final ExtensionFileType type)
+			throws IOException {
 		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook(inputStream);
 		} else {
@@ -196,7 +194,7 @@ public class Engine implements IEngine {
 	 * @return the {@link Workbook} created
 	 * @throws IOException
 	 */
-	private Workbook initializeWorkbook(byte[] byteArray, ExtensionFileType type) throws IOException {
+	private Workbook initializeWorkbook(final byte[] byteArray, final ExtensionFileType type) throws IOException {
 		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
 			return new HSSFWorkbook(new ByteArrayInputStream(byteArray));
 		} else {
@@ -214,7 +212,7 @@ public class Engine implements IEngine {
 	 * @return the {@link Sheet} created
 	 * @throws SheetException
 	 */
-	private Sheet initializeSheet(Workbook wb, String sheetName) throws SheetException {
+	private Sheet initializeSheet(final Workbook wb, final String sheetName) throws SheetException {
 		Sheet s = null;
 		try {
 			s = wb.createSheet(sheetName);
@@ -234,7 +232,7 @@ public class Engine implements IEngine {
 	 *            the {@link XlsNestedHeader} annotation
 	 * @throws ConfigurationException
 	 */
-	private void isValidNestedHeaderConfiguration(boolean isPH, XlsNestedHeader annotation)
+	private void isValidNestedHeaderConfiguration(final boolean isPH, final XlsNestedHeader annotation)
 			throws ConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
@@ -259,9 +257,10 @@ public class Engine implements IEngine {
 	 * @param isPH
 	 *            true if propagation horizontally, false if propagation
 	 *            vertically
+	 * @throws ConfigurationException
 	 */
-	private void applyMergeRegion(ConfigCriteria configCriteria, Row r, int idxR, int idxC, boolean isPH)
-			throws Exception {
+	private void applyMergeRegion(final ConfigCriteria configCriteria, Row r, final int idxR, final int idxC,
+			final boolean isPH) throws ConfigurationException {
 		/* Process @XlsNestedHeader */
 		if (configCriteria.getField().isAnnotationPresent(XlsNestedHeader.class)) {
 			XlsNestedHeader annotation = (XlsNestedHeader) configCriteria.getField()
@@ -287,7 +286,7 @@ public class Engine implements IEngine {
 			}
 
 			/* initialize master header cell */
-			CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), r, startCell, annotation.title());
+			CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), r, startCell, annotation.title());
 
 			/* merge region of the master header cell */
 			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
@@ -303,7 +302,7 @@ public class Engine implements IEngine {
 	 *            position of the new row
 	 * @return the {@link Row} created
 	 */
-	private Row initializeRow(Sheet s, int idxR) {
+	private Row initializeRow(final Sheet s, final int idxR) {
 		return s.createRow(idxR);
 	}
 
@@ -316,7 +315,7 @@ public class Engine implements IEngine {
 	 *            the {@link TitleOrientationType} of the element
 	 * @return the cell position
 	 */
-	private int initializeHeaderCellPosition(int positionCell, TitleOrientationType orientation) {
+	private int initializeHeaderCellPosition(final int positionCell, final TitleOrientationType orientation) {
 		int idxCell = positionCell - 1;
 		if (TitleOrientationType.LEFT == orientation) {
 			idxCell -= 1;
@@ -335,7 +334,7 @@ public class Engine implements IEngine {
 	 *            the {@link TitleOrientationType} of the element
 	 * @return the row position
 	 */
-	private int initializeHeaderRowPosition(int positionRow, TitleOrientationType orientation) {
+	private int initializeHeaderRowPosition(final int positionRow, final TitleOrientationType orientation) {
 		int idxRow = positionRow;
 		if (TitleOrientationType.TOP == orientation) {
 			idxRow -= 1;
@@ -345,8 +344,9 @@ public class Engine implements IEngine {
 		return idxRow;
 	}
 
-	private void initializeCellByField(ConfigCriteria configCriteria, XlsFreeElement xlsAnnotation, Object o,
-			Field field, int idxR, int idxC, int cL) throws Exception {
+	private void initializeCellByField(final ConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
+			final Object o, final Field field, final int idxC, final int cL)
+					throws ElementException, ConverterException {
 
 		// FIXME uncomment line to activate cascade level
 		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
@@ -389,10 +389,19 @@ public class Engine implements IEngine {
 	 *            the cascade level
 	 * @return in case of the object return the number of cell created,
 	 *         otherwise 0
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws CustomizedRulesException
+	 * @throws ElementException
+	 * @throws ConfigurationException
+	 * @throws InvocationTargetException
+	 * @throws ConverterException
 	 * @throws Exception
 	 */
-	private int initializeCellByFieldHorizontal(ConfigCriteria configCriteria, Object o, int idxR, int idxC, int cL)
-			throws Exception {
+	private int initializeCellByFieldHorizontal(final ConfigCriteria configCriteria, final Object o, final int idxR,
+			final int idxC, final int cL)
+					throws IllegalAccessException, InstantiationException, InvocationTargetException,
+					ConfigurationException, ElementException, CustomizedRulesException, ConverterException {
 
 		int counter = 0;
 
@@ -439,10 +448,19 @@ public class Engine implements IEngine {
 	 * @param cL
 	 *            the cascade level
 	 * @return
-	 * @throws Exception
+	 * @throws ConverterException
+	 * @throws ElementException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 * @throws ConfigurationException
+	 * @throws CustomizedRulesException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
 	 */
-	private int initializeCellByFieldVertical(ConfigCriteria configCriteria, Object o, Row r, int idxR, int idxC,
-			int cL) throws Exception {
+	private int initializeCellByFieldVertical(final ConfigCriteria configCriteria, final Object o, final Row r,
+			final int idxR, final int idxC, int cL)
+					throws ElementException, ConverterException, IllegalAccessException, InstantiationException,
+					NoSuchMethodException, InvocationTargetException, CustomizedRulesException, ConfigurationException {
 
 		int counter = 0;
 
@@ -486,13 +504,16 @@ public class Engine implements IEngine {
 	 * @param idxC
 	 *            the position of the cell
 	 * @return
+	 * @throws ElementException
+	 * @throws ConverterException
 	 * @throws Exception
 	 */
-	private boolean toExcel(ConfigCriteria configCriteria, Object o, Class<?> fT, int idxC) throws Exception {
+	private boolean toExcel(final ConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
+			throws ElementException, ConverterException {
 		/* flag which define if the cell was updated or not */
-		boolean isUpdated = false;
+		boolean isUpdated;
 		/* initialize cell */
-		Cell cell = null;
+		Cell cell;
 
 		/*
 		 * check if the cell to be applied the element is empty otherwise one
@@ -503,54 +524,54 @@ public class Engine implements IEngine {
 		}
 
 		switch (fT.getName()) {
-		case CellValueUtils.OBJECT_DATE:
+		case CellHandler.OBJECT_DATE:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toDate(configCriteria, o, cell);
+			isUpdated = CellHandler.dateWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_STRING:
+		case CellHandler.OBJECT_STRING:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toString(configCriteria, o, cell);
+			isUpdated = CellHandler.stringWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_INTEGER:
+		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_INTEGER:
+		case CellHandler.PRIMITIVE_INTEGER:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toInteger(configCriteria, o, cell);
+			isUpdated = CellHandler.integerWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_LONG:
+		case CellHandler.OBJECT_LONG:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_LONG:
+		case CellHandler.PRIMITIVE_LONG:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toLong(configCriteria, o, cell);
+			isUpdated = CellHandler.longWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_DOUBLE:
+		case CellHandler.OBJECT_DOUBLE:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_DOUBLE:
+		case CellHandler.PRIMITIVE_DOUBLE:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toDouble(configCriteria, o, cell);
+			isUpdated = CellHandler.doubleWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_BIGDECIMAL:
+		case CellHandler.OBJECT_BIGDECIMAL:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toBigDecimal(configCriteria, o, cell);
+			isUpdated = CellHandler.bigDecimalWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_FLOAT:
+		case CellHandler.OBJECT_FLOAT:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_FLOAT:
+		case CellHandler.PRIMITIVE_FLOAT:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toFloat(configCriteria, o, cell);
+			isUpdated = CellHandler.floatWriter(configCriteria, o, cell);
 			break;
 
-		case CellValueUtils.OBJECT_BOOLEAN:
+		case CellHandler.OBJECT_BOOLEAN:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_BOOLEAN:
+		case CellHandler.PRIMITIVE_BOOLEAN:
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toBoolean(configCriteria, o, cell);
+			isUpdated = CellHandler.booleanWriter(configCriteria, o, cell);
 			break;
 
 		default:
@@ -560,7 +581,7 @@ public class Engine implements IEngine {
 
 		if (!isUpdated && fT.isEnum()) {
 			cell = configCriteria.getRow().createCell(idxC);
-			isUpdated = CellValueUtils.toEnum(configCriteria, o, cell);
+			isUpdated = CellHandler.enumWriter(configCriteria, o, cell);
 		}
 
 		return isUpdated;
@@ -580,124 +601,65 @@ public class Engine implements IEngine {
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
 	 * @return
-	 * @throws IllegalArgumentException
+	 * 
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private boolean toObject(Object o, Class<?> fT, Field f, Cell c, XlsElement xlsAnnotation)
-			throws IllegalArgumentException, IllegalAccessException, ConverterException {
+	private boolean toObject(final Object o, final Class<?> fT, final Field f, final Cell c,
+			final XlsElement xlsAnnotation) throws IllegalAccessException, ConverterException {
 		/* flag which define if the cell was updated or not */
-		boolean isUpdated = false;
+		boolean isUpdated;
 
 		f.setAccessible(true);
 
 		switch (fT.getName()) {
-		case CellValueUtils.OBJECT_DATE:
-			// FIXME review the management
-			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
-				f.set(o, c.getDateCellValue());
-			} else {
-				String date = c.getStringCellValue();
-				if (StringUtils.isNotBlank(date)) {
-
-					String tM = xlsAnnotation.transformMask();
-					String fM = xlsAnnotation.formatMask();
-					String decorator = StringUtils.isEmpty(tM)
-							? (StringUtils.isEmpty(fM) ? CellStyleUtils.MASK_DECORATOR_DATE : fM) : tM;
-
-					SimpleDateFormat dt = new SimpleDateFormat(decorator);
-					try {
-						Date dateConverted = dt.parse(date);
-						f.set(o, dateConverted);
-					} catch (ParseException e) {
-						/*
-						 * if date decorator do not match with a valid mask
-						 * launch exception
-						 */
-						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
-					}
-				}
-			}
-			isUpdated = true;
-
-			break;
-
-		case CellValueUtils.OBJECT_STRING:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				f.set(o, CellValueUtils.fromExcel(c));
-			}
+		case CellHandler.OBJECT_DATE:
+			CellHandler.dateReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_INTEGER:
+		case CellHandler.OBJECT_STRING:
+			CellHandler.stringReader(o, f, c);
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_INTEGER:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).intValue());
-			}
+		case CellHandler.PRIMITIVE_INTEGER:
+			CellHandler.integerReader(o, f, c);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_LONG:
+		case CellHandler.OBJECT_LONG:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_LONG:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).longValue());
-			}
+		case CellHandler.PRIMITIVE_LONG:
+			CellHandler.longReader(o, f, c);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_DOUBLE:
+		case CellHandler.OBJECT_DOUBLE:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_DOUBLE:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					f.set(o, Double.valueOf(CellValueUtils.fromExcel(c).replace(",", ".")));
-				} else {
-					f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)));
-				}
-			}
+		case CellHandler.PRIMITIVE_DOUBLE:
+			CellHandler.doubleReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_BIGDECIMAL:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c).replace(",", "."))));
-				} else {
-					f.set(o, BigDecimal.valueOf(Double.valueOf(CellValueUtils.fromExcel(c))));
-				}
-			}
+		case CellHandler.OBJECT_BIGDECIMAL:
+			CellHandler.bigDecimalReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_FLOAT:
+		case CellHandler.OBJECT_FLOAT:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_FLOAT:
-			if (StringUtils.isNotBlank(CellValueUtils.fromExcel(c))) {
-				f.set(o, Double.valueOf(CellValueUtils.fromExcel(c)).floatValue());
-			}
+		case CellHandler.PRIMITIVE_FLOAT:
+			CellHandler.floatReader(o, f, c);
 			isUpdated = true;
 			break;
 
-		case CellValueUtils.OBJECT_BOOLEAN:
+		case CellHandler.OBJECT_BOOLEAN:
 			/* falls through */
-		case CellValueUtils.PRIMITIVE_BOOLEAN:
-
-			String booleanValue = c.getStringCellValue();
-			if (StringUtils.isNotBlank(booleanValue)) {
-				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-					/* apply format mask defined at transform mask */
-					String[] split = xlsAnnotation.transformMask().split("/");
-					f.set(o, StringUtils.isNotBlank(booleanValue) ? (split[0].equals(booleanValue) ? true : false)
-							: null);
-
-				} else {
-					/* locale mode */
-					f.set(o, StringUtils.isNotBlank(booleanValue) ? Boolean.valueOf(booleanValue) : null);
-				}
-			}
+		case CellHandler.PRIMITIVE_BOOLEAN:
+			CellHandler.booleanReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
 			break;
 
@@ -707,9 +669,7 @@ public class Engine implements IEngine {
 		}
 
 		if (!isUpdated && fT.isEnum()) {
-			if (StringUtils.isNotBlank(c.getStringCellValue())) {
-				f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
-			}
+			CellHandler.enumReader(o, fT, f, c);
 			isUpdated = true;
 		}
 
@@ -733,12 +693,22 @@ public class Engine implements IEngine {
 	 * @param cL
 	 *            the cascade level
 	 * @return
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws CustomizedRulesException
+	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 * @throws InstantiationException
+	 * 
 	 */
-	private int marshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC,
-			int cL) throws Exception {
+	private int marshalAsPropagationHorizontal(final ConfigCriteria configCriteria, final Object o, final Class<?> oC,
+			final int idxR, final int idxC, final int cL)
+					throws ConfigurationException, ElementException, CustomizedRulesException, IllegalAccessException,
+					InvocationTargetException, InstantiationException, ConverterException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
+		int indexCell = idxC;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -751,7 +721,7 @@ public class Engine implements IEngine {
 				/* calculate index of the cell */
 				int tmpIdxRow = idxR - 3;
 				/* apply merge region */
-				applyMergeRegion(configCriteria, null, tmpIdxRow, idxC, true);
+				applyMergeRegion(configCriteria, null, tmpIdxRow, indexCell, true);
 			}
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
@@ -767,10 +737,11 @@ public class Engine implements IEngine {
 
 				/* apply customized rules defined at the object */
 				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
-					try{
-					CellValueUtils.applyCustomizedRules(o, xlsAnnotation.customizedRules());
-					} catch (NoSuchMethodException e){
-						throw new CustomizedRulesException(ExceptionMessage.CustomizedRulesException_NoSuchMethod.getMessage(), e);
+					try {
+						CellHandler.applyCustomizedRules(o, xlsAnnotation.customizedRules());
+					} catch (NoSuchMethodException e) {
+						throw new CustomizedRulesException(
+								ExceptionMessage.CustomizedRulesException_NoSuchMethod.getMessage(), e);
 					}
 				}
 
@@ -781,11 +752,12 @@ public class Engine implements IEngine {
 				counter++;
 				if (configCriteria.getRowHeader() != null) {
 					/* header treatment */
-					CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
-							idxC + xlsAnnotation.position(), xlsAnnotation.title());
+					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
+							indexCell + xlsAnnotation.position(), xlsAnnotation.title());
 				}
 				/* content treatment */
-				idxC += initializeCellByFieldHorizontal(configCriteria, o, idxR, idxC + xlsAnnotation.position(), cL);
+				indexCell += initializeCellByFieldHorizontal(configCriteria, o, idxR,
+						indexCell + xlsAnnotation.position(), cL);
 			}
 
 			/* Process @XlsFreeElement */
@@ -811,14 +783,26 @@ public class Engine implements IEngine {
 	 * @param cL
 	 *            the cascade level
 	 * @return
-	 * @throws Exception
+	 * @throws ElementException
+	 * @throws CustomizedRulesException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws ConfigurationException
+	 * @throws ConverterException
+	 * @throws InstantiationException
+	 * 
 	 */
-	private int marshalAsPropagationVertical(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC,
-			int cL) throws Exception {
+	private int marshalAsPropagationVertical(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+			final int idxR, final int idxC, final int cL)
+					throws ElementException, NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+					CustomizedRulesException, ConfigurationException, ConverterException, InstantiationException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
+		int indexCell = idxC;
+		int indexRow = idxR;
 		/* backup base index of the cell */
-		int baseIdxCell = idxC;
+		int baseIdxCell = indexCell;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -827,7 +811,7 @@ public class Engine implements IEngine {
 			configCriteria.setField(f);
 
 			/* restart the index of the cell */
-			idxC = baseIdxCell;
+			indexCell = baseIdxCell;
 
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
@@ -843,7 +827,7 @@ public class Engine implements IEngine {
 
 				/* apply customized rules defined at the object */
 				if (StringUtils.isNotBlank(xlsAnnotation.customizedRules())) {
-					CellValueUtils.applyCustomizedRules(o, xlsAnnotation.customizedRules());
+					CellHandler.applyCustomizedRules(o, xlsAnnotation.customizedRules());
 				}
 
 				/*
@@ -853,28 +837,28 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* create the row */
-				Row row = null;
+				Row row;
 				if (baseIdxCell == 1) {
-					int tmpIdxCell = idxC - 1;
+					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
-					row = initializeRow(configCriteria.getSheet(), idxR + xlsAnnotation.position());
+					row = initializeRow(configCriteria.getSheet(), indexRow + xlsAnnotation.position());
 
 					/* apply merge region */
-					applyMergeRegion(configCriteria, row, idxR, tmpIdxCell, false);
+					applyMergeRegion(configCriteria, row, indexRow, tmpIdxCell, false);
 
 					/* header treatment */
-					CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), row, idxC,
+					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
 							xlsAnnotation.title());
 
 				} else {
-					row = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
+					row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
 				}
 
 				/* increment the cell position */
-				idxC++;
+				indexCell++;
 				/* content treatment */
-				idxR += initializeCellByFieldVertical(configCriteria, o, row, idxR + xlsAnnotation.position(), idxC,
-						cL);
+				indexRow += initializeCellByFieldVertical(configCriteria, o, row, indexRow + xlsAnnotation.position(),
+						indexCell, cL);
 			}
 
 			/* Process @XlsFreeElement */
@@ -895,10 +879,11 @@ public class Engine implements IEngine {
 	 * @param f
 	 *            the field
 	 * @throws ElementException
+	 * @throws ConverterException
 	 * @throws Exception
 	 */
-	private void processXlsFreeElement(ConfigCriteria configCriteria, Object o, int cL, Field f)
-			throws ElementException, Exception {
+	private void processXlsFreeElement(final ConfigCriteria configCriteria, final Object o, final int cL, final Field f)
+			throws ElementException, ConverterException {
 
 		if (f.isAnnotationPresent(XlsFreeElement.class)) {
 			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
@@ -928,12 +913,11 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
 				}
 
-				CellStyleUtils.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell, xlsAnnotation.title());
+				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell, xlsAnnotation.title());
 			}
 
 			/* content treatment */
-			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.row() - 1,
-					xlsAnnotation.cell() - 1, cL);
+			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.cell() - 1, cL);
 		}
 	}
 
@@ -957,10 +941,12 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * @throws ElementException
 	 */
-	private int unmarshalAsPropagationHorizontal(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR,
-			int idxC) throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
+	private int unmarshalAsPropagationHorizontal(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+			final int idxR, final int idxC)
+					throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
+		int indexCell = idxC;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -984,7 +970,7 @@ public class Engine implements IEngine {
 
 				/* content row */
 				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
-				Cell contentCell = contentRow.getCell(idxC + xlsAnnotation.position());
+				Cell contentCell = contentRow.getCell(indexCell + xlsAnnotation.position());
 
 				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
@@ -994,13 +980,13 @@ public class Engine implements IEngine {
 					Class<?> subObjbectClass = subObjbect.getClass();
 
 					int internalCellCounter = unmarshalAsPropagationHorizontal(configCriteria, subObjbect,
-							subObjbectClass, idxR, idxC + xlsAnnotation.position() - 1);
+							subObjbectClass, idxR, indexCell + xlsAnnotation.position() - 1);
 
 					/* add the sub object to the parent object */
 					f.set(o, subObjbect);
 
 					/* update the index */
-					idxC += internalCellCounter;
+					indexCell += internalCellCounter;
 				}
 			}
 
@@ -1050,10 +1036,12 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * @throws ElementException
 	 */
-	private int unmarshalAsPropagationVertical(ConfigCriteria configCriteria, Object o, Class<?> oC, int idxR, int idxC)
-			throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
+	private int unmarshalAsPropagationVertical(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+			final int idxR, final int idxC)
+					throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
+		int indexRow = idxR;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -1077,7 +1065,7 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* content row */
-				Row contentRow = configCriteria.getSheet().getRow(idxR + xlsAnnotation.position());
+				Row contentRow = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
 				Cell contentCell = contentRow.getCell(idxC + 1);
 
 				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
@@ -1088,13 +1076,13 @@ public class Engine implements IEngine {
 					Class<?> subObjbectClass = subObjbect.getClass();
 
 					int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
-							subObjbectClass, idxR + xlsAnnotation.position() - 1, idxC);
+							subObjbectClass, indexRow + xlsAnnotation.position() - 1, idxC);
 
 					/* add the sub object to the parent object */
 					f.set(o, subObjbect);
 
 					/* update the index */
-					idxR += internalCellCounter;
+					indexRow += internalCellCounter;
 				}
 			}
 
@@ -1132,9 +1120,10 @@ public class Engine implements IEngine {
 	 * @param name
 	 *            the name
 	 * @return
+	 * @throws IOException
 	 * @throws Exception
 	 */
-	private FileOutputStream workbookFileOutputStream(Workbook wb, String name) throws Exception {
+	private FileOutputStream workbookFileOutputStream(final Workbook wb, final String name) throws IOException {
 		FileOutputStream output = new FileOutputStream(name);
 		wb.write(output);
 		output.close();
@@ -1149,7 +1138,7 @@ public class Engine implements IEngine {
 	 * @return the byte[]
 	 * @throws IOException
 	 */
-	private byte[] workbookToByteAray(Workbook wb) throws IOException {
+	private byte[] workbookToByteAray(final Workbook wb) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			wb.write(bos);
@@ -1173,10 +1162,16 @@ public class Engine implements IEngine {
 	 * @throws ElementException
 	 * @throws ConfigurationException
 	 * @throws SheetException
-	 * @throws Exception
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
 	 */
-	private void marshalEngine(ConfigCriteria configCriteria, Object object)
-			throws ElementException, ConfigurationException, SheetException, Exception {
+	private void marshalEngine(final ConfigCriteria configCriteria, final Object object) throws ElementException,
+			ConfigurationException, SheetException, IllegalAccessException, InvocationTargetException,
+			InstantiationException, CustomizedRulesException, ConverterException, NoSuchMethodException {
 
 		if (object == null) {
 			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
@@ -1186,7 +1181,6 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		// ConfigCriteria configCriteria = new ConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
 		/* initialize Workbook */
@@ -1197,7 +1191,6 @@ public class Engine implements IEngine {
 
 		/* initialize style cell via default option */
 		configCriteria.initializeCellDecorator();
-		// configCriteria.setStylesMap(stylesMap);
 
 		/* initialize Sheet */
 		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
@@ -1217,7 +1210,7 @@ public class Engine implements IEngine {
 
 		}
 
-		// FIXME apply the column size here - if necessary
+		/* TODO apply the column size here - if necessary */
 	}
 
 	/**
@@ -1230,9 +1223,15 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @param oC
 	 *            the object class
-	 * @throws Exception
+	 * @throws SheetException
+	 * @throws ElementException
+	 * @throws ConverterException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
-	private void unmarshalEngine(ConfigCriteria configCriteria, Object object, Class<?> oC) throws Exception {
+	private void unmarshalEngine(final ConfigCriteria configCriteria, final Object object, final Class<?> oC)
+			throws SheetException, IllegalAccessException, InstantiationException, ConverterException,
+			ElementException {
 
 		/* initialize sheet */
 		if (StringUtils.isBlank(configCriteria.getTitleSheet())) {
@@ -1260,8 +1259,20 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
-	public Sheet marshalToSheet(Object object) throws Exception {
+	@Override
+	public Sheet marshalToSheet(final Object object)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Initialize a basic ConfigCriteria */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
@@ -1281,8 +1292,20 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
-	public Sheet marshalToSheet(ConfigCriteria configCriteria, Object object) throws Exception {
+	@Override
+	public Sheet marshalToSheet(final ConfigCriteria configCriteria, final Object object)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
@@ -1297,8 +1320,20 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
-	public Workbook marshalToWorkbook(Object object) throws Exception {
+	@Override
+	public Workbook marshalToWorkbook(final Object object)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Initialize a basic ConfigCriteria */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
@@ -1318,8 +1353,20 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
-	public Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object) throws Exception {
+	@Override
+	public Workbook marshalToWorkbook(final ConfigCriteria configCriteria, final Object object)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
@@ -1334,8 +1381,21 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
 	 */
-	public byte[] marshalToByte(Object object) throws Exception {
+	@Override
+	public byte[] marshalToByte(final Object object) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException {
 		/* Initialize a basic ConfigCriteria */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
@@ -1354,8 +1414,21 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @param pathFile
 	 *            the file path where will be the file saved
+	 * @throws IOException
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
 	 */
-	public void marshalAndSave(Object object, String pathFile) throws Exception {
+	@Override
+	public void marshalAndSave(final Object object, final String pathFile) throws IllegalAccessException,
+			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
+			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
 		/* Generate the workbook from the object passed as parameter */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
@@ -1372,8 +1445,22 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @param pathFile
 	 *            the file path where will be the file saved
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
 	 */
-	public void marshalAndSave(ConfigCriteria configCriteria, Object object, String pathFile) throws Exception {
+	@Override
+	public void marshalAndSave(final ConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException,
+			IOException {
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
@@ -1381,12 +1468,13 @@ public class Engine implements IEngine {
 		 * check if the path terminate with the file separator, otherwise will
 		 * be added to avoid any problem
 		 */
+		String internalPathFile = pathFile;
 		if (!pathFile.endsWith(File.separator)) {
-			pathFile = pathFile.concat(File.separator);
+			internalPathFile = pathFile.concat(File.separator);
 		}
 
 		/* Save the Workbook at a specified path (received as parameter) */
-		workbookFileOutputStream(configCriteria.getWorkbook(), pathFile + configCriteria.getCompleteFileName());
+		workbookFileOutputStream(configCriteria.getWorkbook(), internalPathFile + configCriteria.getCompleteFileName());
 	}
 
 	/**
@@ -1400,7 +1488,8 @@ public class Engine implements IEngine {
 	 *            the file extension
 	 * @throws Exception
 	 */
-	public void marshalAsCollection(Collection<?> collection, final String filename,
+	@Override
+	public void marshalAsCollection(final Collection<?> collection, final String filename,
 			final ExtensionFileType extensionFileType) throws Exception {
 
 		// FIXME apply the ConfigCriteria, then remove cofiguration
@@ -1424,9 +1513,6 @@ public class Engine implements IEngine {
 		}
 
 		try {
-			/* initialize style cell via annotations */
-			// Class<?> oC = collection.iterator().next().getClass();
-
 			/* initialize the runtime class of the object */
 			Class<?> oC = initializeRuntimeClass(collection.iterator().next());
 			initializeCellStyleViaAnnotation(oC, configCriteria);
@@ -1436,7 +1522,6 @@ public class Engine implements IEngine {
 
 		// initialize style cell via default option
 		configCriteria.initializeCellDecorator();
-		// configCriteria.setStylesMap(stylesMap);
 
 		int idxRow = 0, idxCell = 0, index = 0;
 
@@ -1501,9 +1586,16 @@ public class Engine implements IEngine {
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
 	 * @return the {@link Object} filled up
+	 * @throws ElementException
 	 * @throws ConfigurationException
+	 * @throws ConverterException
+	 * @throws SheetException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
-	public Object unmarshalFromWorkbook(Object object, Workbook workbook) throws Exception {
+	@Override
+	public Object unmarshalFromWorkbook(final Object object, final Workbook workbook) throws ElementException,
+			ConfigurationException, IllegalAccessException, InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -1529,8 +1621,18 @@ public class Engine implements IEngine {
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
 	 * @return the {@link Object} filled up
+	 * @throws ElementException
+	 * @throws ConfigurationException
+	 * @throws IOException
+	 * @throws ConverterException
+	 * @throws SheetException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
-	public Object unmarshalFromPath(Object object, String pathFile) throws Exception {
+	@Override
+	public Object unmarshalFromPath(final Object object, final String pathFile)
+			throws ElementException, ConfigurationException, IOException, IllegalAccessException,
+			InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -1542,11 +1644,12 @@ public class Engine implements IEngine {
 		 * check if the path terminate with the file separator, otherwise will
 		 * be added to avoid any problem
 		 */
+		String internalPathFile = pathFile;
 		if (!pathFile.endsWith(File.separator)) {
-			pathFile = pathFile.concat(File.separator);
+			internalPathFile = pathFile.concat(File.separator);
 		}
 
-		FileInputStream input = new FileInputStream(pathFile + configCriteria.getCompleteFileName());
+		FileInputStream input = new FileInputStream(internalPathFile + configCriteria.getCompleteFileName());
 
 		/* set workbook */
 		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
@@ -1565,8 +1668,18 @@ public class Engine implements IEngine {
 	 * @param inputByte
 	 *            the byte array to read and pass the information to the object
 	 * @return the {@link Object} filled up
+	 * @throws ElementException
+	 * @throws ConfigurationException
+	 * @throws IOException
+	 * @throws ConverterException
+	 * @throws SheetException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
 	 */
-	public Object unmarshalFromByte(Object object, byte[] byteArray) throws Exception {
+	@Override
+	public Object unmarshalFromByte(final Object object, final byte[] byteArray)
+			throws ElementException, ConfigurationException, IOException, IllegalAccessException,
+			InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -1601,14 +1714,14 @@ public class Engine implements IEngine {
 	 * @throws SheetException
 	 * @throws ElementException
 	 */
-	private void unmarshalIntern(Object object, Class<?> oC, ConfigCriteria configCriteria, FileInputStream input)
-			throws IOException, IllegalAccessException, ConverterException, InstantiationException, SheetException,
-			ElementException {
+	private void unmarshalIntern(final Object object, final Class<?> oC, final ConfigCriteria configCriteria,
+			final FileInputStream input) throws IOException, IllegalAccessException, ConverterException,
+					InstantiationException, SheetException, ElementException {
 
 		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
 		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
-		// FIXME add manage sheet null
+		/* manage sheet null */
 		if (configCriteria.getSheet() == null) {
 			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage());
 		}
@@ -1632,7 +1745,7 @@ public class Engine implements IEngine {
 	@Override
 	public Collection<?> unmarshalToCollection(Object object) {
 		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	/* ############################################# */
@@ -1642,9 +1755,11 @@ public class Engine implements IEngine {
 	/**
 	 * marshal
 	 * 
+	 * @deprecated s
 	 * @throws Exception
 	 */
 	@Deprecated
+	@Override
 	public void marshal(Object object) throws Exception {
 		Class<?> objectClass = object.getClass();
 		ConfigCriteria configCriteria = new ConfigCriteria();
@@ -1671,7 +1786,7 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 		/* initialize Sheet */
-		// FIXME add loop if necessary
+		// TODO add loop if necessary
 		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 
 		/* initialize Row & Cell */
@@ -1688,13 +1803,17 @@ public class Engine implements IEngine {
 			marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
 
 		}
-		// FIXME manage return value
+		// TODO manage return value
 		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + configCriteria.getFileName());
 	}
 
+	/**
+	 * @deprecated s
+	 */
 	@Deprecated
-	public Object unmarshal(Object object) throws IOException, IllegalArgumentException, IllegalAccessException,
-			ConverterException, InstantiationException, ElementException, SheetException {
+	@Override
+	public Object unmarshal(Object object) throws IOException, IllegalAccessException, ConverterException,
+			InstantiationException, ElementException, SheetException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 		/* initialize configuration data */
@@ -1713,9 +1832,21 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link FileOutputStream} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
 	 */
 	@Override
-	public FileOutputStream marshalToFileOutputStream(Object object) throws Exception {
+	public FileOutputStream marshalToFileOutputStream(final Object object) throws IllegalAccessException,
+			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
+			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
 		/* Initialize a basic ConfigCriteria */
 		ConfigCriteria configCriteria = new ConfigCriteria();
 
@@ -1736,7 +1867,7 @@ public class Engine implements IEngine {
 	 * @return the {@link Object} filled up
 	 */
 	@Override
-	public Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws Exception {
+	public Object unmarshalFromFileInputStream(final Object object, final FileInputStream stream) throws Exception {
 		/* instance object class */
 		Class<?> oC = object.getClass();
 
@@ -1755,6 +1886,7 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize the configuration to apply at the Excel.
 	 * 
+	 * @deprecated s
 	 * @param oC
 	 *            the {@link Class<?>}
 	 * @return
@@ -1780,6 +1912,7 @@ public class Engine implements IEngine {
 	/**
 	 * Add the main xls configuration.
 	 * 
+	 * @deprecated s
 	 * @param config
 	 *            the {@link XlsConfiguration}
 	 * @return
@@ -1798,6 +1931,7 @@ public class Engine implements IEngine {
 	/**
 	 * Add the sheet configuration.
 	 * 
+	 * @deprecated a
 	 * @param config
 	 *            the {@link XlsSheet}
 	 * @return

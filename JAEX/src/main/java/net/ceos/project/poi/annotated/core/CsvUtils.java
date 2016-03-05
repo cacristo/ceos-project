@@ -30,6 +30,10 @@ public class CsvUtils {
 	public static final String PRIMITIVE_FLOAT = "float";
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
+	private CsvUtils() {
+		/* private constructor to hide the implicit public */
+	}
+
 	/**
 	 * Apply a date value at the field.
 	 * 
@@ -42,46 +46,47 @@ public class CsvUtils {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 */
-	protected static String toDate(Date value, String formatMask, String transformMask) throws ConverterException {
+	protected static String toDate(final Date value, final String formatMask, final String transformMask)
+			throws ConverterException {
+		String dateMasked = "";
 		if (value != null) {
-			if (StringUtils.isNotBlank(transformMask)) {
-				// apply transformation mask
-				try {
-					SimpleDateFormat dt = new SimpleDateFormat(transformMask);
-					String dateFormated = dt.format(value);
-					if (dateFormated.equals(transformMask)) {
-						// if date decorator do not match with a valid mask
-						// launch exception
-						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
-					}
-					return dateFormated;
+			try {
+				if (StringUtils.isNotBlank(transformMask)) {
+					// apply transformation mask
+					dateMasked = applyMaskToDate(value, transformMask);
 
-				} catch (Exception e) {
-					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				} else if (StringUtils.isNotBlank(formatMask)) {
+					// apply format mask
+					dateMasked = applyMaskToDate(value, formatMask);
+
+				} else {
+					// default mask
+					dateMasked = applyMaskToDate(value, "dd-MMM-yyyy HH:mm:ss");
 				}
-
-			} else if (StringUtils.isNotBlank(formatMask)) {
-				// apply format mask
-				try {
-					SimpleDateFormat dt = new SimpleDateFormat(formatMask);
-					String dateFormated = dt.format(value);
-					if (dateFormated.equals(formatMask)) {
-						// if date decorator do not match with a valid mask
-						// launch exception
-						throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
-					}
-					return dateFormated;
-
-				} catch (Exception e) {
-					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
-				}
-
-			} else {
-				SimpleDateFormat dt = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-				return dt.format(value);
+			} catch (Exception e) {
+				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 			}
 		}
-		return ""; // empty field
+		return dateMasked;
+	}
+
+	/**
+	 * Apply mask to date based as the mask passed as parameter.
+	 * 
+	 * @param value
+	 * @param mask
+	 * @return
+	 * @throws ConverterException
+	 */
+	private static String applyMaskToDate(final Date value, final String mask) throws ConverterException {
+		SimpleDateFormat dt = new SimpleDateFormat(mask);
+		String dateFormated = dt.format(value);
+		if (dateFormated.equals(mask)) {
+			// if date decorator do not match with a valid mask
+			// launch exception
+			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
+		}
+		return dateFormated;
 	}
 
 	/**
@@ -95,7 +100,7 @@ public class CsvUtils {
 	 *            the transformation mask
 	 * @return false if problem otherwise true
 	 */
-	protected static String toDouble(Double value, String formatMask, String transformMask) {
+	protected static String toDouble(final Double value, final String formatMask, final String transformMask) {
 		if (value != null) {
 			if (StringUtils.isNotBlank(transformMask)) {
 				// apply transformation mask
@@ -125,7 +130,7 @@ public class CsvUtils {
 	 *            the transformation mask
 	 * @return false if problem otherwise true
 	 */
-	protected static String toBigDecimal(BigDecimal value, String formatMask, String transformMask) {
+	protected static String toBigDecimal(final BigDecimal value, final String formatMask, final String transformMask) {
 		if (value != null) {
 			Double dBigDecimal = value.doubleValue();
 			if (StringUtils.isNotBlank(transformMask)) {
@@ -153,11 +158,10 @@ public class CsvUtils {
 	 * @param f
 	 *            the field
 	 * @return
+	 * @throws ConverterException
 	 */
-	protected static String toEnum(Object o, Field f) {
-
+	protected static String toEnum(final Object o, final Field f) throws ConverterException {
 		try {
-
 			@SuppressWarnings("rawtypes")
 			Class[] argTypes = {};
 
@@ -169,11 +173,11 @@ public class CsvUtils {
 
 			if (objEnum != null) {
 				// apply the enum value
-				return (String) objEnum.toString();
+				return objEnum.toString();
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
 		return "";
 	}

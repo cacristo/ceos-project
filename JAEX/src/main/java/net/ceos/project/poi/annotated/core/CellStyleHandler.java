@@ -29,7 +29,13 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.exception.ConfigurationException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
-public class CellStyleUtils {
+/**
+ * This class manage all the cell style to apply to one cell decoration.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
+public class CellStyleHandler {
 	// cell decorator constants
 	public static final String CELL_DECORATOR_DATE = "date";
 	public static final String CELL_DECORATOR_BOOLEAN = "boolean";
@@ -55,6 +61,10 @@ public class CellStyleUtils {
 	public static final short CELL_FOREGROUND_COLOR = 9;
 	public static final boolean CELL_WRAP_TEXT = false;
 
+	private CellStyleHandler() {
+		/* private constructor to hide the implicit public */
+	}
+
 	/**
 	 * Apply the data format to the cell style.
 	 * 
@@ -66,7 +76,8 @@ public class CellStyleUtils {
 	 *            the cell style
 	 * @param formatMask
 	 */
-	protected static void applyDataFormat(Workbook wb, Cell c, CellStyle cs, String formatMask) {
+	protected static void applyDataFormat(final Workbook wb, final Cell c, final CellStyle cs,
+			final String formatMask) {
 		DataFormat df = initializeDataFormat(wb);
 		cs.setDataFormat(df.getFormat(formatMask));
 		c.setCellStyle(cs);
@@ -81,8 +92,8 @@ public class CellStyleUtils {
 	 *            the cell style
 	 */
 	protected static void applyFontDefault(Workbook wb, CellStyle cs) {
-		applyFont(wb, cs, CellStyleUtils.FONT_NAME, CellStyleUtils.FONT_SIZE, CellStyleUtils.FONT_COLOR,
-				CellStyleUtils.FONT_BOLD, CellStyleUtils.FONT_ITALIC, FontUnderline.NONE.getByteValue());
+		applyFont(wb, cs, CellStyleHandler.FONT_NAME, CellStyleHandler.FONT_SIZE, CellStyleHandler.FONT_COLOR,
+				CellStyleHandler.FONT_BOLD, CellStyleHandler.FONT_ITALIC, FontUnderline.NONE.getByteValue());
 	}
 
 	/**
@@ -105,8 +116,8 @@ public class CellStyleUtils {
 	 * @param u
 	 *            is underline format
 	 */
-	protected static void applyFont(Workbook wb, CellStyle cs, String name, short size, short c, boolean b, boolean i,
-			byte u) {
+	protected static void applyFont(final Workbook wb, final CellStyle cs, final String name, final short size,
+			final short c, final boolean b, final boolean i, final byte u) {
 		Font f = initializeFont(wb);
 		f.setFontName(name);
 		f.setFontHeightInPoints(size);
@@ -126,7 +137,7 @@ public class CellStyleUtils {
 	 * @param a
 	 *            the horizontal alignment
 	 */
-	protected static void applyAlignment(CellStyle cs, short a) {
+	protected static void applyAlignment(final CellStyle cs, final short a) {
 		applyAlignment(cs, a, (short) 0);
 	}
 
@@ -140,7 +151,7 @@ public class CellStyleUtils {
 	 * @param vA
 	 *            the vertical alignment
 	 */
-	protected static void applyAlignment(CellStyle cs, short a, short vA) {
+	protected static void applyAlignment(final CellStyle cs, final short a, final short vA) {
 		if (a != 0) {
 			cs.setAlignment(a);
 		}
@@ -155,7 +166,7 @@ public class CellStyleUtils {
 	 * @param cs
 	 *            the cell style
 	 */
-	protected static void applyBorderDefault(CellStyle cs) {
+	protected static void applyBorderDefault(final CellStyle cs) {
 		applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN);
 	}
 
@@ -173,7 +184,8 @@ public class CellStyleUtils {
 	 * @param bB
 	 *            the cell border bottom
 	 */
-	protected static void applyBorder(CellStyle cs, short bL, short bR, short bT, short bB) {
+	protected static void applyBorder(final CellStyle cs, final short bL, final short bR, final short bT,
+			final short bB) {
 		cs.setBorderLeft(bL);
 		cs.setBorderRight(bR);
 		cs.setBorderTop(bT);
@@ -188,7 +200,7 @@ public class CellStyleUtils {
 	 * @param bC
 	 *            the background color
 	 */
-	protected static void applyBackgroundColor(CellStyle cs, short bC) {
+	protected static void applyBackgroundColor(final CellStyle cs, final short bC) {
 		cs.setFillBackgroundColor(bC);
 	}
 
@@ -204,10 +216,9 @@ public class CellStyleUtils {
 	 * @param e
 	 *            the extension file
 	 */
-	protected static void applyComment(Workbook wb, Cell c, String t, ExtensionFileType e) {
-
+	protected static void applyComment(final Workbook wb, final Cell c, final String t, final ExtensionFileType e) {
 		if (ExtensionFileType.XLS.equals(e)) {
-			final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<Sheet, HSSFPatriarch>();
+			final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<>();
 
 			CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
 			HSSFSheet sheet = (HSSFSheet) c.getSheet();
@@ -246,7 +257,7 @@ public class CellStyleUtils {
 	 *            the workbook
 	 * @return the {@link CellStyle}.
 	 */
-	protected static CellStyle initializeCellStyle(Workbook wb) {
+	protected static CellStyle initializeCellStyle(final Workbook wb) {
 		return wb.createCellStyle();
 	}
 
@@ -263,8 +274,8 @@ public class CellStyleUtils {
 	 *            the format mask by default
 	 * @throws ElementException
 	 */
-	protected static void applyCellStyle(ConfigCriteria configCriteria, Cell c, String cellDecoratorType,
-			String maskDecoratorType) throws ElementException {
+	protected static void applyCellStyle(final ConfigCriteria configCriteria, final Cell c,
+			final String cellDecoratorType, final String maskDecoratorType) throws ElementException {
 
 		CellStyle cs = configCriteria.getCellStyle(cellDecoratorType);
 
@@ -316,11 +327,11 @@ public class CellStyleUtils {
 	 *            the value of the cell content
 	 * @return the cell created
 	 */
-	protected static Cell initializeHeaderCell(Map<String, CellStyle> stylesMap, Row r, int idxC, String value)
-			throws Exception {
+	protected static Cell initializeHeaderCell(final Map<String, CellStyle> stylesMap, final Row r, final int idxC,
+			final String value) {
 		Cell c = r.createCell(idxC);
 		c.setCellValue(value);
-		c.setCellStyle(stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER));
+		c.setCellStyle(stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER));
 		return c;
 	}
 
@@ -331,14 +342,14 @@ public class CellStyleUtils {
 	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} header decorator
 	 */
-	protected static CellStyle initializeHeaderCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+	protected static CellStyle initializeHeaderCellDecorator(final Workbook wb) {
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
+		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
 
 		/* add the border to the cell */
-		CellStyleUtils.applyBorderDefault(cs);
+		CellStyleHandler.applyBorderDefault(cs);
 
 		/* add the background to the cell */
 		cs.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
@@ -348,7 +359,7 @@ public class CellStyleUtils {
 		cs.setWrapText(true);
 
 		/* add the font style to the cell */
-		CellStyleUtils.applyFontDefault(wb, cs);
+		CellStyleHandler.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -360,14 +371,12 @@ public class CellStyleUtils {
 	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} numeric decorator
 	 */
-	protected static CellStyle initializeNumericCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+	protected static CellStyle initializeNumericCellDecorator(final Workbook wb) {
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
-		CellStyleUtils.applyFontDefault(wb, cs);
-		//DataFormat df = initializeDataFormat(wb);
-		//cs.setDataFormat(df.getFormat(CellStyleUtils.MASK_DECORATOR_INTEGER));
+		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
+		CellStyleHandler.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -379,14 +388,12 @@ public class CellStyleUtils {
 	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} date decorator
 	 */
-	protected static CellStyle initializeDateCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+	protected static CellStyle initializeDateCellDecorator(final Workbook wb) {
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
-		CellStyleUtils.applyFontDefault(wb, cs);
-		//DataFormat df = initializeDataFormat(wb);
-		//cs.setDataFormat(df.getFormat(CellStyleUtils.MASK_DECORATOR_DATE));
+		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER);
+		CellStyleHandler.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -398,12 +405,12 @@ public class CellStyleUtils {
 	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} boolean decorator
 	 */
-	protected static CellStyle initializeBooleanCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+	protected static CellStyle initializeBooleanCellDecorator(final Workbook wb) {
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_CENTER);
-		CellStyleUtils.applyFontDefault(wb, cs);
+		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER);
+		CellStyleHandler.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -415,12 +422,12 @@ public class CellStyleUtils {
 	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle} generic decorator
 	 */
-	protected static CellStyle initializeGenericCellDecorator(Workbook wb) {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+	protected static CellStyle initializeGenericCellDecorator(final Workbook wb) {
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 
 		/* add the alignment to the cell */
-		CellStyleUtils.applyAlignment(cs, CellStyle.ALIGN_LEFT);
-		CellStyleUtils.applyFontDefault(wb, cs);
+		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_LEFT);
+		CellStyleHandler.applyFontDefault(wb, cs);
 
 		return cs;
 	}
@@ -434,16 +441,16 @@ public class CellStyleUtils {
 	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
 	 */
-	protected static CellStyle initializeCellStyleByCellDecorator(Workbook wb, CellDecorator decorator)
+	protected static CellStyle initializeCellStyleByCellDecorator(final Workbook wb, final CellDecorator decorator)
 			throws ConfigurationException {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
-			CellStyleUtils.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
+			CellStyleHandler.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
 
 			/* add the border to the cell */
 			borderPropagationManagement(decorator);
-			CellStyleUtils.applyBorder(cs, decorator.getBorderLeft(), decorator.getBorderRight(),
+			CellStyleHandler.applyBorder(cs, decorator.getBorderLeft(), decorator.getBorderRight(),
 					decorator.getBorderTop(), decorator.getBorderBottom());
 
 			/* add the background to the cell */
@@ -454,7 +461,7 @@ public class CellStyleUtils {
 			cs.setWrapText(decorator.isWrapText());
 
 			/* add the font style to the cell */
-			CellStyleUtils.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
+			CellStyleHandler.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
 					decorator.isFontBold(), decorator.isFontItalic(), decorator.getFontUnderline());
 		} catch (Exception e) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), e);
@@ -471,20 +478,19 @@ public class CellStyleUtils {
 	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
 	 */
-	protected static CellStyle initializeCellStyleByXlsDecorator(Workbook wb, XlsDecorator decorator)
+	protected static CellStyle initializeCellStyleByXlsDecorator(final Workbook wb, final XlsDecorator decorator)
 			throws ConfigurationException {
-		CellStyle cs = CellStyleUtils.initializeCellStyle(wb);
+		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
 		try {
 			/* add the alignment to the cell */
-			CellStyleUtils.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
+			CellStyleHandler.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
 
 			/* add the border to the cell */
-			if (decorator.border() != 0 && decorator.borderLeft() == 0 && decorator.borderRight() == 0
-					&& decorator.borderTop() == 0 && decorator.borderBottom() == 0) {
-				CellStyleUtils.applyBorder(cs, decorator.border(), decorator.border(), decorator.border(),
+			if (decorator.border() != 0 && isBorderPropagationValid(decorator)) {
+				CellStyleHandler.applyBorder(cs, decorator.border(), decorator.border(), decorator.border(),
 						decorator.border());
 			} else {
-				CellStyleUtils.applyBorder(cs, decorator.borderLeft(), decorator.borderRight(), decorator.borderTop(),
+				CellStyleHandler.applyBorder(cs, decorator.borderLeft(), decorator.borderRight(), decorator.borderTop(),
 						decorator.borderBottom());
 			}
 
@@ -496,7 +502,7 @@ public class CellStyleUtils {
 			cs.setWrapText(decorator.wrapText());
 
 			/* add the font style to the cell */
-			CellStyleUtils.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
+			CellStyleHandler.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
 					decorator.fontBold(), decorator.fontItalic(), decorator.fontUnderline());
 		} catch (Exception e) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), e);
@@ -511,7 +517,7 @@ public class CellStyleUtils {
 	 *            the workbook
 	 * @return the {@link Font}.
 	 */
-	private static Font initializeFont(Workbook wb) {
+	private static Font initializeFont(final Workbook wb) {
 		return wb.createFont();
 	}
 
@@ -522,7 +528,7 @@ public class CellStyleUtils {
 	 *            the workbook
 	 * @return the {@link DataFormat}.
 	 */
-	private static DataFormat initializeDataFormat(Workbook wb) {
+	private static DataFormat initializeDataFormat(final Workbook wb) {
 		return wb.createDataFormat();
 	}
 
@@ -535,7 +541,7 @@ public class CellStyleUtils {
 	 *            the cell style base
 	 * @return the new cell style
 	 */
-	private static CellStyle cloneCellStyle(Workbook wb, CellStyle csBase) {
+	private static CellStyle cloneCellStyle(final Workbook wb, final CellStyle csBase) {
 		CellStyle cs = initializeCellStyle(wb);
 		cs.setAlignment(csBase.getAlignment());
 		cs.setVerticalAlignment(csBase.getVerticalAlignment());
@@ -558,16 +564,33 @@ public class CellStyleUtils {
 	 * @param decorator
 	 *            the {@link CellDecorator} to use
 	 */
-	private static void borderPropagationManagement(CellDecorator decorator) {
+	private static void borderPropagationManagement(final CellDecorator decorator) {
 		/* if specific border not configured */
-		if (decorator.getBorder() != 0 && decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0
-				&& decorator.getBorderTop() == 0 && decorator.getBorderBottom() == 0) {
+		if (decorator.getBorder() != 0 && isBorderPropagationValid(decorator)) {
 			/* propagate generic border configuration to specific border */
 			decorator.setBorderLeft(decorator.getBorder());
 			decorator.setBorderRight(decorator.getBorder());
 			decorator.setBorderTop(decorator.getBorder());
 			decorator.setBorderBottom(decorator.getBorder());
 		}
+	}
+
+	/**
+	 * @param decorator
+	 * @return
+	 */
+	private static boolean isBorderPropagationValid(final CellDecorator decorator) {
+		return decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0 && decorator.getBorderTop() == 0
+				&& decorator.getBorderBottom() == 0;
+	}
+
+	/**
+	 * @param decorator
+	 * @return
+	 */
+	private static boolean isBorderPropagationValid(final XlsDecorator decorator) {
+		return decorator.borderLeft() == 0 && decorator.borderRight() == 0 && decorator.borderTop() == 0
+				&& decorator.borderBottom() == 0;
 	}
 
 }

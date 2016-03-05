@@ -1,9 +1,15 @@
 package net.ceos.project.poi.annotated.core;
 
+/**
+ * This class has all the properties available to apply to one cell decoration.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class CellDecorator {
 
 	private String decoratorName;
-	
+
 	private String fontName = "Arial";
 	private short fontSize = 10;
 	private short fontColor = 0;
@@ -26,68 +32,73 @@ public class CellDecorator {
 	private boolean wrapText = false;
 
 	public CellDecorator() {
+		/* Default constructor */
 	}
-	
+
 	/**
 	 * @return the decoratorName
 	 */
-	public String getDecoratorName() {
+	public final String getDecoratorName() {
 		return decoratorName;
 	}
 
 	/**
-	 * @param decoratorName the decoratorName to set
+	 * @param decoratorName
+	 *            the decoratorName to set
 	 */
-	public void setDecoratorName(String decoratorName) {
+	public final void setDecoratorName(final String decoratorName) {
 		this.decoratorName = decoratorName;
 	}
 
 	/**
 	 * @return the fontName
 	 */
-	public String getFontName() {
+	public final String getFontName() {
 		return fontName;
 	}
 
 	/**
-	 * @param fontName the fontName to set
+	 * @param fontName
+	 *            the fontName to set
 	 */
-	public void setFontName(String fontName) {
+	public final void setFontName(final String fontName) {
 		this.fontName = fontName;
 	}
 
 	/**
 	 * @return the fontSize
 	 */
-	public short getFontSize() {
+	public final short getFontSize() {
 		return fontSize;
 	}
 
 	/**
-	 * @param fontSize the fontSize to set
+	 * @param fontSize
+	 *            the fontSize to set
 	 */
-	public void setFontSize(short fontSize) {
+	public final void setFontSize(final short fontSize) {
 		this.fontSize = fontSize;
 	}
 
 	/**
 	 * @return the fontColor
 	 */
-	public short getFontColor() {
+	public final short getFontColor() {
 		return fontColor;
 	}
 
 	/**
-	 * @param fontColor the fontColor to set
+	 * @param fontColor
+	 *            the fontColor to set
 	 */
-	public void setFontColor(short fontColor) {
+	public final void setFontColor(final short fontColor) {
 		this.fontColor = fontColor;
 	}
 
 	/**
 	 * @return the fontBold
 	 */
-	public boolean isFontBold() {
+	public final boolean isFontBold() {
 		return fontBold;
 	}
 
@@ -95,14 +106,14 @@ public class CellDecorator {
 	 * @param fontBold
 	 *            the fontBold to set
 	 */
-	public void setFontBold(boolean fontBold) {
+	public final void setFontBold(final boolean fontBold) {
 		this.fontBold = fontBold;
 	}
 
 	/**
 	 * @return the fontItalic
 	 */
-	public boolean isFontItalic() {
+	public final boolean isFontItalic() {
 		return fontItalic;
 	}
 
@@ -110,28 +121,29 @@ public class CellDecorator {
 	 * @param fontItalic
 	 *            the fontItalic to set
 	 */
-	public void setFontItalic(boolean fontItalic) {
+	public final void setFontItalic(final boolean fontItalic) {
 		this.fontItalic = fontItalic;
 	}
 
 	/**
 	 * @return the fontUnderline
 	 */
-	public byte getFontUnderline() {
+	public final byte getFontUnderline() {
 		return fontUnderline;
 	}
 
 	/**
-	 * @param fontUnderline the fontUnderline to set
+	 * @param fontUnderline
+	 *            the fontUnderline to set
 	 */
-	public void setFontUnderline(byte fontUnderline) {
+	public final void setFontUnderline(final byte fontUnderline) {
 		this.fontUnderline = fontUnderline;
 	}
 
 	/**
 	 * @return the alignment
 	 */
-	public short getAlignment() {
+	public final short getAlignment() {
 		return alignment;
 	}
 
@@ -139,14 +151,14 @@ public class CellDecorator {
 	 * @param alignment
 	 *            the alignment to set
 	 */
-	public void setAlignment(short alignment) {
+	public final void setAlignment(final short alignment) {
 		this.alignment = alignment;
 	}
 
 	/**
 	 * @return the verticalAlignment
 	 */
-	public short getVerticalAlignment() {
+	public final short getVerticalAlignment() {
 		return verticalAlignment;
 	}
 
@@ -154,14 +166,14 @@ public class CellDecorator {
 	 * @param verticalAlignment
 	 *            the verticalAlignment to set
 	 */
-	public void setVerticalAlignment(short verticalAlignment) {
+	public final void setVerticalAlignment(final short verticalAlignment) {
 		this.verticalAlignment = verticalAlignment;
 	}
 
 	/**
 	 * @return the border
 	 */
-	public short getBorder() {
+	public final short getBorder() {
 		return border;
 	}
 
@@ -169,14 +181,14 @@ public class CellDecorator {
 	 * @param border
 	 *            the border to set
 	 */
-	public void setBorder(short border) {
+	public final void setBorder(final short border) {
 		this.border = border;
 	}
 
 	/**
 	 * @return the borderLeft
 	 */
-	public short getBorderLeft() {
+	public final short getBorderLeft() {
 		return borderLeft;
 	}
 
@@ -184,14 +196,14 @@ public class CellDecorator {
 	 * @param borderLeft
 	 *            the borderLeft to set
 	 */
-	public void setBorderLeft(short borderLeft) {
+	public final void setBorderLeft(final short borderLeft) {
 		this.borderLeft = borderLeft;
 	}
 
 	/**
 	 * @return the borderRight
 	 */
-	public short getBorderRight() {
+	public final short getBorderRight() {
 		return borderRight;
 	}
 
@@ -199,14 +211,14 @@ public class CellDecorator {
 	 * @param borderRight
 	 *            the borderRight to set
 	 */
-	public void setBorderRight(short borderRight) {
+	public final void setBorderRight(final short borderRight) {
 		this.borderRight = borderRight;
 	}
 
 	/**
 	 * @return the borderTop
 	 */
-	public short getBorderTop() {
+	public final short getBorderTop() {
 		return borderTop;
 	}
 
@@ -214,14 +226,14 @@ public class CellDecorator {
 	 * @param borderTop
 	 *            the borderTop to set
 	 */
-	public void setBorderTop(short borderTop) {
+	public final void setBorderTop(final short borderTop) {
 		this.borderTop = borderTop;
 	}
 
 	/**
 	 * @return the borderBottom
 	 */
-	public short getBorderBottom() {
+	public final short getBorderBottom() {
 		return borderBottom;
 	}
 
@@ -229,14 +241,14 @@ public class CellDecorator {
 	 * @param borderBottom
 	 *            the borderBottom to set
 	 */
-	public void setBorderBottom(short borderBottom) {
+	public final void setBorderBottom(final short borderBottom) {
 		this.borderBottom = borderBottom;
 	}
 
 	/**
 	 * @return the backgroundColor
 	 */
-	public short getBackgroundColor() {
+	public final short getBackgroundColor() {
 		return backgroundColor;
 	}
 
@@ -244,14 +256,14 @@ public class CellDecorator {
 	 * @param backgroundColor
 	 *            the backgroundColor to set
 	 */
-	public void setBackgroundColor(short backgroundColor) {
+	public final void setBackgroundColor(final short backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 
 	/**
 	 * @return the foregroundColor
 	 */
-	public short getForegroundColor() {
+	public final short getForegroundColor() {
 		return foregroundColor;
 	}
 
@@ -259,14 +271,14 @@ public class CellDecorator {
 	 * @param foregroundColor
 	 *            the foregroundColor to set
 	 */
-	public void setForegroundColor(short foregroundColor) {
+	public final void setForegroundColor(final short foregroundColor) {
 		this.foregroundColor = foregroundColor;
 	}
 
 	/**
 	 * @return the wrapText
 	 */
-	public boolean isWrapText() {
+	public final boolean isWrapText() {
 		return wrapText;
 	}
 
@@ -274,7 +286,7 @@ public class CellDecorator {
 	 * @param wrapText
 	 *            the wrapText to set
 	 */
-	public void setWrapText(boolean wrapText) {
+	public final void setWrapText(final boolean wrapText) {
 		this.wrapText = wrapText;
 	}
 

@@ -19,8 +19,8 @@ import net.ceos.project.poi.annotated.exception.ConfigurationException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
- * This will define all the configuration criteria to be used internally by the
- * framework. <br>
+ * This class will define all the configuration criteria to be used internally
+ * by the framework. <br>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -51,10 +51,10 @@ public class ConfigCriteria {
 	private CascadeType overrideCascadeLevel;
 
 	/* cell style parameters */
-	private Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
-	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
+	private Map<String, CellStyle> stylesMap = new HashMap<>();
+	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<>();
 
-	private Map<String, CellStyle> cellStyleManager = new HashMap<String, CellStyle>();
+	private Map<String, CellStyle> cellStyleManager = new HashMap<>();
 
 	/**
 	 * Force the header cell decorator.
@@ -62,8 +62,8 @@ public class ConfigCriteria {
 	 * @param decorator
 	 *            the {@link CellDecorator} to apply
 	 */
-	public void overrideHeaderCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_HEADER, decorator);
+	public final void overrideHeaderCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_HEADER, decorator);
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class ConfigCriteria {
 	 * @param decorator
 	 *            the {@link CellDecorator} to apply
 	 */
-	public void overrideNumericCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC, decorator);
+	public final void overrideNumericCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC, decorator);
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class ConfigCriteria {
 	 * @param decorator
 	 *            the {@link CellDecorator} to apply
 	 */
-	public void overrideBooleanCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN, decorator);
+	public final void overrideBooleanCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN, decorator);
 	}
 
 	/**
@@ -92,8 +92,8 @@ public class ConfigCriteria {
 	 * @param decorator
 	 *            the {@link CellDecorator} to apply
 	 */
-	public void overrideDateCellDecorator(CellDecorator decorator) {
-		cellDecoratorMap.put(CellStyleUtils.CELL_DECORATOR_DATE, decorator);
+	public final void overrideDateCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_DATE, decorator);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class ConfigCriteria {
 	 * @param decorator
 	 *            the {@link CellDecorator} to apply
 	 */
-	public void addSpecificCellDecorator(String decoratorName, CellDecorator decorator) {
+	public final void addSpecificCellDecorator(final String decoratorName, final CellDecorator decorator) {
 		cellDecoratorMap.put(decoratorName, decorator);
 	}
 
@@ -114,7 +114,7 @@ public class ConfigCriteria {
 	 * @param type
 	 *            the {@link PropagationType} to apply
 	 */
-	public void overridePropagationType(PropagationType type) {
+	public final void overridePropagationType(final PropagationType type) {
 		overridePropagation = type;
 	}
 
@@ -124,7 +124,7 @@ public class ConfigCriteria {
 	 * @param type
 	 *            the {@link ExtensionFileType} to apply
 	 */
-	public void overrideExtensionType(ExtensionFileType type) {
+	public final void overrideExtensionType(final ExtensionFileType type) {
 		overrideExtension = type;
 	}
 
@@ -134,7 +134,7 @@ public class ConfigCriteria {
 	 * @param type
 	 *            the {@link CascadeType} to apply
 	 */
-	public void overrideCascadeLevel(CascadeType type) {
+	public final void overrideCascadeLevel(final CascadeType type) {
 		overrideCascadeLevel = type;
 	}
 
@@ -147,58 +147,58 @@ public class ConfigCriteria {
 	 */
 	protected void initializeCellDecorator() throws ConfigurationException {
 
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_HEADER) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_HEADER,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_HEADER))
-							: CellStyleUtils.initializeHeaderCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_HEADER));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_HEADER,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_HEADER))
+							: CellStyleHandler.initializeHeaderCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER));
 		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_NUMERIC,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_NUMERIC))
-							: CellStyleUtils.initializeNumericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_NUMERIC));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC))
+							: CellStyleHandler.initializeNumericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC));
 		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_DATE) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_DATE,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_DATE))
-							: CellStyleUtils.initializeDateCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_DATE));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_DATE) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_DATE,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_DATE))
+							: CellStyleHandler.initializeDateCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE));
 		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_BOOLEAN,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_BOOLEAN))
-							: CellStyleUtils.initializeBooleanCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_BOOLEAN));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN))
+							: CellStyleHandler.initializeBooleanCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN));
 		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_GENERIC,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_GENERIC))
-							: CellStyleUtils.initializeGenericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_GENERIC));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC))
+							: CellStyleHandler.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC));
 		}
-		if (stylesMap.get(CellStyleUtils.CELL_DECORATOR_ENUM) == null) {
-			stylesMap.put(CellStyleUtils.CELL_DECORATOR_ENUM,
-					cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_ENUM)
-							? CellStyleUtils.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleUtils.CELL_DECORATOR_ENUM))
-							: CellStyleUtils.initializeGenericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleUtils.CELL_DECORATOR_ENUM));
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_ENUM) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_ENUM,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_ENUM))
+							: CellStyleHandler.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM));
 		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
 			stylesMap.put(object.getKey(),
-					CellStyleUtils.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+					CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
 		}
 	}
 
@@ -213,7 +213,7 @@ public class ConfigCriteria {
 	 * @param workbook
 	 *            the workbook to set
 	 */
-	protected void setWorkbook(Workbook workbook) {
+	protected void setWorkbook(final Workbook workbook) {
 		this.workbook = workbook;
 	}
 
@@ -228,7 +228,7 @@ public class ConfigCriteria {
 	 * @param sheet
 	 *            the sheet to set
 	 */
-	protected void setSheet(Sheet sheet) {
+	protected void setSheet(final Sheet sheet) {
 		this.sheet = sheet;
 	}
 
@@ -243,7 +243,7 @@ public class ConfigCriteria {
 	 * @param titleSheet
 	 *            the titleSheet to set
 	 */
-	protected void setTitleSheet(String titleSheet) {
+	protected void setTitleSheet(final String titleSheet) {
 		this.titleSheet = titleSheet;
 	}
 
@@ -258,7 +258,7 @@ public class ConfigCriteria {
 	 * @param rowHeader
 	 *            the rowHeader to set
 	 */
-	protected void setRowHeader(Row rowHeader) {
+	protected void setRowHeader(final Row rowHeader) {
 		this.rowHeader = rowHeader;
 	}
 
@@ -273,7 +273,7 @@ public class ConfigCriteria {
 	 * @param row
 	 *            the row to set
 	 */
-	protected void setRow(Row row) {
+	protected void setRow(final Row row) {
 		this.row = row;
 	}
 
@@ -288,7 +288,7 @@ public class ConfigCriteria {
 	 * @param startRow
 	 *            the startRow to set
 	 */
-	protected void setStartRow(int startRow) {
+	protected void setStartRow(final int startRow) {
 		this.startRow = startRow;
 	}
 
@@ -303,7 +303,7 @@ public class ConfigCriteria {
 	 * @param startCell
 	 *            the startCell to set
 	 */
-	protected void setStartCell(int startCell) {
+	protected void setStartCell(final int startCell) {
 		this.startCell = startCell;
 	}
 
@@ -318,7 +318,7 @@ public class ConfigCriteria {
 	 * @param field
 	 *            the field to set
 	 */
-	protected void setField(Field field) {
+	protected void setField(final Field field) {
 		this.field = field;
 	}
 
@@ -333,7 +333,7 @@ public class ConfigCriteria {
 	 * @param fileName
 	 *            the fileName to set
 	 */
-	protected void setFileName(String fileName) {
+	protected void setFileName(final String fileName) {
 		this.fileName = fileName;
 	}
 
@@ -348,7 +348,7 @@ public class ConfigCriteria {
 	 * @param completeFileName
 	 *            the completeFileName to set
 	 */
-	protected void setCompleteFileName(String completeFileName) {
+	protected void setCompleteFileName(final String completeFileName) {
 		this.completeFileName = completeFileName;
 	}
 
@@ -367,7 +367,7 @@ public class ConfigCriteria {
 	 * @param propagation
 	 *            the propagation to set
 	 */
-	protected void setPropagation(PropagationType propagation) {
+	protected void setPropagation(final PropagationType propagation) {
 		this.propagation = propagation;
 	}
 
@@ -386,7 +386,7 @@ public class ConfigCriteria {
 	 * @param extension
 	 *            the extension to set
 	 */
-	protected void setExtension(ExtensionFileType extension) {
+	protected void setExtension(final ExtensionFileType extension) {
 		this.extension = extension;
 	}
 
@@ -405,7 +405,7 @@ public class ConfigCriteria {
 	 * @param cascadeLevel
 	 *            the cascadeLevel to set
 	 */
-	protected void setCascadeLevel(CascadeType cascadeLevel) {
+	protected void setCascadeLevel(final CascadeType cascadeLevel) {
 		this.cascadeLevel = cascadeLevel;
 	}
 
@@ -420,7 +420,7 @@ public class ConfigCriteria {
 	 * @param element
 	 *            the element to set
 	 */
-	protected void setElement(XlsElement element) {
+	protected void setElement(final XlsElement element) {
 		this.element = element;
 	}
 
@@ -435,7 +435,7 @@ public class ConfigCriteria {
 	 * @param stylesMap
 	 *            the stylesMap to set
 	 */
-	protected void setStylesMap(Map<String, CellStyle> stylesMap) {
+	protected void setStylesMap(final Map<String, CellStyle> stylesMap) {
 		this.stylesMap = stylesMap;
 	}
 
@@ -447,9 +447,10 @@ public class ConfigCriteria {
 	}
 
 	/**
-	 * @param cellStyleManager the cellStyleManager to set
+	 * @param cellStyleManager
+	 *            the cellStyleManager to set
 	 */
-	protected void setCellStyleManager(Map<String, CellStyle> cellStyleManager) {
+	protected void setCellStyleManager(final Map<String, CellStyle> cellStyleManager) {
 		this.cellStyleManager = cellStyleManager;
 	}
 
@@ -464,7 +465,7 @@ public class ConfigCriteria {
 	 * @param cellDecoratorMap
 	 *            the cellDecoratorMap to set
 	 */
-	protected void setCellDecoratorMap(Map<String, CellDecorator> cellDecoratorMap) {
+	protected void setCellDecoratorMap(final Map<String, CellDecorator> cellDecoratorMap) {
 		this.cellDecoratorMap = cellDecoratorMap;
 	}
 
@@ -472,11 +473,11 @@ public class ConfigCriteria {
 	 * Get the CellStyle according the type of field.
 	 * 
 	 * @param type
-	 *            the {@link CellStyleUtils} type
+	 *            the {@link CellStyleHandler} type
 	 * @return
 	 * @throws ElementException
 	 */
-	protected CellStyle getCellStyle(String type) throws ElementException {
+	protected CellStyle getCellStyle(final String type) throws ElementException {
 		if (StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null) {
 			throw new ElementException(ExceptionMessage.ConfigurationException_XlsDecoratorMissing.getMessage());
 		}
@@ -487,10 +488,10 @@ public class ConfigCriteria {
 	 * Get the mask to apply according the annotation formatMask.
 	 * 
 	 * @param maskDecoratorType
-	 *            the {@link CellStyleUtils} mask decorator
+	 *            the {@link CellStyleHandler} mask decorator
 	 * @return
 	 */
-	protected String getFormatMask(String maskDecoratorType) {
+	protected String getFormatMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType;
 	}
 
@@ -498,10 +499,10 @@ public class ConfigCriteria {
 	 * Get the mask to apply according the annotation transformationMask.
 	 * 
 	 * @param maskDecoratorType
-	 *            the {@link CellStyleUtils} mask decorator
+	 *            the {@link CellStyleHandler} mask decorator
 	 * @return
 	 */
-	protected String getTransformMask(String maskDecoratorType) {
+	protected String getTransformMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask() : maskDecoratorType;
 	}
 
@@ -510,18 +511,27 @@ public class ConfigCriteria {
 	 * transformationMask.
 	 * 
 	 * @param maskDecoratorType
-	 *            the {@link CellStyleUtils} mask decorator
+	 *            the {@link CellStyleHandler} mask decorator
 	 * @return
 	 */
-	protected String getMask(String maskDecoratorType) {
+	protected String getMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
 				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
 	}
 
-	protected String generateCellStyleKey(String cellDecoratorType, String maskDecoratorType) {
+	/**
+	 * Generate a key to identify the cell style.
+	 * 
+	 * @param cellDecoratorType
+	 *            the decorator name
+	 * @param maskDecoratorType
+	 *            the mask format to apply
+	 * @return the key based at : <mask><decorator>
+	 */
+	protected String generateCellStyleKey(final String cellDecoratorType, final String maskDecoratorType) {
+		String decorator = StringUtils.isNotBlank(element.decorator()) ? element.decorator() : cellDecoratorType;
 		String mask = StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
 				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
-		String decorator = StringUtils.isNotBlank(element.decorator()) ? element.decorator() : cellDecoratorType;
 		return mask.concat(decorator);
 	}
 }

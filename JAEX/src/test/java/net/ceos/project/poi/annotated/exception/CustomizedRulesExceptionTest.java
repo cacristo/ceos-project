@@ -14,7 +14,6 @@ import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesString;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
-import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 
 public class CustomizedRulesExceptionTest {
 	private boolean exceptionDetected = false;
@@ -141,19 +140,14 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleNoSuchMethod() throws Exception {
 		XlsElementCustomizedRulesNoSuchMethod custom = new XlsElementCustomizedRulesNoSuchMethod();
 		custom.setDateAttribute(new Date());
 		custom.setStringAttribute("Touch this team!");
 		custom.setIntegerAttribute(300);
-		try {
-			IEngine en = new Engine();
-			en.marshalToWorkbook(custom);
-		} catch (Exception e) {
-			this.exceptionDetected = (e.getClass().equals(CustomizedRulesException.class)
-					&& ExceptionMessage.CustomizedRulesException_NoSuchMethod.getMessage().equals(e.getMessage()));
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalToWorkbook(custom);
 	}
 }
