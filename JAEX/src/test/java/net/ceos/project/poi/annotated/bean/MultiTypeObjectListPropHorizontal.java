@@ -309,13 +309,17 @@ public class MultiTypeObjectListPropHorizontal {
 	}
 	public void rules() throws CustomizedRulesException {
 		if(StringUtils.isBlank(this.getStringAttribute())){
-			System.out.println("Alert! String is empty");
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
 		}
 		if(this.booleanPrimitiveAttribute){
-			System.out.println("Alert! Boolean is true");
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
 		}
 		if(this.integerPrimitiveAttribute > 450){
-			System.out.println("Alert! Up to 450");
+			/* launch exception */
 			throw new CustomizedRulesException("Pim Pam Pum!!");
 		}
 	}

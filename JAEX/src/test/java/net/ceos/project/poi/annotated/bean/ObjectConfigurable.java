@@ -169,10 +169,14 @@ public class ObjectConfigurable {
 	
 	public void rules(){
 		if(StringUtils.isNotBlank(this.getStringAttribute())){
-			System.out.println("Alert! String is empty");
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
 		}
 		if(this.booleanAttribute){
-			System.out.println("Alert! Boolean is true");
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
 		}
 	}
 	
