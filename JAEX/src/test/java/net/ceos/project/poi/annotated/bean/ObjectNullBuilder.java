@@ -28,37 +28,7 @@ public class ObjectNullBuilder {
 	public static ObjectNull buildObjectNull(int multiplier) {
 		ObjectNull obj = new ObjectNull();
 
-		//obj.setDoubleAttribute(Double.valueOf(2));
-		//obj.setDoublePrimitiveAttribute(Double.valueOf(2));
-		/*obj.setDateAttribute(new Date());
-		obj.setStringAttribute("some string");
-		obj.setIntegerAttribute(46 * multiplier);
-		obj.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
-		obj.setLongAttribute(Long.valueOf("1234567890") * multiplier);
-		obj.setBooleanAttribute(Boolean.FALSE);*/
-		/* create sub object Job */
-		/*Job job = new Job();
-		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name");
-		job.setJobName("Job Name");
-		obj.setJob(job);
-		obj.setIntegerPrimitiveAttribute(121 * multiplier);
-		obj.setDoublePrimitiveAttribute(44.6 * multiplier);
-		obj.setLongPrimitiveAttribute(987654321L * multiplier);
-		obj.setBooleanPrimitiveAttribute(true);*/
-		/* create sub object AddressInfo */
-		/*AddressInfo ai = new AddressInfo();
-		ai.setAddress("this is the street");
-		ai.setNumber(99);
-		ai.setCity("this is the city");
-		ai.setCityCode(70065);
-		ai.setCountry("This is a Country");
-		obj.setAddressInfo(ai);
-		obj.setFloatAttribute(14.765f * multiplier);
-		obj.setFloatPrimitiveAttribute(11.1125f * multiplier);
-		obj.setUnitFamily(UnitFamily.COMPONENTS);
-		obj.setBigDecimalAttribute(BigDecimal.valueOf(24.777).multiply(BigDecimal.valueOf(multiplier)));*/
-		// TODO add new fields below
+		/* this object has no values at the attributes */
 
 		return obj;
 	}

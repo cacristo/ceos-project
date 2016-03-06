@@ -7,13 +7,20 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.bean.ObjectConfigurable;
 import net.ceos.project.poi.annotated.bean.ObjectConfigurableBuilder;
 
+/**
+ * Test multiple modes how to configure a CellDecorator.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class ObjectConfigurableTest {
 
 	/**
-	 * Test one basic object
+	 * Test the override the header {@link CellDecorator} specified by annotation at the
+	 * element {@link ObjectConfigurable}
 	 */
 	@Test
-	public void testMarshalMultiObject() throws Exception {
+	public void testMarshalOverrideHeader() throws Exception {
 		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
 
 		IEngine en = new Engine();
@@ -51,10 +58,55 @@ public class ObjectConfigurableTest {
 	}
 
 	/**
-	 * Test one basic object
+	 * Test if the override of the header {@link CellDecorator} specified by annotation
+	 * at the element {@link ObjectConfigurable} cause any damage at the moment
+	 * of unmarshal.
 	 */
 	@Test
-	public void testUnmarshalMultiObject() throws Exception {
+	public void testUnmarshalOverrideHeader() throws Exception {
+		ObjectConfigurable oc = new ObjectConfigurable();
+
+		Engine en = new Engine();
+
+		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
+
+		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
+	}
+
+	/**
+	 * Test the override the header {@link CellDecorator} specified by annotation at the
+	 * element {@link ObjectConfigurable}
+	 */
+	@Test
+	public void testMarshalHeaderAnnotated() throws Exception {
+		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
+
+		IEngine en = new Engine();
+
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		CellDecorator dateDecorator = new CellDecorator();
+		dateDecorator.setDecoratorName("anotherDate");
+		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
+		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		dateDecorator.setForegroundColor(HSSFColor.RED.index);
+		dateDecorator.setFontItalic(true);
+		dateDecorator.setWrapText(true);
+
+		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
+
+		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test if the override of the header {@link CellDecorator} specified by annotation
+	 * at the element {@link ObjectConfigurable} cause any damage at the moment
+	 * of unmarshal.
+	 */
+	@Test
+	public void testUnmarshalHeaderAnnotated() throws Exception {
 		ObjectConfigurable oc = new ObjectConfigurable();
 
 		Engine en = new Engine();

@@ -13,6 +13,12 @@ import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObject;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObjectBuilder;
 
+/**
+ * Test the core of the library.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 public class EngineTest {
 
 	/*

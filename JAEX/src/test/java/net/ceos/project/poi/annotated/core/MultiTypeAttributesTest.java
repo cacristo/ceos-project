@@ -4,16 +4,21 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.testng.annotations.Test;
 
+import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 
 /**
- * Unit test for simple App.
+ * Test multiple type of attributes at {@link XlsElement} to verify if
+ * everything work properly.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
  */
 public class MultiTypeAttributesTest {
 
 	/**
-	 * Test one basic object
+	 * Test marshal to multiple types of objects
 	 */
 	@Test
 	public void testMarshalMultiObject() throws Exception {
@@ -48,7 +53,7 @@ public class MultiTypeAttributesTest {
 	}
 
 	/**
-	 * Test one basic object
+	 * Test if the unmarshal to multiple types of objects works properly.
 	 */
 	@Test
 	public void testUnmarshalMultiObject() throws Exception {
