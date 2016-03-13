@@ -346,7 +346,7 @@ public class Engine implements IEngine {
 
 	private void initializeCellByField(final ConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
 			final Object o, final Field field, final int idxC, final int cL)
-					throws ElementException, ConverterException {
+					throws ElementException, ConverterException, CustomizedRulesException {
 
 		// FIXME uncomment line to activate cascade level
 		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
@@ -506,10 +506,11 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws ElementException
 	 * @throws ConverterException
+	 * @throws CustomizedRulesException 
 	 * @throws Exception
 	 */
 	private boolean toExcel(final ConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
-			throws ElementException, ConverterException {
+			throws ElementException, ConverterException, CustomizedRulesException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated;
 		/* initialize cell */
@@ -880,10 +881,10 @@ public class Engine implements IEngine {
 	 *            the field
 	 * @throws ElementException
 	 * @throws ConverterException
-	 * @throws Exception
+	 * @throws CustomizedRulesException 
 	 */
 	private void processXlsFreeElement(final ConfigCriteria configCriteria, final Object o, final int cL, final Field f)
-			throws ElementException, ConverterException {
+			throws ElementException, ConverterException, CustomizedRulesException {
 
 		if (f.isAnnotationPresent(XlsFreeElement.class)) {
 			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
