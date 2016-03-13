@@ -23,16 +23,19 @@ public class ObjectFormula {
 
 	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM(E3,F3,G3)", position = 6)
 	private double totalValue = 0;
-	
-	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(E3,F3,G3)", position = 7)
+
+	@XlsElement(title = "Total Sales", isFormula = true, formula = "H3 * 1.21", position = 7)
+	private double totalValueTax = 0;
+
+	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(E3,F3,G3)", position = 8)
 	private double avgValue = 0;
 
-	@XlsElement(title = "ROI", isFormula = true, position = 8)
+	@XlsElement(title = "ROI", isFormula = true, position = 9)
 	private double generateValue = 0;
-	
-	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Eidx < Fidx,\"Over Budget\", \"OK\")", position = 9)
+
+	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Eidx < Fidx,\"Over Budget\", \"OK\")", position = 10)
 	private String someString;
-	
+
 	public ObjectFormula() {
 	}
 
@@ -127,6 +130,21 @@ public class ObjectFormula {
 	}
 
 	/**
+	 * @return the totalValueTax
+	 */
+	public final double getTotalValueTax() {
+		return totalValueTax;
+	}
+
+	/**
+	 * @param totalValueTax
+	 *            the totalValueTax to set
+	 */
+	public final void setTotalValueTax(double totalValueTax) {
+		this.totalValueTax = totalValueTax;
+	}
+
+	/**
 	 * @return the avgValue
 	 */
 	public double getAvgValue() {
@@ -160,7 +178,7 @@ public class ObjectFormula {
 	 * @return the generateValue
 	 */
 	public double formulaGenerateValue() {
-		return (1.40 * this.valueCountry / this.store + 1.14 * this.valueCountry / this.webStore ) ;
+		return (1.40 * this.valueCountry / this.store + 1.14 * this.valueCountry / this.webStore);
 	}
 
 	/**
@@ -171,7 +189,8 @@ public class ObjectFormula {
 	}
 
 	/**
-	 * @param someString the someString to set
+	 * @param someString
+	 *            the someString to set
 	 */
 	public void setSomeString(String someString) {
 		this.someString = someString;
