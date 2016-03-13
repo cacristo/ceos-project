@@ -62,7 +62,7 @@ public interface XlsElementFactory {
 
 			@Override
 			public String commentRules() {
-				return "";
+				return xlsAnnotation.commentRules();
 			}
 		};
 	}
