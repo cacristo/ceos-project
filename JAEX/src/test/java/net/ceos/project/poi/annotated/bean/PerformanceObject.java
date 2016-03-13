@@ -39,7 +39,7 @@ public class PerformanceObject {
 	@XlsElement(title = "Integer value 5", position = 7)
 	private Integer integerAttribute5;
 
-	@XlsElement(title = "Integer value 6", position = 8)
+	@XlsElement(title = "Integer value 6", position = 8, comment="Under 1000", commentRules="rulesCommentInteger")
 	private Integer integerAttribute6;
 
 	@XlsElement(title = "Integer value 7", position = 9)
@@ -836,6 +836,13 @@ public class PerformanceObject {
 	 */
 	public void setSumVal(Double sumVal) {
 		this.sumVal = sumVal;
+	}
+	
+	public boolean rulesCommentInteger(){
+		if(this.integerAttribute6 < 1000){
+			return true;
+		}
+		return false;
 	}
 
 }
