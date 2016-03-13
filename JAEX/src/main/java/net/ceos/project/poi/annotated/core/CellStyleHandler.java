@@ -216,38 +216,41 @@ public class CellStyleHandler {
 	 * @param e
 	 *            the extension file
 	 */
-	protected static void applyComment(final Workbook wb, final Cell c, final String t, final ExtensionFileType e) {
-		if (ExtensionFileType.XLS.equals(e)) {
-			final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<>();
+	protected static void applyComment(final ConfigCriteria configCriteria, final Boolean isAuthorizedComment,
+			final Cell c) {
+		if (StringUtils.isBlank(configCriteria.getElement().commentRules())
+				|| StringUtils.isNotBlank(configCriteria.getElement().commentRules()) && isAuthorizedComment) {
+			if (ExtensionFileType.XLS.equals(configCriteria.getExtension())) {
+				final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<>();
 
-			CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
-			HSSFSheet sheet = (HSSFSheet) c.getSheet();
-			HSSFPatriarch drawingPatriarch = drawingPatriarches.get(sheet);
-			if (drawingPatriarch == null) {
-				drawingPatriarch = sheet.createDrawingPatriarch();
-				drawingPatriarches.put(sheet, drawingPatriarch);
+				CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
+				HSSFSheet sheet = (HSSFSheet) c.getSheet();
+				HSSFPatriarch drawingPatriarch = drawingPatriarches.get(sheet);
+				if (drawingPatriarch == null) {
+					drawingPatriarch = sheet.createDrawingPatriarch();
+					drawingPatriarches.put(sheet, drawingPatriarch);
+				}
+
+				Comment comment = drawingPatriarch
+						.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));
+				comment.setString(createHelper.createRichTextString(configCriteria.getElement().comment()));
+
+				c.setCellComment(comment);
+
+			} else if (ExtensionFileType.XLSX.equals(configCriteria.getExtension())) {
+				CreationHelper factory = configCriteria.getWorkbook().getCreationHelper();
+
+				Drawing drawing = c.getSheet().createDrawingPatriarch();
+
+				ClientAnchor anchor = factory.createClientAnchor();
+
+				Comment comment = drawing.createCellComment(anchor);
+				RichTextString str = factory.createRichTextString(configCriteria.getElement().comment());
+				comment.setString(str);
+
+				c.setCellComment(comment);
 			}
-
-			Comment comment = drawingPatriarch
-					.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));
-			comment.setString(createHelper.createRichTextString(t));
-
-			c.setCellComment(comment);
-
-		} else if (ExtensionFileType.XLSX.equals(e)) {
-			CreationHelper factory = wb.getCreationHelper();
-
-			Drawing drawing = c.getSheet().createDrawingPatriarch();
-
-			ClientAnchor anchor = factory.createClientAnchor();
-
-			Comment comment = drawing.createCellComment(anchor);
-			RichTextString str = factory.createRichTextString(t);
-			comment.setString(str);
-
-			c.setCellComment(comment);
 		}
-
 	}
 
 	/**
@@ -461,8 +464,9 @@ public class CellStyleHandler {
 			cs.setWrapText(decorator.isWrapText());
 
 			/* add the font style to the cell */
-			CellStyleHandler.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(), decorator.getFontColor(),
-					decorator.isFontBold(), decorator.isFontItalic(), decorator.getFontUnderline());
+			CellStyleHandler.applyFont(wb, cs, decorator.getFontName(), decorator.getFontSize(),
+					decorator.getFontColor(), decorator.isFontBold(), decorator.isFontItalic(),
+					decorator.getFontUnderline());
 		} catch (Exception e) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), e);
 		}
