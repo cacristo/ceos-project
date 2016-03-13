@@ -1,5 +1,6 @@
 package net.ceos.project.poi.annotated.core;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -7,8 +8,10 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
+import net.ceos.project.poi.annotated.bean.XlsElementTestFactory;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
@@ -86,6 +89,16 @@ public class ConfigCriteriaTest {
 	public Object[][] booleanCellDecoratorProvider() throws Exception {
 		return new Object[][] { 
 			{ CellStyleHandler.CELL_DECORATOR_BOOLEAN, (short) CellStyle.ALIGN_CENTER, (short) CellStyle.VERTICAL_CENTER, 	(short) CellStyle.BORDER_HAIR, 	(short) HSSFColor.YELLOW.index,	"Times New Roman", 	(short) 11, true, 	true, 	(byte) 1, true }
+		};
+	}
+
+	@DataProvider
+	public Object[][] elementProvider(){
+		return new Object[][] { 
+			{ XlsElementTestFactory.build("Title 1", "date", 	"", "ddMMyy", 	"ddMMyyyy", false, "", "")},
+			{ XlsElementTestFactory.build("Title 2", "numeric",	"", "0", 		"", 		false, "", "")},
+			{ XlsElementTestFactory.build("Title 3", "double", 	"", "", 		"0.00", 	false, "", "")},
+			{ XlsElementTestFactory.build("Title 4", "boolean",	"", "", 		"", 		false, "", "")}
 		};
 	}
 	
@@ -254,9 +267,52 @@ public class ConfigCriteriaTest {
 	/* TODO test getCellStyle */
 	/* TODO test getFormatMask */
 	/* TODO test getTransformMask */
-	/* TODO test getMask */
-	/* TODO test generateCellStyleKey */
+
+	@Test(dataProvider="elementProvider")
+	public void testFormatMask(XlsElement element) {
+		ConfigCriteria config = new ConfigCriteria();
+		
+		config.setElement(element);
+		
+		Assert.assertNotNull(element);
+		Assert.assertNotNull(config);
+		Assert.assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
+	}
+
+	@Test(dataProvider="elementProvider")
+	public void testTransformMask(XlsElement element) {
+		ConfigCriteria config = new ConfigCriteria();
+		
+		config.setElement(element);
+		
+		Assert.assertNotNull(element);
+		Assert.assertNotNull(config);
+		Assert.assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
+	}
+
+	@Test(dataProvider="elementProvider")
+	public void testMask(XlsElement element) {
+		ConfigCriteria config = new ConfigCriteria();
+		
+		config.setElement(element);
+		
+		Assert.assertNotNull(element);
+		Assert.assertNotNull(config);
+		Assert.assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
+	}
 	
+	
+	@Test(dataProvider="elementProvider")
+	public void testGenerateCellStyleKey(XlsElement element) {
+		ConfigCriteria config = new ConfigCriteria();
+		
+		config.setElement(element);
+		
+		Assert.assertNotNull(element);
+		Assert.assertNotNull(config);
+		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"), detectMaskToUse(element, "thisMask").concat(element.decorator()));
+	}
+
 	/*internal methods */
 
 	/**
@@ -292,5 +348,35 @@ public class ConfigCriteriaTest {
 		
 		return decorator;
 	}
-	
+
+	/**
+	 * Generate the format mask to be used.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private String detectFormatMaskToUse(XlsElement element, String newMask) {
+		return StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : newMask;
+	}
+
+	/**
+	 * Generate the transform mask to be used.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private String detectTransformMaskToUse(XlsElement element, String newMask) {
+		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask() : newMask;
+	}
+
+	/**
+	 * Generate the mask to be used.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private String detectMaskToUse(XlsElement element, String newMask) {
+		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
+				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : newMask);
+	}
 }
