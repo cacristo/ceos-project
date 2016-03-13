@@ -44,7 +44,8 @@ public enum ExceptionMessage {
 	SheetException_UpdateSheet("Problem while add a new Sheet."),
 
 	/* declared messages of SheetException */
-	CustomizedRulesException_NoSuchMethod("The customized method entry does not exist. Review your configuration.");
+	CustomizedRulesException_NoSuchMethod("The customized method entry does not exist. Review your configuration."),
+	CustomizedRulesException_NoSuchCommentMethod("The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.");
 	
 	
 	private String message;
