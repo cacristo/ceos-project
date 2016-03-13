@@ -284,9 +284,10 @@ public class CellHandler {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean stringWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException {
+			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -302,15 +303,21 @@ public class CellHandler {
 			// apply the style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_String.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -325,9 +332,10 @@ public class CellHandler {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean integerWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException {
+			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -344,15 +352,21 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -367,9 +381,10 @@ public class CellHandler {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean longWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException {
+			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -386,15 +401,21 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Long.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -409,9 +430,10 @@ public class CellHandler {
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean doubleWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException {
+			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -433,15 +455,21 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Double.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -457,9 +485,10 @@ public class CellHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean bigDecimalWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException {
+			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -486,15 +515,21 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_BigDecimal.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -510,9 +545,10 @@ public class CellHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean dateWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException {
+			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			Date date = (Date) configCriteria.getField().get(o);
@@ -532,17 +568,26 @@ public class CellHandler {
 				// apply cell style
 				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
 						CellStyleHandler.MASK_DECORATOR_DATE);
-
-				if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-					// apply the comment
-					CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-							configCriteria.getExtension());
-				}
 			}
 
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				Date date = (Date) configCriteria.getField().get(o);
+				if (date != null) {
+					CellStyleHandler.applyComment(configCriteria,
+							(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+				}
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
+		}
+
 		return isUpdated;
 	}
 
@@ -558,9 +603,10 @@ public class CellHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean floatWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException {
+			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			if (configCriteria.getElement().isFormula()) {
@@ -577,14 +623,19 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Float.getMessage(), e);
+		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
 		}
 		return isUpdated;
 	}
@@ -602,9 +653,10 @@ public class CellHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean booleanWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException {
+			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			Boolean bBoolean = (Boolean) configCriteria.getField().get(o);
@@ -621,14 +673,19 @@ public class CellHandler {
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
 		}
 		return isUpdated;
 	}
@@ -646,9 +703,10 @@ public class CellHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
+	 * @throws CustomizedRulesException
 	 */
 	protected static boolean enumWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException {
+			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 
 		try {
@@ -671,14 +729,19 @@ public class CellHandler {
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_ENUM, null);
 
-			if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
-				// apply the comment
-				CellStyleHandler.applyComment(configCriteria.getWorkbook(), c, configCriteria.getElement().comment(),
-						configCriteria.getExtension());
-			}
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+		}
+
+		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
+			// apply the comment
+			try {
+				CellStyleHandler.applyComment(configCriteria,
+						(Boolean) applyCommentRules(o, configCriteria.getElement().commentRules()), c);
+			} catch (Exception e) {
+				throw new CustomizedRulesException(
+						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+			}
 		}
 		return isUpdated;
 	}
@@ -795,6 +858,30 @@ public class CellHandler {
 		Method m = o.getClass().getDeclaredMethod(method, argTypes);
 
 		return m.invoke(o, (Object[]) null);
+	}
+
+	/**
+	 * Apply a explicit formula value at the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @throws NoSuchMethodException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private static Object applyCommentRules(final Object o, final String method)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		if (StringUtils.isNotBlank(method)) {
+			@SuppressWarnings("rawtypes")
+			Class[] argTypes = {};
+
+			Method m = o.getClass().getDeclaredMethod(method, argTypes);
+
+			return m.invoke(o, (Object[]) null);
+		}
+		return true;
 	}
 
 	/**
