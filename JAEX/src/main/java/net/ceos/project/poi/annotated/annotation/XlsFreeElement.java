@@ -66,6 +66,14 @@ public @interface XlsFreeElement {
 	String comment() default "";
 
 	/**
+	 * Define the commentary of the element applying determined rule(s).<br>
+	 * By default is empty.
+	 * 
+	 * @return the rules to apply
+	 */
+	String commentRules() default "";
+
+	/**
 	 * The decorator to apply to the element.<br>
 	 * By default is empty.
 	 * 
