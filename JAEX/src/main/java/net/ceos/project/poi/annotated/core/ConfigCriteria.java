@@ -67,6 +67,16 @@ public class ConfigCriteria {
 	}
 
 	/**
+	 * Force the generic cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public final void overrideGenericCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC, decorator);
+	}
+
+	/**
 	 * Force the numeric cell decorator.
 	 * 
 	 * @param decorator
@@ -155,6 +165,14 @@ public class ConfigCriteria {
 							: CellStyleHandler.initializeHeaderCellDecorator(workbook));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER));
 		}
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC))
+							: CellStyleHandler.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC));
+		}
 		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC) == null) {
 			stylesMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC)
@@ -178,14 +196,6 @@ public class ConfigCriteria {
 									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN))
 							: CellStyleHandler.initializeBooleanCellDecorator(workbook));
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC))
-							: CellStyleHandler.initializeGenericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC));
 		}
 		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_ENUM) == null) {
 			stylesMap.put(CellStyleHandler.CELL_DECORATOR_ENUM,
