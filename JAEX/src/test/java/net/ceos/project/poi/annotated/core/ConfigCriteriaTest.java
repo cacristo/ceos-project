@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
+import net.ceos.project.poi.annotated.bean.ObjectConfigurable;
+import net.ceos.project.poi.annotated.bean.ObjectConfigurableBuilder;
 import net.ceos.project.poi.annotated.bean.XlsElementTestFactory;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
@@ -65,6 +67,14 @@ public class ConfigCriteriaTest {
 			{ CellStyleHandler.CELL_DECORATOR_HEADER, (short) CellStyle.ALIGN_CENTER, (short) CellStyle.VERTICAL_CENTER, 	(short) CellStyle.BORDER_DOTTED, 	(short) HSSFColor.YELLOW.index,	"Times New Roman", 	(short) 20, true, 	true, 	(byte) 1, true },
 			{ CellStyleHandler.CELL_DECORATOR_HEADER, (short) CellStyle.ALIGN_LEFT, 	(short) CellStyle.VERTICAL_TOP, 	(short) CellStyle.BORDER_DOUBLE, 	(short) HSSFColor.RED.index, 	"Helvetic", 		(short) 8, 	true, 	false, 	(byte) 1, true },
 			{ CellStyleHandler.CELL_DECORATOR_HEADER, (short) CellStyle.ALIGN_RIGHT, 	(short) CellStyle.VERTICAL_BOTTOM, 	(short) CellStyle.BORDER_DASH_DOT, 	(short) HSSFColor.BLUE.index, 	"Arial Black",		(short) 14, false, 	false, 	(byte) 0, true } 
+		};
+	}
+	
+	@DataProvider
+	public Object[][] genericCellDecoratorProvider() throws Exception {
+		return new Object[][] { 
+			{ CellStyleHandler.CELL_DECORATOR_GENERIC, (short) CellStyle.ALIGN_CENTER, (short) CellStyle.VERTICAL_CENTER, 	(short) CellStyle.BORDER_NONE, 	(short) HSSFColor.GREEN.index,	"Times New Roman", 	(short) 9, 	false, 	false, 	(byte) 1, false },
+			{ CellStyleHandler.CELL_DECORATOR_GENERIC, (short) CellStyle.ALIGN_RIGHT, 	(short) CellStyle.VERTICAL_BOTTOM, 	(short) CellStyle.BORDER_NONE, 	(short) HSSFColor.PINK.index, 	"Times New Roman",	(short) 11, false, 	false, 	(byte) 0, false } 
 		};
 	}
 	
@@ -172,6 +182,36 @@ public class ConfigCriteriaTest {
 		Assert.assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
 		Assert.assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
 		Assert.assertEquals(decoratorHeader.isWrapText(), isWrapText);
+	}
+
+	/**
+	 * Test the override generic {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 */
+	@Test(dataProvider="genericCellDecoratorProvider")
+	public void testOverrideGenericCellDecorator(String decoratorName, short alignment, short verticalAlignment,
+			short border, short foregroundColor, String fontName, short fontSize, boolean isFontBold, boolean isFontItalic, byte fontUnderline, boolean isWrapText) throws Exception {
+		
+		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
+				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
+		
+		ConfigCriteria config = new ConfigCriteria();
+		config.overrideGenericCellDecorator(decorator);
+		
+		CellDecorator decoratorGeneric = config.getCellDecoratorMap().get(decoratorName);
+		
+		Assert.assertNotNull(decorator);
+		Assert.assertNotNull(decoratorGeneric);
+		Assert.assertEquals(decoratorGeneric.getDecoratorName(), decoratorName);
+		Assert.assertEquals(decoratorGeneric.getAlignment(), alignment);
+		Assert.assertEquals(decoratorGeneric.getVerticalAlignment(), verticalAlignment);
+		Assert.assertEquals(decoratorGeneric.getBorder(), border);
+		Assert.assertEquals(decoratorGeneric.getForegroundColor(), foregroundColor);
+		Assert.assertEquals(decoratorGeneric.getFontName(), fontName);
+		Assert.assertEquals(decoratorGeneric.getFontSize(), fontSize);
+		Assert.assertEquals(decoratorGeneric.isFontBold(), isFontBold);
+		Assert.assertEquals(decoratorGeneric.isFontItalic(), isFontItalic);
+		Assert.assertEquals(decoratorGeneric.getFontUnderline(), fontUnderline);
+		Assert.assertEquals(decoratorGeneric.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -313,7 +353,111 @@ public class ConfigCriteriaTest {
 		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"), detectMaskToUse(element, "thisMask").concat(element.decorator()));
 	}
 
-	/*internal methods */
+	/* Test complete */
+	
+
+	/**
+	 * Test the override the header {@link CellDecorator} specified by annotation at the
+	 * element {@link ObjectConfigurable}
+	 */
+	@Test
+	public void testMarshalOverrideHeader() throws Exception {
+		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
+
+		IEngine en = new Engine();
+
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		CellDecorator configurationHeader = new CellDecorator();
+		// override default header configuration
+		configurationHeader.setDecoratorName("header");
+		configurationHeader.setAlignment(CellStyle.ALIGN_CENTER);
+		configurationHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		configurationHeader.setBorder(CellStyle.BORDER_THIN);
+
+		configurationHeader.setForegroundColor(HSSFColor.BLUE.index);
+		configurationHeader.setFontBold(true);
+		configurationHeader.setFontItalic(true);
+		configurationHeader.setWrapText(true);
+		// en.overrideHeaderCellDecorator(configurationHeader);
+		configCriteria.overrideHeaderCellDecorator(configurationHeader);
+
+		CellDecorator dateDecorator = new CellDecorator();
+		dateDecorator.setDecoratorName("anotherDate");
+		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
+		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		dateDecorator.setForegroundColor(HSSFColor.RED.index);
+		dateDecorator.setFontItalic(true);
+		dateDecorator.setWrapText(true);
+
+		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
+
+		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test if the override of the header {@link CellDecorator} specified by annotation
+	 * at the element {@link ObjectConfigurable} cause any damage at the moment
+	 * of unmarshal.
+	 */
+	@Test
+	public void testUnmarshalOverrideHeader() throws Exception {
+		ObjectConfigurable oc = new ObjectConfigurable();
+
+		Engine en = new Engine();
+
+		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
+
+		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
+	}
+
+	/**
+	 * Test the override the header {@link CellDecorator} specified by annotation at the
+	 * element {@link ObjectConfigurable}
+	 */
+	@Test
+	public void testMarshalHeaderAnnotated() throws Exception {
+		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
+
+		IEngine en = new Engine();
+
+		ConfigCriteria configCriteria = new ConfigCriteria();
+
+		CellDecorator dateDecorator = new CellDecorator();
+		dateDecorator.setDecoratorName("anotherDate");
+		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
+		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+		dateDecorator.setForegroundColor(HSSFColor.RED.index);
+		dateDecorator.setFontItalic(true);
+		dateDecorator.setWrapText(true);
+
+		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
+		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
+
+		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test if the override of the header {@link CellDecorator} specified by annotation
+	 * at the element {@link ObjectConfigurable} cause any damage at the moment
+	 * of unmarshal.
+	 */
+	@Test
+	public void testUnmarshalHeaderAnnotated() throws Exception {
+		ObjectConfigurable oc = new ObjectConfigurable();
+
+		Engine en = new Engine();
+
+		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
+
+		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
+	}
+	
+	/* internal methods */
 
 	/**
 	 * Initialize the cell decorator
