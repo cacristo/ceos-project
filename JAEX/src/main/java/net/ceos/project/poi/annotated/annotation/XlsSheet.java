@@ -45,6 +45,13 @@ public @interface XlsSheet {
 	int startCell() default 1;
 
 	/**
+	 * Define the coordinates of the freeze pane to apply at the sheet 
+	 * @return
+	 */
+	XlsFreezePane freezePane() default @XlsFreezePane(colSplit = -1, rowSplit = -1)
+	;
+
+	/**
 	 * Define the propagation type when writing/reading at the Excel.<br>
 	 * By default is PROPAGATION_HORIZONTAL.
 	 * 
