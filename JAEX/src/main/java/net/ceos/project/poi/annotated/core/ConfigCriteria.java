@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
+import net.ceos.project.poi.annotated.annotation.XlsFreezePane;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
@@ -36,6 +37,9 @@ public class ConfigCriteria {
 	private int startRow;
 	private int startCell;
 
+	/* sheet parameters */
+	private XlsFreezePane freezePane;
+	
 	/* element parameters */
 	private XlsElement element;
 	private Field field;
@@ -543,5 +547,19 @@ public class ConfigCriteria {
 		String mask = StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
 				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
 		return mask.concat(decorator);
+	}
+
+	/**
+	 * @return the freezePane
+	 */
+	public final XlsFreezePane getFreezePane() {
+		return freezePane;
+	}
+
+	/**
+	 * @param freezePane the freezePane to set
+	 */
+	public final void setFreezePane(XlsFreezePane freezePane) {
+		this.freezePane = freezePane;
 	}
 }

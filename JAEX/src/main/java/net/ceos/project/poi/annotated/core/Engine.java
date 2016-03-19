@@ -124,6 +124,8 @@ public class Engine implements IEngine {
 		configCriteria.setPropagation(annotation.propagation());
 		configCriteria.setStartRow(annotation.startRow());
 		configCriteria.setStartCell(annotation.startCell());
+		configCriteria.setFreezePane(annotation.freezePane());
+		
 	}
 
 	/**
@@ -241,6 +243,39 @@ public class Engine implements IEngine {
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 		}
+	}
+
+	/**
+	 * Apply a freeze pane to the sheet.
+	 * 
+	 * @param configCriteria
+	 */
+	private void applyFreezePane(final ConfigCriteria configCriteria) {
+		if(checkMandatoryFreezePaneArgs(configCriteria)
+				&& configCriteria.getFreezePane().leftMostColumn() == -1
+				&& configCriteria.getFreezePane().topRow() == -1){
+			configCriteria.getSheet().createFreezePane(
+					configCriteria.getFreezePane().colSplit(), 
+					configCriteria.getFreezePane().rowSplit());
+			
+		} else if(checkMandatoryFreezePaneArgs(configCriteria)
+				&& configCriteria.getFreezePane().leftMostColumn() != -1
+				&& configCriteria.getFreezePane().topRow() != -1){
+			configCriteria.getSheet().createFreezePane(
+					configCriteria.getFreezePane().colSplit(), 
+					configCriteria.getFreezePane().rowSplit(), 
+					configCriteria.getFreezePane().leftMostColumn(), 
+					configCriteria.getFreezePane().topRow());
+		}
+	}
+
+	/**
+	 * @param configCriteria
+	 * @return
+	 */
+	private boolean checkMandatoryFreezePaneArgs(final ConfigCriteria configCriteria) {
+		return configCriteria.getFreezePane().colSplit() != -1
+				&& configCriteria.getFreezePane().rowSplit() != -1;
 	}
 
 	/**
@@ -1210,6 +1245,8 @@ public class Engine implements IEngine {
 			marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		}
+		
+		applyFreezePane(configCriteria);
 
 		/* TODO apply the column size here - if necessary */
 	}
