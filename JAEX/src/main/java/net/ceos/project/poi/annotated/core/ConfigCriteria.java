@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreezePane;
+import net.ceos.project.poi.annotated.annotation.XlsGroupElement;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
@@ -39,6 +40,7 @@ public class ConfigCriteria {
 
 	/* sheet parameters */
 	private XlsFreezePane freezePane;
+	private XlsGroupElement groupElement;
 	
 	/* element parameters */
 	private XlsElement element;
@@ -484,6 +486,34 @@ public class ConfigCriteria {
 	}
 
 	/**
+	 * @return the freezePane
+	 */
+	public final XlsFreezePane getFreezePane() {
+		return freezePane;
+	}
+
+	/**
+	 * @param freezePane the freezePane to set
+	 */
+	public final void setFreezePane(XlsFreezePane freezePane) {
+		this.freezePane = freezePane;
+	}
+
+	/**
+	 * @return the groupElement
+	 */
+	public final XlsGroupElement getGroupElement() {
+		return groupElement;
+	}
+
+	/**
+	 * @param groupElement the groupElement to set
+	 */
+	public final void setGroupElement(XlsGroupElement groupElement) {
+		this.groupElement = groupElement;
+	}
+
+	/**
 	 * Get the CellStyle according the type of field.
 	 * 
 	 * @param type
@@ -547,19 +577,5 @@ public class ConfigCriteria {
 		String mask = StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
 				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
 		return mask.concat(decorator);
-	}
-
-	/**
-	 * @return the freezePane
-	 */
-	public final XlsFreezePane getFreezePane() {
-		return freezePane;
-	}
-
-	/**
-	 * @param freezePane the freezePane to set
-	 */
-	public final void setFreezePane(XlsFreezePane freezePane) {
-		this.freezePane = freezePane;
 	}
 }

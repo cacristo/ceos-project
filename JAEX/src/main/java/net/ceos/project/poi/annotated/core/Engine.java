@@ -29,6 +29,8 @@ import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
+import net.ceos.project.poi.annotated.annotation.XlsGroupColumn;
+import net.ceos.project.poi.annotated.annotation.XlsGroupRow;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
@@ -125,6 +127,7 @@ public class Engine implements IEngine {
 		configCriteria.setStartRow(annotation.startRow());
 		configCriteria.setStartCell(annotation.startCell());
 		configCriteria.setFreezePane(annotation.freezePane());
+		configCriteria.setGroupElement(annotation.groupElement());
 		
 	}
 
@@ -279,6 +282,28 @@ public class Engine implements IEngine {
 	}
 
 	/**
+	 * Apply a freeze pane to the sheet.
+	 * 
+	 * @param configCriteria
+	 */
+	private void applyGroupElements(final ConfigCriteria configCriteria) {
+		if(configCriteria.getGroupElement() != null){
+			XlsGroupColumn[] columns = configCriteria.getGroupElement().groupColumns();
+			for(int i = 0; i < columns.length; i++){
+				if(columns[i].fromColumn() != 0 || columns[i].toColumn() != 0) {
+					configCriteria.getSheet().groupColumn(columns[i].fromColumn(), columns[i].toColumn());
+				}
+			}
+			XlsGroupRow[] rows = configCriteria.getGroupElement().groupRows();
+			for(int i = 0; i < rows.length; i++){
+				if(rows[i].fromRow() != 0 || rows[i].toRow() != 0) {
+					configCriteria.getSheet().groupRow(rows[i].fromRow(), rows[i].toRow());
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Apply merge region if necessary.
 	 * 
 	 * @param configCriteria
@@ -325,6 +350,7 @@ public class Engine implements IEngine {
 
 			/* merge region of the master header cell */
 			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
+			
 		}
 	}
 
@@ -1247,6 +1273,9 @@ public class Engine implements IEngine {
 		}
 		
 		applyFreezePane(configCriteria);
+		
+		applyGroupElements(configCriteria);
+		
 
 		/* TODO apply the column size here - if necessary */
 	}

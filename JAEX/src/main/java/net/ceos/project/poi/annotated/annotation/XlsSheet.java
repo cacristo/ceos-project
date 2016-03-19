@@ -45,10 +45,21 @@ public @interface XlsSheet {
 	int startCell() default 1;
 
 	/**
-	 * Define the coordinates of the freeze pane to apply at the sheet 
-	 * @return
+	 * Define the coordinates of the freeze pane to apply at the sheet
+	 * 
+	 * @return the freeze pane to apply
 	 */
-	XlsFreezePane freezePane() default @XlsFreezePane(colSplit = -1, rowSplit = -1)
+	XlsFreezePane freezePane() default @XlsFreezePane(colSplit = 0, rowSplit = 0)
+	;
+
+	/**
+	 * Define a group, columns or rows, according the column range or row range
+	 * respectively
+	 * 
+	 * @return the group of elements to apply
+	 */
+	XlsGroupElement groupElement() default @XlsGroupElement(groupColumns = {
+			@XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) })
 	;
 
 	/**
