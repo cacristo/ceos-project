@@ -1,8 +1,10 @@
 package net.ceos.project.poi.annotated.exception;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
@@ -26,6 +28,38 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
  * @author Carlos CRISTO ABREU
  */
 public class ElementExceptionTest {
+
+	@DataProvider
+	public Object[][] collectionProvider() {
+		/* Collection empty */
+		List<Object> collectionEmpty = new ArrayList<Object>();
+		/* Collection with object null */
+		List<Object> collection = new ArrayList<Object>();
+		SimpleObject so = null;
+		collection.add(so);
+		
+		return new Object[][] { 
+			{ collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS },
+			{ collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX }
+		};
+	}
+
+	@DataProvider
+	public Object[][] overwriteCellProvider(){
+		return new Object[][] { 
+			{ new XlsElementOverwriteCell() },
+			{ new XlsFreeElementOverwriteCell() }
+		};
+	}
+
+	@DataProvider
+	public Object[][] invalidPositionProvider(){
+		return new Object[][] { 
+			{ new XlsElementInvalidPosition() },
+			{ new XlsFreeElementInvalidPositionCell() },
+			{ new XlsFreeElementInvalidPositionRow() }
+		};
+	}
 
 	/**
 	 * Test an null object
@@ -66,32 +100,17 @@ public class ElementExceptionTest {
 	}
 
 	/**
-	 * Test an empty list
+	 * Test an empty list & list with null object
 	 * 
 	 * @throws Exception
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
-	public void testMarshalListEmpty() throws Exception {
-		List<Object> collectionEmpty = new ArrayList<Object>();
-
+	@SuppressWarnings("rawtypes")
+	@Test(dataProvider = "collectionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
+	public void testMarshalListEmpty(Collection collection, String fileName, ExtensionFileType extension) throws Exception {
 		IEngine en = new Engine();
-		en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLSX);
+		en.marshalAsCollection(collection, fileName, extension);
 	}
 
-	/**
-	 * Test an empty list
-	 * 
-	 * @throws Exception
-	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
-	public void testMarshalListWithObjectEmpty() throws Exception {
-		List<Object> collection = new ArrayList<Object>();
-		SimpleObject so = null;
-		collection.add(so);
-
-		IEngine en = new Engine();
-		en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
-	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying use a complex object
@@ -105,57 +124,22 @@ public class ElementExceptionTest {
 	}
 
 	/**
-	 * Test a {@link XlsElement} trying write at one cell already used
+	 * Test a {@link XlsElement} & {@link XlsFreeElement} trying write at one cell already used
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
-	public void testMarshalXlsElementOverwriteCell() throws Exception {
-		XlsElementOverwriteCell overwrite = new XlsElementOverwriteCell();
-
+	@Test(dataProvider = "overwriteCellProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
+	public void testMarshalXlsElementOverwriteCell(Object object) throws Exception {
 		IEngine en = new Engine();
-		en.marshalToWorkbook(overwrite);
+		en.marshalToWorkbook(object);
 	}
 
 	/**
-	 * Test a {@link XlsFreeElement} trying write at one cell already used
+	 * Test a {@link XlsElement} trying write at invalid position<br>
+	 * Test a {@link XlsFreeElement} trying write at invalid cell position<br>
+	 * Test a {@link XlsFreeElement} trying write at invalid row position<br>
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
-	public void testMarshalXlsFreeElementOverwriteCell() throws Exception {
-		XlsFreeElementOverwriteCell overwrite = new XlsFreeElementOverwriteCell();
-
+	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
+	public void testMarshalXlsElementInvalidPosition(Object object) throws Exception {
 		IEngine en = new Engine();
-		en.marshalToSheet(overwrite);
-	}
-
-	/**
-	 * Test a {@link XlsElement} trying write at invalid position
-	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
-	public void testMarshalXlsElementInvalidPosition() throws Exception {
-		XlsElementInvalidPosition invalidPosition = new XlsElementInvalidPosition();
-
-		IEngine en = new Engine();
-		en.marshalToFileOutputStream(invalidPosition);
-	}
-
-	/**
-	 * Test a {@link XlsFreeElement} trying write at invalid cell position
-	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
-	public void testMarshalXlsFreeElementInvalidPositionCell() throws Exception {
-		XlsFreeElementInvalidPositionCell overwrite = new XlsFreeElementInvalidPositionCell();
-
-		IEngine en = new Engine();
-		en.marshalToSheet(overwrite);
-	}
-
-	/**
-	 * Test a {@link XlsFreeElement} trying write at invalid row position
-	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
-	public void testMarshalXlsFreeElementInvalidPositionRow() throws Exception {
-		XlsFreeElementInvalidPositionRow overwrite = new XlsFreeElementInvalidPositionRow();
-
-		IEngine en = new Engine();
-		en.marshalToSheet(overwrite);
+		en.marshalToFileOutputStream(object);
 	}
 }

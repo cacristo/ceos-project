@@ -5,8 +5,10 @@ import static org.testng.Assert.assertEquals;
 import java.util.Date;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import net.ceos.project.poi.annotated.bean.FantasticFourFactory;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesMultipleMethods;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNoSuchMethod;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNumeric;
@@ -22,6 +24,7 @@ import net.ceos.project.poi.annotated.core.TestUtils;
  * @author Carlos CRISTO ABREU
  */
 public class CustomizedRulesExceptionTest {
+	
 	private boolean exceptionDetected = false;
 
 	private void reset() {
@@ -34,6 +37,21 @@ public class CustomizedRulesExceptionTest {
 		reset();
 	}
 
+	@DataProvider
+	public Object[][] fantasticFourFactoryProvider() {
+		return new Object[][] { 
+			{ FantasticFourFactory.instanceMrFantastic() },
+			{ FantasticFourFactory.instanceInvisibleWoman() },
+			{ FantasticFourFactory.instanceThing() },
+			{ FantasticFourFactory.instanceHumanTorch() },
+			{ FantasticFourFactory.instanceAntMan() },
+			{ FantasticFourFactory.instanceBlackPanther() },
+			{ FantasticFourFactory.instanceCrystal() },
+			{ FantasticFourFactory.instanceDrDoom() },
+			{ FantasticFourFactory.instanceFlux() }
+		};
+	}
+	
 	/**
 	 * Test a simple customized rules defined if value under 450
 	 * 
@@ -156,4 +174,15 @@ public class CustomizedRulesExceptionTest {
 		IEngine en = new Engine();
 		en.marshalToWorkbook(custom);
 	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(dataProvider="fantasticFourFactoryProvider", expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.")
+	public void testCommentRuleNoSuchMethod(Object fantasticFour) throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(fantasticFour);
+	}	
 }
