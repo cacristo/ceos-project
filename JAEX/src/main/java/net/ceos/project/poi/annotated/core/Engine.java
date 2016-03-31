@@ -29,8 +29,6 @@ import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
-import net.ceos.project.poi.annotated.annotation.XlsGroupColumn;
-import net.ceos.project.poi.annotated.annotation.XlsGroupRow;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
@@ -245,61 +243,6 @@ public class Engine implements IEngine {
 
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
-		}
-	}
-
-	/**
-	 * Apply a freeze pane to the sheet.
-	 * 
-	 * @param configCriteria
-	 */
-	private void applyFreezePane(final ConfigCriteria configCriteria) {
-		if(checkMandatoryFreezePaneArgs(configCriteria)
-				&& configCriteria.getFreezePane().leftMostColumn() == -1
-				&& configCriteria.getFreezePane().topRow() == -1){
-			configCriteria.getSheet().createFreezePane(
-					configCriteria.getFreezePane().colSplit(), 
-					configCriteria.getFreezePane().rowSplit());
-			
-		} else if(checkMandatoryFreezePaneArgs(configCriteria)
-				&& configCriteria.getFreezePane().leftMostColumn() != -1
-				&& configCriteria.getFreezePane().topRow() != -1){
-			configCriteria.getSheet().createFreezePane(
-					configCriteria.getFreezePane().colSplit(), 
-					configCriteria.getFreezePane().rowSplit(), 
-					configCriteria.getFreezePane().leftMostColumn(), 
-					configCriteria.getFreezePane().topRow());
-		}
-	}
-
-	/**
-	 * @param configCriteria
-	 * @return
-	 */
-	private boolean checkMandatoryFreezePaneArgs(final ConfigCriteria configCriteria) {
-		return configCriteria.getFreezePane().colSplit() != -1
-				&& configCriteria.getFreezePane().rowSplit() != -1;
-	}
-
-	/**
-	 * Apply a freeze pane to the sheet.
-	 * 
-	 * @param configCriteria
-	 */
-	private void applyGroupElements(final ConfigCriteria configCriteria) {
-		if(configCriteria.getGroupElement() != null){
-			XlsGroupColumn[] columns = configCriteria.getGroupElement().groupColumns();
-			for(int i = 0; i < columns.length; i++){
-				if(columns[i].fromColumn() != 0 || columns[i].toColumn() != 0) {
-					configCriteria.getSheet().groupColumn(columns[i].fromColumn(), columns[i].toColumn());
-				}
-			}
-			XlsGroupRow[] rows = configCriteria.getGroupElement().groupRows();
-			for(int i = 0; i < rows.length; i++){
-				if(rows[i].fromRow() != 0 || rows[i].toRow() != 0) {
-					configCriteria.getSheet().groupRow(rows[i].fromRow(), rows[i].toRow());
-				}
-			}
 		}
 	}
 	
@@ -596,6 +539,13 @@ public class Engine implements IEngine {
 			isUpdated = CellHandler.stringWriter(configCriteria, o, cell);
 			break;
 
+		case CellHandler.OBJECT_SHORT:
+			/* falls through */
+		case CellHandler.PRIMITIVE_SHORT:
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellHandler.shortWriter(configCriteria, o, cell);
+			break;
+
 		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
 		case CellHandler.PRIMITIVE_INTEGER:
@@ -794,6 +744,11 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
+				/* validate the propagation type & formulas */
+				if(xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula()) && xlsAnnotation.formula().contains("idy")){
+					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+				}
+
 				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
@@ -884,6 +839,11 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
+				/* validate the propagation type & formulas */
+				if(xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula()) && xlsAnnotation.formula().contains("idx")){
+					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+				}
+
 				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
@@ -900,7 +860,8 @@ public class Engine implements IEngine {
 
 				/* create the row */
 				Row row;
-				if (baseIdxCell == 1) {
+				//if (baseIdxCell == 1) {
+				if (baseIdxCell == 0) {
 					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
 					row = initializeRow(configCriteria.getSheet(), indexRow + xlsAnnotation.position());
@@ -1272,9 +1233,9 @@ public class Engine implements IEngine {
 
 		}
 		
-		applyFreezePane(configCriteria);
+		SheetFreezePaneHandler.applyFreezePane(configCriteria);
 		
-		applyGroupElements(configCriteria);
+		SheetGroupElementHandler.applyGroupElements(configCriteria);
 		
 
 		/* TODO apply the column size here - if necessary */
