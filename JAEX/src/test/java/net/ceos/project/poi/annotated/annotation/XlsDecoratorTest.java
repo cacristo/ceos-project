@@ -4,7 +4,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 
 /**
  * Test the annotation {@link XlsDecorator}
@@ -19,7 +19,7 @@ public class XlsDecoratorTest {
 	 */
 	@Test
 	public void testDefaultConfiguration() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> o = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsDecorator
 		if (o.isAnnotationPresent(XlsDecorator.class)) {

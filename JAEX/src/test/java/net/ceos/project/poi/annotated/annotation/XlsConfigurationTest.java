@@ -4,7 +4,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
@@ -20,7 +20,7 @@ public class XlsConfigurationTest {
 	 */
 	@Test
 	public void testDefaultConfiguration() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> o = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
@@ -37,7 +37,7 @@ public class XlsConfigurationTest {
 	 */
 	@Test
 	public void testNameFileAttribute() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> o = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
@@ -54,7 +54,7 @@ public class XlsConfigurationTest {
 	 */
 	@Test
 	public void testExtensionFileAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> o = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> o = XMenFactory.Cyclops.class;
 
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {

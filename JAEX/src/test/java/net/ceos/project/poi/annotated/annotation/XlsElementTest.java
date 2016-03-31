@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 
 /**
  * Test the annotation {@link XlsElement}
@@ -24,7 +24,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testDefaultConfiguration() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -50,7 +50,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testTitleAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -87,7 +87,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testCommentAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -108,7 +108,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testDecoratorAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -129,7 +129,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testFormatMaskAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -150,7 +150,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testTransformMaskAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -171,7 +171,7 @@ public class XlsElementTest {
 	 */
 	@Test
 	public void testFormulaAttribute() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {

@@ -1,10 +1,11 @@
 package net.ceos.project.poi.annotated.annotation;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
@@ -21,7 +22,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testDefaultConfigurationAttibutes() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -31,6 +32,18 @@ public class XlsSheetTest {
 			// add here the annotations attributes
 			assertEquals(xlsSheet.startRow(), 1);
 			assertEquals(xlsSheet.startCell(), 1);
+			assertEquals(xlsSheet.freezePane().colSplit(), 0);
+			assertEquals(xlsSheet.freezePane().rowSplit(), 0);
+			assertEquals(xlsSheet.freezePane().leftMostColumn(), 0);
+			assertEquals(xlsSheet.freezePane().topRow(), 0);
+			XlsGroupColumn[] column = xlsSheet.groupElement().groupColumns();
+			assertNotNull(column);
+			assertEquals(column[0].fromColumn(), 0);
+			assertEquals(column[0].toColumn(), 0);
+			XlsGroupRow[] rows = xlsSheet.groupElement().groupRows();
+			assertNotNull(rows);
+			assertEquals(rows[0].fromRow(), 0);
+			assertEquals(rows[0].toRow(), 0);
 			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_HORIZONTAL);
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_BASE);
 		}
@@ -41,7 +54,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testTitleAttibute() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -58,7 +71,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testPropagationVerticalAttibute() {
-		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
+		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -75,7 +88,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testPropagationHorizontalAttibute() {
-		Class<ObjectsBuilderTest.Thor> oC = ObjectsBuilderTest.Thor.class;
+		Class<XMenFactory.Thor> oC = XMenFactory.Thor.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -92,7 +105,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testCascadeLevelBaseAttibute() {
-		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
+		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -109,7 +122,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testCascadeLevelOneAttibute() {
-		Class<ObjectsBuilderTest.Wolverine> oC = ObjectsBuilderTest.Wolverine.class;
+		Class<XMenFactory.Wolverine> oC = XMenFactory.Wolverine.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -126,7 +139,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testCascadeLevelTwoAttibute() {
-		Class<ObjectsBuilderTest.SpiderMan> oC = ObjectsBuilderTest.SpiderMan.class;
+		Class<XMenFactory.SpiderMan> oC = XMenFactory.SpiderMan.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -143,7 +156,7 @@ public class XlsSheetTest {
 	 */
 	@Test
 	public void testCascadeLevelFullAttibute() {
-		Class<ObjectsBuilderTest.DoctorX> oC = ObjectsBuilderTest.DoctorX.class;
+		Class<XMenFactory.DoctorX> oC = XMenFactory.DoctorX.class;
 
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {

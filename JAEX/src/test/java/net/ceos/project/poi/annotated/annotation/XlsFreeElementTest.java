@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 import net.ceos.project.poi.annotated.definition.TitleOrientationType;
 
 /**
@@ -25,7 +25,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testDefaultConfiguration() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -56,7 +56,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testTitleAttribute() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -100,7 +100,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testCommentAttribute() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -121,7 +121,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testDecoratorAttribute() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -142,7 +142,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testFormatMaskAttribute() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -163,7 +163,7 @@ public class XlsFreeElementTest {
 	 */
 	@Test
 	public void testTransformMaskAttribute() {
-		Class<ObjectsBuilderTest.ProfessorX> oC = ObjectsBuilderTest.ProfessorX.class;
+		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {

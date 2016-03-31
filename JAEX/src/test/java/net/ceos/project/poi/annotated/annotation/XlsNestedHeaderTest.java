@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.ObjectsBuilderTest;
+import net.ceos.project.poi.annotated.bean.XMenFactory;
 
 /**
  * Test the annotation {@link XlsNestedHeader}
@@ -23,7 +23,7 @@ public class XlsNestedHeaderTest {
 	 */
 	@Test
 	public void testDefaultConfiguration() {
-		Class<ObjectsBuilderTest.ObjectWithDefaultConfig> oC = ObjectsBuilderTest.ObjectWithDefaultConfig.class;
+		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -46,7 +46,7 @@ public class XlsNestedHeaderTest {
 	 */
 	@Test
 	public void testCellConfiguration() {
-		Class<ObjectsBuilderTest.Cyclops> oC = ObjectsBuilderTest.Cyclops.class;
+		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
@@ -67,7 +67,7 @@ public class XlsNestedHeaderTest {
 	 */
 	@Test
 	public void testRowConfiguration() {
-		Class<ObjectsBuilderTest.IronMan> oC = ObjectsBuilderTest.IronMan.class;
+		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		for (Field f : fL) {
