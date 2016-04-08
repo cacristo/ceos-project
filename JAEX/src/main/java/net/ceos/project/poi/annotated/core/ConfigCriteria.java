@@ -45,6 +45,7 @@ public class ConfigCriteria {
 	/* element parameters */
 	private XlsElement element;
 	private Field field;
+	private Boolean resizeActive = true;
 
 	/* workbook file parameters */
 	private String fileName;
@@ -62,6 +63,8 @@ public class ConfigCriteria {
 
 	private Map<String, CellStyle> cellStyleManager = new HashMap<>();
 
+	private Map<Integer, Integer> columnWidthMap = new HashMap<>();
+	
 	/**
 	 * Force the header cell decorator.
 	 * 
@@ -161,7 +164,7 @@ public class ConfigCriteria {
 	 *            the {@link Workbook} in use
 	 * @throws ConfigurationException
 	 */
-	protected void initializeCellDecorator() throws ConfigurationException {
+	protected final void initializeCellDecorator() throws ConfigurationException {
 
 		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER) == null) {
 			stylesMap.put(CellStyleHandler.CELL_DECORATOR_HEADER,
@@ -215,6 +218,22 @@ public class ConfigCriteria {
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
 			stylesMap.put(object.getKey(),
 					CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+		}
+	}
+	
+	/**
+	 * @return the columnWidthMap
+	 */
+	protected final Map<Integer, Integer> getColumnWidthMap() {
+		return columnWidthMap;
+	}
+
+	/**
+	 * Apply to sheet the column width defined.
+	 */
+	protected final void applyColumnWidthToSheet(){
+		for(Map.Entry<Integer, Integer> column : columnWidthMap.entrySet()) {
+			getSheet().setColumnWidth(column.getKey(), column.getValue() * 256);
 		}
 	}
 
@@ -297,7 +316,8 @@ public class ConfigCriteria {
 	 * @return the startRow
 	 */
 	protected int getStartRow() {
-		return startRow;
+		// to row 1 : return startRow - 2;
+		return startRow - 1;
 	}
 
 	/**
@@ -312,7 +332,8 @@ public class ConfigCriteria {
 	 * @return the startCell
 	 */
 	protected int getStartCell() {
-		return startCell;
+		// to cell 1 : return startCell - 2;
+		return startCell - 1;
 	}
 
 	/**
@@ -337,6 +358,22 @@ public class ConfigCriteria {
 	protected void setField(final Field field) {
 		this.field = field;
 	}
+
+	/**
+	 * @return the resizeActive
+	 */
+	protected final Boolean getResizeActive() {
+		return resizeActive;
+	}
+
+
+	/**
+	 * @param resizeActive the resizeActive to set
+	 */
+	protected final void setResizeActive(Boolean resizeActive) {
+		this.resizeActive = resizeActive;
+	}
+
 
 	/**
 	 * @return the fileName
