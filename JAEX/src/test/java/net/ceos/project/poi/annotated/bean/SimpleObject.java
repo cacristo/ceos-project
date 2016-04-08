@@ -7,18 +7,18 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 
-@XlsSheet(title = "Simple object sample")
+@XlsSheet(title = "Simple object sample", startCell=0, startRow=2)
 @XlsConfiguration(nameFile = "SimpleSample")
 public class SimpleObject {
 
 	@XlsNestedHeader(title = "Main info", startX = 1, endX = 3)
-	@XlsElement(title = "Date value", position = 1)
+	@XlsElement(title = "Date value", position = 1, columnWidthInUnits = 10)
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", position = 2, comment="This is an simple comment")
+	@XlsElement(title = "String value", position = 2, columnWidthInUnits = 20, comment = "This is an simple comment")
 	private String stringAttribute;
 
-	@XlsElement(title = "Integer value", position = 3)
+	@XlsElement(title = "Integer value", position = 3, columnWidthInUnits = 5)
 	private Integer integerAttribute = 0;
 
 	public SimpleObject() {
@@ -32,7 +32,8 @@ public class SimpleObject {
 	}
 
 	/**
-	 * @param dateAttribute the dateAttribute to set
+	 * @param dateAttribute
+	 *            the dateAttribute to set
 	 */
 	public void setDateAttribute(Date dateAttribute) {
 		this.dateAttribute = dateAttribute;
@@ -46,7 +47,8 @@ public class SimpleObject {
 	}
 
 	/**
-	 * @param stringAttribute the stringAttribute to set
+	 * @param stringAttribute
+	 *            the stringAttribute to set
 	 */
 	public void setStringAttribute(String stringAttribute) {
 		this.stringAttribute = stringAttribute;
@@ -60,7 +62,8 @@ public class SimpleObject {
 	}
 
 	/**
-	 * @param integerAttribute the integerAttribute to set
+	 * @param integerAttribute
+	 *            the integerAttribute to set
 	 */
 	public void setIntegerAttribute(Integer integerAttribute) {
 		this.integerAttribute = integerAttribute;

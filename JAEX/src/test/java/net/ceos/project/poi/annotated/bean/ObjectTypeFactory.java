@@ -10,9 +10,9 @@ import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-public class ObjectTypeBuilder {
+public class ObjectTypeFactory {
 
-	private static ObjectTypeBuilder objectTypeBuilder = new ObjectTypeBuilder();
+	private static ObjectTypeFactory objectTypeBuilder = new ObjectTypeFactory();
 
 	public static StringDeclaredAttribute instanceString() {
 		return objectTypeBuilder.new StringDeclaredAttribute();

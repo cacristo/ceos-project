@@ -60,7 +60,6 @@ public class MultiTypeAttributesTest {
 		MultiTypeObject mto = new MultiTypeObject();
 
 		Engine en = new Engine();
-
 		en.unmarshalFromPath(mto, TestUtils.WORKING_DIR_GENERATED_I + "\\");
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(mto);

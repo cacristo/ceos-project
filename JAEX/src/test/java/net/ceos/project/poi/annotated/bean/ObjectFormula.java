@@ -21,19 +21,19 @@ public class ObjectFormula {
 	@XlsElement(title = "Country sales", position = 5)
 	private double valueCountry = 0;
 
-	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM(E3,F3,G3)", position = 6)
+	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM(D2,E2,F2)", position = 6)
 	private double totalValue = 0;
 
-	@XlsElement(title = "Total Sales", isFormula = true, formula = "H3 * 1.21", position = 7)
+	@XlsElement(title = "Total Sales", isFormula = true, formula = "G2 * 1.21", position = 7)
 	private double totalValueTax = 0;
 
-	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(E3,F3,G3)", position = 8)
+	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(D2,E2,F2)", position = 8)
 	private double avgValue = 0;
 
 	@XlsElement(title = "ROI", isFormula = true, position = 9)
 	private double generateValue = 0;
 
-	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Eidx < Fidx,\"Over Budget\", \"OK\")", position = 10)
+	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Didx < Eidx,\"Over Budget\", \"OK\")", position = 10)
 	private String someString;
 
 	public ObjectFormula() {

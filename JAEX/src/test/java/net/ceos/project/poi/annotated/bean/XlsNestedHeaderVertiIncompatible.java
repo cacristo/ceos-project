@@ -8,7 +8,7 @@ import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Nested Header Vertical", propagation = PropagationType.PROPAGATION_VERTICAL)
+@XlsSheet(title = "Nested Header Vertical", startCell = 2, propagation = PropagationType.PROPAGATION_VERTICAL)
 @XlsConfiguration(nameFile = "NestedHeaderVertical")
 public class XlsNestedHeaderVertiIncompatible {
 

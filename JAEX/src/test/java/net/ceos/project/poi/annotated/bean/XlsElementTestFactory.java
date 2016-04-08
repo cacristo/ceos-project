@@ -7,7 +7,7 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 public interface XlsElementTestFactory {
 
 	static XlsElement build(String title, String comment, String decorator, String formatMask, String transformMask,
-			boolean isFormula, String formula, String customizedRules) {
+			boolean isFormula, String formula, String customizedRules, int columnSize) {
 		return new XlsElement() {
 
 			@Override
@@ -63,6 +63,11 @@ public interface XlsElementTestFactory {
 			@Override
 			public String commentRules() {
 				return "";
+			}
+			
+			@Override
+			public int columnWidthInUnits() {
+				return columnSize;
 			}
 		};
 	}

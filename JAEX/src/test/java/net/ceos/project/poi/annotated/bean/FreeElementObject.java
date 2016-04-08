@@ -19,7 +19,7 @@ public class FreeElementObject {
 	@XlsFreeElement(title = "Free Primitive int", row = 3, cell = 1)
 	private int freePrimitiveInt;
 
-	@XlsFreeElement(title = "Free Date", row = 4, cell = 1)
+	@XlsFreeElement(title = "Free Date", row = 4, cell = 1, columnWidthInUnits = 10)
 	private Date freeDate;
 
 	@XlsFreeElement(title = "Free Long", row = 5, cell = 1)

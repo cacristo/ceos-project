@@ -8,7 +8,7 @@ import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
-@XlsSheet(title = "Xls Element customized rules")
+@XlsSheet(title = "Xls Element customized rules", startRow = 2)
 @XlsConfiguration(nameFile = "ElementCustomizedRule")
 public class XlsElementCustomizedRulesNumeric {
 

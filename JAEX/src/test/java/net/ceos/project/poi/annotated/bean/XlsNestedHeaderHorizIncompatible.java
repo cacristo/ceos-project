@@ -7,7 +7,7 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 
-@XlsSheet(title = "Nested Header Horizontal")
+@XlsSheet(title = "Nested Header Horizontal", startRow = 2)
 @XlsConfiguration(nameFile = "NestedHeaderHorizontal")
 public class XlsNestedHeaderHorizIncompatible {
 

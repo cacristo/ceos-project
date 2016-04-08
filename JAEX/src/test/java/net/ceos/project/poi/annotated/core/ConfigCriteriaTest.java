@@ -105,10 +105,10 @@ public class ConfigCriteriaTest {
 	@DataProvider
 	public Object[][] elementProvider(){
 		return new Object[][] { 
-			{ XlsElementTestFactory.build("Title 1", "date", 	"", "ddMMyy", 	"ddMMyyyy", false, "", "")},
-			{ XlsElementTestFactory.build("Title 2", "numeric",	"", "0", 		"", 		false, "", "")},
-			{ XlsElementTestFactory.build("Title 3", "double", 	"", "", 		"0.00", 	false, "", "")},
-			{ XlsElementTestFactory.build("Title 4", "boolean",	"", "", 		"", 		false, "", "")}
+			{ XlsElementTestFactory.build("Title 1", "date", 	"", "ddMMyy", 	"ddMMyyyy", false, "", "", 10)},
+			{ XlsElementTestFactory.build("Title 2", "numeric",	"", "0", 		"", 		false, "", "", 0)},
+			{ XlsElementTestFactory.build("Title 3", "double", 	"", "", 		"0.00", 	false, "", "", 0)},
+			{ XlsElementTestFactory.build("Title 4", "boolean",	"", "", 		"", 		false, "", "", 0)}
 		};
 	}
 	

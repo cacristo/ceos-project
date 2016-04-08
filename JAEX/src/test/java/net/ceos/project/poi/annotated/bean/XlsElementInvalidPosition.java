@@ -7,7 +7,7 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 
-@XlsSheet(title = "Xls Element invalid position")
+@XlsSheet(title = "Xls Element invalid position", startRow = 2)
 @XlsConfiguration(nameFile = "ElementInvalidPosition")
 public class XlsElementInvalidPosition {
 

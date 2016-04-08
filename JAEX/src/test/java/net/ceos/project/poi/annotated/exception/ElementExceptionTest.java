@@ -11,6 +11,8 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
+import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
+import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsElementInvalidPosition;
 import net.ceos.project.poi.annotated.bean.XlsElementOverwriteCell;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidObject;
@@ -19,6 +21,7 @@ import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidPositionRow;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
+import net.ceos.project.poi.annotated.core.TestUtils;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
@@ -59,6 +62,13 @@ public class ElementExceptionTest {
 			{ new XlsFreeElementInvalidPositionCell() },
 			{ new XlsFreeElementInvalidPositionRow() }
 		};
+	}
+
+	@DataProvider
+	public Object[][] xlsConflictConfigurationProvider() {
+		return new Object[][] { 
+			{ new XlsConflitFormulaHorizIncompatible() },
+			{ new XlsConflitFormulaVertiIncompatible() } };
 	}
 
 	/**
@@ -141,5 +151,14 @@ public class ElementExceptionTest {
 	public void testMarshalXlsElementInvalidPosition(Object object) throws Exception {
 		IEngine en = new Engine();
 		en.marshalToFileOutputStream(object);
+	}
+
+	/**
+	 * Test a horizontal configuration exception conflict
+	 */
+	@Test(dataProvider = "xlsConflictConfigurationProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
+	public void testXlsConflictConfigurationException(Object incompatibleConfig) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 }

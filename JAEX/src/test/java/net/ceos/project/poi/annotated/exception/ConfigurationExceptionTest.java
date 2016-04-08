@@ -6,8 +6,6 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
 import net.ceos.project.poi.annotated.bean.XlsConfigurationAbsent;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsNestedHeaderHorizIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsNestedHeaderVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsSheetAbsent;
@@ -29,9 +27,7 @@ public class ConfigurationExceptionTest {
 	public Object[][] xlsConflictConfigurationProvider() {
 		return new Object[][] { 
 			{ new XlsNestedHeaderHorizIncompatible() },
-			{ new XlsNestedHeaderVertiIncompatible() },
-			{ new XlsConflitFormulaHorizIncompatible() },
-			{ new XlsConflitFormulaVertiIncompatible() } };
+			{ new XlsNestedHeaderVertiIncompatible() } };
 	}
 	
 	@DataProvider
