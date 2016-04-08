@@ -111,5 +111,5 @@ public @interface XlsElement {
 	 * 
 	 * @return the column size to apply
 	 */
-	// FIXME int columnSize() default 10;
+	int columnWidthInUnits() default 0;
 }
