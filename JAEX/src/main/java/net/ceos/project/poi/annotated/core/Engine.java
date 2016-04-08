@@ -122,11 +122,12 @@ public class Engine implements IEngine {
 	private void initializeXlsSheet(final ConfigCriteria configCriteria, final XlsSheet annotation) {
 		configCriteria.setTitleSheet(annotation.title());
 		configCriteria.setPropagation(annotation.propagation());
+		configCriteria.setCascadeLevel(annotation.cascadeLevel());
 		configCriteria.setStartRow(annotation.startRow());
 		configCriteria.setStartCell(annotation.startCell());
 		configCriteria.setFreezePane(annotation.freezePane());
 		configCriteria.setGroupElement(annotation.groupElement());
-		
+
 	}
 
 	/**
@@ -245,7 +246,7 @@ public class Engine implements IEngine {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Apply merge region if necessary.
 	 * 
@@ -269,15 +270,19 @@ public class Engine implements IEngine {
 			XlsNestedHeader annotation = (XlsNestedHeader) configCriteria.getField()
 					.getAnnotation(XlsNestedHeader.class);
 			/* if row null is necessary to create it */
-			if (r == null) {
-				r = initializeRow(configCriteria.getSheet(), idxR);
+			Row row = r;
+			if (row == null) {
+				row = initializeRow(configCriteria.getSheet(), idxR);
 			}
 
 			/* validation of configuration */
 			isValidNestedHeaderConfiguration(isPH, annotation);
 
 			/* prepare position rows / cells */
-			int startRow, endRow, startCell, endCell;
+			int startRow;
+			int endRow;
+			int startCell;
+			int endCell;
 			if (isPH) {
 				startRow = endRow = idxR;
 				startCell = idxC + annotation.startX();
@@ -289,11 +294,11 @@ public class Engine implements IEngine {
 			}
 
 			/* initialize master header cell */
-			CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), r, startCell, annotation.title());
+			CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, startCell, annotation.title());
 
 			/* merge region of the master header cell */
 			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
-			
+
 		}
 	}
 
@@ -352,28 +357,29 @@ public class Engine implements IEngine {
 			final Object o, final Field field, final int idxC, final int cL)
 					throws ElementException, ConverterException, CustomizedRulesException {
 
-		// FIXME uncomment line to activate cascade level
-		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		/* validate cascade level */
+		if (cL <= configCriteria.getCascadeLevel().getCode()) {
 
-		/* make the field accessible to recover the value */
-		field.setAccessible(true);
+			/* make the field accessible to recover the value */
+			field.setAccessible(true);
 
-		Class<?> fT = field.getType();
+			Class<?> fT = field.getType();
 
-		if (configCriteria.getSheet().getRow(xlsAnnotation.row()) != null) {
-			configCriteria.setRow(configCriteria.getSheet().getRow(xlsAnnotation.row()));
-		} else {
-			configCriteria.setRow(configCriteria.getSheet().createRow(xlsAnnotation.row()));
-		}
-		configCriteria.setField(field);
+			if (configCriteria.getSheet().getRow(xlsAnnotation.row()) != null) {
+				configCriteria.setRow(configCriteria.getSheet().getRow(xlsAnnotation.row()));
+			} else {
+				configCriteria.setRow(configCriteria.getSheet().createRow(xlsAnnotation.row()));
+			}
+			configCriteria.setField(field);
 
-		// initialize Element
-		configCriteria.setElement(XlsElementFactory.build(xlsAnnotation));
+			// initialize Element
+			configCriteria.setElement(XlsElementFactory.build(xlsAnnotation));
 
-		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
-		if (!isAppliedObject && !fT.isPrimitive()) {
-			throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+			if (!isAppliedObject && !fT.isPrimitive()) {
+				throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+			}
 		}
 	}
 
@@ -409,29 +415,26 @@ public class Engine implements IEngine {
 
 		int counter = 0;
 
-		// FIXME uncomment line to activate cascade level
-		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		/* validate cascade level */
+		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+			/* make the field accessible to recover the value */
+			configCriteria.getField().setAccessible(true);
 
-		/* make the field accessible to recover the value */
-		configCriteria.getField().setAccessible(true);
+			Class<?> fT = configCriteria.getField().getType();
 
-		Class<?> fT = configCriteria.getField().getType();
+			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
-		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+			if (!isAppliedObject && !fT.isPrimitive()) {
+				Object nO = configCriteria.getField().get(o);
+				/* manage null objects */
+				if (nO == null) {
+					nO = fT.newInstance();
+				}
+				Class<?> oC = nO.getClass();
 
-		if (!isAppliedObject && !fT.isPrimitive()) {
-			Object nO = configCriteria.getField().get(o);
-			/* manage null objects */
-			if (nO == null) {
-				nO = fT.newInstance();
+				counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
 			}
-			Class<?> oC = nO.getClass();
-
-			counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
 		}
-
-		// FIXME uncomment line to activate cascade level
-		// }
 		return counter;
 	}
 
@@ -468,31 +471,28 @@ public class Engine implements IEngine {
 
 		int counter = 0;
 
-		// FIXME uncomment line to activate cascade level
-		// if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		/* validate cascade level */
+		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+			/* make the field accessible to recover the value */
+			configCriteria.getField().setAccessible(true);
 
-		/* make the field accessible to recover the value */
-		configCriteria.getField().setAccessible(true);
+			Class<?> fT = configCriteria.getField().getType();
 
-		Class<?> fT = configCriteria.getField().getType();
+			configCriteria.setRow(r);
 
-		configCriteria.setRow(r);
+			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
-		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+			if (!isAppliedObject && !fT.isPrimitive()) {
+				Object nO = configCriteria.getField().get(o);
+				/* manage null objects */
+				if (nO == null) {
+					nO = fT.newInstance();
+				}
+				Class<?> oC = nO.getClass();
 
-		if (!isAppliedObject && !fT.isPrimitive()) {
-			Object nO = configCriteria.getField().get(o);
-			/* manage null objects */
-			if (nO == null) {
-				nO = fT.newInstance();
+				counter = marshalAsPropagationVertical(configCriteria, nO, oC, idxR - 1, idxC - 1, cL + 1);
 			}
-			Class<?> oC = nO.getClass();
-
-			counter = marshalAsPropagationVertical(configCriteria, nO, oC, idxR - 1, idxC - 1, cL + 1);
 		}
-
-		// FIXME uncomment line to activate cascade level
-		// }
 		return counter;
 	}
 
@@ -510,7 +510,7 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws ElementException
 	 * @throws ConverterException
-	 * @throws CustomizedRulesException 
+	 * @throws CustomizedRulesException
 	 * @throws Exception
 	 */
 	private boolean toExcel(final ConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
@@ -745,7 +745,8 @@ public class Engine implements IEngine {
 				}
 
 				/* validate the propagation type & formulas */
-				if(xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula()) && xlsAnnotation.formula().contains("idy")){
+				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
+						&& xlsAnnotation.formula().contains("idy")) {
 					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 				}
 
@@ -772,6 +773,12 @@ public class Engine implements IEngine {
 					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
 							indexCell + xlsAnnotation.position(), xlsAnnotation.title());
 				}
+				/* prepare the column width */
+				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
+					configCriteria.getColumnWidthMap().put(indexCell + xlsAnnotation.position(),
+							xlsAnnotation.columnWidthInUnits());
+				}
+
 				/* content treatment */
 				indexCell += initializeCellByFieldHorizontal(configCriteria, o, idxR,
 						indexCell + xlsAnnotation.position(), cL);
@@ -780,6 +787,9 @@ public class Engine implements IEngine {
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
+		/* disable the resize */
+		configCriteria.setResizeActive(false);
+
 		return counter;
 	}
 
@@ -840,7 +850,8 @@ public class Engine implements IEngine {
 				}
 
 				/* validate the propagation type & formulas */
-				if(xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula()) && xlsAnnotation.formula().contains("idx")){
+				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
+						&& xlsAnnotation.formula().contains("idx")) {
 					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 				}
 
@@ -859,9 +870,8 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* create the row */
-				Row row;
-				//if (baseIdxCell == 1) {
-				if (baseIdxCell == 0) {
+				Row row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
+				if (row == null) {
 					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
 					row = initializeRow(configCriteria.getSheet(), indexRow + xlsAnnotation.position());
@@ -873,8 +883,14 @@ public class Engine implements IEngine {
 					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
 							xlsAnnotation.title());
 
-				} else {
-					row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
+				} /*
+					 * else { row = configCriteria.getSheet().getRow(indexRow +
+					 * xlsAnnotation.position()); }
+					 */
+				/* prepare the column width */
+				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
+					configCriteria.getColumnWidthMap().put(indexCell + xlsAnnotation.position(),
+							xlsAnnotation.columnWidthInUnits());
 				}
 
 				/* increment the cell position */
@@ -887,6 +903,9 @@ public class Engine implements IEngine {
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
+		/* disable the resize */
+		configCriteria.setResizeActive(false);
+
 		return counter;
 	}
 
@@ -903,7 +922,7 @@ public class Engine implements IEngine {
 	 *            the field
 	 * @throws ElementException
 	 * @throws ConverterException
-	 * @throws CustomizedRulesException 
+	 * @throws CustomizedRulesException
 	 */
 	private void processXlsFreeElement(final ConfigCriteria configCriteria, final Object o, final int cL, final Field f)
 			throws ElementException, ConverterException, CustomizedRulesException {
@@ -936,7 +955,13 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
 				}
 
-				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell, xlsAnnotation.title());
+				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell,
+						xlsAnnotation.title());
+			}
+
+			/* prepare the column width */
+			if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
+				configCriteria.getColumnWidthMap().put(xlsAnnotation.cell() - 1, xlsAnnotation.columnWidthInUnits());
 			}
 
 			/* content treatment */
@@ -1232,13 +1257,15 @@ public class Engine implements IEngine {
 			marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		}
-		
-		SheetFreezePaneHandler.applyFreezePane(configCriteria);
-		
-		SheetGroupElementHandler.applyGroupElements(configCriteria);
-		
 
-		/* TODO apply the column size here - if necessary */
+		/* apply the freeze pane */
+		SheetFreezePaneHandler.applyFreezePane(configCriteria);
+
+		/* apply the elements as group */
+		SheetGroupElementHandler.applyGroupElements(configCriteria);
+
+		/* apply the column resize */
+		configCriteria.applyColumnWidthToSheet();
 	}
 
 	/**
@@ -1532,7 +1559,7 @@ public class Engine implements IEngine {
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.setPropagation(config.getPropagationType());
 		configCriteria.setExtension(config.getExtensionFile());
-
+		
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
@@ -1551,7 +1578,8 @@ public class Engine implements IEngine {
 		// initialize style cell via default option
 		configCriteria.initializeCellDecorator();
 
-		int idxRow = 0, idxCell = 0, index = 0;
+		int idxRow;
+		int idxCell = 0;
 
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = collection.iterator();
@@ -1565,6 +1593,7 @@ public class Engine implements IEngine {
 			if (objectClass.isAnnotationPresent(XlsSheet.class)) {
 				XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
 				config = initializeSheetConfiguration(xlsAnnotation);
+				configCriteria.setCascadeLevel(config.getCascadeLevel());
 			}
 
 			// initialize rows according the PropagationType
@@ -1590,13 +1619,14 @@ public class Engine implements IEngine {
 					configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
 					idxCell = config.getStartCell();
 				} else {
-					idxCell = index + 1;
+					idxCell += 1;
 				}
 				marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
-				index = index + 1;
 			}
 
 		}
+		/* apply the column resize */
+		configCriteria.applyColumnWidthToSheet();
 
 		// FIXME manage return value
 		workbookFileOutputStream(configCriteria.getWorkbook(),
@@ -1814,7 +1844,7 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 		/* initialize Sheet */
-		// TODO add loop if necessary
+		// add loop if necessary
 		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 
 		/* initialize Row & Cell */
@@ -1831,7 +1861,6 @@ public class Engine implements IEngine {
 			marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
 
 		}
-		// TODO manage return value
 		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + configCriteria.getFileName());
 	}
 
@@ -1971,6 +2000,7 @@ public class Engine implements IEngine {
 		}
 		configuration.setTitleSheet(config.title());
 		configuration.setPropagationType(config.propagation());
+		configuration.setCascadeLevel(config.cascadeLevel());
 		configuration.setStartRow(config.startRow());
 		configuration.setStartCell(config.startCell());
 		return configuration;
