@@ -64,6 +64,10 @@ public interface XlsElementFactory {
 			public String commentRules() {
 				return xlsAnnotation.commentRules();
 			}
+			@Override
+			public int columnWidthInUnits() {
+				return xlsAnnotation.columnWidthInUnits();
+			}
 		};
 	}
 }
