@@ -664,13 +664,20 @@ public class CellHandler {
 	 * @return the content of the cell
 	 */
 	private static String readCell(final Cell c) {
+		if (c == null) {
+			return null;
+		}
+		
 		if (c.getCellType() == Cell.CELL_TYPE_STRING) {
 			return c.getStringCellValue();
+		}
 
-		} else if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+		if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			Double value = c.getNumericCellValue();
 			return value.toString();
-		} else if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
+		} 
+
+		if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
 			switch (c.getCachedFormulaResultType()) {
 			case Cell.CELL_TYPE_NUMERIC:
 				Double value = c.getNumericCellValue();
@@ -682,9 +689,8 @@ public class CellHandler {
 			default:
 				return null;
 			}
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	// TODO : to review
