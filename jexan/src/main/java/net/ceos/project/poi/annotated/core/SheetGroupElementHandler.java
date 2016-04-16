@@ -19,8 +19,9 @@ class SheetGroupElementHandler {
 	 * Apply a freeze pane to the sheet.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	protected static void applyGroupElements(final ConfigCriteria configCriteria) {
+	protected static void applyGroupElements(final XConfigCriteria configCriteria) {
 		if (configCriteria.getGroupElement() != null) {
 			applyToColumns(configCriteria);
 
@@ -32,8 +33,9 @@ class SheetGroupElementHandler {
 	 * Group n elements by columns.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void applyToColumns(final ConfigCriteria configCriteria) {
+	private static void applyToColumns(final XConfigCriteria configCriteria) {
 		XlsGroupColumn[] columns = configCriteria.getGroupElement().groupColumns();
 		for (int i = 0; i < columns.length; i++) {
 			if (columns[i].fromColumn() != 0 || columns[i].toColumn() != 0) {
@@ -46,8 +48,9 @@ class SheetGroupElementHandler {
 	 * Group n elements by rows.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void applyToRows(final ConfigCriteria configCriteria) {
+	private static void applyToRows(final XConfigCriteria configCriteria) {
 		XlsGroupRow[] rows = configCriteria.getGroupElement().groupRows();
 		for (int i = 0; i < rows.length; i++) {
 			if (rows[i].fromRow() != 0 || rows[i].toRow() != 0) {

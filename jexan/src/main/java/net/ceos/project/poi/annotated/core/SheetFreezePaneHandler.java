@@ -16,8 +16,9 @@ class SheetFreezePaneHandler {
 	 * Apply a freeze pane to the sheet.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	protected static void applyFreezePane(final ConfigCriteria configCriteria) {
+	protected static void applyFreezePane(final XConfigCriteria configCriteria) {
 		if (checkMandatoryFreezePaneArgs(configCriteria) && configCriteria.getFreezePane().leftMostColumn() == 0
 				&& configCriteria.getFreezePane().topRow() == 0) {
 			createBasicFreezePane(configCriteria);
@@ -32,8 +33,9 @@ class SheetFreezePaneHandler {
 	 * Create a base freeze pane.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void createBasicFreezePane(final ConfigCriteria configCriteria) {
+	private static void createBasicFreezePane(final XConfigCriteria configCriteria) {
 		configCriteria.getSheet().createFreezePane(configCriteria.getFreezePane().colSplit(),
 				configCriteria.getFreezePane().rowSplit());
 	}
@@ -42,8 +44,9 @@ class SheetFreezePaneHandler {
 	 * Create an advanced freeze pane.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void createAdvancedFreezePane(final ConfigCriteria configCriteria) {
+	private static void createAdvancedFreezePane(final XConfigCriteria configCriteria) {
 		configCriteria.getSheet().createFreezePane(configCriteria.getFreezePane().colSplit(),
 				configCriteria.getFreezePane().rowSplit(), configCriteria.getFreezePane().leftMostColumn(),
 				configCriteria.getFreezePane().topRow());
@@ -53,9 +56,10 @@ class SheetFreezePaneHandler {
 	 * Check if the mandatory values are declared
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @return
 	 */
-	private static boolean checkMandatoryFreezePaneArgs(final ConfigCriteria configCriteria) {
+	private static boolean checkMandatoryFreezePaneArgs(final XConfigCriteria configCriteria) {
 		return configCriteria.getFreezePane().colSplit() != -1 && configCriteria.getFreezePane().rowSplit() != -1;
 	}
 
