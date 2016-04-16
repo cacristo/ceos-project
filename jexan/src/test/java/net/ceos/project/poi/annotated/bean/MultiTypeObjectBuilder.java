@@ -58,6 +58,8 @@ public class MultiTypeObjectBuilder {
 		toValidate.setFloatPrimitiveAttribute(11.1125f * multiplier);
 		toValidate.setUnitFamily(UnitFamily.COMPONENTS);
 		toValidate.setBigDecimalAttribute(BigDecimal.valueOf(24.777).multiply(BigDecimal.valueOf(multiplier)));
+		toValidate.setShortAttribute((short) 17);
+		toValidate.setShortPrimitiveAttribute((short) 4);
 		// TODO add new fields below
 
 		return toValidate;
@@ -116,6 +118,8 @@ public class MultiTypeObjectBuilder {
 		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
+		assertEquals(base.getShortAttribute(), toValidate.getShortAttribute());
+		assertEquals(base.getShortPrimitiveAttribute(), toValidate.getShortPrimitiveAttribute());
 		// TODO add new validation below
 	}
 

@@ -71,7 +71,7 @@ class CellFormulaHandler {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
 				// apply the formula
-				c.setCellValue((Short) toExplicitFormula(o, configCriteria.getField()));
+				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
