@@ -216,7 +216,7 @@ public class CellStyleHandler {
 	 * @param e
 	 *            the extension file
 	 */
-	protected static void applyComment(final ConfigCriteria configCriteria, final Boolean isAuthorizedComment,
+	protected static void applyComment(final XConfigCriteria configCriteria, final Boolean isAuthorizedComment,
 			final Cell c) {
 		if (StringUtils.isBlank(configCriteria.getElement().commentRules())
 				|| StringUtils.isNotBlank(configCriteria.getElement().commentRules()) && isAuthorizedComment) {
@@ -268,7 +268,7 @@ public class CellStyleHandler {
 	 * Apply cell style according the one cell style base and format mask.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param c
 	 *            the {@link Cell}
 	 * @param cellDecoratorType
@@ -277,7 +277,7 @@ public class CellStyleHandler {
 	 *            the format mask by default
 	 * @throws ElementException
 	 */
-	protected static void applyCellStyle(final ConfigCriteria configCriteria, final Cell c,
+	protected static void applyCellStyle(final XConfigCriteria configCriteria, final Cell c,
 			final String cellDecoratorType, final String maskDecoratorType) throws ElementException {
 
 		CellStyle cs = configCriteria.getCellStyle(cellDecoratorType);
