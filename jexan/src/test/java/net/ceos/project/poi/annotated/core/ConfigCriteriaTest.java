@@ -19,7 +19,7 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
- * Test the {@link ConfigCriteria}
+ * Test the {@link XConfigCriteria}
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -113,12 +113,12 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override extension file type at {@link ConfigCriteria}.<br>
+	 * Test the override extension file type at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="criteriaExtensionProvider")
 	public void testOverrideExtension(ExtensionFileType type) throws Exception {
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 
 		config.setExtension(null);
 		config.overrideExtensionType(type);
@@ -127,12 +127,12 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override propagation type at {@link ConfigCriteria}.<br>
+	 * Test the override propagation type at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="criteriaPropagationProvider")
 	public void testOverridePropagation(PropagationType type) throws Exception {
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 
 		config.setPropagation(null);
 		config.overridePropagationType(type);
@@ -141,12 +141,12 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override cascade level at {@link ConfigCriteria}.<br>
+	 * Test the override cascade level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="criteriaCascadeLevelProvider")
 	public void testOverrideCascadeLevel(CascadeType type) throws Exception {
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 
 		config.setCascadeLevel(null);
 		config.overrideCascadeLevel(type);
@@ -155,7 +155,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override header {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 * Test the override header {@link CellDecorator} level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="headerCellDecoratorProvider")
 	public void testOverrideHeaderCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -164,7 +164,7 @@ public class ConfigCriteriaTest {
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
 				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		config.overrideHeaderCellDecorator(decorator);
 		
 		CellDecorator decoratorHeader = config.getCellDecoratorMap().get(decoratorName);
@@ -185,7 +185,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override generic {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 * Test the override generic {@link CellDecorator} level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="genericCellDecoratorProvider")
 	public void testOverrideGenericCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -194,7 +194,7 @@ public class ConfigCriteriaTest {
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
 				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		config.overrideGenericCellDecorator(decorator);
 		
 		CellDecorator decoratorGeneric = config.getCellDecoratorMap().get(decoratorName);
@@ -215,7 +215,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override date {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 * Test the override date {@link CellDecorator} level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="dateCellDecoratorProvider")
 	public void testOverrideDateCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -224,7 +224,7 @@ public class ConfigCriteriaTest {
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
 				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		config.overrideDateCellDecorator(decorator);
 		
 		CellDecorator decoratorDate = config.getCellDecoratorMap().get(decoratorName);
@@ -245,7 +245,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override numeric {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 * Test the override numeric {@link CellDecorator} level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="numericCellDecoratorProvider")
 	public void testOverrideNumericCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -254,7 +254,7 @@ public class ConfigCriteriaTest {
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
 				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		config.overrideNumericCellDecorator(decorator);
 		
 		CellDecorator decoratorNumeric = config.getCellDecoratorMap().get(decoratorName);
@@ -275,7 +275,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override boolean {@link CellDecorator} level at {@link ConfigCriteria}.<br>
+	 * Test the override boolean {@link CellDecorator} level at {@link XConfigCriteria}.<br>
 	 */
 	@Test(dataProvider="booleanCellDecoratorProvider")
 	public void testOverrideBooleanCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -284,7 +284,7 @@ public class ConfigCriteriaTest {
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border, foregroundColor, fontName,
 				fontSize, isFontBold, isFontItalic, fontUnderline, isWrapText);
 		
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		config.overrideBooleanCellDecorator(decorator);
 		
 		CellDecorator decoratorBoolean = config.getCellDecoratorMap().get(decoratorName);
@@ -310,7 +310,7 @@ public class ConfigCriteriaTest {
 
 	@Test(dataProvider="elementProvider")
 	public void testFormatMask(XlsElement element) {
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		
 		config.setElement(element);
 		
@@ -321,7 +321,7 @@ public class ConfigCriteriaTest {
 
 	@Test(dataProvider="elementProvider")
 	public void testTransformMask(XlsElement element) {
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		
 		config.setElement(element);
 		
@@ -332,7 +332,7 @@ public class ConfigCriteriaTest {
 
 	@Test(dataProvider="elementProvider")
 	public void testMask(XlsElement element) {
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		
 		config.setElement(element);
 		
@@ -344,7 +344,7 @@ public class ConfigCriteriaTest {
 	
 	@Test(dataProvider="elementProvider")
 	public void testGenerateCellStyleKey(XlsElement element) {
-		ConfigCriteria config = new ConfigCriteria();
+		XConfigCriteria config = new XConfigCriteria();
 		
 		config.setElement(element);
 		
@@ -366,7 +366,7 @@ public class ConfigCriteriaTest {
 
 		IEngine en = new Engine();
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		CellDecorator configurationHeader = new CellDecorator();
 		// override default header configuration
@@ -424,7 +424,7 @@ public class ConfigCriteriaTest {
 
 		IEngine en = new Engine();
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");

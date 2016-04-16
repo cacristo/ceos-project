@@ -60,7 +60,7 @@ public class MarshalUnmarshalTest {
 	}
 
 	/**
-	 * Test the method 'marshalToSheet', using {@link ConfigCriteria}, to
+	 * Test the method 'marshalToSheet', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and return the {@link Sheet}
 	 * generated.<br>
 	 */
@@ -68,7 +68,7 @@ public class MarshalUnmarshalTest {
 	public void testMarshalToSheetWithConfigCriteria() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
-		ConfigCriteria configuration = new ConfigCriteria();
+		XConfigCriteria configuration = new XConfigCriteria();
 		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
 
 		IEngine en = new Engine();
@@ -92,7 +92,7 @@ public class MarshalUnmarshalTest {
 	}
 
 	/**
-	 * Test the method 'marshalToWorkbook', using {@link ConfigCriteria}, to
+	 * Test the method 'marshalToWorkbook', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and return the {@link Workbook}
 	 * generated.<br>
 	 */
@@ -100,7 +100,7 @@ public class MarshalUnmarshalTest {
 	public void testMarshalToWorkbookWithConfigCriteria() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
-		ConfigCriteria configuration = new ConfigCriteria();
+		XConfigCriteria configuration = new XConfigCriteria();
 		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
 
 		IEngine en = new Engine();
@@ -123,7 +123,7 @@ public class MarshalUnmarshalTest {
 	}
 
 	/**
-	 * Test the method 'marshalAndSave', using {@link ConfigCriteria}, to
+	 * Test the method 'marshalAndSave', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and save it at the path file
 	 * indicated.
 	 */
@@ -132,7 +132,7 @@ public class MarshalUnmarshalTest {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 		String outputPath = TestUtils.WORKING_DIR_GENERATED_II;
 
-		ConfigCriteria configuration = new ConfigCriteria();
+		XConfigCriteria configuration = new XConfigCriteria();
 		configuration.overrideExtensionType(ExtensionFileType.XLS);
 
 		IEngine en = new Engine();
