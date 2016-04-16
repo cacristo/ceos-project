@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.core;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;

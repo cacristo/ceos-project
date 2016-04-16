@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.core;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.ObjectFormula;

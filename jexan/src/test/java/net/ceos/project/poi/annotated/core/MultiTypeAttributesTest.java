@@ -2,7 +2,7 @@ package net.ceos.project.poi.annotated.core;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;

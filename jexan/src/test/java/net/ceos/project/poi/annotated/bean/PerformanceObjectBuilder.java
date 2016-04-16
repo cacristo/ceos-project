@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.bean;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.core;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;

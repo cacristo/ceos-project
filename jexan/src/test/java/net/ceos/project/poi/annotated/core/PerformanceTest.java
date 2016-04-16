@@ -2,7 +2,7 @@ package net.ceos.project.poi.annotated.core;
 
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.PerformanceObject;
 import net.ceos.project.poi.annotated.bean.PerformanceObjectBuilder;
