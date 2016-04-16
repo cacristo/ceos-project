@@ -35,12 +35,12 @@ public interface IEngine {
 	 * Generate the sheet from the object and return the sheet generated.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 */
-	Sheet marshalToSheet(ConfigCriteria configCriteria, Object object)
+	Sheet marshalToSheet(XConfigCriteria configCriteria, Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -59,12 +59,12 @@ public interface IEngine {
 	 * Generate the workbook from the object and return the workbook generated.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 */
-	Workbook marshalToWorkbook(ConfigCriteria configCriteria, Object object)
+	Workbook marshalToWorkbook(XConfigCriteria configCriteria, Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -86,13 +86,13 @@ public interface IEngine {
 	 * the path send as parameter.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 */
-	void marshalAndSave(ConfigCriteria configCriteria, Object object, String pathFile) throws IllegalAccessException,
+	void marshalAndSave(XConfigCriteria configCriteria, Object object, String pathFile) throws IllegalAccessException,
 			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
 			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException;
 
@@ -172,19 +172,6 @@ public interface IEngine {
 	/* ############################################# */
 	/* ################## TO REVIEW ################ */
 	/* ############################################# */
-
-	// <T> Object unmarshal(T obecjt);
-	// <T> Collection<T> unmarshalToCollection(T object);
-
-	/**
-	 * 
-	 * @param object
-	 * @throws Exception
-	 */
-	void marshal(Object object) throws Exception;
-
-	Object unmarshal(Object obecjt) throws IOException, IllegalAccessException, ConverterException,
-			InstantiationException, ElementException, SheetException;
 
 	/**
 	 * Generate the workbook from the object and return the FileOutputStream
