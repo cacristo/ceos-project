@@ -25,14 +25,14 @@ class CellCommentHandler {
 	 * Apply the comment, if exists, to a cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param c
 	 *            the {@link Cell}
 	 * @throws CustomizedRulesException
 	 */
-	protected static void applyComment(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void applyComment(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws CustomizedRulesException {
 		if (StringUtils.isNotBlank(configCriteria.getElement().comment())) {
 			// apply the comment
