@@ -36,104 +36,16 @@ class CellFormulaHandler {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void stringHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void genericHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
 				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
+				CellValueHandler.consumeValue(c, toExplicitFormula(o, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
-			c.setCellValue((String) configCriteria.getField().get(o));
-		}
-	}
-
-	/**
-	 * 
-	 * @param configCriteria
-	 * @param o
-	 * @param c
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	protected static void shortHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
-				// apply the formula
-				c.setCellValue((Short) toExplicitFormula(o, configCriteria.getField()));
-			}
-		} else {
-			// apply the value
-			c.setCellValue((Short) configCriteria.getField().get(o));
-		}
-	}
-
-	/**
-	 * 
-	 * @param configCriteria
-	 * @param o
-	 * @param c
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	protected static void integerHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
-				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
-			}
-		} else {
-			// apply the value
-			c.setCellValue((Integer) configCriteria.getField().get(o));
-		}
-	}
-
-	/**
-	 * 
-	 * @param configCriteria
-	 * @param o
-	 * @param c
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	protected static void longHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
-				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
-			}
-		} else {
-			// apply the value
-			c.setCellValue((Long) configCriteria.getField().get(o));
-		}
-	}
-
-	/**
-	 * 
-	 * @param configCriteria
-	 * @param o
-	 * @param c
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 */
-	protected static void floatHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		if (configCriteria.getElement().isFormula()) {
-			// apply the formula
-			if (!toFormula(configCriteria, c)) {
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
-			}
-		} else {
-			// normal manage cell
-			c.setCellValue((Float) configCriteria.getField().get(o));
+			CellValueHandler.consumeValue(c, configCriteria.getField().get(o));
 		}
 	}
 
@@ -151,15 +63,16 @@ class CellFormulaHandler {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
 				// apply the formula
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
+				CellValueHandler.consumeValue(c, toExplicitFormula(o, configCriteria.getField()));
 			}
 		} else {
 			// normal manage cell
 			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-				c.setCellValue(Double.valueOf(df.format((Double) configCriteria.getField().get(o)).replace(",", ".")));
+				CellValueHandler.consumeValue(c, df.format((Double) configCriteria.getField().get(o)).replace(",", "."));
 			} else {
-				c.setCellValue((Double) configCriteria.getField().get(o));
+				// apply the value
+				CellValueHandler.consumeValue(c, configCriteria.getField().get(o));
 			}
 		}
 	}
@@ -178,7 +91,7 @@ class CellFormulaHandler {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
 			if (!toFormula(configCriteria, c)) {
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
+				CellValueHandler.consumeValue(c, toExplicitFormula(o, configCriteria.getField()));
 			}
 		} else {
 			// normal manage cell
@@ -209,11 +122,11 @@ class CellFormulaHandler {
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 			// apply format mask defined at transform mask
 			String[] split = configCriteria.getElement().transformMask().split("/");
-			c.setCellValue(bBoolean == null ? "" : (bBoolean ? split[0] : split[1]));
+			CellValueHandler.consumeValue(c, bBoolean == null ? "" : (bBoolean ? split[0] : split[1]));
 
 		} else {
 			// locale mode
-			c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
+			CellValueHandler.consumeValue(c, (bBoolean == null ? "" : bBoolean).toString());
 		}
 	}
 

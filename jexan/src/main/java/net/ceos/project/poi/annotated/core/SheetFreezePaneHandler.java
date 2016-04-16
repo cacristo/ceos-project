@@ -18,12 +18,14 @@ class SheetFreezePaneHandler {
 	 * @param configCriteria
 	 */
 	protected static void applyFreezePane(final ConfigCriteria configCriteria) {
-		if (checkMandatoryFreezePaneArgs(configCriteria) && configCriteria.getFreezePane().leftMostColumn() == 0
-				&& configCriteria.getFreezePane().topRow() == 0) {
+		if(PredicateFactory.isMandatoryFreezePaneValid
+				.and(PredicateFactory.isOptionalFieldsFreezePaneIgnored)
+				.test(configCriteria.getFreezePane())){
 			createBasicFreezePane(configCriteria);
-
-		} else if (checkMandatoryFreezePaneArgs(configCriteria) && (configCriteria.getFreezePane().leftMostColumn() != 0
-				|| configCriteria.getFreezePane().topRow() != 0)) {
+			
+		} else if(PredicateFactory.isMandatoryFreezePaneValid
+				.and(PredicateFactory.isOptionalFieldsFreezePaneActived)
+				.test(configCriteria.getFreezePane())){
 			createAdvancedFreezePane(configCriteria);
 		}
 	}
@@ -48,15 +50,4 @@ class SheetFreezePaneHandler {
 				configCriteria.getFreezePane().rowSplit(), configCriteria.getFreezePane().leftMostColumn(),
 				configCriteria.getFreezePane().topRow());
 	}
-
-	/**
-	 * Check if the mandatory values are declared
-	 * 
-	 * @param configCriteria
-	 * @return
-	 */
-	private static boolean checkMandatoryFreezePaneArgs(final ConfigCriteria configCriteria) {
-		return configCriteria.getFreezePane().colSplit() != -1 && configCriteria.getFreezePane().rowSplit() != -1;
-	}
-
 }

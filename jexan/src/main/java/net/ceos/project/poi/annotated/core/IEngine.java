@@ -173,19 +173,6 @@ public interface IEngine {
 	/* ################## TO REVIEW ################ */
 	/* ############################################# */
 
-	// <T> Object unmarshal(T obecjt);
-	// <T> Collection<T> unmarshalToCollection(T object);
-
-	/**
-	 * 
-	 * @param object
-	 * @throws Exception
-	 */
-	void marshal(Object object) throws Exception;
-
-	Object unmarshal(Object obecjt) throws IOException, IllegalAccessException, ConverterException,
-			InstantiationException, ElementException, SheetException;
-
 	/**
 	 * Generate the workbook from the object and return the FileOutputStream
 	 * generated.

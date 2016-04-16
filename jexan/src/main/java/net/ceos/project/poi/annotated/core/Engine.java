@@ -79,7 +79,7 @@ public class Engine implements IEngine {
 	private void initializeConfigurationData(final ConfigCriteria configCriteria, final Class<?> oC)
 			throws ConfigurationException {
 		/* Process @XlsConfiguration */
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+		if (PredicateFactory.isAnnotationXlsConfigurationPresent.test(oC)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
 			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		} else {
@@ -87,7 +87,7 @@ public class Engine implements IEngine {
 					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
 		}
 		/* Process @XlsSheet */
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
+		if (PredicateFactory.isAnnotationXlsSheetPresent.test(oC)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			initializeXlsSheet(configCriteria, xlsAnnotation);
 		} else {
@@ -141,7 +141,7 @@ public class Engine implements IEngine {
 	 */
 	private void initializeCellStyleViaAnnotation(final Class<?> objectClass, final ConfigCriteria configCriteria)
 			throws ConfigurationException {
-		if (objectClass.isAnnotationPresent(XlsDecorators.class)) {
+		if (PredicateFactory.isAnnotationXlsDecoratorsPresent.test(objectClass)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
 			for (XlsDecorator decorator : xlsDecorators.values()) {
 				if (configCriteria.getStylesMap().containsKey(decorator.decoratorName())) {
@@ -162,7 +162,7 @@ public class Engine implements IEngine {
 	 * @return the {@link Workbook}.
 	 */
 	private Workbook initializeWorkbook(final ExtensionFileType type) {
-		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (PredicateFactory.isExtensionFileDefault.test(type)) {
 			return new HSSFWorkbook();
 		} else {
 			return new XSSFWorkbook();
@@ -181,7 +181,7 @@ public class Engine implements IEngine {
 	 */
 	private Workbook initializeWorkbook(final FileInputStream inputStream, final ExtensionFileType type)
 			throws IOException {
-		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (PredicateFactory.isExtensionFileDefault.test(type)) {
 			return new HSSFWorkbook(inputStream);
 		} else {
 			return new XSSFWorkbook(inputStream);
@@ -199,7 +199,7 @@ public class Engine implements IEngine {
 	 * @throws IOException
 	 */
 	private Workbook initializeWorkbook(final byte[] byteArray, final ExtensionFileType type) throws IOException {
-		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+		if (PredicateFactory.isExtensionFileDefault.test(type)) {
 			return new HSSFWorkbook(new ByteArrayInputStream(byteArray));
 		} else {
 			return new XSSFWorkbook(new ByteArrayInputStream(byteArray));
@@ -239,10 +239,10 @@ public class Engine implements IEngine {
 	private void isValidNestedHeaderConfiguration(final boolean isPH, final XlsNestedHeader annotation)
 			throws ConfigurationException {
 
-		if (isPH && annotation.startX() == annotation.endX()) {
+		if (isPH && PredicateFactory.isNestedHeaderIdenticalHorizontalConfiguration.test(annotation)) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 
-		} else if (!isPH && annotation.startY() == annotation.endY()) {
+		} else if (!isPH && PredicateFactory.isNestedHeaderIdenticalVerticalConfiguration.test(annotation)) {
 			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
 		}
 	}
@@ -266,7 +266,7 @@ public class Engine implements IEngine {
 	private void applyMergeRegion(final ConfigCriteria configCriteria, Row r, final int idxR, final int idxC,
 			final boolean isPH) throws ConfigurationException {
 		/* Process @XlsNestedHeader */
-		if (configCriteria.getField().isAnnotationPresent(XlsNestedHeader.class)) {
+		if (PredicateFactory.isFieldAnnotationXlsNestedHeaderPresent.test(configCriteria.getField())) {
 			XlsNestedHeader annotation = (XlsNestedHeader) configCriteria.getField()
 					.getAnnotation(XlsNestedHeader.class);
 			/* if row null is necessary to create it */
@@ -729,18 +729,18 @@ public class Engine implements IEngine {
 			configCriteria.setField(f);
 
 			/* process each field from the object */
-			if (configCriteria.getRowHeader() != null) {
+			if (PredicateFactory.isRowValid.test(configCriteria.getRowHeader())) {
 				/* calculate index of the cell */
 				int tmpIdxRow = idxR - 3;
 				/* apply merge region */
 				applyMergeRegion(configCriteria, null, tmpIdxRow, indexCell, true);
 			}
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (PredicateFactory.isXlsElementInvalid.test(xlsAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
@@ -841,11 +841,11 @@ public class Engine implements IEngine {
 			indexCell = baseIdxCell;
 
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (PredicateFactory.isXlsElementInvalid.test(xlsAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
@@ -927,11 +927,11 @@ public class Engine implements IEngine {
 	private void processXlsFreeElement(final ConfigCriteria configCriteria, final Object o, final int cL, final Field f)
 			throws ElementException, ConverterException, CustomizedRulesException {
 
-		if (f.isAnnotationPresent(XlsFreeElement.class)) {
+		if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
 			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
 			/* validate the row/cell of the element */
-			if (xlsAnnotation.row() < 1 || xlsAnnotation.cell() < 1) {
+			if (PredicateFactory.isXlsFreeElementInvalid.test(xlsAnnotation)) {
 				throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 			}
 
@@ -1003,11 +1003,11 @@ public class Engine implements IEngine {
 			Class<?> fT = f.getType();
 
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (PredicateFactory.isXlsElementInvalid.test(xlsAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 				/*
@@ -1039,11 +1039,11 @@ public class Engine implements IEngine {
 			}
 
 			/* Process @XlsFreeElement */
-			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
 				XlsFreeElement xlsFreeAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
 				/* validate the row/cell of the element */
-				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
+				if (PredicateFactory.isXlsFreeElementInvalid.test(xlsFreeAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
@@ -1098,11 +1098,11 @@ public class Engine implements IEngine {
 			Class<?> fT = f.getType();
 
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (PredicateFactory.isXlsElementInvalid.test(xlsAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
@@ -1135,11 +1135,11 @@ public class Engine implements IEngine {
 			}
 
 			/* Process @XlsFreeElement */
-			if (f.isAnnotationPresent(XlsFreeElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
 				XlsFreeElement xlsFreeAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
 
 				/* validate the row/cell of the element */
-				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
+				if (PredicateFactory.isXlsFreeElementInvalid.test(xlsFreeAnnotation)) {
 					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
 				}
 
@@ -1248,7 +1248,7 @@ public class Engine implements IEngine {
 		int idxCell = configCriteria.getStartCell();
 
 		/* initialize rows according the PropagationType */
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+		if (PredicateFactory.isPropagationHorizontal.test(configCriteria.getPropagation())) {
 			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
 			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 			marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
@@ -1298,7 +1298,7 @@ public class Engine implements IEngine {
 		int idxRow = configCriteria.getStartRow();
 		int idxCell = configCriteria.getStartCell();
 
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+		if (PredicateFactory.isPropagationHorizontal.test(configCriteria.getPropagation())) {
 			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
 		} else {
 			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
@@ -1559,7 +1559,7 @@ public class Engine implements IEngine {
 		ConfigCriteria configCriteria = new ConfigCriteria();
 		configCriteria.setPropagation(config.getPropagationType());
 		configCriteria.setExtension(config.getExtensionFile());
-		
+
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
 
@@ -1590,10 +1590,11 @@ public class Engine implements IEngine {
 			Class<?> objectClass = object.getClass();
 
 			// Process @XlsSheet
-			if (objectClass.isAnnotationPresent(XlsSheet.class)) {
+			if (PredicateFactory.isAnnotationXlsSheetPresent.test(objectClass)) {
 				XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
 				config = initializeSheetConfiguration(xlsAnnotation);
 				configCriteria.setCascadeLevel(config.getCascadeLevel());
+				//initializeXlsSheet(configCriteria, xlsAnnotation);
 			}
 
 			// initialize rows according the PropagationType
@@ -1630,7 +1631,7 @@ public class Engine implements IEngine {
 
 		// FIXME manage return value
 		workbookFileOutputStream(configCriteria.getWorkbook(),
-				"D:\\projects\\generated\\" + config.getNameFile() + config.getExtensionFile().getExtension());
+				"C:\\projects\\tests\\generated\\" + config.getNameFile() + config.getExtensionFile().getExtension());
 	}
 
 	/* ######################## Unmarshal methods ######################## */
@@ -1754,46 +1755,6 @@ public class Engine implements IEngine {
 		return object;
 	}
 
-	/**
-	 * Manage the unmarshal internally.
-	 * 
-	 * @param object
-	 *            the object to fill up.
-	 * @param oC
-	 *            the obect class
-	 * @param config
-	 *            the {@link Configuration} to use
-	 * @param input
-	 *            the {@link FileInputStream} to use
-	 * @throws IOException
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 * @throws InstantiationException
-	 * @throws SheetException
-	 * @throws ElementException
-	 */
-	private void unmarshalIntern(final Object object, final Class<?> oC, final ConfigCriteria configCriteria,
-			final FileInputStream input) throws IOException, IllegalAccessException, ConverterException,
-					InstantiationException, SheetException, ElementException {
-
-		configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
-		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
-
-		/* manage sheet null */
-		if (configCriteria.getSheet() == null) {
-			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage());
-		}
-		/* initialize index row & cell */
-		int idxRow = configCriteria.getStartRow();
-		int idxCell = configCriteria.getStartCell();
-
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
-		} else {
-			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
-		}
-	}
-
 	@Override
 	public void marshalAsCollection(Collection<?> collection) {
 		// TODO Auto-generated method stub
@@ -1809,78 +1770,6 @@ public class Engine implements IEngine {
 	/* ############################################# */
 	/* ################## TO REVIEW ################ */
 	/* ############################################# */
-
-	/**
-	 * marshal
-	 * 
-	 * @deprecated s
-	 * @throws Exception
-	 */
-	@Deprecated
-	@Override
-	public void marshal(Object object) throws Exception {
-		Class<?> objectClass = object.getClass();
-		ConfigCriteria configCriteria = new ConfigCriteria();
-
-		/* Process @XlsConfiguration */
-		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) objectClass.getAnnotation(XlsConfiguration.class);
-			initializeXlsConfiguration(configCriteria, xlsAnnotation);
-		}
-
-		/* Process @XlsSheet */
-		if (objectClass.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
-			initializeXlsSheet(configCriteria, xlsAnnotation);
-		}
-
-		/* initialize Workbook */
-		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
-
-		/* initialize style cell via annotations */
-		initializeCellStyleViaAnnotation(objectClass, configCriteria);
-
-		/* initialize style cell via default option */
-		configCriteria.initializeCellDecorator();
-
-		/* initialize Sheet */
-		// add loop if necessary
-		configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
-
-		/* initialize Row & Cell */
-		int idxRow = configCriteria.getStartRow();
-		int idxCell = configCriteria.getStartCell();
-
-		/* initialize rows according the PropagationType */
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
-			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
-
-			marshalAsPropagationHorizontal(configCriteria, object, objectClass, idxRow, idxCell, 0);
-		} else {
-			marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
-
-		}
-		workbookFileOutputStream(configCriteria.getWorkbook(), "D:\\projects\\" + configCriteria.getFileName());
-	}
-
-	/**
-	 * @deprecated s
-	 */
-	@Deprecated
-	@Override
-	public Object unmarshal(Object object) throws IOException, IllegalAccessException, ConverterException,
-			InstantiationException, ElementException, SheetException {
-		/* initialize the runtime class of the object */
-		Class<?> oC = initializeRuntimeClass(object);
-		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
-
-		FileInputStream input = new FileInputStream("D:\\projects\\" + config.getNameFile());
-		unmarshalIntern(object, oC, new ConfigCriteria(), input);
-
-		return object;
-	}
 
 	/**
 	 * Generate the workbook from the object passed as parameter and return the

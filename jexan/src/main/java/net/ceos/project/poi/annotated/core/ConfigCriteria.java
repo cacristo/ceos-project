@@ -411,9 +411,8 @@ public class ConfigCriteria {
 	protected PropagationType getPropagation() {
 		if (overridePropagation != null) {
 			return overridePropagation;
-		} else {
-			return propagation;
 		}
+		return propagation;
 	}
 
 	/**
@@ -430,9 +429,8 @@ public class ConfigCriteria {
 	protected ExtensionFileType getExtension() {
 		if (overrideExtension != null) {
 			return overrideExtension;
-		} else {
-			return extension;
 		}
+		return extension;
 	}
 
 	/**
@@ -449,9 +447,8 @@ public class ConfigCriteria {
 	protected CascadeType getCascadeLevel() {
 		if (overrideCascadeLevel != null) {
 			return overrideCascadeLevel;
-		} else {
-			return cascadeLevel;
 		}
+		return cascadeLevel;
 	}
 
 	/**

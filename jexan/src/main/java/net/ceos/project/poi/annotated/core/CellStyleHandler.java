@@ -28,6 +28,7 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.exception.ConfigurationException;
 import net.ceos.project.poi.annotated.exception.ElementException;
+import net.ceos.project.poi.annotated.functional.interfaces.PoiConstructor;
 
 /**
  * This class manage all the cell style to apply to one cell decoration.
@@ -61,6 +62,10 @@ public class CellStyleHandler {
 	public static final short CELL_FOREGROUND_COLOR = 9;
 	public static final boolean CELL_WRAP_TEXT = false;
 
+	private static PoiConstructor<Workbook, Font> fontFactory = wb -> wb.createFont();
+	private static PoiConstructor<Workbook, CellStyle> cellStyleFactory = wb -> wb.createCellStyle();
+	private static PoiConstructor<Workbook, DataFormat> dataFormatFactory = wb -> wb.createDataFormat();
+	
 	private CellStyleHandler() {
 		/* private constructor to hide the implicit public */
 	}
@@ -78,7 +83,7 @@ public class CellStyleHandler {
 	 */
 	protected static void applyDataFormat(final Workbook wb, final Cell c, final CellStyle cs,
 			final String formatMask) {
-		DataFormat df = initializeDataFormat(wb);
+		DataFormat df = dataFormatFactory.newInstance(wb);
 		cs.setDataFormat(df.getFormat(formatMask));
 		c.setCellStyle(cs);
 	}
@@ -118,7 +123,7 @@ public class CellStyleHandler {
 	 */
 	protected static void applyFont(final Workbook wb, final CellStyle cs, final String name, final short size,
 			final short c, final boolean b, final boolean i, final byte u) {
-		Font f = initializeFont(wb);
+		Font f = fontFactory.newInstance(wb);
 		f.setFontName(name);
 		f.setFontHeightInPoints(size);
 		f.setColor(c);
@@ -292,7 +297,7 @@ public class CellStyleHandler {
 				/* clone a cell style */
 				CellStyle csNew = cloneCellStyle(configCriteria.getWorkbook(), cs);
 				/* initialize/apply a data format */
-				DataFormat df = initializeDataFormat(configCriteria.getWorkbook());
+				DataFormat df = dataFormatFactory.newInstance(configCriteria.getWorkbook());
 				csNew.setDataFormat(df.getFormat(configCriteria.getMask(maskDecoratorType)));
 
 				configCriteria.getCellStyleManager().put(key, csNew);
@@ -308,11 +313,11 @@ public class CellStyleHandler {
 		} else {
 			if (cs == null) {
 				/* CASE : if the cell has no cell style base */
-				cs = initializeCellStyle(configCriteria.getWorkbook());
+				cs = cellStyleFactory.newInstance(configCriteria.getWorkbook());
 			}
 			if (maskDecoratorType != null && StringUtils.isNotBlank(configCriteria.getMask(maskDecoratorType))) {
 				/* CASE : if the cell has a formatMask */
-				DataFormat df = initializeDataFormat(configCriteria.getWorkbook());
+				DataFormat df = dataFormatFactory.newInstance(configCriteria.getWorkbook());
 				cs.setDataFormat(df.getFormat(configCriteria.getMask(maskDecoratorType)));
 			}
 			c.setCellStyle(cs);
@@ -332,7 +337,7 @@ public class CellStyleHandler {
 	 */
 	protected static Cell initializeHeaderCell(final Map<String, CellStyle> stylesMap, final Row r, final int idxC,
 			final String value) {
-		Cell c = r.createCell(idxC);
+		Cell c = CellHandler.cellFactory.apply(r, idxC);
 		c.setCellValue(value);
 		c.setCellStyle(stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER));
 		return c;
@@ -346,7 +351,7 @@ public class CellStyleHandler {
 	 * @return the {@link CellStyle} header decorator
 	 */
 	protected static CellStyle initializeHeaderCellDecorator(final Workbook wb) {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 
 		/* add the alignment to the cell */
 		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER);
@@ -375,7 +380,7 @@ public class CellStyleHandler {
 	 * @return the {@link CellStyle} numeric decorator
 	 */
 	protected static CellStyle initializeNumericCellDecorator(final Workbook wb) {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 
 		/* add the alignment to the cell */
 		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_RIGHT);
@@ -392,7 +397,7 @@ public class CellStyleHandler {
 	 * @return the {@link CellStyle} date decorator
 	 */
 	protected static CellStyle initializeDateCellDecorator(final Workbook wb) {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 
 		/* add the alignment to the cell */
 		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER);
@@ -409,7 +414,7 @@ public class CellStyleHandler {
 	 * @return the {@link CellStyle} boolean decorator
 	 */
 	protected static CellStyle initializeBooleanCellDecorator(final Workbook wb) {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 
 		/* add the alignment to the cell */
 		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_CENTER);
@@ -426,7 +431,7 @@ public class CellStyleHandler {
 	 * @return the {@link CellStyle} generic decorator
 	 */
 	protected static CellStyle initializeGenericCellDecorator(final Workbook wb) {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 
 		/* add the alignment to the cell */
 		CellStyleHandler.applyAlignment(cs, CellStyle.ALIGN_LEFT);
@@ -446,7 +451,7 @@ public class CellStyleHandler {
 	 */
 	protected static CellStyle initializeCellStyleByCellDecorator(final Workbook wb, final CellDecorator decorator)
 			throws ConfigurationException {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 		try {
 			/* add the alignment to the cell */
 			CellStyleHandler.applyAlignment(cs, decorator.getAlignment(), decorator.getVerticalAlignment());
@@ -484,7 +489,7 @@ public class CellStyleHandler {
 	 */
 	protected static CellStyle initializeCellStyleByXlsDecorator(final Workbook wb, final XlsDecorator decorator)
 			throws ConfigurationException {
-		CellStyle cs = CellStyleHandler.initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 		try {
 			/* add the alignment to the cell */
 			CellStyleHandler.applyAlignment(cs, decorator.alignment(), decorator.verticalAlignment());
@@ -515,28 +520,6 @@ public class CellStyleHandler {
 	}
 
 	/**
-	 * Initialize font.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @return the {@link Font}.
-	 */
-	private static Font initializeFont(final Workbook wb) {
-		return wb.createFont();
-	}
-
-	/**
-	 * Initialize the data format.
-	 * 
-	 * @param wb
-	 *            the workbook
-	 * @return the {@link DataFormat}.
-	 */
-	private static DataFormat initializeDataFormat(final Workbook wb) {
-		return wb.createDataFormat();
-	}
-
-	/**
 	 * Clone a cell style passed as parameter.
 	 * 
 	 * @param wb
@@ -546,7 +529,7 @@ public class CellStyleHandler {
 	 * @return the new cell style
 	 */
 	private static CellStyle cloneCellStyle(final Workbook wb, final CellStyle csBase) {
-		CellStyle cs = initializeCellStyle(wb);
+		CellStyle cs = cellStyleFactory.newInstance(wb);
 		cs.setAlignment(csBase.getAlignment());
 		cs.setVerticalAlignment(csBase.getVerticalAlignment());
 		cs.setBorderTop(csBase.getBorderTop());

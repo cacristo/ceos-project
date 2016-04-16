@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.formula.FormulaParser;
@@ -15,6 +16,7 @@ import org.apache.poi.ss.formula.FormulaType;
 import org.apache.poi.ss.formula.ptg.Ptg;
 import org.apache.poi.ss.formula.ptg.RefPtgBase;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -57,6 +59,8 @@ public class CellHandler {
 	public static final String PRIMITIVE_FLOAT = "float";
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
+	protected static BiFunction<Row, Integer, Cell> cellFactory = (r, idx)  -> r.createCell(idx);
+	
 	private CellHandler() {
 		/* private constructor to hide the implicit public */
 	}
@@ -291,7 +295,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.stringHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, o, c);
 
 			// apply the style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
@@ -324,7 +328,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.shortHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, o, c);
 
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
@@ -358,7 +362,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.integerHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, o, c);
 
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
@@ -392,7 +396,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.longHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, o, c);
 
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
@@ -533,7 +537,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.floatHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, o, c);
 
 			// apply cell style
 			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
