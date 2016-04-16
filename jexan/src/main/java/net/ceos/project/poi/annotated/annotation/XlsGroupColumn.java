@@ -7,7 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * This annotation create an outline for the provided column range.<br>
+ * This annotation creates an outline for the provided column range.<br>
  * In another words, tie a range of columns together and give us the possibility to
  * collapse or expand the group.
  * 
