@@ -221,7 +221,7 @@ public class CellStyleHandler {
 		if (StringUtils.isBlank(configCriteria.getElement().commentRules())
 				|| StringUtils.isNotBlank(configCriteria.getElement().commentRules()) && isAuthorizedComment) {
 			if (ExtensionFileType.XLS.equals(configCriteria.getExtension())) {
-				final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<>();
+				final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<Sheet, HSSFPatriarch>();
 
 				CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
 				HSSFSheet sheet = (HSSFSheet) c.getSheet();

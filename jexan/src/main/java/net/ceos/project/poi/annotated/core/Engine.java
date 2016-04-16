@@ -8,9 +8,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -516,7 +518,7 @@ public class Engine implements IEngine {
 	private boolean toExcel(final XConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
 			throws ElementException, ConverterException, CustomizedRulesException {
 		/* flag which define if the cell was updated or not */
-		boolean isUpdated;
+		boolean isUpdated = false;
 		/* initialize cell */
 		Cell cell;
 
@@ -528,70 +530,47 @@ public class Engine implements IEngine {
 			throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
 		}
 
-		switch (fT.getName()) {
-		case CellHandler.OBJECT_DATE:
+		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.dateWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_STRING:
+			
+		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.stringWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_SHORT:
-			/* falls through */
-		case CellHandler.PRIMITIVE_SHORT:
+			
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.shortWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_INTEGER:
-			/* falls through */
-		case CellHandler.PRIMITIVE_INTEGER:
+			
+		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.integerWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_LONG:
-			/* falls through */
-		case CellHandler.PRIMITIVE_LONG:
+			
+		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.longWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_DOUBLE:
-			/* falls through */
-		case CellHandler.PRIMITIVE_DOUBLE:
+			
+		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.doubleWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_BIGDECIMAL:
+			
+		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.bigDecimalWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_FLOAT:
-			/* falls through */
-		case CellHandler.PRIMITIVE_FLOAT:
+			
+		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.floatWriter(configCriteria, o, cell);
-			break;
-
-		case CellHandler.OBJECT_BOOLEAN:
-			/* falls through */
-		case CellHandler.PRIMITIVE_BOOLEAN:
+			
+		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.booleanWriter(configCriteria, o, cell);
-			break;
-
-		default:
-			isUpdated = false;
-			break;
-		}
-
-		if (!isUpdated && fT.isEnum()) {
+			
+		} else if (fT.isEnum()) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.enumWriter(configCriteria, o, cell);
 		}
@@ -620,67 +599,51 @@ public class Engine implements IEngine {
 	private boolean toObject(final Object o, final Class<?> fT, final Field f, final Cell c,
 			final XlsElement xlsAnnotation) throws IllegalAccessException, ConverterException {
 		/* flag which define if the cell was updated or not */
-		boolean isUpdated;
+		boolean isUpdated = false;
 
 		f.setAccessible(true);
 
-		switch (fT.getName()) {
-		case CellHandler.OBJECT_DATE:
+		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
 			CellHandler.dateReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_STRING:
+			
+		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
 			CellHandler.stringReader(o, f, c);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_INTEGER:
-			/* falls through */
-		case CellHandler.PRIMITIVE_INTEGER:
+			
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
+			CellHandler.shortReader(o, f, c);
+			isUpdated = true;
+			
+		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
 			CellHandler.integerReader(o, f, c);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_LONG:
-			/* falls through */
-		case CellHandler.PRIMITIVE_LONG:
+			
+		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
 			CellHandler.longReader(o, f, c);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_DOUBLE:
-			/* falls through */
-		case CellHandler.PRIMITIVE_DOUBLE:
+			
+		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
 			CellHandler.doubleReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_BIGDECIMAL:
+			
+		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
 			CellHandler.bigDecimalReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_FLOAT:
-			/* falls through */
-		case CellHandler.PRIMITIVE_FLOAT:
+			
+		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
 			CellHandler.floatReader(o, f, c);
 			isUpdated = true;
-			break;
-
-		case CellHandler.OBJECT_BOOLEAN:
-			/* falls through */
-		case CellHandler.PRIMITIVE_BOOLEAN:
+			
+		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
 			CellHandler.booleanReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			break;
-
-		default:
-			isUpdated = false;
-			break;
-		}
-
-		if (!isUpdated && fT.isEnum()) {
+			
+		} else if (fT.isEnum()) {
 			CellHandler.enumReader(o, fT, f, c);
 			isUpdated = true;
 		}

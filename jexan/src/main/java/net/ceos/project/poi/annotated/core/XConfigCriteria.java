@@ -58,12 +58,12 @@ public class XConfigCriteria {
 	private CascadeType overrideCascadeLevel;
 
 	/* cell style parameters */
-	private Map<String, CellStyle> stylesMap = new HashMap<>();
-	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<>();
+	private Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
+	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
 
-	private Map<String, CellStyle> cellStyleManager = new HashMap<>();
+	private Map<String, CellStyle> cellStyleManager = new HashMap<String, CellStyle>();
 
-	private Map<Integer, Integer> columnWidthMap = new HashMap<>();
+	private Map<Integer, Integer> columnWidthMap = new HashMap<Integer, Integer>();
 	
 	/**
 	 * Force the header cell decorator.
