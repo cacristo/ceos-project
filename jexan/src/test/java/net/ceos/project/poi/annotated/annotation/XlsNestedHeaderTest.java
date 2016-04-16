@@ -1,12 +1,12 @@
 package net.ceos.project.poi.annotated.annotation;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.XMenFactory;
 
