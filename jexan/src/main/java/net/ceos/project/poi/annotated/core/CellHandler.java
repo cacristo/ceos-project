@@ -281,7 +281,7 @@ public class CellHandler {
 	 * Apply a integer value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -290,7 +290,7 @@ public class CellHandler {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean stringWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean stringWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -314,7 +314,7 @@ public class CellHandler {
 	 * Apply a integer value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -323,7 +323,7 @@ public class CellHandler {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean shortWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean shortWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -348,7 +348,7 @@ public class CellHandler {
 	 * Apply a integer value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -357,7 +357,7 @@ public class CellHandler {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean integerWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean integerWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -382,7 +382,7 @@ public class CellHandler {
 	 * Apply a double value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -391,7 +391,7 @@ public class CellHandler {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean longWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean longWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -416,7 +416,7 @@ public class CellHandler {
 	 * Apply a double value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -425,7 +425,7 @@ public class CellHandler {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean doubleWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean doubleWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -450,7 +450,7 @@ public class CellHandler {
 	 * Apply a big decimal value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -460,7 +460,7 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean bigDecimalWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean bigDecimalWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -485,7 +485,7 @@ public class CellHandler {
 	 * Apply a date value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -495,7 +495,7 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean dateWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean dateWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -522,7 +522,7 @@ public class CellHandler {
 	 * Apply a float value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -532,7 +532,7 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean floatWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean floatWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -558,7 +558,7 @@ public class CellHandler {
 	 * Apply a boolean value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -568,7 +568,7 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean booleanWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean booleanWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
@@ -593,7 +593,7 @@ public class CellHandler {
 	 * Apply a enum value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -603,7 +603,7 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean enumWriter(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean enumWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 
@@ -671,7 +671,7 @@ public class CellHandler {
 		if (c == null) {
 			return null;
 		}
-		
+
 		if (c.getCellType() == Cell.CELL_TYPE_STRING) {
 			return c.getStringCellValue();
 		}
@@ -679,7 +679,7 @@ public class CellHandler {
 		if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 			Double value = c.getNumericCellValue();
 			return value.toString();
-		} 
+		}
 
 		if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
 			switch (c.getCachedFormulaResultType()) {

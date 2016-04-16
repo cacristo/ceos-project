@@ -76,7 +76,7 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws ConfigurationException
 	 */
-	private void initializeConfigurationData(final ConfigCriteria configCriteria, final Class<?> oC)
+	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC)
 			throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (PredicateFactory.isAnnotationXlsConfigurationPresent.test(oC)) {
@@ -99,12 +99,12 @@ public class Engine implements IEngine {
 	 * Add the main xls configuration.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param annotation
 	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
-	private void initializeXlsConfiguration(final ConfigCriteria configCriteria, final XlsConfiguration annotation) {
+	private void initializeXlsConfiguration(final XConfigCriteria configCriteria, final XlsConfiguration annotation) {
 		configCriteria.setFileName(annotation.nameFile());
 		configCriteria.setCompleteFileName(annotation.nameFile() + annotation.extensionFile().getExtension());
 		configCriteria.setExtension(annotation.extensionFile());
@@ -114,12 +114,12 @@ public class Engine implements IEngine {
 	 * Add the sheet configuration.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param annotation
 	 *            the {@link XlsSheet}
 	 * @return
 	 */
-	private void initializeXlsSheet(final ConfigCriteria configCriteria, final XlsSheet annotation) {
+	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation) {
 		configCriteria.setTitleSheet(annotation.title());
 		configCriteria.setPropagation(annotation.propagation());
 		configCriteria.setCascadeLevel(annotation.cascadeLevel());
@@ -136,10 +136,10 @@ public class Engine implements IEngine {
 	 * @param objectClass
 	 *            the object class
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @throws ConfigurationException
 	 */
-	private void initializeCellStyleViaAnnotation(final Class<?> objectClass, final ConfigCriteria configCriteria)
+	private void initializeCellStyleViaAnnotation(final Class<?> objectClass, final XConfigCriteria configCriteria)
 			throws ConfigurationException {
 		if (PredicateFactory.isAnnotationXlsDecoratorsPresent.test(objectClass)) {
 			XlsDecorators xlsDecorators = (XlsDecorators) objectClass.getAnnotation(XlsDecorators.class);
@@ -251,7 +251,7 @@ public class Engine implements IEngine {
 	 * Apply merge region if necessary.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param r
 	 *            the {@link Row}
 	 * @param idxR
@@ -263,7 +263,7 @@ public class Engine implements IEngine {
 	 *            vertically
 	 * @throws ConfigurationException
 	 */
-	private void applyMergeRegion(final ConfigCriteria configCriteria, Row r, final int idxR, final int idxC,
+	private void applyMergeRegion(final XConfigCriteria configCriteria, Row r, final int idxR, final int idxC,
 			final boolean isPH) throws ConfigurationException {
 		/* Process @XlsNestedHeader */
 		if (PredicateFactory.isFieldAnnotationXlsNestedHeaderPresent.test(configCriteria.getField())) {
@@ -353,7 +353,7 @@ public class Engine implements IEngine {
 		return idxRow;
 	}
 
-	private void initializeCellByField(final ConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
+	private void initializeCellByField(final XConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
 			final Object o, final Field field, final int idxC, final int cL)
 					throws ElementException, ConverterException, CustomizedRulesException {
 
@@ -388,7 +388,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_HORIZONTAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param idxR
@@ -408,7 +408,7 @@ public class Engine implements IEngine {
 	 * @throws ConverterException
 	 * @throws Exception
 	 */
-	private int initializeCellByFieldHorizontal(final ConfigCriteria configCriteria, final Object o, final int idxR,
+	private int initializeCellByFieldHorizontal(final XConfigCriteria configCriteria, final Object o, final int idxR,
 			final int idxC, final int cL)
 					throws IllegalAccessException, InstantiationException, InvocationTargetException,
 					ConfigurationException, ElementException, CustomizedRulesException, ConverterException {
@@ -443,7 +443,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_VERTICAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param r
@@ -464,7 +464,7 @@ public class Engine implements IEngine {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	private int initializeCellByFieldVertical(final ConfigCriteria configCriteria, final Object o, final Row r,
+	private int initializeCellByFieldVertical(final XConfigCriteria configCriteria, final Object o, final Row r,
 			final int idxR, final int idxC, int cL)
 					throws ElementException, ConverterException, IllegalAccessException, InstantiationException,
 					NoSuchMethodException, InvocationTargetException, CustomizedRulesException, ConfigurationException {
@@ -500,7 +500,7 @@ public class Engine implements IEngine {
 	 * Apply the base object to cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param fT
@@ -513,7 +513,7 @@ public class Engine implements IEngine {
 	 * @throws CustomizedRulesException
 	 * @throws Exception
 	 */
-	private boolean toExcel(final ConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
+	private boolean toExcel(final XConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
 			throws ElementException, ConverterException, CustomizedRulesException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated;
@@ -693,7 +693,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_HORIZONTAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
@@ -714,7 +714,7 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * 
 	 */
-	private int marshalAsPropagationHorizontal(final ConfigCriteria configCriteria, final Object o, final Class<?> oC,
+	private int marshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, final Class<?> oC,
 			final int idxR, final int idxC, final int cL)
 					throws ConfigurationException, ElementException, CustomizedRulesException, IllegalAccessException,
 					InvocationTargetException, InstantiationException, ConverterException {
@@ -798,7 +798,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_VERTICAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
@@ -820,7 +820,7 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * 
 	 */
-	private int marshalAsPropagationVertical(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+	private int marshalAsPropagationVertical(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC, final int cL)
 					throws ElementException, NoSuchMethodException, IllegalAccessException, InvocationTargetException,
 					CustomizedRulesException, ConfigurationException, ConverterException, InstantiationException {
@@ -913,7 +913,7 @@ public class Engine implements IEngine {
 	 * Process the annotation {@link XlsFreeElement}
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
@@ -924,8 +924,8 @@ public class Engine implements IEngine {
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	private void processXlsFreeElement(final ConfigCriteria configCriteria, final Object o, final int cL, final Field f)
-			throws ElementException, ConverterException, CustomizedRulesException {
+	private void processXlsFreeElement(final XConfigCriteria configCriteria, final Object o, final int cL,
+			final Field f) throws ElementException, ConverterException, CustomizedRulesException {
 
 		if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
 			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
@@ -974,7 +974,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_HORIZONTAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
@@ -989,7 +989,7 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * @throws ElementException
 	 */
-	private int unmarshalAsPropagationHorizontal(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+	private int unmarshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC)
 					throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
@@ -1069,7 +1069,7 @@ public class Engine implements IEngine {
 	 * PROPAGATION_VERTICAL.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria}
+	 *            the {@link XConfigCriteria}
 	 * @param o
 	 *            the object
 	 * @param oC
@@ -1084,7 +1084,7 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * @throws ElementException
 	 */
-	private int unmarshalAsPropagationVertical(final ConfigCriteria configCriteria, final Object o, Class<?> oC,
+	private int unmarshalAsPropagationVertical(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC)
 					throws IllegalAccessException, ConverterException, InstantiationException, ElementException {
 		/* counter related to the number of fields (if new object) */
@@ -1200,11 +1200,11 @@ public class Engine implements IEngine {
 	/* ######################## engine methods ########################## */
 
 	/**
-	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
 	 * passed as parameters.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use.
+	 *            the {@link XConfigCriteria} to use.
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @throws ElementException
@@ -1217,7 +1217,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 * @throws NoSuchMethodException
 	 */
-	private void marshalEngine(final ConfigCriteria configCriteria, final Object object) throws ElementException,
+	private void marshalEngine(final XConfigCriteria configCriteria, final Object object) throws ElementException,
 			ConfigurationException, SheetException, IllegalAccessException, InvocationTargetException,
 			InstantiationException, CustomizedRulesException, ConverterException, NoSuchMethodException {
 
@@ -1269,11 +1269,11 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Extract from the workbook based at the {@link ConfigCriteria} and the
+	 * Extract from the workbook based at the {@link XConfigCriteria} and the
 	 * object passed as parameters.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use.
+	 *            the {@link XConfigCriteria} to use.
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @param oC
@@ -1284,7 +1284,7 @@ public class Engine implements IEngine {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private void unmarshalEngine(final ConfigCriteria configCriteria, final Object object, final Class<?> oC)
+	private void unmarshalEngine(final XConfigCriteria configCriteria, final Object object, final Class<?> oC)
 			throws SheetException, IllegalAccessException, InstantiationException, ConverterException,
 			ElementException {
 
@@ -1329,7 +1329,7 @@ public class Engine implements IEngine {
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Initialize a basic ConfigCriteria */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
@@ -1339,11 +1339,11 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the sheet based at the {@link ConfigCriteria} and the object
+	 * Generate the sheet based at the {@link XConfigCriteria} and the object
 	 * passed as parameters and return the sheet generated.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
@@ -1358,7 +1358,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 */
 	@Override
-	public Sheet marshalToSheet(final ConfigCriteria configCriteria, final Object object)
+	public Sheet marshalToSheet(final XConfigCriteria configCriteria, final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Generate the workbook based at the object passed as parameter */
@@ -1390,7 +1390,7 @@ public class Engine implements IEngine {
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Initialize a basic ConfigCriteria */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
@@ -1400,11 +1400,11 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
 	 * passed as parameters and return the workbook generated.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
@@ -1419,7 +1419,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 */
 	@Override
-	public Workbook marshalToWorkbook(final ConfigCriteria configCriteria, final Object object)
+	public Workbook marshalToWorkbook(final XConfigCriteria configCriteria, final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
 		/* Generate the workbook from the object passed as parameter */
@@ -1452,7 +1452,7 @@ public class Engine implements IEngine {
 			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
 			CustomizedRulesException, ConverterException, IOException {
 		/* Initialize a basic ConfigCriteria */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
@@ -1485,17 +1485,17 @@ public class Engine implements IEngine {
 			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
 			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
 		/* Generate the workbook from the object passed as parameter */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		marshalAndSave(configCriteria, object, pathFile);
 	}
 
 	/**
-	 * Generate the workbook based at the {@link ConfigCriteria} and the object
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
 	 * passed as parameters and save it at the path send as parameter.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} to use
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @param pathFile
@@ -1512,7 +1512,7 @@ public class Engine implements IEngine {
 	 * @throws IOException
 	 */
 	@Override
-	public void marshalAndSave(final ConfigCriteria configCriteria, final Object object, final String pathFile)
+	public void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException,
 			IOException {
@@ -1556,7 +1556,7 @@ public class Engine implements IEngine {
 		configuration.setNameFile(filename);
 		Configuration config = configuration;
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.setPropagation(config.getPropagationType());
 		configCriteria.setExtension(config.getExtensionFile());
 
@@ -1659,7 +1659,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
 		/* set workbook */
@@ -1696,7 +1696,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
 		/*
@@ -1743,7 +1743,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
 		/* set workbook */
@@ -1794,7 +1794,7 @@ public class Engine implements IEngine {
 			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
 			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
 		/* Initialize a basic ConfigCriteria */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
@@ -1818,7 +1818,7 @@ public class Engine implements IEngine {
 		Class<?> oC = object.getClass();
 
 		/* initialize configuration data */
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		initializeConfigurationData(configCriteria, oC);
 
 		/* set workbook */

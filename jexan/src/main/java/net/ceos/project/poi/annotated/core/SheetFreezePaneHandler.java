@@ -16,8 +16,9 @@ class SheetFreezePaneHandler {
 	 * Apply a freeze pane to the sheet.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	protected static void applyFreezePane(final ConfigCriteria configCriteria) {
+	protected static void applyFreezePane(final XConfigCriteria configCriteria) {
 		if(PredicateFactory.isMandatoryFreezePaneValid
 				.and(PredicateFactory.isOptionalFieldsFreezePaneIgnored)
 				.test(configCriteria.getFreezePane())){
@@ -34,8 +35,9 @@ class SheetFreezePaneHandler {
 	 * Create a base freeze pane.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void createBasicFreezePane(final ConfigCriteria configCriteria) {
+	private static void createBasicFreezePane(final XConfigCriteria configCriteria) {
 		configCriteria.getSheet().createFreezePane(configCriteria.getFreezePane().colSplit(),
 				configCriteria.getFreezePane().rowSplit());
 	}
@@ -44,8 +46,9 @@ class SheetFreezePaneHandler {
 	 * Create an advanced freeze pane.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 */
-	private static void createAdvancedFreezePane(final ConfigCriteria configCriteria) {
+	private static void createAdvancedFreezePane(final XConfigCriteria configCriteria) {
 		configCriteria.getSheet().createFreezePane(configCriteria.getFreezePane().colSplit(),
 				configCriteria.getFreezePane().rowSplit(), configCriteria.getFreezePane().leftMostColumn(),
 				configCriteria.getFreezePane().topRow());
