@@ -10,7 +10,7 @@ import net.ceos.project.poi.annotated.bean.XlsNestedHeaderHorizIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsNestedHeaderVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsSheetAbsent;
 import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.ConfigCriteria;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
@@ -33,17 +33,17 @@ public class ConfigurationExceptionTest {
 	@DataProvider
 	public Object[][] configCriteriaProvider() {
 		
-		ConfigCriteria header = new ConfigCriteria();
+		XConfigCriteria header = new XConfigCriteria();
 		header.overrideHeaderCellDecorator(null);
 
-		ConfigCriteria numeric = new ConfigCriteria();
+		XConfigCriteria numeric = new XConfigCriteria();
 		numeric.overrideNumericCellDecorator(null);
 		
 
-		ConfigCriteria bool = new ConfigCriteria();
+		XConfigCriteria bool = new XConfigCriteria();
 		bool.overrideBooleanCellDecorator(null);
 
-		ConfigCriteria date = new ConfigCriteria();
+		XConfigCriteria date = new XConfigCriteria();
 		date.overrideDateCellDecorator(null);
 
 		return new Object[][] { 
@@ -115,7 +115,7 @@ public class ConfigurationExceptionTest {
 	 * {@link CellDecorator}
 	 */
 	@Test(dataProvider="configCriteriaProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is missing. Review your configuration.")
-	public void testOverrideMissingException(ConfigCriteria configCriteria) throws Exception {
+	public void testOverrideMissingException(XConfigCriteria configCriteria) throws Exception {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
