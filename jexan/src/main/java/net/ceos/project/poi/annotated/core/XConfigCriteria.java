@@ -27,7 +27,7 @@ import net.ceos.project.poi.annotated.exception.ElementException;
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class ConfigCriteria {
+public class XConfigCriteria {
 
 	/* workbook parameters */
 	private Workbook workbook;
