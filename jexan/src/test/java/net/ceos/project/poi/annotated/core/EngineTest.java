@@ -72,7 +72,7 @@ public class EngineTest {
 		anotherDate.setFontItalic(true);
 		anotherDate.setWrapText(true);
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
 
 		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);

@@ -44,7 +44,7 @@ public class MultiTypeAttributesTest {
 		anotherDate.setFontItalic(true);
 		anotherDate.setWrapText(true);
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.overrideHeaderCellDecorator(configuration);
 		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
 
