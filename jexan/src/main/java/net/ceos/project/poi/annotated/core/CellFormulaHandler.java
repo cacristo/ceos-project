@@ -28,15 +28,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a String value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void stringHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void stringHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
@@ -50,15 +54,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Short value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void shortHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void shortHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
@@ -72,15 +80,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply an Integer value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void integerHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void integerHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
@@ -94,15 +106,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Long value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void longHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void longHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
@@ -116,15 +132,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Float value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void floatHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void floatHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
@@ -138,15 +158,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Double value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void doubleHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void doubleHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, c)) {
@@ -165,15 +189,19 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a BigDecimal value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void bigDecimalHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void bigDecimalHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
@@ -197,13 +225,17 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Boolean value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws IllegalAccessException
 	 */
-	protected static void booleanHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void booleanHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws IllegalAccessException {
 		Boolean bBoolean = (Boolean) configCriteria.getField().get(o);
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
@@ -218,14 +250,18 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a Date value to the cell.
 	 * 
 	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param o
+	 *            the object
 	 * @param c
+	 *            the {@link Cell} to use
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void dateHandler(final ConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void dateHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
 			throws IllegalAccessException, ConverterException {
 		Date date = (Date) configCriteria.getField().get(o);
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
@@ -247,7 +283,7 @@ class CellFormulaHandler {
 	 * Apply a formula value at the Cell.
 	 * 
 	 * @param configCriteria
-	 *            the {@link ConfigCriteria} object
+	 *            the {@link XConfigCriteria} object
 	 * @param o
 	 *            the object
 	 * @param c
@@ -256,7 +292,7 @@ class CellFormulaHandler {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private static boolean toFormula(final ConfigCriteria configCriteria, final Cell c)
+	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell c)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		boolean isFormulaApplied = false;
 
