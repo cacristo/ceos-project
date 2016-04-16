@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public class CGen implements IGeneratorCSV {
 	private static final String SLASH = "/";
 	private static final String DOT = ".";
 	private static final String COMMA = ",";
-	private static final char END_OF_LINE = '\n';
+	private static final String END_OF_LINE = "\r\n";
 	private static final String DEFAULT_DATE = "dd-MMM-yyyy HH:mm:ss";
 
 	/**
