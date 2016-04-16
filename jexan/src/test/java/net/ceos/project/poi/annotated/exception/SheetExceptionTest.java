@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.exception;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.XlsSheetEmptyTitle;
 import net.ceos.project.poi.annotated.core.Engine;
@@ -18,7 +18,7 @@ public class SheetExceptionTest {
 	/**
 	 * Test a sheet exception because an empty title sheet
 	 */
-	@Test(expectedExceptions = SheetException.class, expectedExceptionsMessageRegExp = "Problem while creating the Sheet. Review your configuration.")
+	@Test(expected = SheetException.class)
 	public void testEmptyTitleSheetMarshalSheetException() throws Exception {
 		XlsSheetEmptyTitle emptyTitle = new XlsSheetEmptyTitle();
 
@@ -29,7 +29,7 @@ public class SheetExceptionTest {
 	/**
 	 * Test a sheet exception because an empty title sheet
 	 */
-	@Test(expectedExceptions = SheetException.class, expectedExceptionsMessageRegExp = "Problem while creating the Sheet. Review your configuration.")
+	@Test(expected = SheetException.class)
 	public void testEmptyTitleSheetUnmarshalSheetException() throws Exception {
 		XlsSheetEmptyTitle emptyTitle = new XlsSheetEmptyTitle();
 

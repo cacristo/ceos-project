@@ -78,7 +78,7 @@ public class BasicObjectBuilder {
 		assertEquals(base.getDoubleAttribute(), toValidate.getDoubleAttribute());
 		assertEquals(base.getLongAttribute(), toValidate.getLongAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
 		// TODO add new validation below

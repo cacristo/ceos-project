@@ -1,11 +1,9 @@
 package net.ceos.project.poi.annotated.exception;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
@@ -32,51 +30,12 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
  */
 public class ElementExceptionTest {
 
-	@DataProvider
-	public Object[][] collectionProvider() {
-		/* Collection empty */
-		List<Object> collectionEmpty = new ArrayList<Object>();
-		/* Collection with object null */
-		List<Object> collection = new ArrayList<Object>();
-		SimpleObject so = null;
-		collection.add(so);
-		
-		return new Object[][] { 
-			{ collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS },
-			{ collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX }
-		};
-	}
-
-	@DataProvider
-	public Object[][] overwriteCellProvider(){
-		return new Object[][] { 
-			{ new XlsElementOverwriteCell() },
-			{ new XlsFreeElementOverwriteCell() }
-		};
-	}
-
-	@DataProvider
-	public Object[][] invalidPositionProvider(){
-		return new Object[][] { 
-			{ new XlsElementInvalidPosition() },
-			{ new XlsFreeElementInvalidPositionCell() },
-			{ new XlsFreeElementInvalidPositionRow() }
-		};
-	}
-
-	@DataProvider
-	public Object[][] xlsConflictConfigurationProvider() {
-		return new Object[][] { 
-			{ new XlsConflitFormulaHorizIncompatible() },
-			{ new XlsConflitFormulaVertiIncompatible() } };
-	}
-
 	/**
 	 * Test an null object
 	 * 
 	 * @throws Exception
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
+	@Test(expected = ElementException.class)
 	public void testMarsharObjectNull() throws Exception {
 		MultiTypeObject objNull = null;
 
@@ -87,7 +46,7 @@ public class ElementExceptionTest {
 	/**
 	 * Test an empty object
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
+	@Test(expected = ElementException.class)
 	public void testUnmarshalObjectNull() throws Exception {
 		MultiTypeObject objEmpty = new MultiTypeObject();
 
@@ -101,7 +60,7 @@ public class ElementExceptionTest {
 	/**
 	 * Test an null list
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
+	@Test(expected = ElementException.class)
 	public void testMarshalListNull() throws Exception {
 		List<Object> collectionNull = null;
 
@@ -114,18 +73,37 @@ public class ElementExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@SuppressWarnings("rawtypes")
-	@Test(dataProvider = "collectionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
-	public void testMarshalListEmpty(Collection collection, String fileName, ExtensionFileType extension) throws Exception {
+	@Test(expected = ElementException.class)
+	public void testMarshalListEmpty() throws Exception {
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, fileName, extension);
+		
+		/* Collection empty */
+		List<Object> collectionEmpty = new ArrayList<Object>();
+		
+		en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS);
 	}
 
+	/**
+	 * Test an empty list & list with null object
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = ElementException.class)
+	public void testMarshalListWithElementEmpty() throws Exception {
+		IEngine en = new Engine();
+		
+		/* Collection with object null */
+		List<Object> collection = new ArrayList<Object>();
+		SimpleObject so = null;
+		collection.add(so);
+		
+		en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
+	}
 
 	/**
 	 * Test a {@link XlsFreeElement} trying use a complex object
 	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Complex objects are not allowed for this type! Review your configuration.")
+	@Test(expected = ElementException.class)
 	public void testMarshalXlsFreeElementInvalidObject() throws Exception {
 		XlsFreeElementInvalidObject complexObject = new XlsFreeElementInvalidObject();
 
@@ -136,29 +114,64 @@ public class ElementExceptionTest {
 	/**
 	 * Test a {@link XlsElement} & {@link XlsFreeElement} trying write at one cell already used
 	 */
-	@Test(dataProvider = "overwriteCellProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry is trying to be set at one position already used. Review your configuration.")
-	public void testMarshalXlsElementOverwriteCell(Object object) throws Exception {
+	@Test(expected = ElementException.class)
+	public void testMarshalXlsElementOverwriteCell() throws Exception {
 		IEngine en = new Engine();
-		en.marshalToWorkbook(object);
+		en.marshalToWorkbook(new XlsElementOverwriteCell());
+	}
+
+	/**
+	 * Test a {@link XlsElement} & {@link XlsFreeElement} trying write at one cell already used
+	 */
+	@Test(expected = ElementException.class)
+	public void testMarshalXlsFreeElementOverwriteCell() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(new XlsFreeElementOverwriteCell());
 	}
 
 	/**
 	 * Test a {@link XlsElement} trying write at invalid position<br>
+	 */
+	@Test(expected = ElementException.class)
+	public void testMarshalXlsElementInvalidPosition() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToFileOutputStream(new XlsElementInvalidPosition());
+	}
+
+	/**
 	 * Test a {@link XlsFreeElement} trying write at invalid cell position<br>
+	 */
+	@Test(expected = ElementException.class)
+	public void testMarshalXlsFreeElementInvalidPositionCell() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToFileOutputStream(new XlsFreeElementInvalidPositionCell());
+	}
+
+	/**
 	 * Test a {@link XlsFreeElement} trying write at invalid row position<br>
 	 */
-	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
-	public void testMarshalXlsElementInvalidPosition(Object object) throws Exception {
+	@Test(expected = ElementException.class)
+	public void testMarshalXlsFreeElementInvalidPositionRow() throws Exception {
 		IEngine en = new Engine();
-		en.marshalToFileOutputStream(object);
+		en.marshalToFileOutputStream(new XlsFreeElementInvalidPositionRow());
 	}
 
 	/**
 	 * Test a horizontal configuration exception conflict
 	 */
-	@Test(dataProvider = "xlsConflictConfigurationProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
-	public void testXlsConflictConfigurationException(Object incompatibleConfig) throws Exception {
+	@Test(expected = ElementException.class)
+	public void testXlsConflictConfigurationExceptionHorizontal() throws Exception {
 		IEngine en = new Engine();
-		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(new XlsConflitFormulaHorizIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
+
+	/**
+	 * Test a vertical configuration exception conflict
+	 */
+	@Test(expected = ElementException.class)
+	public void testXlsConflictConfigurationExceptionVertical() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(new XlsConflitFormulaVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+	
 }

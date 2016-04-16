@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
@@ -20,30 +19,6 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
  * @author Carlos CRISTO ABREU
  */
 public class MarshalUnmarshalTest {
-
-	@DataProvider
-	public Object[][] sheetProvider() throws Exception {
-		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
-		IEngine en = new Engine();
-		Sheet sheet = en.marshalToSheet(mto);
-		return new Object[][] { { sheet } };
-	}
-
-	@DataProvider
-	public Object[][] workBookProvider() throws Exception {
-		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
-		IEngine en = new Engine();
-		Workbook workbook = en.marshalToWorkbook(mto);
-		return new Object[][] { { workbook } };
-	}
-
-	@DataProvider
-	public Object[][] byteProvider() throws Exception {
-		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
-		IEngine en = new Engine();
-		byte[] generatedBytes = en.marshalToByte(mto);
-		return new Object[][] { { generatedBytes } };
-	}
 
 	/**
 	 * Test the method 'marshalToSheet' to generate the Excel from the object
@@ -172,12 +147,16 @@ public class MarshalUnmarshalTest {
 	 * Test the method 'unmarshalFromWorkbook' reading the Excel from the
 	 * Workbook passed as parameter and bring the data to the object.
 	 */
-	@Test(dataProvider = "workBookProvider")
-	public void testUnmarshalFromWorkbook(Workbook wb) throws Exception {
-		MultiTypeObject charger = new MultiTypeObject();
+	@Test
+	public void testUnmarshalFromWorkbook() throws Exception {
 
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 		IEngine en = new Engine();
-		en.unmarshalFromWorkbook(charger, wb);
+		Workbook workbook = en.marshalToWorkbook(mto);
+		
+		MultiTypeObject charger = new MultiTypeObject();
+		IEngine en1 = new Engine();
+		en1.unmarshalFromWorkbook(charger, workbook);
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
 	}
@@ -189,12 +168,16 @@ public class MarshalUnmarshalTest {
 	 * Test the method 'unmarshalFromByte' reading the Excel from the byte[]
 	 * passed as parameter and bring the data to the object.
 	 */
-	@Test(dataProvider = "byteProvider")
-	public void testlUnmarshalFromByte(byte[] bytes) throws Exception {
-		MultiTypeObject charger = new MultiTypeObject();
+	@Test
+	public void testlUnmarshalFromByte() throws Exception {
 
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
+		IEngine en1 = new Engine();
+		byte[] generatedBytes = en1.marshalToByte(mto);
+		
+		MultiTypeObject charger = new MultiTypeObject();
 		IEngine en = new Engine();
-		en.unmarshalFromByte(charger, bytes);
+		en.unmarshalFromByte(charger, generatedBytes);
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
 	}

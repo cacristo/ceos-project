@@ -1,7 +1,6 @@
 package net.ceos.project.poi.annotated.exception;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
@@ -23,41 +22,11 @@ import net.ceos.project.poi.annotated.core.TestUtils;
  */
 public class ConfigurationExceptionTest {
 
-	@DataProvider
-	public Object[][] xlsConflictConfigurationProvider() {
-		return new Object[][] { 
-			{ new XlsNestedHeaderHorizIncompatible() },
-			{ new XlsNestedHeaderVertiIncompatible() } };
-	}
-	
-	@DataProvider
-	public Object[][] configCriteriaProvider() {
-		
-		XConfigCriteria header = new XConfigCriteria();
-		header.overrideHeaderCellDecorator(null);
-
-		XConfigCriteria numeric = new XConfigCriteria();
-		numeric.overrideNumericCellDecorator(null);
-		
-
-		XConfigCriteria bool = new XConfigCriteria();
-		bool.overrideBooleanCellDecorator(null);
-
-		XConfigCriteria date = new XConfigCriteria();
-		date.overrideDateCellDecorator(null);
-
-		return new Object[][] { 
-			{ header }, 
-			{ numeric }, 
-			{ bool }, 
-			{ date } };
-	}
-
 	/**
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsConfiguration is missing. Review your configuration.")
+	@Test(expected = ConfigurationException.class)
 	public void testMarshalMissingXlsConfigurationException() throws Exception {
 		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
 
@@ -69,7 +38,7 @@ public class ConfigurationExceptionTest {
 	 * Test a configuration exception, at unmarshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsConfiguration is missing. Review your configuration.")
+	@Test(expected = ConfigurationException.class)
 	public void testUnmarshalMissingXlsConfigurationException() throws Exception {
 		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
 
@@ -81,7 +50,7 @@ public class ConfigurationExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing XlsSheet
 	 * definitions
 	 */
-	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsSheet is missing. Review your configuration.")
+	@Test(expected = ConfigurationException.class)
 	public void testMarshalMissingXlsSheetException() throws Exception {
 		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
 
@@ -93,7 +62,7 @@ public class ConfigurationExceptionTest {
 	 * Test a configuration exception, at unmarshal mode, with missing XlsSheet
 	 * definitions
 	 */
-	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsSheet is missing. Review your configuration.")
+	@Test(expected = ConfigurationException.class)
 	public void testUnmarshalMissingXlsSheetException() throws Exception {
 		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
 
@@ -104,22 +73,79 @@ public class ConfigurationExceptionTest {
 	/**
 	 * Test a horizontal configuration exception conflict
 	 */
-	@Test(dataProvider = "xlsConflictConfigurationProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
-	public void testXlsConflictConfigurationException(Object incompatibleConfig) throws Exception {
+	@Test(expected = ConfigurationException.class)
+	public void testXlsConflictXlsNestedHeaderHorizIncompatible() throws Exception {
 		IEngine en = new Engine();
-		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(new XlsNestedHeaderHorizIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
-	 * Test a missing configuration exception at override the header, numeric, boolean or date
+	 * Test a horizontal configuration exception conflict
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testXlsConflictXlsNestedHeaderVertiIncompatible() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(new XlsNestedHeaderVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the header
 	 * {@link CellDecorator}
 	 */
-	@Test(dataProvider="configCriteriaProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is missing. Review your configuration.")
-	public void testOverrideMissingException(XConfigCriteria configCriteria) throws Exception {
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionHeader() throws Exception {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
+		XConfigCriteria header = new XConfigCriteria();
+		header.overrideHeaderCellDecorator(null);
+
 		IEngine en = new Engine();
-		en.marshalAndSave(configCriteria, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(header, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the numeric
+	 * {@link CellDecorator}
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionNumeric() throws Exception {
+		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
+
+		XConfigCriteria numeric = new XConfigCriteria();
+		numeric.overrideNumericCellDecorator(null);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(numeric, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the boolean
+	 * {@link CellDecorator}
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionBoolean() throws Exception {
+		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
+
+		XConfigCriteria bool = new XConfigCriteria();
+		bool.overrideBooleanCellDecorator(null);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(bool, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the date
+	 * {@link CellDecorator}
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionDate() throws Exception {
+		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
+
+		XConfigCriteria date = new XConfigCriteria();
+		date.overrideDateCellDecorator(null);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(date, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }

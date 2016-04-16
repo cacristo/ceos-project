@@ -74,7 +74,7 @@ public class ObjectNullBuilder {
 		assertEquals(base.getJob().getJobFamily(), toValidate.getJob().getJobFamily());
 		assertEquals(base.getJob().getJobName(), toValidate.getJob().getJobName());
 		assertEquals(base.getIntegerPrimitiveAttribute(), toValidate.getIntegerPrimitiveAttribute());
-		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute());
+		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute(), 0.001);
 		assertEquals(base.getLongPrimitiveAttribute(), toValidate.getLongPrimitiveAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
 		assertEquals(base.getAddressInfo().getAddress(), toValidate.getAddressInfo().getAddress());
@@ -83,7 +83,7 @@ public class ObjectNullBuilder {
 		assertEquals(base.getAddressInfo().getCityCode(), toValidate.getAddressInfo().getCityCode());
 		assertEquals(base.getAddressInfo().getCountry(), toValidate.getAddressInfo().getCountry());
 		assertEquals(base.getFloatAttribute(), toValidate.getFloatAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
 		// TODO add new validation below

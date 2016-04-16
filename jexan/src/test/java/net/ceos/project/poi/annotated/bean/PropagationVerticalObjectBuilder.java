@@ -65,10 +65,10 @@ public class PropagationVerticalObjectBuilder {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		assertEquals(base.getIntegerPrimitiveAttribute(), toValidate.getIntegerPrimitiveAttribute());
-		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute());
+		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute(), 0.001);
 		assertEquals(base.getLongPrimitiveAttribute(), toValidate.getLongPrimitiveAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		// TODO add new validation below
 	}
 

@@ -1,10 +1,10 @@
 package net.ceos.project.poi.annotated.core;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;

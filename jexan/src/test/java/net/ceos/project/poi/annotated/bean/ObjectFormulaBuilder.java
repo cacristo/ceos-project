@@ -65,9 +65,9 @@ public class ObjectFormulaBuilder {
 
 		assertEquals(base.getStore(), toValidate.getStore());
 		assertEquals(base.getWebStore(), toValidate.getWebStore());
-		assertEquals(base.getValueLocal(), toValidate.getValueLocal());
-		assertEquals(base.getValueRegion(), toValidate.getValueRegion());
-		assertEquals(base.getValueCountry(), toValidate.getValueCountry());
+		assertEquals(base.getValueLocal(), toValidate.getValueLocal(), 0.001);
+		assertEquals(base.getValueRegion(), toValidate.getValueRegion(), 0.001);
+		assertEquals(base.getValueCountry(), toValidate.getValueCountry(), 0.001);
 		// FIXME review how get formula result
 		// assertEquals(base.getSomeString(), toValidate.getSomeString());
 		assertEquals("0.0", toValidate.getSomeString());

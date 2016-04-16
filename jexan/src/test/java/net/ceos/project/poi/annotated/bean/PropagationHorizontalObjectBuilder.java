@@ -78,7 +78,7 @@ public class PropagationHorizontalObjectBuilder {
 		assertEquals(base.getStringAttribute(), toValidate.getStringAttribute());
 		assertEquals(base.getIntegerAttribute(), toValidate.getIntegerAttribute());
 		assertEquals(base.getBooleanAttribute(), toValidate.getBooleanAttribute());
-		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute());
+		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute(), 0.001);
 		assertEquals(base.getLongPrimitiveAttribute(), toValidate.getLongPrimitiveAttribute());
 		assertEquals(base.getFloatAttribute(), toValidate.getFloatAttribute());
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());

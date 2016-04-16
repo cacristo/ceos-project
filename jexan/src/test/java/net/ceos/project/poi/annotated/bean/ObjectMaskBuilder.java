@@ -104,12 +104,12 @@ public class ObjectMaskBuilder {
 		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
 		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
 
-		assertEquals(base.getDoubleAttribute1(), toValidate.getDoubleAttribute1());
-		assertEquals(base.getDoubleAttribute2(), toValidate.getDoubleAttribute2());
-		assertEquals(base.getDoubleAttribute3(), toValidate.getDoubleAttribute3());
+		assertEquals(base.getDoubleAttribute1(), toValidate.getDoubleAttribute1(), 0.001);
+		assertEquals(base.getDoubleAttribute2(), toValidate.getDoubleAttribute2(), 0.001);
+		assertEquals(base.getDoubleAttribute3(), toValidate.getDoubleAttribute3(), 0.001);
 		assertEquals(transformValuesToValidate("doubleAttribute4", base.getDoubleAttribute4()),
 				toValidate.getDoubleAttribute4());
-		assertEquals(base.getDoubleAttribute5(), toValidate.getDoubleAttribute5());
+		assertEquals(base.getDoubleAttribute5(), toValidate.getDoubleAttribute5(), 0.001);
 		assertEquals(base.getBigDecimalAttribute1(), toValidate.getBigDecimalAttribute1());
 		assertEquals(base.getBigDecimalAttribute2(), toValidate.getBigDecimalAttribute2());
 		assertEquals(base.getBigDecimalAttribute3(), toValidate.getBigDecimalAttribute3());
@@ -118,11 +118,11 @@ public class ObjectMaskBuilder {
 		assertEquals(base.getBigDecimalAttribute5(), toValidate.getBigDecimalAttribute5());
 		assertEquals(transformValuesToValidate("bigDecimalAttribute6", base.getBigDecimalAttribute6()),
 				toValidate.getBigDecimalAttribute6());
-		assertEquals(base.getFloatAttribute1(), toValidate.getFloatAttribute1());
+		assertEquals(base.getFloatAttribute1(), toValidate.getFloatAttribute1(), 0.001);
 		assertEquals(base.getFloatAttribute2(), toValidate.getFloatAttribute2());
 		assertEquals(base.getFloatAttribute3(), toValidate.getFloatAttribute3());
 		assertEquals(base.getFloatAttribute4(), toValidate.getFloatAttribute4());
-		assertEquals(base.getFloatAttribute5(), toValidate.getFloatAttribute5());
+		assertEquals(base.getFloatAttribute5(), toValidate.getFloatAttribute5(), 0.001);
 		assertEquals(base.isBooleanAttribute1(), toValidate.isBooleanAttribute1());
 		assertEquals(base.getBooleanAttribute2(), toValidate.getBooleanAttribute2());
 		assertEquals(base.getBooleanAttribute3(), toValidate.getBooleanAttribute3());

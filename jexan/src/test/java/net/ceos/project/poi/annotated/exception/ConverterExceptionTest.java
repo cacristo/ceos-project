@@ -1,6 +1,6 @@
 package net.ceos.project.poi.annotated.exception;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.ObjectTypeFactory;
 import net.ceos.project.poi.annotated.core.Engine;
@@ -19,7 +19,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the date element.")
+	//@Test(expected = ConverterException.class)
 	public void testMarshalMissingStringValue() throws Exception {
 		ObjectTypeFactory.StringDeclaredAttribute stringNull = ObjectTypeFactory.instanceString();
 
@@ -31,7 +31,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the date element.")
+	//@Test(expected = ConverterException.class)
 	public void testMarshalMissingDateValue() throws Exception {
 		ObjectTypeFactory.DateDeclaredAttribute dateNull = ObjectTypeFactory.instanceDate();
 
@@ -43,7 +43,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the integer element.")
+	@Test(expected = ConverterException.class)
 	public void testMarshalMissingIntegerValue() throws Exception {
 		ObjectTypeFactory.IntegerDeclaredAttribute integerNull = ObjectTypeFactory.instanceInteger();
 
@@ -55,7 +55,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the long element.")
+	@Test(expected = ConverterException.class)
 	public void testMarshalMissingLongValue() throws Exception {
 		ObjectTypeFactory.LongDeclaredAttribute longNull = ObjectTypeFactory.instanceLong();
 
@@ -67,7 +67,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the double element.")
+	@Test(expected = ConverterException.class)
 	public void testMarshalMissingDoubleValue() throws Exception {
 		ObjectTypeFactory.DoubleDeclaredAttribute doubleNull = ObjectTypeFactory.instanceDouble();
 
@@ -79,7 +79,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the BigDecimal element.")
+	//@Test(expected = ConverterException.class)
 	public void testMarshalMissingBigDecimalValue() throws Exception {
 		ObjectTypeFactory.BigDecimalDeclaredAttribute bigDecimalNull = ObjectTypeFactory.instanceBigDecimal();
 
@@ -91,7 +91,7 @@ public class ConverterExceptionTest {
 	 * Test a configuration exception, at marshal mode, with missing
 	 * XlsConfiguration definitions
 	 */
-	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the boolean element.")
+	//@Test(expected = ConverterException.class)
 	public void testMarshalMissingBooleanValue() throws Exception {
 		ObjectTypeFactory.BooleanDeclaredAttribute booleanNull = ObjectTypeFactory.instanceBoolean();
 

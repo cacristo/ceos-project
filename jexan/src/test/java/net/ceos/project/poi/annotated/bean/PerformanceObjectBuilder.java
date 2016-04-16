@@ -179,7 +179,7 @@ public class PerformanceObjectBuilder {
 		assertEquals(base.getIntegerPrimitiveAttribute3(), toValidate.getIntegerPrimitiveAttribute3());
 		assertEquals(base.getIntegerPrimitiveAttribute4(), toValidate.getIntegerPrimitiveAttribute4());
 		assertEquals(base.getIntegerPrimitiveAttribute5(), toValidate.getIntegerPrimitiveAttribute5());
-		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute());
+		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute(), 0.001);
 		assertEquals(base.getLongPrimitiveAttribute(), toValidate.getLongPrimitiveAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
 		assertEquals(base.getAddressInfo().getAddress(), toValidate.getAddressInfo().getAddress());
@@ -188,7 +188,7 @@ public class PerformanceObjectBuilder {
 		assertEquals(base.getAddressInfo().getCityCode(), toValidate.getAddressInfo().getCityCode());
 		assertEquals(base.getAddressInfo().getCountry(), toValidate.getAddressInfo().getCountry());
 		assertEquals(base.getFloatAttribute(), toValidate.getFloatAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
 		// TODO add new validation below

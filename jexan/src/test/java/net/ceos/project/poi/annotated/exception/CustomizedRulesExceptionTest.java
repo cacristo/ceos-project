@@ -1,12 +1,11 @@
 package net.ceos.project.poi.annotated.exception;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Date;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.FantasticFourFactory;
 import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesMultipleMethods;
@@ -32,25 +31,11 @@ public class CustomizedRulesExceptionTest {
 
 	}
 
-	@BeforeMethod
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		reset();
 	}
 
-	@DataProvider
-	public Object[][] fantasticFourFactoryProvider() {
-		return new Object[][] { 
-			{ FantasticFourFactory.instanceMrFantastic() },
-			{ FantasticFourFactory.instanceInvisibleWoman() },
-			{ FantasticFourFactory.instanceThing() },
-			{ FantasticFourFactory.instanceHumanTorch() },
-			{ FantasticFourFactory.instanceAntMan() },
-			{ FantasticFourFactory.instanceBlackPanther() },
-			{ FantasticFourFactory.instanceCrystal() },
-			{ FantasticFourFactory.instanceDrDoom() },
-			{ FantasticFourFactory.instanceFlux() }
-		};
-	}
 	
 	/**
 	 * Test a simple customized rules defined if value under 450
@@ -164,7 +149,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleNoSuchMethod() throws Exception {
 		XlsElementCustomizedRulesNoSuchMethod custom = new XlsElementCustomizedRulesNoSuchMethod();
 		custom.setDateAttribute(new Date());
@@ -180,9 +165,97 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider="fantasticFourFactoryProvider", expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.")
-	public void testCommentRuleNoSuchMethod(Object fantasticFour) throws Exception {
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodMrFantastic() throws Exception {
 		IEngine en = new Engine();
-		en.marshalToWorkbook(fantasticFour);
-	}	
+		en.marshalToWorkbook(FantasticFourFactory.instanceMrFantastic());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodInvisibleWoman() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceInvisibleWoman());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodThing() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceThing());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodHumanTorch() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceHumanTorch());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodAntMan() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceAntMan());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodBlackPanther() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceBlackPanther());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodCrystal() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceCrystal());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodDrDoom() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceDrDoom());
+	}
+
+	/**
+	 * Test a comment rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCommentRuleNoSuchMethodFlux() throws Exception {
+		IEngine en = new Engine();
+		en.marshalToWorkbook(FantasticFourFactory.instanceFlux());
+	}
 }
