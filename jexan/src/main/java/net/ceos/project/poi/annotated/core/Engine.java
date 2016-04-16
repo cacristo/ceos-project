@@ -635,6 +635,13 @@ public class Engine implements IEngine {
 			isUpdated = true;
 			break;
 
+		case CellHandler.OBJECT_SHORT:
+			/* falls through */
+		case CellHandler.PRIMITIVE_SHORT:
+			CellHandler.shortReader(o, f, c);
+			isUpdated = true;
+			break;
+
 		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
 		case CellHandler.PRIMITIVE_INTEGER:

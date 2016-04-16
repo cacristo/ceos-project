@@ -22,6 +22,10 @@ public class ObjectTypeFactory {
 		return objectTypeBuilder.new DateDeclaredAttribute();
 	}
 
+	public static ShortDeclaredAttribute instanceShort() {
+		return objectTypeBuilder.new ShortDeclaredAttribute();
+	}
+
 	public static IntegerDeclaredAttribute instanceInteger() {
 		return objectTypeBuilder.new IntegerDeclaredAttribute();
 	}
@@ -112,6 +116,40 @@ public class ObjectTypeFactory {
 		 */
 		public void setDateAttribute(Date dateAttribute) {
 			this.dateAttribute = dateAttribute;
+		}
+	}
+
+	/**
+	 * Object with declared {@link Integer} not initialized.<br>
+	 * <br>
+	 * Configuration : <br>
+	 * Sheet title : Integer not initialized <br>
+	 * File name : ConverterExceptionTest <br>
+	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
+	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
+	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * 
+	 * @author CristoAbreu
+	 */
+	@XlsSheet(title = "Short not initialized")
+	@XlsConfiguration(nameFile = "ConverterExceptionTest")
+	public class ShortDeclaredAttribute {
+
+		@XlsElement(title = "Short value", position = 3)
+		private Short shortAttribute;
+
+		/**
+		 * @return the shortAttribute
+		 */
+		public final Short getShortAttribute() {
+			return shortAttribute;
+		}
+
+		/**
+		 * @param shortAttribute the shortAttribute to set
+		 */
+		public final void setShortAttribute(Short shortAttribute) {
+			this.shortAttribute = shortAttribute;
 		}
 	}
 
