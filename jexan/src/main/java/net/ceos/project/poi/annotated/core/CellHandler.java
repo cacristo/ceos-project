@@ -81,6 +81,23 @@ public class CellHandler {
 	}
 
 	/**
+	 * Read a short value from the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the {@link Field} to set
+	 * @param c
+	 *            the {@link Cell} to read
+	 * @throws IllegalAccessException
+	 */
+	protected static void shortReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(c))) {
+			f.set(o, Double.valueOf(readCell(c)).shortValue());
+		}
+	}
+
+	/**
 	 * Read a integer value from the Cell.
 	 * 
 	 * @param o
