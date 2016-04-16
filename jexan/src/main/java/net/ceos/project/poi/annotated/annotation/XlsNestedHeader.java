@@ -7,7 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation responsible to manage the master header at the Sheet.
+ * Annotation responsible to manage the nested header at the Sheet.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface XlsNestedHeader {
 	/**
-	 * Define the master element title.
+	 * Define the nested element title.
 	 * 
 	 * @return the title of the element
 	 */

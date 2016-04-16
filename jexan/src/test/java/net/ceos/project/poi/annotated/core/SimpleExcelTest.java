@@ -127,7 +127,7 @@ public class SimpleExcelTest {
 		configuration.setFontItalic(true);
 		configuration.setWrapText(true);
 
-		ConfigCriteria configCriteria = new ConfigCriteria();
+		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.overrideHeaderCellDecorator(configuration);
 		
 		en.marshalAndSave(configCriteria, fastTest, TestUtils.WORKING_DIR_GENERATED_II);
