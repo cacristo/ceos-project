@@ -11,34 +11,30 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jaexcel.framework.JAEX.configuration.Configuration;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
-import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.exception.ConfigurationException;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
 public class CGen implements IGeneratorCSV {
 
+	private static final String SLASH = "/";
+	private static final String DOT = ".";
+	private static final String COMMA = ",";
 	private static final char END_OF_LINE = '\n';
 	private static final String DEFAULT_DATE = "dd-MMM-yyyy HH:mm:ss";
-
-	private char separator = ',';
-	private Boolean isHeaderPainted = Boolean.FALSE;
-	private Map<Integer, String> header = new HashMap<>();
-	private Map<Integer, String> content = new HashMap<>();
-
-	Configuration configuration;
 
 	/**
 	 * Get the runtime class of the object passed as parameter.
@@ -65,55 +61,52 @@ public class CGen implements IGeneratorCSV {
 	 * @param oC
 	 *            the {@link Class<?>}
 	 * @return
+	 * @throws ConfigurationException
 	 */
-	private Configuration initializeConfigurationData(final Class<?> oC) {
-		Configuration config = null;
-
+	private void initializeConfigurationData(final CConfigCriteria configCriteria, final Class<?> oC)
+			throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
+			initializeXlsConfiguration(configCriteria, xlsAnnotation);
+		} else {
+			throw new ConfigurationException(
+					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
 		}
-
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
+			initializeXlsSheet(configCriteria, xlsAnnotation);
+		} else {
+			throw new ConfigurationException(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage());
 		}
-		return config;
 	}
 
 	/**
 	 * Add the main xls configuration.
 	 * 
-	 * @param config
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param annotation
+	 *            the {@link XlsConfiguration}
 	 * @return
 	 */
-	private Configuration initializeConfiguration(XlsConfiguration config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setName(config.nameFile());
-		configuration.setNameFile(config.nameFile() + config.extensionFile().getExtension());
-		configuration.setExtensionFile(config.extensionFile());
-		return configuration;
+	private void initializeXlsConfiguration(final CConfigCriteria configCriteria, final XlsConfiguration annotation) {
+		configCriteria.setFileName(annotation.nameFile());
 	}
 
 	/**
 	 * Add the sheet configuration.
 	 * 
-	 * @param config
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param annotation
+	 *            the {@link XlsSheet}
 	 * @return
 	 */
-	private Configuration initializeSheetConfiguration(XlsSheet config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setTitleSheet(config.title());
-		configuration.setPropagationType(config.propagation());
-		configuration.setStartRow(config.startRow());
-		configuration.setStartCell(config.startCell());
-		return configuration;
+	private void initializeXlsSheet(final CConfigCriteria configCriteria, final XlsSheet annotation) {
+		configCriteria.setTitleSheet(annotation.title());
+		configCriteria.setCascadeLevel(annotation.cascadeLevel());
 	}
 
 	/**
@@ -125,7 +118,7 @@ public class CGen implements IGeneratorCSV {
 	 *            the Map with the data to write at the file
 	 * @throws IOException
 	 */
-	private void addLine(final FileWriter f, final Map<Integer, String> values) throws IOException {
+	private void addLine(final FileWriter f, final Map<Integer, String> values, final String separator) throws IOException {
 		Set<Integer> keys = values.keySet();
 		boolean isFirst = true;
 		for (Integer integer : keys) {
@@ -140,18 +133,6 @@ public class CGen implements IGeneratorCSV {
 			isFirst = false;
 		}
 		f.append(END_OF_LINE);
-	}
-
-	/**
-	 * Force the the separator to be used.<br>
-	 * By default is ','
-	 * 
-	 * @param newSeparator
-	 *            the new separator to apply
-	 */
-	@Override
-	public void overrideSepratorChar(final char newSeparator) {
-		this.separator = newSeparator;
 	}
 
 	/**
@@ -177,7 +158,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws IOException
 	 */
-	private int initializeField(final Object o, final Field f, final XlsElement xlsAnnotation, final int idx)
+	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field f, final XlsElement xlsAnnotation, final int idx)
 			throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, ConverterException,
 			InstantiationException, IOException {
 
@@ -188,7 +169,7 @@ public class CGen implements IGeneratorCSV {
 
 		Class<?> fT = f.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(o, fT, f, xlsAnnotation, idx);
+		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, f, xlsAnnotation, idx);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 			Object nO = f.get(o);
@@ -199,7 +180,7 @@ public class CGen implements IGeneratorCSV {
 			}
 			Class<?> oC = nO.getClass();
 
-			counter = marshal(nO, oC, null, idx - 1);
+			counter = marshal(configCriteria, nO, oC, null, idx - 1);
 		}
 
 		return counter;
@@ -224,8 +205,9 @@ public class CGen implements IGeneratorCSV {
 	 * @throws IllegalAccessException
 	 * @throws IOException
 	 */
-	private int marshal(final Object o, final Class<?> oC, final FileWriter fW, final int idx) throws IllegalAccessException,
-			NoSuchMethodException, InvocationTargetException, InstantiationException, ConverterException, IOException {
+	private int marshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final FileWriter fW, final int idx)
+			throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException,
+			ConverterException, IOException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int index = idx;
@@ -246,21 +228,21 @@ public class CGen implements IGeneratorCSV {
 				counter++;
 
 				/* content header */
-				header.put(index + xlsAnnotation.position(), xlsAnnotation.title());
+				configCriteria.getHeader().put(index + xlsAnnotation.position(), xlsAnnotation.title());
 
 				/* content values treatment */
-				index += initializeField(o, f, xlsAnnotation, index + xlsAnnotation.position());
+				index += initializeField(configCriteria, o, f, xlsAnnotation, index + xlsAnnotation.position());
 			}
 		}
 
 		if (fW != null) {
 			/* paint the header line */
-			if (!isHeaderPainted) {
-				addLine(fW, header);
-				isHeaderPainted = Boolean.TRUE;
+			if (!configCriteria.isHeaderPainted()) {
+				addLine(fW, configCriteria.getHeader(), configCriteria.getSeparator());
+				configCriteria.setIsHeaderPainted(Boolean.TRUE);
 			}
 			/* paint the content line */
-			addLine(fW, content);
+			addLine(fW, configCriteria.getContent(), configCriteria.getSeparator());
 		}
 		return counter;
 	}
@@ -282,7 +264,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws ParseException
 	 */
-	private int unmarshal(final Object o, final Class<?> oC, final String[] v, final int idx)
+	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] v, final int idx)
 			throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
@@ -313,7 +295,7 @@ public class CGen implements IGeneratorCSV {
 					Object subObjbect = fT.newInstance();
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshal(subObjbect, subObjbectClass, v,
+					int internalCellCounter = unmarshal(configCriteria, subObjbect, subObjbectClass, v,
 							index + xlsAnnotation.position() - 1);
 
 					/* add the sub object to the parent object */
@@ -345,7 +327,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	private boolean applyBaseObject(final Object o, final Class<?> fT, final Field f, final XlsElement element,
+	private boolean applyBaseObject(final CConfigCriteria configCriteria, final Object o, final Class<?> fT, final Field f, final XlsElement element,
 			final int idx) throws IllegalAccessException, ConverterException, NoSuchMethodException,
 					InvocationTargetException {
 		/* flag which define if the cell was updated or not */
@@ -357,52 +339,52 @@ public class CGen implements IGeneratorCSV {
 
 		switch (fT.getName()) {
 		case CellHandler.OBJECT_DATE:
-			content.put(idx, CsvUtils.toDate((Date) f.get(o), fM, tM));
+			configCriteria.getContent().put(idx, CsvUtils.toDate((Date) f.get(o), fM, tM));
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_STRING:
-			content.put(idx, (String) f.get(o) != null ? (String) f.get(o) : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (String) f.get(o) != null ? (String) f.get(o) : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
 		case CellHandler.PRIMITIVE_INTEGER:
-			content.put(idx, (Integer) f.get(o) != null ? ((Integer) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (Integer) f.get(o) != null ? ((Integer) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_LONG:
 			/* falls through */
 		case CellHandler.PRIMITIVE_LONG:
-			content.put(idx, (Long) f.get(o) != null ? ((Long) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (Long) f.get(o) != null ? ((Long) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_DOUBLE:
 			/* falls through */
 		case CellHandler.PRIMITIVE_DOUBLE:
-			content.put(idx, CsvUtils.toDouble((Double) f.get(o), fM, tM));
+			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) f.get(o), fM, tM));
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_BIGDECIMAL:
-			content.put(idx, (BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_FLOAT:
 			/* falls through */
 		case CellHandler.PRIMITIVE_FLOAT:
-			content.put(idx, (Float) f.get(o) != null ? ((Float) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (Float) f.get(o) != null ? ((Float) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_BOOLEAN:
 			/* falls through */
 		case CellHandler.PRIMITIVE_BOOLEAN:
-			content.put(idx, (Boolean) f.get(o) != null ? ((Boolean) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (Boolean) f.get(o) != null ? ((Boolean) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
@@ -412,7 +394,7 @@ public class CGen implements IGeneratorCSV {
 		}
 
 		if (!isUpdated && fT.isEnum()) {
-			content.put(idx, CsvUtils.toEnum(o, f));
+			configCriteria.getContent().put(idx, CsvUtils.toEnum(o, f));
 			isUpdated = true;
 		}
 		return isUpdated;
@@ -512,10 +494,15 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
@@ -544,9 +531,13 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageString(final Object o, final Field f, final String[] v, final int idx)
@@ -556,9 +547,13 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageInteger(final Object o, final Field f, final String[] v, final int idx)
@@ -571,9 +566,13 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageLong(final Object o, final Field f, final String[] v, final int idx)
@@ -585,21 +584,26 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 * @param o
+	 *@param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
-	 * @throws IllegalAccessException
+	 *            the index of the field
+	 *  @throws IllegalAccessException
 	 */
 	private void manageDouble(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
 			final int idx) throws IllegalAccessException {
 		String dPValue = v[idx];
 		if (StringUtils.isNotBlank(dPValue)) {
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
+				f.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
 			} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-				f.set(o, Double.parseDouble(dPValue.replace(",", ".")));
+				f.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
 			} else {
 				f.set(o, Double.parseDouble(dPValue));
 			}
@@ -608,9 +612,13 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageBigDecimal(final Object o, final Field f, final String[] v, final int idx)
@@ -623,9 +631,13 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageFloat(final Object o, final Field f, final String[] v, final int idx)
@@ -638,10 +650,15 @@ public class CGen implements IGeneratorCSV {
 
 	/**
 	 * @param o
+	 *            the object
 	 * @param f
+	 *            the field
 	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
 	 * @param v
+	 *            the array with the content at one line
 	 * @param idx
+	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
 	private void manageBoolean(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
@@ -650,7 +667,7 @@ public class CGen implements IGeneratorCSV {
 
 		if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 			/* apply format mask defined at transform mask */
-			String[] split = xlsAnnotation.transformMask().split("/");
+			String[] split = xlsAnnotation.transformMask().split(SLASH);
 			f.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
 
 		} else {
@@ -662,12 +679,22 @@ public class CGen implements IGeneratorCSV {
 	/* ######################## Marshal methods ########################## */
 
 	@Override
-	public void marshalAndSave(final Object object, final String pathFile, final String file) throws Exception {
+	public void marshalAndSave(final Object object, final String pathFile) throws Exception {
+
+		/* Initialize a basic ConfigCriteria */
+		CConfigCriteria configCriteria = new CConfigCriteria();
+
+		marshalAndSave(configCriteria, object, pathFile);
+	}
+
+	@Override
+	public void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
+		initializeConfigurationData(configCriteria, oC);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -678,9 +705,11 @@ public class CGen implements IGeneratorCSV {
 			internalPathFile = pathFile.concat(File.separator);
 		}
 
-		FileWriter fW = new FileWriter(internalPathFile + config.getName() + ExtensionFileType.CSV.getExtension());
+		FileWriter fW = new FileWriter(internalPathFile + configCriteria.getCompleteFileName());
 
-		marshal(object, oC, fW, 0);
+		if (object != null) {
+			marshal(configCriteria, object, oC, fW, 0);
+		}
 
 		/* flush then close the file */
 		fW.flush();
@@ -697,34 +726,56 @@ public class CGen implements IGeneratorCSV {
 	 * @throws Exception
 	 */
 	@Override
-	public void marshalAsCollectionAndSave(final List<Object> listObject, final String pathFile, final String file)
-			throws Exception {
+	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws Exception {
 
-		if (listObject != null && !listObject.isEmpty()) {
+		/* Initialize a basic ConfigCriteria */
+		CConfigCriteria configCriteria = new CConfigCriteria();
 
-			/*
-			 * check if the path terminate with the file separator, otherwise
-			 * will be added to avoid any problem
-			 */
-			String internalPathFile = pathFile;
-			if (!pathFile.endsWith(File.separator)) {
-				internalPathFile = pathFile.concat(File.separator);
-			}
+		marshalAsCollectionAndSave(configCriteria, listObject, pathFile);
+	}
 
-			FileWriter fW = new FileWriter(internalPathFile + file + ExtensionFileType.CSV.getExtension());
+	/**
+	 * Marshal as collection.
+	 * 
+	 * @param listObject
+	 * @param pathFile
+	 * @param file
+	 * @throws Exception
+	 */
+	@Override
+	public void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
+			final String pathFile) throws Exception {
 
-			for (Object object : listObject) {
-				/* initialize the runtime class of the object */
-				Class<?> oC = initializeRuntimeClass(object);
-
-				marshal(object, oC, fW, 0);
-			}
-
-			/* flush then close the file */
-			fW.flush();
-			fW.close();
-
+		if (listObject == null || listObject.isEmpty()) {
+			return;
 		}
+		
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(listObject.stream().findFirst().get());
+
+		/* initialize configuration data */
+		initializeConfigurationData(configCriteria, oC);
+	
+		/*
+		 * check if the path terminate with the file separator, otherwise will
+		 * be added to avoid any problem
+		 */
+		String internalPathFile = pathFile;
+		if (!pathFile.endsWith(File.separator)) {
+			internalPathFile = pathFile.concat(File.separator);
+		}
+
+		FileWriter fW = new FileWriter(internalPathFile + configCriteria.getCompleteFileName());
+		
+		for (Object object : listObject) {
+			/* marshal the content  list */
+			marshal(configCriteria, object, oC, fW, 0);
+		}
+
+		/* flush then close the file */
+		fW.flush();
+		fW.close();
+
 	}
 
 	/* ######################## Unmarshal methods ######################## */
@@ -740,11 +791,31 @@ public class CGen implements IGeneratorCSV {
 	 */
 	@Override
 	public Object unmarshalFromPath(final Object object, final String pathFile) throws Exception {
+		/* initialize configuration data */
+		CConfigCriteria configCriteria = new CConfigCriteria();
+		
+		unmarshalFromPath(configCriteria, object, pathFile);
+
+		return object;
+	}
+
+	/**
+	 * Generate the object from the path file passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @return the {@link Object} filled up
+	 */
+	@Override
+	public Object unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile) throws Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		Configuration config = initializeConfigurationData(oC);
+		initializeConfigurationData(configCriteria, oC);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -756,7 +827,7 @@ public class CGen implements IGeneratorCSV {
 		}
 
 		BufferedReader br = new BufferedReader(
-				new FileReader(internalPathFile + config.getName() + ExtensionFileType.CSV.getExtension()));
+				new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 		String[] values = null;
 		String line = StringUtils.EMPTY;
 		boolean isHeaderLine = true;
@@ -767,8 +838,9 @@ public class CGen implements IGeneratorCSV {
 			}
 			values = line.split(",");
 		}
-		unmarshal(object, oC, values, -1);
+		unmarshal(configCriteria, object, oC, values, -1);
 
+		/* close the file */
 		br.close();
 
 		return object;
@@ -778,9 +850,26 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 */
 	@Override
-	public void unmarshalAsCollectionFromPath(final List<Object> listObject, final String pathFile, final String file)
-			throws Exception {
+	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile) throws Exception {
+		/* initialize configuration data */
+		CConfigCriteria configCriteria = new CConfigCriteria();
 
+		unmarshalAsCollectionFromPath(configCriteria, oC, listObject, pathFile);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC, final Collection<?> listObject, final String pathFile) throws Exception {
+
+		if(listObject == null || listObject.isEmpty() || oC == null){
+			return;
+		}
+		
+		/* initialize configuration data */
+		initializeConfigurationData(configCriteria, oC);
+		
 		/*
 		 * check if the path terminate with the file separator, otherwise will
 		 * be added to avoid any problem
@@ -791,27 +880,17 @@ public class CGen implements IGeneratorCSV {
 		}
 
 		BufferedReader br = new BufferedReader(
-				new FileReader(internalPathFile + file + ExtensionFileType.CSV.getExtension()));
+				new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 
 		for (Object object : listObject) {
+			String[] values = br.lines().skip(1).map(line -> line.split(configCriteria.getSeparator()))
+					.collect(Collectors.toList()).get(0);
 
-			/* initialize the runtime class of the object */
-			Class<?> oC = initializeRuntimeClass(object);
-
-			String[] values = null;
-			String line = StringUtils.EMPTY;
-			boolean isHeaderLine = true;
-			while ((line = br.readLine()) != null) {
-				if (isHeaderLine) {
-					isHeaderLine = false;
-					continue;
-				}
-				values = line.split(",");
-			}
-			unmarshal(object, oC, values, -1);
-
+			/* unmarshal the content  list */
+			unmarshal(configCriteria, object, oC, values, -1);
 		}
 
+		/* close the file */
 		br.close();
 	}
 
