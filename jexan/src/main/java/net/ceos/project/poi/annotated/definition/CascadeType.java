@@ -13,7 +13,8 @@ package net.ceos.project.poi.annotated.definition;
  */
 public enum CascadeType {
 
-	CASCADE_BASE(0), CASCADE_LEVEL_ONE(1), CASCADE_LEVEL_TWO(2), CASCADE_FULL(3);
+	// TODO review cascade level
+	CASCADE_BASE(2), CASCADE_LEVEL_ONE(4), CASCADE_LEVEL_TWO(20), CASCADE_FULL(100);
 
 	private int code;
 
