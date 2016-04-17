@@ -5,6 +5,9 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -62,6 +65,78 @@ public class CsvUtils {
 				} else {
 					// default mask
 					dateMasked = applyMaskToDate(value, "dd-MMM-yyyy HH:mm:ss");
+				}
+			} catch (Exception e) {
+				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+			}
+		}
+		return dateMasked;
+	}
+
+	/**
+	 * Apply a date time value at the field.
+	 * 
+	 * @param value
+	 *            the value
+	 * @param formatMask
+	 *            the decorator mask
+	 * @param transformMask
+	 *            the transformation mask
+	 * @return false if problem otherwise true
+	 * @throws ConverterException
+	 */
+	protected static String toLocalDate(final LocalDate value, final String formatMask, final String transformMask)
+			throws ConverterException {
+		String dateMasked = "";
+		if (value != null) {
+			try {
+				if (StringUtils.isNotBlank(transformMask)) {
+					// apply transformation mask
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), transformMask);
+
+				} else if (StringUtils.isNotBlank(formatMask)) {
+					// apply format mask
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), formatMask);
+
+				} else {
+					// default mask
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), "dd-MMM-yyyy HH:mm:ss");
+				}
+			} catch (Exception e) {
+				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+			}
+		}
+		return dateMasked;
+	}
+
+	/**
+	 * Apply a date time value at the field.
+	 * 
+	 * @param value
+	 *            the value
+	 * @param formatMask
+	 *            the decorator mask
+	 * @param transformMask
+	 *            the transformation mask
+	 * @return false if problem otherwise true
+	 * @throws ConverterException
+	 */
+	protected static String toLocalDateTime(final LocalDateTime value, final String formatMask, final String transformMask)
+			throws ConverterException {
+		String dateMasked = "";
+		if (value != null) {
+			try {
+				if (StringUtils.isNotBlank(transformMask)) {
+					// apply transformation mask
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), transformMask);
+
+				} else if (StringUtils.isNotBlank(formatMask)) {
+					// apply format mask
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), formatMask);
+
+				} else {
+					// default mask
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), "dd-MMM-yyyy HH:mm:ss");
 				}
 			} catch (Exception e) {
 				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);

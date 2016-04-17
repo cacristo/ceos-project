@@ -10,6 +10,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -343,6 +346,16 @@ public class CGen implements IGeneratorCSV {
 			isUpdated = true;
 			break;
 
+		case CellHandler.OBJECT_LOCALDATE:
+			configCriteria.getContent().put(idx, CsvUtils.toLocalDate((LocalDate) f.get(o), fM, tM));
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_LOCALDATETIME:
+			configCriteria.getContent().put(idx, CsvUtils.toLocalDateTime((LocalDateTime) f.get(o), fM, tM));
+			isUpdated = true;
+			break;
+
 		case CellHandler.OBJECT_STRING:
 			configCriteria.getContent().put(idx, (String) f.get(o) != null ? (String) f.get(o) : StringUtils.EMPTY);
 			isUpdated = true;
@@ -441,6 +454,16 @@ public class CGen implements IGeneratorCSV {
 			isUpdated = true;
 			break;
 
+		case CellHandler.OBJECT_LOCALDATE:
+			manageLocalDate(o, f, xlsAnnotation, v, idx);
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_LOCALDATETIME:
+			manageLocalDateTime(o, f, xlsAnnotation, v, idx);
+			isUpdated = true;
+			break;
+
 		case CellHandler.OBJECT_STRING:
 			manageString(o, f, v, idx);
 			isUpdated = true;
@@ -522,6 +545,70 @@ public class CGen implements IGeneratorCSV {
 	 */
 	private void manageDate(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
 			final int idx) throws IllegalAccessException, ConverterException {
+		if (StringUtils.isNotBlank(v[idx])) {
+			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx));
+		}
+	}
+
+	/**
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @param v
+	 *            the array with the content at one line
+	 * @param idx
+	 *            the index of the field
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	private void manageLocalDate(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+			final int idx) throws IllegalAccessException, ConverterException {
+		if (StringUtils.isNotBlank(v[idx])) {
+			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		}
+	}
+
+	/**
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @param v
+	 *            the array with the content at one line
+	 * @param idx
+	 *            the index of the field
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	private void manageLocalDateTime(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+			final int idx) throws IllegalAccessException, ConverterException {
+		if (StringUtils.isNotBlank(v[idx])) {
+			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		}
+	}
+
+	/**
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @param v
+	 *            the array with the content at one line
+	 * @param idx
+	 *            the index of the field
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	private Date applyMaskToDate(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+			final int idx) throws IllegalAccessException, ConverterException {
+		Date dateConverted = null;
 		String date = v[idx];
 		if (StringUtils.isNotBlank(date)) {
 
@@ -531,8 +618,7 @@ public class CGen implements IGeneratorCSV {
 
 			SimpleDateFormat dt = new SimpleDateFormat(decorator);
 			try {
-				Date dateConverted = dt.parse(date);
-				f.set(o, dateConverted);
+				dateConverted = dt.parse(date);
 			} catch (ParseException e) {
 				/*
 				 * if date decorator do not match with a valid mask launch
@@ -541,6 +627,7 @@ public class CGen implements IGeneratorCSV {
 				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
 			}
 		}
+		return dateConverted;
 	}
 
 	/**

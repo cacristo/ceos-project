@@ -3,6 +3,8 @@ package net.ceos.project.poi.annotated.bean;
 import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +33,8 @@ public class MultiTypeObjectBuilder {
 		MultiTypeObject toValidate = new MultiTypeObject();
 
 		toValidate.setDateAttribute(new Date());
+		toValidate.setLocalDateAttribute(LocalDate.now());
+		toValidate.setLocalDateTimeAttribute(LocalDateTime.now());
 		toValidate.setStringAttribute("some string");
 		toValidate.setIntegerAttribute(46 * multiplier);
 		toValidate.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
@@ -58,6 +62,8 @@ public class MultiTypeObjectBuilder {
 		toValidate.setFloatPrimitiveAttribute(11.1125f * multiplier);
 		toValidate.setUnitFamily(UnitFamily.COMPONENTS);
 		toValidate.setBigDecimalAttribute(BigDecimal.valueOf(24.777).multiply(BigDecimal.valueOf(multiplier)));
+		toValidate.setShortAttribute((short) 17);
+		toValidate.setShortPrimitiveAttribute((short) 4);
 		// TODO add new fields below
 
 		return toValidate;
@@ -95,6 +101,19 @@ public class MultiTypeObjectBuilder {
 		assertEquals(calendar.get(Calendar.YEAR), calendarUnmarshal.get(Calendar.YEAR));
 		assertEquals(calendar.get(Calendar.MONTH), calendarUnmarshal.get(Calendar.MONTH));
 		assertEquals(calendar.get(Calendar.DAY_OF_MONTH), calendarUnmarshal.get(Calendar.DAY_OF_MONTH));
+		LocalDate localDate = LocalDate.now();
+		assertEquals(localDate.getDayOfMonth(), toValidate.getLocalDateAttribute().getDayOfMonth());
+		assertEquals(localDate.getMonth(), toValidate.getLocalDateAttribute().getMonth());
+		assertEquals(localDate.getYear(), toValidate.getLocalDateAttribute().getYear());
+		LocalDateTime localDateTime = LocalDateTime.now();
+		assertEquals(localDateTime.getDayOfMonth(), toValidate.getLocalDateTimeAttribute().getDayOfMonth());
+		assertEquals(localDateTime.getMonth(), toValidate.getLocalDateTimeAttribute().getMonth());
+		assertEquals(localDateTime.getYear(), toValidate.getLocalDateTimeAttribute().getYear());
+		assertEquals(localDateTime.getHour(), toValidate.getLocalDateTimeAttribute().getHour());
+		
+		/* it is possible to have an error below due the time of execution of the test */
+		assertEquals(localDateTime.getMinute(), toValidate.getLocalDateTimeAttribute().getMinute());
+		
 		assertEquals(base.getStringAttribute(), toValidate.getStringAttribute());
 		assertEquals(base.getIntegerAttribute(), toValidate.getIntegerAttribute());
 		assertEquals(base.getDoubleAttribute(), toValidate.getDoubleAttribute());

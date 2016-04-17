@@ -1,6 +1,8 @@
 package net.ceos.project.poi.annotated.bean;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
@@ -69,6 +71,12 @@ public class MultiTypeObject {
 
 	@XlsElement(title = "Short primitive value", position = 19)
 	private Short shortAttribute = 0;
+
+	@XlsElement(title = "Local date value", position = 20, formatMask = "yyyy-MM-dd", decorator = "date")
+	private LocalDate localDateAttribute;
+
+	@XlsElement(title = "Locel date time value", position = 21, formatMask = "yyyy-MM-dd HH:mm:ss", decorator = "date")
+	private LocalDateTime localDateTimeAttribute;
 
 	public MultiTypeObject() {
 	}
@@ -363,5 +371,35 @@ public class MultiTypeObject {
 	 */
 	public final void setShortAttribute(Short shortAttribute) {
 		this.shortAttribute = shortAttribute;
+	}
+
+	/**
+	 * @return the localDateAttribute
+	 */
+	public final LocalDate getLocalDateAttribute() {
+		return localDateAttribute;
+	}
+
+	/**
+	 * @param localDateAttribute
+	 *            the localDateAttribute to set
+	 */
+	public final void setLocalDateAttribute(LocalDate localDateAttribute) {
+		this.localDateAttribute = localDateAttribute;
+	}
+
+	/**
+	 * @return the localDateTimeAttribute
+	 */
+	public final LocalDateTime getLocalDateTimeAttribute() {
+		return localDateTimeAttribute;
+	}
+
+	/**
+	 * @param localDateTimeAttribute
+	 *            the localDateTimeAttribute to set
+	 */
+	public final void setLocalDateTimeAttribute(LocalDateTime localDateTimeAttribute) {
+		this.localDateTimeAttribute = localDateTimeAttribute;
 	}
 }
