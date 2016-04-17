@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -167,6 +170,62 @@ class CellFormulaHandler {
 		} else {
 			// apply default date mask
 			c.setCellValue(date);
+		}
+	}
+
+	/**
+	 * Apply a Date value to the cell.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param o
+	 *            the object
+	 * @param c
+	 *            the {@link Cell} to use
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	protected static void localDateHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+			throws IllegalAccessException, ConverterException {
+		LocalDate date = (LocalDate) configCriteria.getField().get(o);
+		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+			// apply transformation mask
+			String decorator = configCriteria.getElement().transformMask();
+			convertDate(c, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), decorator);
+		} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
+			// apply format mask
+			c.setCellValue(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		} else {
+			// apply default date mask
+			c.setCellValue(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		}
+	}
+
+	/**
+	 * Apply a Date value to the cell.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param o
+	 *            the object
+	 * @param c
+	 *            the {@link Cell} to use
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	protected static void localDateTimeHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+			throws IllegalAccessException, ConverterException {
+		LocalDateTime date = (LocalDateTime) configCriteria.getField().get(o);
+		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+			// apply transformation mask
+			String decorator = configCriteria.getElement().transformMask();
+			convertDate(c, Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), decorator);
+		} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
+			// apply format mask
+			c.setCellValue(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()));
+		} else {
+			// apply default date mask
+			c.setCellValue(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()));
 		}
 	}
 

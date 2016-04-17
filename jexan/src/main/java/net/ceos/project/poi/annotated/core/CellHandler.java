@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.function.BiFunction;
 
@@ -43,6 +44,8 @@ public class CellHandler {
 
 	// object type
 	public static final String OBJECT_DATE = "java.util.Date";
+	public static final String OBJECT_LOCALDATE = "java.time.LocalDate";
+	public static final String OBJECT_LOCALDATETIME = "java.time.LocalDateTime";
 	public static final String OBJECT_STRING = "java.lang.String";
 	public static final String OBJECT_SHORT = "java.lang.Short";
 	public static final String OBJECT_INTEGER = "java.lang.Integer";
@@ -214,6 +217,90 @@ public class CellHandler {
 				try {
 					Date dateConverted = dt.parse(date);
 					f.set(o, dateConverted);
+				} catch (ParseException e) {
+					/*
+					 * if date decorator do not match with a valid mask launch
+					 * exception
+					 */
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Read a date time value from the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the {@link Field} to set
+	 * @param c
+	 *            the {@link Cell} to read
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} element
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	protected static void localDateReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
+			throws IllegalAccessException, ConverterException {
+		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
+			f.set(o, c.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		} else {
+			String date = c.getStringCellValue();
+			if (StringUtils.isNotBlank(date)) {
+
+				String tM = xlsAnnotation.transformMask();
+				String fM = xlsAnnotation.formatMask();
+				String decorator = StringUtils.isEmpty(tM)
+						? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+
+				SimpleDateFormat dt = new SimpleDateFormat(decorator);
+				try {
+					Date dateConverted = dt.parse(date);
+					f.set(o, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+				} catch (ParseException e) {
+					/*
+					 * if date decorator do not match with a valid mask launch
+					 * exception
+					 */
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Read a date time value from the Cell.
+	 * 
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the {@link Field} to set
+	 * @param c
+	 *            the {@link Cell} to read
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} element
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	protected static void localDateTimeReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
+			throws IllegalAccessException, ConverterException {
+		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
+			f.set(o, c.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		} else {
+			String date = c.getStringCellValue();
+			if (StringUtils.isNotBlank(date)) {
+
+				String tM = xlsAnnotation.transformMask();
+				String fM = xlsAnnotation.formatMask();
+				String decorator = StringUtils.isEmpty(tM)
+						? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+
+				SimpleDateFormat dt = new SimpleDateFormat(decorator);
+				try {
+					Date dateConverted = dt.parse(date);
+					f.set(o, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				} catch (ParseException e) {
 					/*
 					 * if date decorator do not match with a valid mask launch
@@ -519,6 +606,80 @@ public class CellHandler {
 			if (configCriteria.getField().get(o) != null) {
 				// apply the formula, if exist, otherwise apply the value
 				CellFormulaHandler.dateHandler(configCriteria, o, c);
+
+				// apply cell style
+				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
+						CellStyleHandler.MASK_DECORATOR_DATE);
+			}
+
+		} catch (Exception e) {
+			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+		}
+
+		// apply the comment
+		CellCommentHandler.applyComment(configCriteria, o, c);
+
+		return isUpdated;
+	}
+
+	/**
+	 * Apply a date time value at the Cell.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} object
+	 * @param o
+	 *            the object
+	 * @param c
+	 *            the {@link Cell} to use
+	 * @return false if problem otherwise true
+	 * @throws ConverterException
+	 * @throws ElementException
+	 * @throws CustomizedRulesException
+	 */
+	protected static boolean localDateWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+			throws ConverterException, ElementException, CustomizedRulesException {
+		boolean isUpdated = true;
+		try {
+			if (configCriteria.getField().get(o) != null) {
+				// apply the formula, if exist, otherwise apply the value
+				CellFormulaHandler.localDateHandler(configCriteria, o, c);
+
+				// apply cell style
+				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
+						CellStyleHandler.MASK_DECORATOR_DATE);
+			}
+
+		} catch (Exception e) {
+			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+		}
+
+		// apply the comment
+		CellCommentHandler.applyComment(configCriteria, o, c);
+
+		return isUpdated;
+	}
+
+	/**
+	 * Apply a date time value at the Cell.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} object
+	 * @param o
+	 *            the object
+	 * @param c
+	 *            the {@link Cell} to use
+	 * @return false if problem otherwise true
+	 * @throws ConverterException
+	 * @throws ElementException
+	 * @throws CustomizedRulesException
+	 */
+	protected static boolean localDateTimeWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+			throws ConverterException, ElementException, CustomizedRulesException {
+		boolean isUpdated = true;
+		try {
+			if (configCriteria.getField().get(o) != null) {
+				// apply the formula, if exist, otherwise apply the value
+				CellFormulaHandler.localDateTimeHandler(configCriteria, o, c);
 
 				// apply cell style
 				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,

@@ -534,6 +534,16 @@ public class Engine implements IEngine {
 			isUpdated = CellHandler.dateWriter(configCriteria, o, cell);
 			break;
 
+		case CellHandler.OBJECT_LOCALDATE:
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellHandler.localDateWriter(configCriteria, o, cell);
+			break;
+
+		case CellHandler.OBJECT_LOCALDATETIME:
+			cell = configCriteria.getRow().createCell(idxC);
+			isUpdated = CellHandler.localDateTimeWriter(configCriteria, o, cell);
+			break;
+
 		case CellHandler.OBJECT_STRING:
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.stringWriter(configCriteria, o, cell);
@@ -627,6 +637,16 @@ public class Engine implements IEngine {
 		switch (fT.getName()) {
 		case CellHandler.OBJECT_DATE:
 			CellHandler.dateReader(o, f, c, xlsAnnotation);
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_LOCALDATE:
+			CellHandler.localDateReader(o, f, c, xlsAnnotation);
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_LOCALDATETIME:
+			CellHandler.localDateTimeReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
 			break;
 
