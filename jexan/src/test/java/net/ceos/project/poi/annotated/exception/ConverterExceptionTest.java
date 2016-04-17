@@ -44,6 +44,18 @@ public class ConverterExceptionTest {
 	 * XlsConfiguration definitions
 	 */
 	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the integer element.")
+	public void testMarshalMissingShortValue() throws Exception {
+		ObjectTypeFactory.ShortDeclaredAttribute shortNull = ObjectTypeFactory.instanceShort();
+
+		IEngine en = new Engine();
+		en.marshalAndSave(shortNull, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a configuration exception, at marshal mode, with missing
+	 * XlsConfiguration definitions
+	 */
+	@Test(enabled= false, expectedExceptions = ConverterException.class, expectedExceptionsMessageRegExp = "Problem while convert the integer element.")
 	public void testMarshalMissingIntegerValue() throws Exception {
 		ObjectTypeFactory.IntegerDeclaredAttribute integerNull = ObjectTypeFactory.instanceInteger();
 

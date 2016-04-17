@@ -348,6 +348,13 @@ public class CGen implements IGeneratorCSV {
 			isUpdated = true;
 			break;
 
+		case CellHandler.OBJECT_SHORT:
+			/* falls through */
+		case CellHandler.PRIMITIVE_SHORT:
+			configCriteria.getContent().put(idx, (Short) f.get(o) != null ? ((Short) f.get(o)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+			break;
+
 		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
 		case CellHandler.PRIMITIVE_INTEGER:
@@ -436,6 +443,13 @@ public class CGen implements IGeneratorCSV {
 
 		case CellHandler.OBJECT_STRING:
 			manageString(o, f, v, idx);
+			isUpdated = true;
+			break;
+
+		case CellHandler.OBJECT_SHORT:
+			/* falls through */
+		case CellHandler.PRIMITIVE_SHORT:
+			manageShort(o, f, v, idx);
 			isUpdated = true;
 			break;
 
@@ -543,6 +557,25 @@ public class CGen implements IGeneratorCSV {
 	private void manageString(final Object o, final Field f, final String[] v, final int idx)
 			throws IllegalAccessException {
 		f.set(o, v[idx]);
+	}
+
+	/**
+	 * @param o
+	 *            the object
+	 * @param f
+	 *            the field
+	 * @param v
+	 *            the array with the content at one line
+	 * @param idx
+	 *            the index of the field
+	 * @throws IllegalAccessException
+	 */
+	private void manageShort(final Object o, final Field f, final String[] v, final int idx)
+			throws IllegalAccessException {
+		String iValue = v[idx];
+		if (StringUtils.isNotBlank(iValue)) {
+			f.set(o, Short.valueOf(iValue));
+		}
 	}
 
 	/**

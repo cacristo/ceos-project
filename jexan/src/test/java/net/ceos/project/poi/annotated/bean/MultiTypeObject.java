@@ -13,7 +13,7 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 @XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 
-	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator="date")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "date")
 	private Date dateAttribute;
 
 	@XlsElement(title = "String value", position = 2)
@@ -28,7 +28,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Long value", position = 5)
 	private Long longAttribute = 0L;
 
-	@XlsElement(title = "Boolean value", position = 6, comment="boolean comment")
+	@XlsElement(title = "Boolean value", position = 6, comment = "boolean comment")
 	private Boolean booleanAttribute = Boolean.TRUE;
 
 	@XlsElement(title = "job", position = 7)
@@ -37,7 +37,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive int value", position = 8)
 	private int integerPrimitiveAttribute = 0;
 
-	@XlsElement(title = "Primitive double value", position = 9, comment="double comment")
+	@XlsElement(title = "Primitive double value", position = 9, comment = "double comment")
 	private double doublePrimitiveAttribute = 0;
 
 	@XlsElement(title = "Primitive long value", position = 10)
@@ -55,16 +55,21 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive float value", position = 14)
 	private float floatPrimitiveAttribute = 0f;
 
-	@XlsElement(title="some sum", position = 15, isFormula = true)
+	@XlsElement(title = "some sum", position = 15, isFormula = true)
 	private Double sumVal;
-	
+
 	@XlsElement(title = "Unit family", position = 16)
 	private UnitFamily unitFamily;
-	
+
 	@XlsElement(title = "BigDecimal value", position = 17)
 	private BigDecimal bigDecimalAttribute;
-	
-	
+
+	@XlsElement(title = "Short value", position = 18)
+	private short shortPrimitiveAttribute = 0;
+
+	@XlsElement(title = "Short primitive value", position = 19)
+	private Short shortAttribute = 0;
+
 	public MultiTypeObject() {
 	}
 
@@ -291,9 +296,10 @@ public class MultiTypeObject {
 	public Double formulaSumVal() {
 		return doubleAttribute + doubleAttribute * 5;
 	}
-	
+
 	/**
-	 * @param sumVal the sumVal to set
+	 * @param sumVal
+	 *            the sumVal to set
 	 */
 	public void setSumVal(Double sumVal) {
 		this.sumVal = sumVal;
@@ -307,7 +313,8 @@ public class MultiTypeObject {
 	}
 
 	/**
-	 * @param unitFamily the unitFamily to set
+	 * @param unitFamily
+	 *            the unitFamily to set
 	 */
 	public void setUnitFamily(UnitFamily unitFamily) {
 		this.unitFamily = unitFamily;
@@ -321,9 +328,40 @@ public class MultiTypeObject {
 	}
 
 	/**
-	 * @param bigDecimalAttribute the bigDecimalAttribute to set
+	 * @param bigDecimalAttribute
+	 *            the bigDecimalAttribute to set
 	 */
 	public void setBigDecimalAttribute(BigDecimal bigDecimalAttribute) {
 		this.bigDecimalAttribute = bigDecimalAttribute;
+	}
+
+	/**
+	 * @return the shortPrimitiveAttribute
+	 */
+	public final short getShortPrimitiveAttribute() {
+		return shortPrimitiveAttribute;
+	}
+
+	/**
+	 * @param shortPrimitiveAttribute
+	 *            the shortPrimitiveAttribute to set
+	 */
+	public final void setShortPrimitiveAttribute(short shortPrimitiveAttribute) {
+		this.shortPrimitiveAttribute = shortPrimitiveAttribute;
+	}
+
+	/**
+	 * @return the shortAttribute
+	 */
+	public final Short getShortAttribute() {
+		return shortAttribute;
+	}
+
+	/**
+	 * @param shortAttribute
+	 *            the shortAttribute to set
+	 */
+	public final void setShortAttribute(Short shortAttribute) {
+		this.shortAttribute = shortAttribute;
 	}
 }

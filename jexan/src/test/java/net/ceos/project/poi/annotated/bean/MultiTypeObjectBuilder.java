@@ -116,6 +116,8 @@ public class MultiTypeObjectBuilder {
 		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
+		assertEquals(base.getShortAttribute(), toValidate.getShortAttribute());
+		assertEquals(base.getShortPrimitiveAttribute(), toValidate.getShortPrimitiveAttribute());
 		// TODO add new validation below
 	}
 
