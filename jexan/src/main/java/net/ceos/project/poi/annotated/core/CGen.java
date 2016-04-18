@@ -36,7 +36,7 @@ public class CGen implements IGeneratorCSV {
 	private static final String SLASH = "/";
 	private static final String DOT = ".";
 	private static final String COMMA = ",";
-	private static final char END_OF_LINE = '\n';
+	private static final String END_OF_LINE = "\r\n";
 	private static final String DEFAULT_DATE = "dd-MMM-yyyy HH:mm:ss";
 
 	/**
