@@ -121,7 +121,8 @@ public class CGen implements IGeneratorCSV {
 	 *            the Map with the data to write at the file
 	 * @throws IOException
 	 */
-	private void addLine(final FileWriter f, final Map<Integer, String> values, final String separator) throws IOException {
+	private void addLine(final FileWriter f, final Map<Integer, String> values, final String separator)
+			throws IOException {
 		Set<Integer> keys = values.keySet();
 		boolean isFirst = true;
 		for (Integer integer : keys) {
@@ -161,9 +162,9 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws IOException
 	 */
-	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field f, final XlsElement xlsAnnotation, final int idx)
-			throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, ConverterException,
-			InstantiationException, IOException {
+	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field f,
+			final XlsElement xlsAnnotation, final int idx) throws IllegalAccessException, NoSuchMethodException,
+					InvocationTargetException, ConverterException, InstantiationException, IOException {
 
 		/* make the field accessible to recover the value */
 		f.setAccessible(true);
@@ -208,9 +209,9 @@ public class CGen implements IGeneratorCSV {
 	 * @throws IllegalAccessException
 	 * @throws IOException
 	 */
-	private int marshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final FileWriter fW, final int idx)
-			throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException,
-			ConverterException, IOException {
+	private int marshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final FileWriter fW,
+			final int idx) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException,
+					InstantiationException, ConverterException, IOException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int index = idx;
@@ -267,8 +268,8 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws ParseException
 	 */
-	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] v, final int idx)
-			throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
+	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] v,
+			final int idx) throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int index = idx;
@@ -313,6 +314,7 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Export the object to the CSV file.
 	 * 
 	 * @param o
 	 *            the object
@@ -330,9 +332,9 @@ public class CGen implements IGeneratorCSV {
 	 * @throws NoSuchMethodException
 	 * @throws InvocationTargetException
 	 */
-	private boolean applyBaseObject(final CConfigCriteria configCriteria, final Object o, final Class<?> fT, final Field f, final XlsElement element,
-			final int idx) throws IllegalAccessException, ConverterException, NoSuchMethodException,
-					InvocationTargetException {
+	private boolean applyBaseObject(final CConfigCriteria configCriteria, final Object o, final Class<?> fT,
+			final Field f, final XlsElement element, final int idx) throws IllegalAccessException, ConverterException,
+					NoSuchMethodException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated;
 
@@ -364,21 +366,24 @@ public class CGen implements IGeneratorCSV {
 		case CellHandler.OBJECT_SHORT:
 			/* falls through */
 		case CellHandler.PRIMITIVE_SHORT:
-			configCriteria.getContent().put(idx, (Short) f.get(o) != null ? ((Short) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(Short) f.get(o) != null ? ((Short) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_INTEGER:
 			/* falls through */
 		case CellHandler.PRIMITIVE_INTEGER:
-			configCriteria.getContent().put(idx, (Integer) f.get(o) != null ? ((Integer) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(Integer) f.get(o) != null ? ((Integer) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_LONG:
 			/* falls through */
 		case CellHandler.PRIMITIVE_LONG:
-			configCriteria.getContent().put(idx, (Long) f.get(o) != null ? ((Long) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(Long) f.get(o) != null ? ((Long) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
@@ -390,21 +395,24 @@ public class CGen implements IGeneratorCSV {
 			break;
 
 		case CellHandler.OBJECT_BIGDECIMAL:
-			configCriteria.getContent().put(idx, (BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_FLOAT:
 			/* falls through */
 		case CellHandler.PRIMITIVE_FLOAT:
-			configCriteria.getContent().put(idx, (Float) f.get(o) != null ? ((Float) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(Float) f.get(o) != null ? ((Float) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
 		case CellHandler.OBJECT_BOOLEAN:
 			/* falls through */
 		case CellHandler.PRIMITIVE_BOOLEAN:
-			configCriteria.getContent().put(idx, (Boolean) f.get(o) != null ? ((Boolean) f.get(o)).toString() : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx,
+					(Boolean) f.get(o) != null ? ((Boolean) f.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 			break;
 
@@ -421,6 +429,7 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Import the CSV file into the object.
 	 * 
 	 * @param o
 	 *            the object
@@ -530,6 +539,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Date value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -551,6 +562,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a LocalDate value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -567,11 +580,14 @@ public class CGen implements IGeneratorCSV {
 	private void manageLocalDate(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
 			final int idx) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isNotBlank(v[idx])) {
-			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault())
+					.toLocalDate());
 		}
 	}
 
 	/**
+	 * Apply a LocalDateTime value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -588,11 +604,14 @@ public class CGen implements IGeneratorCSV {
 	private void manageLocalDateTime(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
 			final int idx) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isNotBlank(v[idx])) {
-			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			f.set(o, applyMaskToDate(o, f, xlsAnnotation, v, idx).toInstant().atZone(ZoneId.systemDefault())
+					.toLocalDateTime());
 		}
 	}
 
 	/**
+	 * Manage the mask to apply to a Date object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -631,6 +650,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a String value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -647,6 +668,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Short value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -666,6 +689,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Integer value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -685,6 +710,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Long value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -704,7 +731,9 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 *@param o
+	 * Apply a Double value to the object.
+	 * 
+	 * @param o
 	 *            the object
 	 * @param f
 	 *            the field
@@ -714,7 +743,7 @@ public class CGen implements IGeneratorCSV {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 *  @throws IllegalAccessException
+	 * @throws IllegalAccessException
 	 */
 	private void manageDouble(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
 			final int idx) throws IllegalAccessException {
@@ -731,6 +760,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a BigDecimal value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -750,6 +781,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Float value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -769,6 +802,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Boolean value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -798,6 +833,16 @@ public class CGen implements IGeneratorCSV {
 
 	/* ######################## Marshal methods ########################## */
 
+	/**
+	 * Generate the CSV file based at the object passed as parameters and save
+	 * it at the path send as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
 	@Override
 	public void marshalAndSave(final Object object, final String pathFile) throws Exception {
 
@@ -807,6 +852,18 @@ public class CGen implements IGeneratorCSV {
 		marshalAndSave(configCriteria, object, pathFile);
 	}
 
+	/**
+	 * Generate the CSV file based at {@link CConfigCriteria} and the object
+	 * passed as parameters and save it at the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
 	@Override
 	public void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws Exception {
@@ -838,11 +895,13 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 * Marshal as collection.
+	 * Generate the CSV file from the collection of objects.
 	 * 
 	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
 	 * @param pathFile
-	 * @param file
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
 	 * @throws Exception
 	 */
 	@Override
@@ -855,11 +914,16 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 * Marshal as collection.
+	 * Generate the CSV file, based at {@link CConfigCriteria}, from the
+	 * collection of objects.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
 	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
 	 * @param pathFile
-	 * @param file
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
 	 * @throws Exception
 	 */
 	@Override
@@ -869,13 +933,13 @@ public class CGen implements IGeneratorCSV {
 		if (listObject == null || listObject.isEmpty()) {
 			return;
 		}
-		
+
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(listObject.stream().findFirst().get());
 
 		/* initialize configuration data */
 		initializeConfigurationData(configCriteria, oC);
-	
+
 		/*
 		 * check if the path terminate with the file separator, otherwise will
 		 * be added to avoid any problem
@@ -886,9 +950,9 @@ public class CGen implements IGeneratorCSV {
 		}
 
 		FileWriter fW = new FileWriter(internalPathFile + configCriteria.getCompleteFileName());
-		
+
 		for (Object object : listObject) {
-			/* marshal the content  list */
+			/* marshal the content list */
 			marshal(configCriteria, object, oC, fW, 0);
 		}
 
@@ -907,30 +971,30 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 */
 	@Override
-	public Object unmarshalFromPath(final Object object, final String pathFile) throws Exception {
+	public void unmarshalFromPath(final Object object, final String pathFile) throws Exception {
 		/* initialize configuration data */
 		CConfigCriteria configCriteria = new CConfigCriteria();
-		
-		unmarshalFromPath(configCriteria, object, pathFile);
 
-		return object;
+		unmarshalFromPath(configCriteria, object, pathFile);
 	}
 
 	/**
-	 * Generate the object from the path file passed as parameter.
+	 * Generate the object from, based at {@link CConfigCriteria}, the path file
+	 * passed as parameter.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
 	 * @param object
 	 *            the object to fill up.
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 */
 	@Override
-	public Object unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile) throws Exception {
+	public void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
 
@@ -946,8 +1010,7 @@ public class CGen implements IGeneratorCSV {
 			internalPathFile = pathFile.concat(File.separator);
 		}
 
-		BufferedReader br = new BufferedReader(
-				new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
+		BufferedReader br = new BufferedReader(new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 		String[] values = null;
 		String line = StringUtils.EMPTY;
 		boolean isHeaderLine = true;
@@ -962,15 +1025,22 @@ public class CGen implements IGeneratorCSV {
 
 		/* close the file */
 		br.close();
-
-		return object;
 	}
 
 	/**
+	 * Charge the collection of object from the path file passed as parameter.
 	 * 
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
 	 */
 	@Override
-	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile) throws Exception {
+	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
+			throws Exception {
 		/* initialize configuration data */
 		CConfigCriteria configCriteria = new CConfigCriteria();
 
@@ -978,18 +1048,30 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Charge the collection of object, based at {@link CConfigCriteria}, from
+	 * the path file passed as parameter.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
 	 */
 	@Override
-	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC, final Collection<?> listObject, final String pathFile) throws Exception {
+	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
+			final Collection<?> listObject, final String pathFile) throws Exception {
 
-		if(listObject == null || listObject.isEmpty() || oC == null){
+		if (listObject == null || listObject.isEmpty() || oC == null) {
 			return;
 		}
-		
+
 		/* initialize configuration data */
 		initializeConfigurationData(configCriteria, oC);
-		
+
 		/*
 		 * check if the path terminate with the file separator, otherwise will
 		 * be added to avoid any problem
@@ -999,14 +1081,13 @@ public class CGen implements IGeneratorCSV {
 			internalPathFile = pathFile.concat(File.separator);
 		}
 
-		BufferedReader br = new BufferedReader(
-				new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
+		BufferedReader br = new BufferedReader(new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 
 		for (Object object : listObject) {
 			String[] values = br.lines().skip(1).map(line -> line.split(configCriteria.getSeparator()))
 					.collect(Collectors.toList()).get(0);
 
-			/* unmarshal the content  list */
+			/* unmarshal the content list */
 			unmarshal(configCriteria, object, oC, values, -1);
 		}
 

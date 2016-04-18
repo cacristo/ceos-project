@@ -4,21 +4,115 @@ import java.util.Collection;
 
 public interface IGeneratorCSV {
 
+	/**
+	 * Generate the CSV file based at the object passed as parameters and save
+	 * it at the path send as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
+	void marshalAndSave(final Object object, final String pathFile) throws Exception;
 
-	void marshalAndSave(Object object, String pathFile) throws Exception;
+	/**
+	 * Generate the CSV file based at {@link CConfigCriteria} and the object
+	 * passed as parameters and save it at the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
+	void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws Exception;
 
-	void marshalAndSave(CConfigCriteria configCriteria, Object object, String pathFile) throws Exception;
-	
-	void marshalAsCollectionAndSave(Collection<?> listObject, String pathFile) throws Exception;
-	
-	void marshalAsCollectionAndSave(CConfigCriteria configCriteria, Collection<?> listObject, String pathFile) throws Exception;
+	/**
+	 * Generate the CSV file from the collection of objects.
+	 * 
+	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @throws Exception
+	 */
+	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws Exception;
 
-	Object unmarshalFromPath(Object object, String pathFile) throws Exception;
+	/**
+	 * Generate the CSV file, based at {@link CConfigCriteria}, from the collection of objects.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @throws Exception
+	 */
+	void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
+			final String pathFile) throws Exception;
 
-	Object unmarshalFromPath(CConfigCriteria configCriteria, Object object, String pathFile) throws Exception;
-	
-	void unmarshalAsCollectionFromPath(Class<?> oC, Collection<?> listObject, String pathFile) throws Exception;
-	
-	void unmarshalAsCollectionFromPath(CConfigCriteria configCriteria, Class<?> oC, Collection<?> listObject, String pathFile) throws Exception;
+	/**
+	 * Generate the object from the path file passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
+	void unmarshalFromPath(final Object object, final String pathFile) throws Exception;
+
+	/**
+	 * Generate the object from, based at {@link CConfigCriteria}, the path file
+	 * passed as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param object
+	 *            the object to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
+	void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws Exception;
+
+	/**
+	 * Charge the collection of object from the path file passed as parameter.
+	 * 
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
+	 */
+	void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
+			throws Exception;
+
+	/**
+	 * Charge the collection of object, based at {@link CConfigCriteria}, from
+	 * the path file passed as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
+	 */
+	void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
+			final Collection<?> listObject, final String pathFile) throws Exception;
 
 }
