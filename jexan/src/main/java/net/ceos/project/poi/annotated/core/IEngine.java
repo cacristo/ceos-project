@@ -27,7 +27,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 */
-	Sheet marshalToSheet(Object object)
+	Sheet marshalToSheet(final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -40,7 +40,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 */
-	Sheet marshalToSheet(XConfigCriteria configCriteria, Object object)
+	Sheet marshalToSheet(final XConfigCriteria configCriteria, final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -51,7 +51,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 */
-	Workbook marshalToWorkbook(Object object)
+	Workbook marshalToWorkbook(final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -64,7 +64,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 */
-	Workbook marshalToWorkbook(XConfigCriteria configCriteria, Object object)
+	Workbook marshalToWorkbook(final XConfigCriteria configCriteria, final Object object)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException;
 
@@ -77,7 +77,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 */
-	void marshalAndSave(Object object, String pathFile) throws IllegalAccessException, InvocationTargetException,
+	void marshalAndSave(final Object object, final String pathFile) throws IllegalAccessException, InvocationTargetException,
 			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
 			CustomizedRulesException, ConverterException, IOException;
 
@@ -92,7 +92,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 */
-	void marshalAndSave(XConfigCriteria configCriteria, Object object, String pathFile) throws IllegalAccessException,
+	void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile) throws IllegalAccessException,
 			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
 			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException;
 
@@ -103,7 +103,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link FileOutputStream} generated
 	 */
-	byte[] marshalToByte(Object object) throws IllegalAccessException, InvocationTargetException,
+	byte[] marshalToByte(final Object object) throws IllegalAccessException, InvocationTargetException,
 			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
 			CustomizedRulesException, ConverterException, IOException;
 
@@ -118,7 +118,7 @@ public interface IEngine {
 	 *            the file extension
 	 * @throws Exception
 	 */
-	void marshalAsCollection(Collection<?> collection, final String filename, final ExtensionFileType extensionFileType)
+	void marshalAsCollection(final Collection<?> collection, final String filename, final ExtensionFileType extensionFileType)
 			throws Exception;
 
 	/* ######################## Unmarshal methods ######################## */
@@ -131,9 +131,8 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 */
-	Object unmarshalFromPath(Object object, String pathFile) throws ElementException, ConfigurationException,
+	void unmarshalFromPath(final Object object, final String pathFile) throws ElementException, ConfigurationException,
 			IOException, IllegalAccessException, InstantiationException, SheetException, ConverterException;
 
 	/**
@@ -144,9 +143,8 @@ public interface IEngine {
 	 * @param workbook
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
-	 * @return the {@link Object} filled up
 	 */
-	Object unmarshalFromWorkbook(Object object, Workbook workbook) throws ElementException, ConfigurationException,
+	void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws ElementException, ConfigurationException,
 			IllegalAccessException, InstantiationException, SheetException, ConverterException;
 
 	/**
@@ -156,18 +154,17 @@ public interface IEngine {
 	 *            the object to fill up.
 	 * @param inputByte
 	 *            the byte array to read and pass the information to the object
-	 * @return the {@link Object} filled up
 	 */
-	Object unmarshalFromByte(Object object, byte[] byteArray) throws ElementException, ConfigurationException,
+	void unmarshalFromByte(final Object object, final byte[] byteArray) throws ElementException, ConfigurationException,
 			IOException, IllegalAccessException, InstantiationException, SheetException, ConverterException;
 
-	Collection<?> unmarshalToCollection(Object object);
+	Collection<?> unmarshalToCollection(final Object object);
 
 	/**
 	 * 
 	 * @param collection
 	 */
-	void marshalAsCollection(Collection<?> collection);
+	void marshalAsCollection(final Collection<?> collection);
 
 	/* ############################################# */
 	/* ################## TO REVIEW ################ */

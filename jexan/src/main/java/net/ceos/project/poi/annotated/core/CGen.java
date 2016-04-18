@@ -312,6 +312,7 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Export the object to the CSV file.
 	 * 
 	 * @param o
 	 *            the object
@@ -395,6 +396,7 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Import the CSV file into the object.
 	 * 
 	 * @param o
 	 *            the object
@@ -471,6 +473,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Date value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -508,6 +512,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a String value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -524,6 +530,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Short value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -562,6 +570,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Long value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -581,6 +591,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Double value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -608,6 +620,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a BigDecimal value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -627,6 +641,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Float value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -646,6 +662,8 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Apply a Boolean value to the object.
+	 * 
 	 * @param o
 	 *            the object
 	 * @param f
@@ -675,6 +693,16 @@ public class CGen implements IGeneratorCSV {
 
 	/* ######################## Marshal methods ########################## */
 
+	/**
+	 * Generate the CSV file based at the object passed as parameters and save
+	 * it at the path send as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
 	@Override
 	public void marshalAndSave(final Object object, final String pathFile) throws Exception {
 
@@ -684,6 +712,18 @@ public class CGen implements IGeneratorCSV {
 		marshalAndSave(configCriteria, object, pathFile);
 	}
 
+	/**
+	 * Generate the CSV file based at {@link CConfigCriteria} and the object
+	 * passed as parameters and save it at the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the CSV file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 */
 	@Override
 	public void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws Exception {
@@ -715,11 +755,13 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 * Marshal as collection.
+	 * Generate the CSV file from the collection of objects.
 	 * 
 	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
 	 * @param pathFile
-	 * @param file
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
 	 * @throws Exception
 	 */
 	@Override
@@ -732,11 +774,16 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
-	 * Marshal as collection.
+	 * Generate the CSV file, based at {@link CConfigCriteria}, from the
+	 * collection of objects.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
 	 * @param listObject
+	 *            the collection of objects to apply at the CSV file.
 	 * @param pathFile
-	 * @param file
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
 	 * @throws Exception
 	 */
 	@Override
@@ -784,30 +831,29 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 */
 	@Override
-	public Object unmarshalFromPath(final Object object, final String pathFile) throws Exception {
+	public void unmarshalFromPath(final Object object, final String pathFile) throws Exception {
 		/* initialize configuration data */
 		CConfigCriteria configCriteria = new CConfigCriteria();
 
 		unmarshalFromPath(configCriteria, object, pathFile);
-
-		return object;
 	}
 
 	/**
-	 * Generate the object from the path file passed as parameter.
+	 * Generate the object from, based at {@link CConfigCriteria}, the path file
+	 * passed as parameter.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
 	 * @param object
 	 *            the object to fill up.
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 */
 	@Override
-	public Object unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
+	public void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws Exception {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
@@ -839,12 +885,18 @@ public class CGen implements IGeneratorCSV {
 
 		/* close the file */
 		br.close();
-
-		return object;
 	}
 
 	/**
+	 * Charge the collection of object from the path file passed as parameter.
 	 * 
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
 	 */
 	@Override
 	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
@@ -856,7 +908,18 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/**
+	 * Charge the collection of object, based at {@link CConfigCriteria}, from
+	 * the path file passed as parameter.
 	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the collection
 	 */
 	@Override
 	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,

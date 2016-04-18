@@ -1607,7 +1607,6 @@ public class Engine implements IEngine {
 	 * @param workbook
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
-	 * @return the {@link Object} filled up
 	 * @throws ElementException
 	 * @throws ConfigurationException
 	 * @throws ConverterException
@@ -1616,7 +1615,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 */
 	@Override
-	public Object unmarshalFromWorkbook(final Object object, final Workbook workbook) throws ElementException,
+	public void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws ElementException,
 			ConfigurationException, IllegalAccessException, InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
@@ -1630,8 +1629,6 @@ public class Engine implements IEngine {
 
 		/* Extract from the workbook to the object passed as parameter */
 		unmarshalEngine(configCriteria, object, oC);
-
-		return object;
 	}
 
 	/**
@@ -1642,7 +1639,6 @@ public class Engine implements IEngine {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the {@link Object} filled up
 	 * @throws ElementException
 	 * @throws ConfigurationException
 	 * @throws IOException
@@ -1652,7 +1648,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 */
 	@Override
-	public Object unmarshalFromPath(final Object object, final String pathFile)
+	public void unmarshalFromPath(final Object object, final String pathFile)
 			throws ElementException, ConfigurationException, IOException, IllegalAccessException,
 			InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
@@ -1678,8 +1674,6 @@ public class Engine implements IEngine {
 
 		/* Extract from the workbook to the object passed as parameter */
 		unmarshalEngine(configCriteria, object, oC);
-
-		return object;
 	}
 
 	/**
@@ -1689,7 +1683,6 @@ public class Engine implements IEngine {
 	 *            the object to fill up.
 	 * @param inputByte
 	 *            the byte array to read and pass the information to the object
-	 * @return the {@link Object} filled up
 	 * @throws ElementException
 	 * @throws ConfigurationException
 	 * @throws IOException
@@ -1699,7 +1692,7 @@ public class Engine implements IEngine {
 	 * @throws IllegalAccessException
 	 */
 	@Override
-	public Object unmarshalFromByte(final Object object, final byte[] byteArray)
+	public void unmarshalFromByte(final Object object, final byte[] byteArray)
 			throws ElementException, ConfigurationException, IOException, IllegalAccessException,
 			InstantiationException, SheetException, ConverterException {
 		/* initialize the runtime class of the object */
@@ -1714,18 +1707,16 @@ public class Engine implements IEngine {
 
 		/* Extract from the workbook to the object passed as parameter */
 		unmarshalEngine(configCriteria, object, oC);
-
-		return object;
 	}
 
 	@Override
-	public void marshalAsCollection(Collection<?> collection) {
+	public void marshalAsCollection(final Collection<?> collection) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Collection<?> unmarshalToCollection(Object object) {
+	public Collection<?> unmarshalToCollection(final Object object) {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}
