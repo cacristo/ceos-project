@@ -557,7 +557,7 @@ public class CGen implements IGeneratorCSV {
 	private void manageDate(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(o, field, xlsAnnotation, values, idx));
+			field.set(o, applyMaskToDate(xlsAnnotation, values, idx));
 		}
 	}
 
@@ -580,7 +580,7 @@ public class CGen implements IGeneratorCSV {
 	private void manageLocalDate(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(o, field, xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
+			field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
 					.toLocalDate());
 		}
 	}
@@ -604,7 +604,7 @@ public class CGen implements IGeneratorCSV {
 	private void manageLocalDateTime(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(o, field, xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
+			field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
 					.toLocalDateTime());
 		}
 	}
@@ -612,10 +612,6 @@ public class CGen implements IGeneratorCSV {
 	/**
 	 * Manage the mask to apply to a Date object.
 	 * 
-	 * @param o
-	 *            the object
-	 * @param f
-	 *            the field
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
 	 * @param values
@@ -625,7 +621,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	private Date applyMaskToDate(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
+	private Date applyMaskToDate(final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException {
 		Date dateConverted = null;
 		String date = values[idx];
