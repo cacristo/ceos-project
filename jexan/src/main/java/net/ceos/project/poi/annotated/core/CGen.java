@@ -112,13 +112,13 @@ public class CGen implements IGeneratorCSV {
 	/**
 	 * Add the content of one line stored at the Map into the file.
 	 * 
-	 * @param f
+	 * @param fW
 	 *            the file to write
 	 * @param values
 	 *            the Map with the data to write at the file
 	 * @throws IOException
 	 */
-	private void addLine(final FileWriter f, final Map<Integer, String> values, final String separator)
+	private void addLine(final FileWriter fW, final Map<Integer, String> values, final String separator)
 			throws IOException {
 		Set<Integer> keys = values.keySet();
 		boolean isFirst = true;
@@ -126,14 +126,14 @@ public class CGen implements IGeneratorCSV {
 
 			/* add separator */
 			if (!isFirst) {
-				f.append(separator);
+				fW.append(separator);
 			}
 
 			/* append value */
-			f.append(values.get(integer));
+			fW.append(values.get(integer));
 			isFirst = false;
 		}
-		f.append(END_OF_LINE);
+		fW.append(END_OF_LINE);
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param xlsAnnotation
 	 *            the XlsAnnotation
@@ -159,21 +159,21 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws IOException
 	 */
-	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field f,
+	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field field,
 			final XlsElement xlsAnnotation, final int idx) throws IllegalAccessException, NoSuchMethodException,
 					InvocationTargetException, ConverterException, InstantiationException, IOException {
 
 		/* make the field accessible to recover the value */
-		f.setAccessible(true);
+		field.setAccessible(true);
 
 		int counter = 0;
 
-		Class<?> fT = f.getType();
+		Class<?> fT = field.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, f, xlsAnnotation, idx);
+		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, field, xlsAnnotation, idx);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-			Object nO = f.get(o);
+			Object nO = field.get(o);
 
 			/* manage null objects */
 			if (nO == null) {
@@ -216,11 +216,11 @@ public class CGen implements IGeneratorCSV {
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 
-		for (Field f : fL) {
+		for (Field field : fL) {
 
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+			if (field.isAnnotationPresent(XlsElement.class)) {
+				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
 
 				/*
 				 * increment of the counter related to the number of fields (if
@@ -232,7 +232,7 @@ public class CGen implements IGeneratorCSV {
 				configCriteria.getHeader().put(index + xlsAnnotation.position(), xlsAnnotation.title());
 
 				/* content values treatment */
-				index += initializeField(configCriteria, o, f, xlsAnnotation, index + xlsAnnotation.position());
+				index += initializeField(configCriteria, o, field, xlsAnnotation, index + xlsAnnotation.position());
 			}
 		}
 
@@ -255,7 +255,7 @@ public class CGen implements IGeneratorCSV {
 	 *            the object
 	 * @param oC
 	 *            the object class
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
@@ -265,7 +265,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws ParseException
 	 */
-	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] v,
+	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
@@ -274,13 +274,13 @@ public class CGen implements IGeneratorCSV {
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 
-		for (Field f : fL) {
+		for (Field field : fL) {
 			/* process each field from the object */
-			Class<?> fT = f.getType();
+			Class<?> fT = field.getType();
 
 			/* Process @XlsElement */
-			if (f.isAnnotationPresent(XlsElement.class)) {
-				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
+			if (field.isAnnotationPresent(XlsElement.class)) {
+				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
 
 				/*
 				 * increment of the counter related to the number of fields (if
@@ -288,7 +288,7 @@ public class CGen implements IGeneratorCSV {
 				 */
 				counter++;
 
-				boolean isAppliedToBaseObject = applyBaseCsvObject(o, fT, f, xlsAnnotation, v,
+				boolean isAppliedToBaseObject = applyBaseCsvObject(o, fT, field, xlsAnnotation, values,
 						index + xlsAnnotation.position());
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
@@ -296,11 +296,11 @@ public class CGen implements IGeneratorCSV {
 					Object subObjbect = fT.newInstance();
 					Class<?> subObjbectClass = subObjbect.getClass();
 
-					int internalCellCounter = unmarshal(configCriteria, subObjbect, subObjbectClass, v,
+					int internalCellCounter = unmarshal(configCriteria, subObjbect, subObjbectClass, values,
 							index + xlsAnnotation.position() - 1);
 
 					/* add the sub object to the parent object */
-					f.set(o, subObjbect);
+					field.set(o, subObjbect);
 
 					/* update the index */
 					index += internalCellCounter;
@@ -317,7 +317,7 @@ public class CGen implements IGeneratorCSV {
 	 *            the object
 	 * @param fT
 	 *            the field type
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param element
 	 *            the {@link XlsElement} annotation
@@ -330,7 +330,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InvocationTargetException
 	 */
 	private boolean applyBaseObject(final CConfigCriteria configCriteria, final Object o, final Class<?> fT,
-			final Field f, final XlsElement element, final int idx) throws IllegalAccessException, ConverterException,
+			final Field field, final XlsElement element, final int idx) throws IllegalAccessException, ConverterException,
 					NoSuchMethodException, InvocationTargetException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
@@ -340,53 +340,53 @@ public class CGen implements IGeneratorCSV {
 		String fM = element.formatMask();
 
 		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, CsvUtils.toDate((Date) f.get(o), fM, tM));
+			configCriteria.getContent().put(idx, CsvUtils.toDate((Date) field.get(o), fM, tM));
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, (String) f.get(o) != null ? (String) f.get(o) : StringUtils.EMPTY);
+			configCriteria.getContent().put(idx, (String) field.get(o) != null ? (String) field.get(o) : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(Short) f.get(o) != null ? ((Short) f.get(o)).toString() : StringUtils.EMPTY);
+					(Short) field.get(o) != null ? ((Short) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(Integer) f.get(o) != null ? ((Integer) f.get(o)).toString() : StringUtils.EMPTY);
+					(Integer) field.get(o) != null ? ((Integer) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(Long) f.get(o) != null ? ((Long) f.get(o)).toString() : StringUtils.EMPTY);
+					(Long) field.get(o) != null ? ((Long) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) f.get(o), fM, tM));
+			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) field.get(o), fM, tM));
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(BigDecimal) f.get(o) != null ? ((BigDecimal) f.get(o)).toString() : StringUtils.EMPTY);
+					(BigDecimal) field.get(o) != null ? ((BigDecimal) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(Float) f.get(o) != null ? ((Float) f.get(o)).toString() : StringUtils.EMPTY);
+					(Float) field.get(o) != null ? ((Float) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
 			configCriteria.getContent().put(idx,
-					(Boolean) f.get(o) != null ? ((Boolean) f.get(o)).toString() : StringUtils.EMPTY);
+					(Boolean) field.get(o) != null ? ((Boolean) field.get(o)).toString() : StringUtils.EMPTY);
 			isUpdated = true;
 
 		} else if (fT.isEnum()) {
-			configCriteria.getContent().put(idx, CsvUtils.toEnum(o, f));
+			configCriteria.getContent().put(idx, CsvUtils.toEnum(o, field));
 			isUpdated = true;
 
 		}
@@ -401,11 +401,11 @@ public class CGen implements IGeneratorCSV {
 	 *            the object
 	 * @param fT
 	 *            the field type
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
@@ -416,55 +416,55 @@ public class CGen implements IGeneratorCSV {
 	 * @throws ParseException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private boolean applyBaseCsvObject(final Object o, final Class<?> fT, final Field f, final XlsElement xlsAnnotation,
-			final String[] v, final int idx) throws IllegalAccessException, ConverterException, ParseException {
+	private boolean applyBaseCsvObject(final Object o, final Class<?> fT, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws IllegalAccessException, ConverterException, ParseException {
 		/* flag which define if the cell was updated or not */
 		boolean isUpdated = false;
 
-		f.setAccessible(true);
+		field.setAccessible(true);
 
 		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
-			manageDate(o, f, xlsAnnotation, v, idx);
+			manageDate(o, field, xlsAnnotation, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
-			manageString(o, f, v, idx);
+			manageString(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
-			manageShort(o, f, v, idx);
+			manageShort(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
-			manageInteger(o, f, v, idx);
+			manageInteger(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
-			manageLong(o, f, v, idx);
+			manageLong(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
-			manageDouble(o, f, xlsAnnotation, v, idx);
+			manageDouble(o, field, xlsAnnotation, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
-			manageBigDecimal(o, f, v, idx);
+			manageBigDecimal(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
-			manageFloat(o, f, v, idx);
+			manageFloat(o, field, values, idx);
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
-			manageBoolean(o, f, xlsAnnotation, v, idx);
+			manageBoolean(o, field, xlsAnnotation, values, idx);
 			isUpdated = true;
 
 		} else if (fT.isEnum()) {
-			f.set(o, Enum.valueOf((Class<Enum>) fT, v[idx]));
+			field.set(o, Enum.valueOf((Class<Enum>) fT, values[idx]));
 			isUpdated = true;
 
 		}
@@ -476,20 +476,20 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	private void manageDate(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+	private void manageDate(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException, ConverterException {
-		String date = v[idx];
+		String date = values[idx];
 		if (StringUtils.isNotBlank(date)) {
 
 			String tM = xlsAnnotation.transformMask();
@@ -499,7 +499,7 @@ public class CGen implements IGeneratorCSV {
 			SimpleDateFormat dt = new SimpleDateFormat(decorator);
 			try {
 				Date dateConverted = dt.parse(date);
-				f.set(o, dateConverted);
+				field.set(o, dateConverted);
 			} catch (ParseException e) {
 				/*
 				 * if date decorator do not match with a valid mask launch
@@ -515,17 +515,17 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageString(final Object o, final Field f, final String[] v, final int idx)
+	private void manageString(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		f.set(o, v[idx]);
+		field.set(o, values[idx]);
 	}
 
 	/**
@@ -533,38 +533,38 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageShort(final Object o, final Field f, final String[] v, final int idx)
+	private void manageShort(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		String iValue = v[idx];
+		String iValue = values[idx];
 		if (StringUtils.isNotBlank(iValue)) {
-			f.set(o, Short.valueOf(iValue));
+			field.set(o, Short.valueOf(iValue));
 		}
 	}
 
 	/**
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageInteger(final Object o, final Field f, final String[] v, final int idx)
+	private void manageInteger(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		String iValue = v[idx];
+		String iValue = values[idx];
 		if (StringUtils.isNotBlank(iValue)) {
-			f.set(o, Integer.valueOf(iValue));
+			field.set(o, Integer.valueOf(iValue));
 		}
 	}
 
@@ -573,19 +573,19 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageLong(final Object o, final Field f, final String[] v, final int idx)
+	private void manageLong(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		String dValue = v[idx];
+		String dValue = values[idx];
 		if (StringUtils.isNotBlank(dValue)) {
-			f.set(o, Double.valueOf(dValue).longValue());
+			field.set(o, Double.valueOf(dValue).longValue());
 		}
 	}
 
@@ -594,26 +594,26 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageDouble(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+	private void manageDouble(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException {
-		String dPValue = v[idx];
+		String dPValue = values[idx];
 		if (StringUtils.isNotBlank(dPValue)) {
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
+				field.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
 			} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-				f.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
+				field.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
 			} else {
-				f.set(o, Double.parseDouble(dPValue));
+				field.set(o, Double.parseDouble(dPValue));
 			}
 		}
 	}
@@ -623,19 +623,19 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageBigDecimal(final Object o, final Field f, final String[] v, final int idx)
+	private void manageBigDecimal(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		String dBdValue = v[idx];
+		String dBdValue = values[idx];
 		if (dBdValue != null) {
-			f.set(o, BigDecimal.valueOf(Double.valueOf(dBdValue)));
+			field.set(o, BigDecimal.valueOf(Double.valueOf(dBdValue)));
 		}
 	}
 
@@ -644,19 +644,19 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageFloat(final Object o, final Field f, final String[] v, final int idx)
+	private void manageFloat(final Object o, final Field field, final String[] values, final int idx)
 			throws IllegalAccessException {
-		String fValue = v[idx];
+		String fValue = values[idx];
 		if (StringUtils.isNotBlank(fValue)) {
-			f.set(o, Float.valueOf(fValue));
+			field.set(o, Float.valueOf(fValue));
 		}
 	}
 
@@ -665,28 +665,28 @@ public class CGen implements IGeneratorCSV {
 	 * 
 	 * @param o
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
-	 * @param v
+	 * @param values
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
 	 * @throws IllegalAccessException
 	 */
-	private void manageBoolean(final Object o, final Field f, final XlsElement xlsAnnotation, final String[] v,
+	private void manageBoolean(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
 			final int idx) throws IllegalAccessException {
-		String bool = v[idx];
+		String bool = values[idx];
 
 		if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 			/* apply format mask defined at transform mask */
 			String[] split = xlsAnnotation.transformMask().split(SLASH);
-			f.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
+			field.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
 
 		} else {
 			/* locale mode */
-			f.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+			field.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
 		}
 	}
 
