@@ -115,17 +115,17 @@ public class CGen implements IGeneratorCSV {
 	/**
 	 * Add the content of one line stored at the Map into the file.
 	 * 
-	 * @param field
+	 * @param fW
 	 *            the file to write
 	 * @param values
 	 *            the Map with the data to write at the file
 	 * @throws IOException
 	 */
-	private void addLine(final FileWriter f, final Map<Integer, String> values, final String separator) throws IOException {
+	private void addLine(final FileWriter fW, final Map<Integer, String> values, final String separator) throws IOException {
 		/* append all values at the Map to the file */
-		f.append(values.values().stream().collect(Collectors.joining(separator)));
+		fW.append(values.values().stream().collect(Collectors.joining(separator)));
 		/* add end of line */
-		f.append(END_OF_LINE);
+		fW.append(END_OF_LINE);
 	}
 
 	/**
