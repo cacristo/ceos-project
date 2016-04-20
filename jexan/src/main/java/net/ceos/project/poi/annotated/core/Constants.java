@@ -16,6 +16,7 @@ class Constants {
 
 	protected static final String INDY = "idy";
 	protected static final String INDX = "idx";
+	protected static final String GET = "get";
 
 	private Constants() {
 		/* private constructor to hide the implicit public */
