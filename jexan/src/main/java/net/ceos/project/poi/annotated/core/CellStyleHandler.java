@@ -30,7 +30,20 @@ import net.ceos.project.poi.annotated.exception.ConfigurationException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
- * This class manage all the cell style to apply to one cell decoration.
+ * Manage the style to apply to the cell.<br>
+ * <br>
+ * Available attributes :<br>
+ * . <i>font name</i><br>
+ * . <i>font size</i><br>
+ * . <i>font color</i><br>
+ * . <i>font italic</i><br>
+ * . <i>font bold</i><br>
+ * . <i>font underline</i><br>
+ * . <i>font alignment</i><br>
+ * . <i>font vertical alignment</i><br>
+ * . <i>cell wrap text</i><br>
+ * . <i>cell border</i><br>
+ * . <i>cell background color</i><br>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -69,25 +82,25 @@ public class CellStyleHandler {
 	 * Apply the data format to the cell style.
 	 * 
 	 * @param wb
-	 *            the workbook
-	 * @param c
-	 *            the cell
+	 *            the {@link Workbook} in use
+	 * @param cell
+	 *            the {@link Cell} to use
 	 * @param cs
 	 *            the cell style
 	 * @param formatMask
 	 */
-	protected static void applyDataFormat(final Workbook wb, final Cell c, final CellStyle cs,
+	protected static void applyDataFormat(final Workbook wb, final Cell cell, final CellStyle cs,
 			final String formatMask) {
 		DataFormat df = initializeDataFormat(wb);
 		cs.setDataFormat(df.getFormat(formatMask));
-		c.setCellStyle(cs);
+		cell.setCellStyle(cs);
 	}
 
 	/**
 	 * Apply the font to the cell style with default values.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @param cs
 	 *            the cell style
 	 */
@@ -100,9 +113,9 @@ public class CellStyleHandler {
 	 * Apply the font to the cell style.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @param cs
-	 *            the cell style
+	 *            the {@link CellStyle} in use
 	 * @param name
 	 *            the font name
 	 * @param size
@@ -145,7 +158,7 @@ public class CellStyleHandler {
 	 * Apply the horizontal & vertical alignment to the cell style.
 	 * 
 	 * @param cs
-	 *            the cell style
+	 *            the {@link CellStyle} to use
 	 * @param a
 	 *            the horizontal alignment
 	 * @param vA
@@ -164,7 +177,7 @@ public class CellStyleHandler {
 	 * Apply the border to the cell style with default values.
 	 * 
 	 * @param cs
-	 *            the cell style
+	 *            the {@link CellStyle} to apply
 	 */
 	protected static void applyBorderDefault(final CellStyle cs) {
 		applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN);
@@ -174,7 +187,7 @@ public class CellStyleHandler {
 	 * Apply the border to the cell style.
 	 * 
 	 * @param cs
-	 *            the cell style
+	 *            the {@link CellStyle} to use
 	 * @param bL
 	 *            the cell border left
 	 * @param bR
@@ -196,7 +209,7 @@ public class CellStyleHandler {
 	 * Apply the background color to the cell style.
 	 * 
 	 * @param cs
-	 *            the cell style
+	 *            the {@link CellStyle} to use
 	 * @param bC
 	 *            the background color
 	 */
@@ -207,24 +220,22 @@ public class CellStyleHandler {
 	/**
 	 * Apply the cell comment to a cell.
 	 * 
-	 * @param wb
-	 *            the workbook
-	 * @param c
-	 *            the cell
-	 * @param t
-	 *            the text comment
-	 * @param e
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} object
+	 * @param isAuthorizedComment
 	 *            the extension file
+	 * @param cell
+	 *            the {@link Cell}
 	 */
 	protected static void applyComment(final XConfigCriteria configCriteria, final Boolean isAuthorizedComment,
-			final Cell c) {
+			final Cell cell) {
 		if (StringUtils.isBlank(configCriteria.getElement().commentRules())
 				|| StringUtils.isNotBlank(configCriteria.getElement().commentRules()) && isAuthorizedComment) {
 			if (ExtensionFileType.XLS.equals(configCriteria.getExtension())) {
 				final Map<Sheet, HSSFPatriarch> drawingPatriarches = new HashMap<Sheet, HSSFPatriarch>();
 
-				CreationHelper createHelper = c.getSheet().getWorkbook().getCreationHelper();
-				HSSFSheet sheet = (HSSFSheet) c.getSheet();
+				CreationHelper createHelper = cell.getSheet().getWorkbook().getCreationHelper();
+				HSSFSheet sheet = (HSSFSheet) cell.getSheet();
 				HSSFPatriarch drawingPatriarch = drawingPatriarches.get(sheet);
 				if (drawingPatriarch == null) {
 					drawingPatriarch = sheet.createDrawingPatriarch();
@@ -235,12 +246,12 @@ public class CellStyleHandler {
 						.createComment(new HSSFClientAnchor(0, 0, 0, 0, (short) 4, 2, (short) 6, 5));
 				comment.setString(createHelper.createRichTextString(configCriteria.getElement().comment()));
 
-				c.setCellComment(comment);
+				cell.setCellComment(comment);
 
 			} else if (ExtensionFileType.XLSX.equals(configCriteria.getExtension())) {
 				CreationHelper factory = configCriteria.getWorkbook().getCreationHelper();
 
-				Drawing drawing = c.getSheet().createDrawingPatriarch();
+				Drawing drawing = cell.getSheet().createDrawingPatriarch();
 
 				ClientAnchor anchor = factory.createClientAnchor();
 
@@ -248,7 +259,7 @@ public class CellStyleHandler {
 				RichTextString str = factory.createRichTextString(configCriteria.getElement().comment());
 				comment.setString(str);
 
-				c.setCellComment(comment);
+				cell.setCellComment(comment);
 			}
 		}
 	}
@@ -257,7 +268,7 @@ public class CellStyleHandler {
 	 * Initialize cell style.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @return the {@link CellStyle}.
 	 */
 	protected static CellStyle initializeCellStyle(final Workbook wb) {
@@ -269,7 +280,7 @@ public class CellStyleHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell}
 	 * @param cellDecoratorType
 	 *            the cell decorator by default
@@ -277,7 +288,7 @@ public class CellStyleHandler {
 	 *            the format mask by default
 	 * @throws ElementException
 	 */
-	protected static void applyCellStyle(final XConfigCriteria configCriteria, final Cell c,
+	protected static void applyCellStyle(final XConfigCriteria configCriteria, final Cell cell,
 			final String cellDecoratorType, final String maskDecoratorType) throws ElementException {
 
 		CellStyle cs = configCriteria.getCellStyle(cellDecoratorType);
@@ -303,7 +314,7 @@ public class CellStyleHandler {
 				cs = configCriteria.getCellStyleManager().get(key);
 			}
 			/* apply cell style to a cell */
-			c.setCellStyle(cs);
+			cell.setCellStyle(cs);
 
 		} else {
 			if (cs == null) {
@@ -315,14 +326,14 @@ public class CellStyleHandler {
 				DataFormat df = initializeDataFormat(configCriteria.getWorkbook());
 				cs.setDataFormat(df.getFormat(configCriteria.getMask(maskDecoratorType)));
 			}
-			c.setCellStyle(cs);
+			cell.setCellStyle(cs);
 		}
 	}
 
 	/**
 	 * Initialize the header cell.
 	 * 
-	 * @param r
+	 * @param row
 	 *            {@link Row} to add the cell
 	 * @param idxC
 	 *            position of the new cell
@@ -330,9 +341,9 @@ public class CellStyleHandler {
 	 *            the value of the cell content
 	 * @return the cell created
 	 */
-	protected static Cell initializeHeaderCell(final Map<String, CellStyle> stylesMap, final Row r, final int idxC,
+	protected static Cell initializeHeaderCell(final Map<String, CellStyle> stylesMap, final Row row, final int idxC,
 			final String value) {
-		Cell c = r.createCell(idxC);
+		Cell c = row.createCell(idxC);
 		c.setCellValue(value);
 		c.setCellStyle(stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER));
 		return c;
@@ -518,7 +529,7 @@ public class CellStyleHandler {
 	 * Initialize font.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @return the {@link Font}.
 	 */
 	private static Font initializeFont(final Workbook wb) {
@@ -529,7 +540,7 @@ public class CellStyleHandler {
 	 * Initialize the data format.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @return the {@link DataFormat}.
 	 */
 	private static DataFormat initializeDataFormat(final Workbook wb) {
@@ -540,9 +551,9 @@ public class CellStyleHandler {
 	 * Clone a cell style passed as parameter.
 	 * 
 	 * @param wb
-	 *            the workbook
+	 *            the {@link Workbook} in use
 	 * @param csBase
-	 *            the cell style base
+	 *            the {@link CellStyle} base
 	 * @return the new cell style
 	 */
 	private static CellStyle cloneCellStyle(final Workbook wb, final CellStyle csBase) {
@@ -580,8 +591,11 @@ public class CellStyleHandler {
 	}
 
 	/**
+	 * Validate if the border should be propagated.
+	 * 
 	 * @param decorator
-	 * @return
+	 *            the {@link CellDecorator} to validate
+	 * @return true if valid, otherwise false
 	 */
 	private static boolean isBorderPropagationValid(final CellDecorator decorator) {
 		return decorator.getBorderLeft() == 0 && decorator.getBorderRight() == 0 && decorator.getBorderTop() == 0
@@ -589,8 +603,11 @@ public class CellStyleHandler {
 	}
 
 	/**
+	 * Validate if the border should be propagated.
+	 * 
 	 * @param decorator
-	 * @return
+	 *            the {@link XlsDecorator} to validate
+	 * @return true if valid, otherwise false
 	 */
 	private static boolean isBorderPropagationValid(final XlsDecorator decorator) {
 		return decorator.borderLeft() == 0 && decorator.borderRight() == 0 && decorator.borderTop() == 0
