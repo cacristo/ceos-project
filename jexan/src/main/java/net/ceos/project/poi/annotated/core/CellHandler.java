@@ -11,16 +11,8 @@ import java.util.Date;
 import java.util.function.BiFunction;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.FormulaParser;
-import org.apache.poi.ss.formula.FormulaRenderer;
-import org.apache.poi.ss.formula.FormulaType;
-import org.apache.poi.ss.formula.ptg.Ptg;
-import org.apache.poi.ss.formula.ptg.RefPtgBase;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
@@ -29,18 +21,14 @@ import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
- * This class manage all the default type of values to apply to one cell.
+ * Manage all the default type of values to apply/read to one cell.<br>
+ * <br>
+ * <b>To improve: </b> manage correctly the cached formulas
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
 public class CellHandler {
-
-	/* Possible news features */
-	// (1) Manage decimalScale
-	// Double d = (Double) f.get(o);
-	// BigDecimal bd = new BigDecimal(d);
-	// bd.setScale(2, BigDecimal.ROUND_HALF_UP);
 
 	// object type
 	public static final String OBJECT_DATE = "java.util.Date";
@@ -62,8 +50,8 @@ public class CellHandler {
 	public static final String PRIMITIVE_FLOAT = "float";
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
-	protected static BiFunction<Row, Integer, Cell> cellFactory = (r, idx)  -> r.createCell(idx);
-	
+	protected static BiFunction<Row, Integer, Cell> cellFactory = (r, idx) -> r.createCell(idx);
+
 	private CellHandler() {
 		/* private constructor to hide the implicit public */
 	}
@@ -73,91 +61,95 @@ public class CellHandler {
 	/**
 	 * Read a string value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
-	protected static void stringReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
-			f.set(o, readCell(c));
+	protected static void stringReader(final Object object, final Field field, final Cell cell)
+			throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			field.set(object, readCell(cell));
 		}
 	}
 
 	/**
 	 * Read a short value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
-	protected static void shortReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
-			f.set(o, Double.valueOf(readCell(c)).shortValue());
+	protected static void shortReader(final Object object, final Field field, final Cell cell)
+			throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			field.set(object, Double.valueOf(readCell(cell)).shortValue());
 		}
 	}
 
 	/**
 	 * Read a integer value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
-	protected static void integerReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
-			f.set(o, Double.valueOf(readCell(c)).intValue());
+	protected static void integerReader(final Object object, final Field field, final Cell cell)
+			throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			field.set(object, Double.valueOf(readCell(cell)).intValue());
 		}
 	}
 
 	/**
 	 * Read a long value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
-	protected static void longReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
-			f.set(o, Double.valueOf(readCell(c)).longValue());
+	protected static void longReader(final Object object, final Field field, final Cell cell)
+			throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			field.set(object, Double.valueOf(readCell(cell)).longValue());
 		}
 	}
 
 	/**
 	 * Read a double value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
 	 * @throws IllegalAccessException
 	 */
-	protected static void doubleReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
+	protected static void doubleReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, Double.valueOf(readCell(c).replace(",", ".")));
+				field.set(object, Double.valueOf(readCell(cell).replace(Constants.COMMA, Constants.DOT)));
 			} else {
-				f.set(o, Double.valueOf(readCell(c)));
+				field.set(object, Double.valueOf(readCell(cell)));
 			}
 		}
 	}
@@ -165,23 +157,24 @@ public class CellHandler {
 	/**
 	 * Read a big decimal value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
 	 * @throws IllegalAccessException
 	 */
-	protected static void bigDecimalReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
+	protected static void bigDecimalReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				f.set(o, BigDecimal.valueOf(Double.valueOf(readCell(c).replace(",", "."))));
+				field.set(object,
+						BigDecimal.valueOf(Double.valueOf(readCell(cell).replace(Constants.COMMA, Constants.DOT))));
 			} else {
-				f.set(o, BigDecimal.valueOf(Double.valueOf(readCell(c))));
+				field.set(object, BigDecimal.valueOf(Double.valueOf(readCell(cell))));
 			}
 		}
 	}
@@ -189,23 +182,23 @@ public class CellHandler {
 	/**
 	 * Read a date value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void dateReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException, ConverterException {
+	protected static void dateReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
-			f.set(o, c.getDateCellValue());
+			field.set(object, cell.getDateCellValue());
 		} else {
-			String date = c.getStringCellValue();
+			String date = cell.getStringCellValue();
 			if (StringUtils.isNotBlank(date)) {
 
 				String tM = xlsAnnotation.transformMask();
@@ -216,7 +209,49 @@ public class CellHandler {
 				SimpleDateFormat dt = new SimpleDateFormat(decorator);
 				try {
 					Date dateConverted = dt.parse(date);
-					f.set(o, dateConverted);
+					field.set(object, dateConverted);
+				} catch (ParseException e) {
+					/*
+					 * if date decorator do not match with a valid mask launch
+					 * exception
+					 */
+					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Read a date time value from the Cell.
+	 * 
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the {@link Field} to set
+	 * @param cell
+	 *            the {@link Cell} to read
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} element
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 */
+	protected static void localDateReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException, ConverterException {
+		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
+			field.set(object, cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		} else {
+			String date = cell.getStringCellValue();
+			if (StringUtils.isNotBlank(date)) {
+
+				String tM = xlsAnnotation.transformMask();
+				String fM = xlsAnnotation.formatMask();
+				String decorator = StringUtils.isEmpty(tM)
+						? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+
+				SimpleDateFormat dt = new SimpleDateFormat(decorator);
+				try {
+					Date dateConverted = dt.parse(date);
+					field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				} catch (ParseException e) {
 					/*
 					 * if date decorator do not match with a valid mask launch
@@ -242,12 +277,12 @@ public class CellHandler {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void localDateReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException, ConverterException {
+	protected static void localDateTimeReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException, ConverterException {
 		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
-			f.set(o, c.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			field.set(object, cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 		} else {
-			String date = c.getStringCellValue();
+			String date = cell.getStringCellValue();
 			if (StringUtils.isNotBlank(date)) {
 
 				String tM = xlsAnnotation.transformMask();
@@ -258,49 +293,7 @@ public class CellHandler {
 				SimpleDateFormat dt = new SimpleDateFormat(decorator);
 				try {
 					Date dateConverted = dt.parse(date);
-					f.set(o, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-				} catch (ParseException e) {
-					/*
-					 * if date decorator do not match with a valid mask launch
-					 * exception
-					 */
-					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Read a date time value from the Cell.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param f
-	 *            the {@link Field} to set
-	 * @param c
-	 *            the {@link Cell} to read
-	 * @param xlsAnnotation
-	 *            the {@link XlsElement} element
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 */
-	protected static void localDateTimeReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException, ConverterException {
-		if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
-			f.set(o, c.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-		} else {
-			String date = c.getStringCellValue();
-			if (StringUtils.isNotBlank(date)) {
-
-				String tM = xlsAnnotation.transformMask();
-				String fM = xlsAnnotation.formatMask();
-				String decorator = StringUtils.isEmpty(tM)
-						? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
-
-				SimpleDateFormat dt = new SimpleDateFormat(decorator);
-				try {
-					Date dateConverted = dt.parse(date);
-					f.set(o, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+					field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				} catch (ParseException e) {
 					/*
 					 * if date decorator do not match with a valid mask launch
@@ -315,45 +308,47 @@ public class CellHandler {
 	/**
 	 * Read a float value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
-	protected static void floatReader(final Object o, final Field f, final Cell c) throws IllegalAccessException {
-		if (StringUtils.isNotBlank(readCell(c))) {
-			f.set(o, Double.valueOf(readCell(c)).floatValue());
+	protected static void floatReader(final Object object, final Field field, final Cell cell)
+			throws IllegalAccessException {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			field.set(object, Double.valueOf(readCell(cell)).floatValue());
 		}
 	}
 
 	/**
 	 * Read a boolean value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
 	 * @throws IllegalAccessException
 	 */
-	protected static void booleanReader(final Object o, final Field f, final Cell c, final XlsElement xlsAnnotation)
-			throws IllegalAccessException {
-		String booleanValue = c.getStringCellValue();
+	protected static void booleanReader(final Object object, final Field field, final Cell cell,
+			final XlsElement xlsAnnotation) throws IllegalAccessException {
+		String booleanValue = cell.getStringCellValue();
 		if (StringUtils.isNotBlank(booleanValue)) {
 			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
 				/* apply format mask defined at transform mask */
-				String[] split = xlsAnnotation.transformMask().split("/");
-				f.set(o, StringUtils.isNotBlank(booleanValue) ? (split[0].equals(booleanValue) ? true : false) : null);
+				String[] split = xlsAnnotation.transformMask().split(Constants.SLASH);
+				field.set(object,
+						StringUtils.isNotBlank(booleanValue) ? (split[0].equals(booleanValue) ? true : false) : null);
 
 			} else {
 				/* locale mode */
-				f.set(o, StringUtils.isNotBlank(booleanValue) ? Boolean.valueOf(booleanValue) : null);
+				field.set(object, StringUtils.isNotBlank(booleanValue) ? Boolean.valueOf(booleanValue) : null);
 			}
 		}
 	}
@@ -361,21 +356,21 @@ public class CellHandler {
 	/**
 	 * Read an enumeration value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
 	 * @param fT
 	 *            the class of the field
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected static void enumReader(final Object o, final Class<?> fT, final Field f, final Cell c)
+	protected static void enumReader(final Object object, final Class<?> fT, final Field field, final Cell cell)
 			throws IllegalAccessException {
-		if (StringUtils.isNotBlank(c.getStringCellValue())) {
-			f.set(o, Enum.valueOf((Class<Enum>) fT, c.getStringCellValue()));
+		if (StringUtils.isNotBlank(cell.getStringCellValue())) {
+			field.set(object, Enum.valueOf((Class<Enum>) fT, cell.getStringCellValue()));
 		}
 	}
 
@@ -386,30 +381,64 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean stringWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean stringWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.genericHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
 			// apply the style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
 
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_String.getMessage(), e);
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
+
+		return isUpdated;
+	}
+
+	/**
+	 * Apply a short value at the Cell.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} object
+	 * @param object
+	 *            the object
+	 * @param cell
+	 *            the {@link Cell} to use
+	 * @return false if problem otherwise true
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 */
+	protected static boolean shortWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
+			throws ConverterException, CustomizedRulesException {
+		boolean isUpdated = true;
+		try {
+			// apply the formula, if exist, otherwise apply the value
+			CellFormulaHandler.genericHandler(configCriteria, object, cell);
+
+			// apply cell style
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+					CellStyleHandler.MASK_DECORATOR_INTEGER);
+
+		} catch (Exception e) {
+			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
+		}
+
+		// apply the comment
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -419,23 +448,23 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean shortWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean integerWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.genericHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		} catch (Exception e) {
@@ -443,41 +472,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
-
-		return isUpdated;
-	}
-
-	/**
-	 * Apply a integer value at the Cell.
-	 * 
-	 * @param configCriteria
-	 *            the {@link XConfigCriteria} object
-	 * @param o
-	 *            the object
-	 * @param c
-	 *            the {@link Cell} to use
-	 * @return false if problem otherwise true
-	 * @throws ConverterException
-	 * @throws CustomizedRulesException
-	 */
-	protected static boolean integerWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, CustomizedRulesException {
-		boolean isUpdated = true;
-		try {
-			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.genericHandler(configCriteria, o, c);
-
-			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_INTEGER);
-
-		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
-		}
-
-		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -487,23 +482,23 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean longWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean longWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.genericHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		} catch (Exception e) {
@@ -511,7 +506,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -521,23 +516,23 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean doubleWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean doubleWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.doubleHandler(configCriteria, o, c);
+			CellFormulaHandler.doubleHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
@@ -545,7 +540,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -555,24 +550,24 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean bigDecimalWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException, CustomizedRulesException {
+	protected static boolean bigDecimalWriter(final XConfigCriteria configCriteria, final Object object,
+			final Cell cell) throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.bigDecimalHandler(configCriteria, o, c);
+			CellFormulaHandler.bigDecimalHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
@@ -580,7 +575,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -590,25 +585,25 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean dateWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean dateWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
-			if (configCriteria.getField().get(o) != null) {
+			if (configCriteria.getField().get(object) != null) {
 				// apply the formula, if exist, otherwise apply the value
-				CellFormulaHandler.dateHandler(configCriteria, o, c);
+				CellFormulaHandler.dateHandler(configCriteria, object, cell);
 
 				// apply cell style
-				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
 						CellStyleHandler.MASK_DECORATOR_DATE);
 			}
 
@@ -617,7 +612,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -636,16 +631,16 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean localDateWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean localDateWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
-			if (configCriteria.getField().get(o) != null) {
+			if (configCriteria.getField().get(object) != null) {
 				// apply the formula, if exist, otherwise apply the value
-				CellFormulaHandler.localDateHandler(configCriteria, o, c);
+				CellFormulaHandler.localDateHandler(configCriteria, object, cell);
 
 				// apply cell style
-				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
 						CellStyleHandler.MASK_DECORATOR_DATE);
 			}
 
@@ -654,7 +649,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -673,16 +668,16 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean localDateTimeWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
-			throws ConverterException, ElementException, CustomizedRulesException {
+	protected static boolean localDateTimeWriter(final XConfigCriteria configCriteria, final Object object,
+			final Cell cell) throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
-			if (configCriteria.getField().get(o) != null) {
+			if (configCriteria.getField().get(object) != null) {
 				// apply the formula, if exist, otherwise apply the value
-				CellFormulaHandler.localDateTimeHandler(configCriteria, o, c);
+				CellFormulaHandler.localDateTimeHandler(configCriteria, object, cell);
 
 				// apply cell style
-				CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
 						CellStyleHandler.MASK_DECORATOR_DATE);
 			}
 
@@ -691,7 +686,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -701,24 +696,24 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean floatWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean floatWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.genericHandler(configCriteria, o, c);
+			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
@@ -726,7 +721,7 @@ public class CellHandler {
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -746,22 +741,22 @@ public class CellHandler {
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean booleanWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean booleanWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 		try {
 			// apply the formula, if exist, otherwise apply the value
-			CellFormulaHandler.booleanHandler(configCriteria, o, c);
+			CellFormulaHandler.booleanHandler(configCriteria, object, cell);
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
 
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -772,16 +767,16 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 * @throws ElementException
 	 * @throws CustomizedRulesException
 	 */
-	protected static boolean enumWriter(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static boolean enumWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws ConverterException, ElementException, CustomizedRulesException {
 		boolean isUpdated = true;
 
@@ -790,27 +785,27 @@ public class CellHandler {
 			@SuppressWarnings("rawtypes")
 			Class[] argTypes = {};
 
-			String method = "get" + configCriteria.getField().getName().substring(0, 1).toUpperCase()
+			String method = Constants.GET + configCriteria.getField().getName().substring(0, 1).toUpperCase()
 					+ configCriteria.getField().getName().substring(1);
 
-			Method m = o.getClass().getDeclaredMethod(method, argTypes);
+			Method m = object.getClass().getDeclaredMethod(method, argTypes);
 
-			Object objEnum = m.invoke(o, (Object[]) null);
+			Object objEnum = m.invoke(object, (Object[]) null);
 
 			if (objEnum != null) {
 				// apply the enum value
-				c.setCellValue((String) objEnum.toString());
+				cell.setCellValue((String) objEnum.toString());
 			}
 
 			// apply cell style
-			CellStyleHandler.applyCellStyle(configCriteria, c, CellStyleHandler.CELL_DECORATOR_ENUM, null);
+			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_ENUM, null);
 
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
 		}
 
 		// apply the comment
-		CellCommentHandler.applyComment(configCriteria, o, c);
+		CellCommentHandler.applyComment(configCriteria, object, cell);
 
 		return isUpdated;
 	}
@@ -818,7 +813,7 @@ public class CellHandler {
 	/**
 	 * Apply a explicit formula value at the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
 	 * @param methodRules
 	 *            the method rules to use
@@ -826,14 +821,14 @@ public class CellHandler {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void applyCustomizedRules(final Object o, final String methodRules)
+	protected static void applyCustomizedRules(final Object object, final String methodRules)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, CustomizedRulesException {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 
-		Method m = o.getClass().getDeclaredMethod(methodRules, argTypes);
+		Method m = object.getClass().getDeclaredMethod(methodRules, argTypes);
 
-		m.invoke(o, (Object[]) null);
+		m.invoke(object, (Object[]) null);
 	}
 
 	/* internal methods */
@@ -841,63 +836,48 @@ public class CellHandler {
 	/**
 	 * Recover the value from the Excel.
 	 * 
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell}
 	 * @return the content of the cell
 	 */
-	private static String readCell(final Cell c) {
-		if (c == null) {
+	private static String readCell(final Cell cell) {
+		if (cell == null) {
 			return null;
 		}
 
-		if (c.getCellType() == Cell.CELL_TYPE_STRING) {
-			return c.getStringCellValue();
+		if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+			return cell.getStringCellValue();
 		}
 
-		if (c.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-			Double value = c.getNumericCellValue();
+		if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+			Double value = cell.getNumericCellValue();
 			return value.toString();
 		}
 
-		if (c.getCellType() == Cell.CELL_TYPE_FORMULA) {
-			switch (c.getCachedFormulaResultType()) {
-			case Cell.CELL_TYPE_NUMERIC:
-				Double value = c.getNumericCellValue();
-				return value.toString();
-
-			case Cell.CELL_TYPE_STRING:
-				return c.getRichStringCellValue().toString();
-
-			default:
-				return null;
-			}
+		if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
+			return switchCachedFormulaManager(cell);
 		}
 		return null;
 	}
 
-	// TODO : to review
-	// source :
-	// http://stackoverflow.com/questions/1636759/poi-excel-applying-formulas-in-a-relative-way
-	protected void aab(Workbook workbook, Cell cell) {
-		String formula = cell.getCellFormula();
-		XSSFEvaluationWorkbook workbookWrapper = XSSFEvaluationWorkbook.create((XSSFWorkbook) workbook);
-		/* parse formula */
-		Ptg[] ptgs = FormulaParser.parse(formula, workbookWrapper, FormulaType.CELL,
-				0 /* sheet index */ );
+	/**
+	 * Manage the cached formula case.
+	 * 
+	 * @param cellthe
+	 *            {@link Cell}
+	 * @return the content of the cell
+	 */
+	private static String switchCachedFormulaManager(final Cell cell) {
+		switch (cell.getCachedFormulaResultType()) {
+		case Cell.CELL_TYPE_NUMERIC:
+			Double value = cell.getNumericCellValue();
+			return value.toString();
 
-		/* re-calculate cell references */
-		for (Ptg ptg : ptgs)
-			if (ptg instanceof RefPtgBase) // base class for cell reference
-											// "things"
-			{
-				RefPtgBase ref = (RefPtgBase) ptg;
-				if (ref.isColRelative())
-					ref.setColumn(ref.getColumn() + 0);
-				if (ref.isRowRelative())
-					ref.setRow(ref.getRow() + 1);
-			}
+		case Cell.CELL_TYPE_STRING:
+			return cell.getRichStringCellValue().toString();
 
-		formula = FormulaRenderer.toFormulaString(workbookWrapper, ptgs);
-		cell.setCellFormula(formula);
+		default:
+			return null;
+		}
 	}
 }
