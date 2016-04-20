@@ -16,7 +16,24 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 
 /**
- * This class manage the formula or value to apply to one cell.
+ * This class manage the formula or value to apply to one cell.<br>
+ * <br>
+ * 
+ * You can apply a formula by :<br>
+ * (1) <b>Create a basic formula</b><br>
+ * To create a basic <i>formula</i> using the Excel orientation is simple as “H3
+ * * 1.21”<br>
+ * 
+ * (2) <b>Using the generic function in a formula</b><br>
+ * Apply a generic Excel functions: <i>formula</i> as “SUM(E3,F3,G3)”.<br>
+ * 
+ * (3) <b>Create your own formula</b><br>
+ * You have to declare a method where the name start with “formula” + the field
+ * will appear at the excel. <br>
+ * <br>
+ * 
+ * You will need to indicate to jexan you are declaring a field such the type is
+ * a <i>formula</i>, active the attribute <i>isFormula</i> as true.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -32,24 +49,24 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void stringHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void stringHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
+			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
+				cell.setCellValue((Long) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
-			c.setCellValue((String) configCriteria.getField().get(o));
+			cell.setCellValue((String) configCriteria.getField().get(object));
 		}
 	}
 
@@ -58,24 +75,24 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void shortHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void shortHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
+			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
+				cell.setCellValue((Short) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
-			c.setCellValue((Short) configCriteria.getField().get(o));
+			cell.setCellValue((Short) configCriteria.getField().get(object));
 		}
 	}
 
@@ -84,24 +101,24 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void integerHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void integerHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
+			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
+				cell.setCellValue((Long) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
-			c.setCellValue((Integer) configCriteria.getField().get(o));
+			cell.setCellValue((Integer) configCriteria.getField().get(object));
 		}
 	}
 
@@ -110,24 +127,24 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void longHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void longHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
+			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
-				c.setCellValue((Long) toExplicitFormula(o, configCriteria.getField()));
+				cell.setCellValue((Long) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// apply the value
-			c.setCellValue((Long) configCriteria.getField().get(o));
+			cell.setCellValue((Long) configCriteria.getField().get(object));
 		}
 	}
 
@@ -136,24 +153,24 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void floatHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void floatHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
-			if (!toFormula(configCriteria, c)) {
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
+			if (!toFormula(configCriteria, cell)) {
+				cell.setCellValue((Double) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// normal manage cell
-			c.setCellValue((Float) configCriteria.getField().get(o));
+			cell.setCellValue((Float) configCriteria.getField().get(object));
 		}
 	}
 
@@ -162,28 +179,29 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void doubleHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void doubleHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
-			if (!toFormula(configCriteria, c)) {
+			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
+				cell.setCellValue((Double) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// normal manage cell
 			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-				c.setCellValue(Double.valueOf(df.format((Double) configCriteria.getField().get(o)).replace(",", ".")));
+				cell.setCellValue(Double.valueOf(df.format((Double) configCriteria.getField().get(object))
+						.replace(Constants.COMMA, Constants.DOT)));
 			} else {
-				c.setCellValue((Double) configCriteria.getField().get(o));
+				cell.setCellValue((Double) configCriteria.getField().get(object));
 			}
 		}
 	}
@@ -193,32 +211,32 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	protected static void bigDecimalHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void bigDecimalHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
-			if (!toFormula(configCriteria, c)) {
-				c.setCellValue((Double) toExplicitFormula(o, configCriteria.getField()));
+			if (!toFormula(configCriteria, cell)) {
+				cell.setCellValue((Double) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
 			// normal manage cell
-			BigDecimal bd = (BigDecimal) configCriteria.getField().get(o);
+			BigDecimal bd = (BigDecimal) configCriteria.getField().get(object);
 
 			if (bd != null) {
 				Double dBigDecimal = bd.doubleValue();
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-					c.setCellValue(Double.valueOf(df.format(dBigDecimal).replace(",", ".")));
+					cell.setCellValue(Double.valueOf(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT)));
 				} else {
-					c.setCellValue(dBigDecimal);
+					cell.setCellValue(dBigDecimal);
 				}
 			}
 		}
@@ -229,23 +247,23 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws IllegalAccessException
 	 */
-	protected static void booleanHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void booleanHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws IllegalAccessException {
-		Boolean bBoolean = (Boolean) configCriteria.getField().get(o);
+		Boolean bBoolean = (Boolean) configCriteria.getField().get(object);
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 			// apply format mask defined at transform mask
-			String[] split = configCriteria.getElement().transformMask().split("/");
-			c.setCellValue(bBoolean == null ? "" : (bBoolean ? split[0] : split[1]));
+			String[] split = configCriteria.getElement().transformMask().split(Constants.SLASH);
+			cell.setCellValue(bBoolean == null ? StringUtils.EMPTY : (bBoolean ? split[0] : split[1]));
 
 		} else {
 			// locale mode
-			c.setCellValue((bBoolean == null ? "" : bBoolean).toString());
+			cell.setCellValue((bBoolean == null ? StringUtils.EMPTY : bBoolean).toString());
 		}
 	}
 
@@ -254,26 +272,26 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void dateHandler(final XConfigCriteria configCriteria, final Object o, final Cell c)
+	protected static void dateHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws IllegalAccessException, ConverterException {
-		Date date = (Date) configCriteria.getField().get(o);
+		Date date = (Date) configCriteria.getField().get(object);
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 			// apply transformation mask
 			String decorator = configCriteria.getElement().transformMask();
-			convertDate(c, date, decorator);
+			convertDate(cell, date, decorator);
 		} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
 			// apply format mask
-			c.setCellValue(date);
+			cell.setCellValue(date);
 		} else {
 			// apply default date mask
-			c.setCellValue(date);
+			cell.setCellValue(date);
 		}
 	}
 
@@ -284,31 +302,31 @@ class CellFormulaHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell c)
+	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		boolean isFormulaApplied = false;
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
-			if (configCriteria.getElement().formula().contains("idx")) {
-				c.setCellFormula(
-						configCriteria.getElement().formula().replace("idx", String.valueOf(c.getRowIndex() + 1)));
+			if (configCriteria.getElement().formula().contains(Constants.INDX)) {
+				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.INDX,
+						String.valueOf(cell.getRowIndex() + 1)));
 				isFormulaApplied = true;
 
-			} else if (configCriteria.getElement().formula().contains("idy")) {
-				c.setCellFormula(configCriteria.getElement().formula().replace("idy",
-						String.valueOf(CellReference.convertNumToColString(c.getColumnIndex()))));
+			} else if (configCriteria.getElement().formula().contains(Constants.INDY)) {
+				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.INDY,
+						String.valueOf(CellReference.convertNumToColString(cell.getColumnIndex()))));
 				isFormulaApplied = true;
 
 			} else {
-				c.setCellFormula(configCriteria.getElement().formula());
+				cell.setCellFormula(configCriteria.getElement().formula());
 				isFormulaApplied = true;
 			}
 		}
@@ -319,30 +337,31 @@ class CellFormulaHandler {
 	/**
 	 * Apply a explicit formula value at the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the field
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-	private static Object toExplicitFormula(final Object o, final Field f)
+	private static Object toExplicitFormula(final Object object, final Field field)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 
-		String method = "formula" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+		String method = Constants.FORMULA + field.getName().substring(0, 1).toUpperCase()
+				+ field.getName().substring(1);
 
-		Method m = o.getClass().getDeclaredMethod(method, argTypes);
+		Method m = object.getClass().getDeclaredMethod(method, argTypes);
 
-		return m.invoke(o, (Object[]) null);
+		return m.invoke(object, (Object[]) null);
 	}
 
 	/**
 	 * Convert date to mask decorator.
 	 * 
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @param date
 	 *            the {@link Date}
@@ -350,7 +369,8 @@ class CellFormulaHandler {
 	 *            the mask to apply
 	 * @throws ConverterException
 	 */
-	private static void convertDate(final Cell c, final Date date, final String decorator) throws ConverterException {
+	private static void convertDate(final Cell cell, final Date date, final String decorator)
+			throws ConverterException {
 		try {
 			SimpleDateFormat dt = new SimpleDateFormat(decorator);
 
@@ -360,7 +380,7 @@ class CellFormulaHandler {
 				// launch exception
 				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
 			}
-			c.setCellValue(dateFormated);
+			cell.setCellValue(dateFormated);
 
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
