@@ -1,12 +1,18 @@
 package net.ceos.project.poi.annotated.core;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 import org.apache.poi.ss.usermodel.Cell;
 
 import net.ceos.project.poi.annotated.functional.interfaces.CellConsumer;
 
+/**
+ * Manage all the default type of values to apply to one cell.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
 class CellValueHandler {
 
 	private static CellConsumer<Cell, String> stringValueConsumer = (c, v) -> c.setCellValue(v);
