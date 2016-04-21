@@ -238,7 +238,7 @@ public class CGen implements IGeneratorCSV {
 
 		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) field.get(object), fM, tM));
+			configCriteria.getContent().put(idx, CsvHandler.toDouble((Double) field.get(object), fM, tM));
 			isUpdated = true;
 
 		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
