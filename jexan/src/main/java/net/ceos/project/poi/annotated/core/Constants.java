@@ -18,6 +18,10 @@ class Constants {
 	protected static final String INDX = "idx";
 	protected static final String GET = "get";
 
+	protected static final String END_OF_LINE = "\r\n";
+	
+	protected static final String DD_MMM_YYYY_HH_MM_SS = "dd-MMM-yyyy HH:mm:ss";
+	
 	private Constants() {
 		/* private constructor to hide the implicit public */
 	}
