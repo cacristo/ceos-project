@@ -340,6 +340,9 @@ public class CGen implements IGeneratorCSV {
 			isUpdated = true;
 
 		}
+		/* set disabled the accessible object */
+		field.setAccessible(false);
+
 		return isUpdated;
 	}
 
