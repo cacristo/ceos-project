@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -29,12 +28,6 @@ import net.ceos.project.poi.annotated.exception.ConverterException;
 import net.ceos.project.poi.annotated.exception.ElementException;
 
 public class CGen implements IGeneratorCSV {
-
-	private static final String SLASH = "/";
-	private static final String DOT = ".";
-	private static final String COMMA = ",";
-	private static final String END_OF_LINE = "\r\n";
-	private static final String DEFAULT_DATE = "dd-MMM-yyyy HH:mm:ss";
 
 	/**
 	 * Get the runtime class of the object passed as parameter.
@@ -133,14 +126,14 @@ public class CGen implements IGeneratorCSV {
 			fW.append(values.get(integer));
 			isFirst = false;
 		}
-		fW.append(END_OF_LINE);
+		fW.append(Constants.END_OF_LINE);
 	}
 
 	/**
 	 * Initialize an cell according the type of field and the PropagationType is
 	 * PROPAGATION_HORIZONTAL.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
 	 * @param field
 	 *            the field
@@ -159,21 +152,21 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws IOException
 	 */
-	private int initializeField(final CConfigCriteria configCriteria, final Object o, final Field field,
+	private int initializeField(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final XlsElement xlsAnnotation, final int idx) throws IllegalAccessException, NoSuchMethodException,
 					InvocationTargetException, ConverterException, InstantiationException, IOException {
 
-		/* make the field accessible to recover the value */
+		/* set enabled the accessible object */
 		field.setAccessible(true);
 
 		int counter = 0;
 
 		Class<?> fT = field.getType();
 
-		boolean isAppliedToBaseObject = applyBaseObject(configCriteria, o, fT, field, xlsAnnotation, idx);
+		boolean isAppliedToBaseObject = toCsv(configCriteria, object, fT, field, xlsAnnotation, idx);
 
 		if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-			Object nO = field.get(o);
+			Object nO = field.get(object);
 
 			/* manage null objects */
 			if (nO == null) {
@@ -183,14 +176,177 @@ public class CGen implements IGeneratorCSV {
 
 			counter = marshal(configCriteria, nO, oC, null, idx - 1);
 		}
+		/* set disabled the accessible object */
+		field.setAccessible(false);
 
 		return counter;
 	}
 
 	/**
+	 * Export the object to the CSV file.
+	 * 
+	 * @param object
+	 *            the object
+	 * @param fT
+	 *            the field type
+	 * @param field
+	 *            the field
+	 * @param element
+	 *            the {@link XlsElement} annotation
+	 * @param idx
+	 *            the index of the field
+	 * @return true if the field has been updated, otherwise false
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 */
+	private boolean toCsv(final CConfigCriteria configCriteria, final Object object, final Class<?> fT,
+			final Field field, final XlsElement element, final int idx) throws IllegalAccessException,
+					ConverterException, NoSuchMethodException, InvocationTargetException {
+		/* flag which define if the cell was updated or not */
+		boolean isUpdated = false;
+
+		/* reading mask */
+		String tM = element.transformMask();
+		String fM = element.formatMask();
+
+		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
+			configCriteria.getContent().put(idx, CsvHandler.toDate((Date) field.get(object), fM, tM));
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(String) field.get(object) != null ? (String) field.get(object) : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName()) || CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(Short) field.get(object) != null ? ((Short) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(Integer) field.get(object) != null ? ((Integer) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(Long) field.get(object) != null ? ((Long) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
+			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) field.get(object), fM, tM));
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
+			configCriteria.getContent().put(idx, (BigDecimal) field.get(object) != null
+					? ((BigDecimal) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(Float) field.get(object) != null ? ((Float) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
+			configCriteria.getContent().put(idx,
+					(Boolean) field.get(object) != null ? ((Boolean) field.get(object)).toString() : StringUtils.EMPTY);
+			isUpdated = true;
+
+		} else if (fT.isEnum()) {
+			configCriteria.getContent().put(idx, CsvHandler.toEnum(object, field));
+			isUpdated = true;
+
+		}
+		return isUpdated;
+
+	}
+
+	/**
+	 * Import the CSV file into the object.
+	 * 
+	 * @param object
+	 *            the object
+	 * @param fT
+	 *            the field type
+	 * @param field
+	 *            the field
+	 * @param xlsAnnotation
+	 *            the {@link XlsElement} annotation
+	 * @param values
+	 *            the array with the content at one line
+	 * @param idx
+	 *            the index of the field
+	 * @return true if the field has been updated, otherwise false
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws ConverterException
+	 * @throws ParseException
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private boolean toObject(final Object object, final Class<?> fT, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws IllegalAccessException, ConverterException, ParseException {
+		/* flag which define if the cell was updated or not */
+		boolean isUpdated = false;
+
+		/* set enabled the accessible object */
+		field.setAccessible(true);
+
+		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
+			CsvHandler.dateReader(object, field, xlsAnnotation, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
+			CsvHandler.stringReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName()) || CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
+			CsvHandler.shortReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
+			CsvHandler.integerReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
+			CsvHandler.longReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
+			CsvHandler.doubleReader(object, field, xlsAnnotation, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
+			CsvHandler.bigDecimalReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
+			CsvHandler.floatReader(object, field, values, idx);
+			isUpdated = true;
+
+		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
+				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
+			CsvHandler.booleanReader(object, field, xlsAnnotation, values, idx);
+			isUpdated = true;
+
+		} else if (fT.isEnum()) {
+			field.set(object, Enum.valueOf((Class<Enum>) fT, values[idx]));
+			isUpdated = true;
+
+		}
+		return isUpdated;
+	}
+
+	/**
 	 * Convert the object to file.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
 	 * @param oC
 	 *            the object class
@@ -251,7 +407,7 @@ public class CGen implements IGeneratorCSV {
 	/**
 	 * Convert the file into object.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
 	 * @param oC
 	 *            the object class
@@ -265,8 +421,9 @@ public class CGen implements IGeneratorCSV {
 	 * @throws InstantiationException
 	 * @throws ParseException
 	 */
-	private int unmarshal(final CConfigCriteria configCriteria, final Object o, final Class<?> oC, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
+	private int unmarshal(final CConfigCriteria configCriteria, final Object object, final Class<?> oC,
+			final String[] values, final int idx)
+					throws IllegalAccessException, ConverterException, InstantiationException, ParseException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int index = idx;
@@ -288,7 +445,7 @@ public class CGen implements IGeneratorCSV {
 				 */
 				counter++;
 
-				boolean isAppliedToBaseObject = applyBaseCsvObject(o, fT, field, xlsAnnotation, values,
+				boolean isAppliedToBaseObject = toObject(object, fT, field, xlsAnnotation, values,
 						index + xlsAnnotation.position());
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
@@ -299,8 +456,14 @@ public class CGen implements IGeneratorCSV {
 					int internalCellCounter = unmarshal(configCriteria, subObjbect, subObjbectClass, values,
 							index + xlsAnnotation.position() - 1);
 
+					/* set enabled the accessible object */
+					field.setAccessible(true);
+
 					/* add the sub object to the parent object */
-					field.set(o, subObjbect);
+					field.set(object, subObjbect);
+
+					/* set disabled the accessible object */
+					field.setAccessible(false);
 
 					/* update the index */
 					index += internalCellCounter;
@@ -308,386 +471,6 @@ public class CGen implements IGeneratorCSV {
 			}
 		}
 		return counter;
-	}
-
-	/**
-	 * Export the object to the CSV file.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param fT
-	 *            the field type
-	 * @param field
-	 *            the field
-	 * @param element
-	 *            the {@link XlsElement} annotation
-	 * @param idx
-	 *            the index of the field
-	 * @return true if the field has been updated, otherwise false
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 * @throws NoSuchMethodException
-	 * @throws InvocationTargetException
-	 */
-	private boolean applyBaseObject(final CConfigCriteria configCriteria, final Object o, final Class<?> fT,
-			final Field field, final XlsElement element, final int idx) throws IllegalAccessException, ConverterException,
-					NoSuchMethodException, InvocationTargetException {
-		/* flag which define if the cell was updated or not */
-		boolean isUpdated = false;
-
-		/* reading mask */
-		String tM = element.transformMask();
-		String fM = element.formatMask();
-
-		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, CsvUtils.toDate((Date) field.get(o), fM, tM));
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, (String) field.get(o) != null ? (String) field.get(o) : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(Short) field.get(o) != null ? ((Short) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(Integer) field.get(o) != null ? ((Integer) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(Long) field.get(o) != null ? ((Long) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
-			configCriteria.getContent().put(idx, CsvUtils.toDouble((Double) field.get(o), fM, tM));
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(BigDecimal) field.get(o) != null ? ((BigDecimal) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(Float) field.get(o) != null ? ((Float) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
-			configCriteria.getContent().put(idx,
-					(Boolean) field.get(o) != null ? ((Boolean) field.get(o)).toString() : StringUtils.EMPTY);
-			isUpdated = true;
-
-		} else if (fT.isEnum()) {
-			configCriteria.getContent().put(idx, CsvUtils.toEnum(o, field));
-			isUpdated = true;
-
-		}
-		return isUpdated;
-
-	}
-
-	/**
-	 * Import the CSV file into the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param fT
-	 *            the field type
-	 * @param field
-	 *            the field
-	 * @param xlsAnnotation
-	 *            the {@link XlsElement} annotation
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @return true if the field has been updated, otherwise false
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 * @throws ParseException
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private boolean applyBaseCsvObject(final Object o, final Class<?> fT, final Field field, final XlsElement xlsAnnotation,
-			final String[] values, final int idx) throws IllegalAccessException, ConverterException, ParseException {
-		/* flag which define if the cell was updated or not */
-		boolean isUpdated = false;
-
-		field.setAccessible(true);
-
-		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
-			manageDate(o, field, xlsAnnotation, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
-			manageString(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
-			manageShort(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
-			manageInteger(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
-			manageLong(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
-			manageDouble(o, field, xlsAnnotation, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
-			manageBigDecimal(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
-			manageFloat(o, field, values, idx);
-			isUpdated = true;
-
-		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
-			manageBoolean(o, field, xlsAnnotation, values, idx);
-			isUpdated = true;
-
-		} else if (fT.isEnum()) {
-			field.set(o, Enum.valueOf((Class<Enum>) fT, values[idx]));
-			isUpdated = true;
-
-		}
-		return isUpdated;
-	}
-
-	/**
-	 * Apply a Date value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param xlsAnnotation
-	 *            the {@link XlsElement} annotation
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 * @throws ConverterException
-	 */
-	private void manageDate(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException {
-		String date = values[idx];
-		if (StringUtils.isNotBlank(date)) {
-
-			String tM = xlsAnnotation.transformMask();
-			String fM = xlsAnnotation.formatMask();
-			String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? DEFAULT_DATE : fM) : tM;
-
-			SimpleDateFormat dt = new SimpleDateFormat(decorator);
-			try {
-				Date dateConverted = dt.parse(date);
-				field.set(o, dateConverted);
-			} catch (ParseException e) {
-				/*
-				 * if date decorator do not match with a valid mask launch
-				 * exception
-				 */
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
-			}
-		}
-	}
-
-	/**
-	 * Apply a String value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageString(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		field.set(o, values[idx]);
-	}
-
-	/**
-	 * Apply a Short value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageShort(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		String iValue = values[idx];
-		if (StringUtils.isNotBlank(iValue)) {
-			field.set(o, Short.valueOf(iValue));
-		}
-	}
-
-	/**
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageInteger(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		String iValue = values[idx];
-		if (StringUtils.isNotBlank(iValue)) {
-			field.set(o, Integer.valueOf(iValue));
-		}
-	}
-
-	/**
-	 * Apply a Long value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageLong(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		String dValue = values[idx];
-		if (StringUtils.isNotBlank(dValue)) {
-			field.set(o, Double.valueOf(dValue).longValue());
-		}
-	}
-
-	/**
-	 * Apply a Double value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param xlsAnnotation
-	 *            the {@link XlsElement} annotation
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageDouble(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException {
-		String dPValue = values[idx];
-		if (StringUtils.isNotBlank(dPValue)) {
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				field.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
-			} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-				field.set(o, Double.parseDouble(dPValue.replace(COMMA, DOT)));
-			} else {
-				field.set(o, Double.parseDouble(dPValue));
-			}
-		}
-	}
-
-	/**
-	 * Apply a BigDecimal value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageBigDecimal(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		String dBdValue = values[idx];
-		if (dBdValue != null) {
-			field.set(o, BigDecimal.valueOf(Double.valueOf(dBdValue)));
-		}
-	}
-
-	/**
-	 * Apply a Float value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageFloat(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		String fValue = values[idx];
-		if (StringUtils.isNotBlank(fValue)) {
-			field.set(o, Float.valueOf(fValue));
-		}
-	}
-
-	/**
-	 * Apply a Boolean value to the object.
-	 * 
-	 * @param o
-	 *            the object
-	 * @param field
-	 *            the field
-	 * @param xlsAnnotation
-	 *            the {@link XlsElement} annotation
-	 * @param values
-	 *            the array with the content at one line
-	 * @param idx
-	 *            the index of the field
-	 * @throws IllegalAccessException
-	 */
-	private void manageBoolean(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException {
-		String bool = values[idx];
-
-		if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-			/* apply format mask defined at transform mask */
-			String[] split = xlsAnnotation.transformMask().split(SLASH);
-			field.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
-
-		} else {
-			/* locale mode */
-			field.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
-		}
 	}
 
 	/* ######################## Marshal methods ########################## */
