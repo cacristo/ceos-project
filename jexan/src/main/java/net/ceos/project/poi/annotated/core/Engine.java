@@ -17,10 +17,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jaexcel.framework.JAEX.configuration.Configuration;
 
@@ -298,13 +300,42 @@ public class Engine implements IEngine {
 				startCell = endCell = idxC;
 			}
 
-			/* initialize master header cell */
+			/* initialize nested header cell */
 			CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, startCell, annotation.title());
 
-			/* merge region of the master header cell */
-			configCriteria.getSheet().addMergedRegion(new CellRangeAddress(startRow, endRow, startCell, endCell));
+			/* merge region of the nested header cell */
+			CellRangeAddress range = new CellRangeAddress(startRow, endRow, startCell, endCell);
+			configCriteria.getSheet().addMergedRegion(range);
 
+			/* apply the border to the nested header cell */
+			applyBorderToRegion(configCriteria, range);
 		}
+	}
+
+	/**
+	 * Apply the border to region according the {@link CellStyle}
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param range
+	 *            the {@link CellRangeAddress}
+	 */
+	private void applyBorderToRegion(final XConfigCriteria configCriteria, CellRangeAddress range) {
+		RegionUtil.setBorderBottom(
+				configCriteria.getStylesMap().get(CellStyleHandler.CELL_DECORATOR_HEADER).getBorderBottom(), range,
+				configCriteria.getSheet(), configCriteria.getWorkbook());
+
+		RegionUtil.setBorderTop(
+				configCriteria.getStylesMap().get(CellStyleHandler.CELL_DECORATOR_HEADER).getBorderTop(), range,
+				configCriteria.getSheet(), configCriteria.getWorkbook());
+
+		RegionUtil.setBorderLeft(
+				configCriteria.getStylesMap().get(CellStyleHandler.CELL_DECORATOR_HEADER).getBorderLeft(), range,
+				configCriteria.getSheet(), configCriteria.getWorkbook());
+
+		RegionUtil.setBorderRight(
+				configCriteria.getStylesMap().get(CellStyleHandler.CELL_DECORATOR_HEADER).getBorderRight(), range,
+				configCriteria.getSheet(), configCriteria.getWorkbook());
 	}
 
 	/**
@@ -820,11 +851,11 @@ public class Engine implements IEngine {
 		for (Field f : fL) {
 			/* update field at ConfigCriteria */
 			configCriteria.setField(f);
-			
+
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
-		
+
 		/* disable the resize */
 		configCriteria.setResizeActive(false);
 
@@ -910,6 +941,7 @@ public class Engine implements IEngine {
 				/* create the row */
 				Row row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
 				if (row == null) {
+					/* header treatment with nested header */
 					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
 					row = initializeRow(configCriteria.getSheet(), indexRow + xlsAnnotation.position());
@@ -921,10 +953,12 @@ public class Engine implements IEngine {
 					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
 							xlsAnnotation.title());
 
-				} /*
-					 * else { row = configCriteria.getSheet().getRow(indexRow +
-					 * xlsAnnotation.position()); }
-					 */
+				} else {
+					/* header treatment without nested header */
+					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
+							xlsAnnotation.title());
+				}
+
 				/* prepare the column width */
 				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
 					configCriteria.getColumnWidthMap().put(indexCell + xlsAnnotation.position(),
@@ -942,7 +976,7 @@ public class Engine implements IEngine {
 		for (Field f : fL) {
 			/* update field at ConfigCriteria */
 			configCriteria.setField(f);
-			
+
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
@@ -1638,7 +1672,7 @@ public class Engine implements IEngine {
 				XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
 				config = initializeSheetConfiguration(xlsAnnotation);
 				configCriteria.setCascadeLevel(config.getCascadeLevel());
-				//initializeXlsSheet(configCriteria, xlsAnnotation);
+				// initializeXlsSheet(configCriteria, xlsAnnotation);
 			}
 
 			// initialize rows according the PropagationType
