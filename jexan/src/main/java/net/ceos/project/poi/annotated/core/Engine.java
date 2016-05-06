@@ -744,10 +744,16 @@ public class Engine implements IEngine {
 				indexCell += initializeCellByFieldHorizontal(configCriteria, o, idxR,
 						indexCell + xlsAnnotation.position(), cL);
 			}
+		}
 
+		for (Field f : fL) {
+			/* update field at ConfigCriteria */
+			configCriteria.setField(f);
+			
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
+		
 		/* disable the resize */
 		configCriteria.setResizeActive(false);
 
@@ -860,10 +866,16 @@ public class Engine implements IEngine {
 				indexRow += initializeCellByFieldVertical(configCriteria, o, row, indexRow + xlsAnnotation.position(),
 						indexCell, cL);
 			}
+		}
 
+		for (Field f : fL) {
+			/* update field at ConfigCriteria */
+			configCriteria.setField(f);
+			
 			/* Process @XlsFreeElement */
 			processXlsFreeElement(configCriteria, o, cL, f);
 		}
+
 		/* disable the resize */
 		configCriteria.setResizeActive(false);
 
