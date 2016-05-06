@@ -272,7 +272,12 @@ public class Engine implements IEngine {
 			/* if row null is necessary to create it */
 			Row row = r;
 			if (row == null) {
-				row = initializeRow(configCriteria.getSheet(), idxR);
+				/* check if the row already exist */
+				row = configCriteria.getSheet().getRow(idxR);
+				if (row == null) {
+					/* create a new row */
+					row = initializeRow(configCriteria.getSheet(), idxR);
+				}
 			}
 
 			/* validation of configuration */
