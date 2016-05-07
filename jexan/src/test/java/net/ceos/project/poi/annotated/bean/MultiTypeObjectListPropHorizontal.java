@@ -4,18 +4,20 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
+import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
+@XlsConfiguration(nameFile="pelotas")
 @XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL)
 public class MultiTypeObjectListPropHorizontal {
 
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", customizedRules="rules", position = 2)
+	@XlsElement(title = "String value", /*customizedRules="rules",*/ position = 2)
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3)

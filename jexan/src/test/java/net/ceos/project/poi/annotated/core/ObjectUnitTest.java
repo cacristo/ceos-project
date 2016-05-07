@@ -36,8 +36,12 @@ public class ObjectUnitTest {
 		collection.add(new ObjectUnit("Drive 500GB", 84.87, 111.99, 21, 100));
 		collection.add(new ObjectUnit("PenDrive 1TB", 164.22, 199.99, 21, 35));
 
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionObjectUnit");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, "CollectionObjectUnit", ExtensionFileType.XLS);
+		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
 
 	}
 }

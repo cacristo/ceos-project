@@ -161,8 +161,12 @@ public class MarshalUnmarshalTest {
 	public void testMarshalAsCollection() throws Exception {
 		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(500);
 
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionMultiType");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+		
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, "CollectionMultiType", ExtensionFileType.XLSX);
+		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**

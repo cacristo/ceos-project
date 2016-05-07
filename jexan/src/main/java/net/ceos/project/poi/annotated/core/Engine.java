@@ -24,7 +24,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jaexcel.framework.JAEX.configuration.Configuration;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsDecorator;
@@ -44,12 +43,6 @@ import net.ceos.project.poi.annotated.exception.ElementException;
 import net.ceos.project.poi.annotated.exception.SheetException;
 
 public class Engine implements IEngine {
-
-	/**
-	 * @deprecated
-	 */
-	@Deprecated
-	Configuration configuration;
 
 	/**
 	 * Get the runtime class of the object passed as parameter.
@@ -752,6 +745,119 @@ public class Engine implements IEngine {
 	}
 
 	/**
+	 * Process the annotation {@link XlsFreeElement}
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param o
+	 *            the object
+	 * @param oC
+	 *            the object class
+	 * @param f
+	 *            the field
+	 * @throws ElementException
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 */
+	private void processXlsFreeElement(final XConfigCriteria configCriteria, final Object o, final int cL,
+			final Field f) throws ElementException, ConverterException, CustomizedRulesException {
+
+		if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
+			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
+
+			/* validate the row/cell of the element */
+			if (PredicateFactory.isXlsFreeElementInvalid.test(xlsAnnotation)) {
+				throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+			}
+
+			/* header treatment */
+			if (xlsAnnotation.showTitle()) {
+				/* initialize the row position */
+				int idxRow = initializeHeaderRowPosition(xlsAnnotation.row(), xlsAnnotation.titleOrientation());
+				/* initialize the cell position */
+				int idxCell = initializeHeaderCellPosition(xlsAnnotation.cell(), xlsAnnotation.titleOrientation());
+				/* obtain/initialize the row */
+				Row row = configCriteria.getSheet().getRow(idxRow);
+				if (row == null) {
+					row = initializeRow(configCriteria.getSheet(), idxRow);
+				}
+
+				/*
+				 * check if the cell to be applied the element is empty
+				 * otherwise one exception will be launched
+				 */
+				if (row.getCell(idxCell) != null) {
+					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
+				}
+
+				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell,
+						xlsAnnotation.title());
+			}
+
+			/* prepare the column width */
+			if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
+				configCriteria.getColumnWidthMap().put(xlsAnnotation.cell() - 1, xlsAnnotation.columnWidthInUnits());
+			}
+
+			/* content treatment */
+			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.cell() - 1, cL);
+		}
+	}
+	
+	/**
+	 * Prepare the propagation horizontal:<br>
+	 * 1. initialize sheet <br>
+	 * 2. initialize header row <br>
+	 * 3. initialize row <br>
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @return
+	 * @throws SheetException
+	 */
+	private int preparePropagationHorizontal(final XConfigCriteria configCriteria) throws SheetException {
+		int idxRow;
+		if (configCriteria.getWorkbook().getNumberOfSheets() == 0
+				|| configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()) == null) {
+			configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
+			idxRow = configCriteria.getStartRow();
+			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
+			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
+
+		} else {
+			idxRow = configCriteria.getSheet().getLastRowNum() + 1;
+			configCriteria.setRowHeader(null);
+			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
+
+		}
+		return idxRow;
+	}
+
+	/**
+	 * Prepare the propagation vertical:<br>
+	 * 1. initialize sheet <br>
+	 * 2. define next cell index value <br>
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param idxCell
+	 *            the cell index
+	 * @return
+	 * @throws SheetException
+	 */
+	private int preparePropagationVertical(final XConfigCriteria configCriteria, int idxCell) throws SheetException {
+		int indexCell = idxCell;
+		if (configCriteria.getWorkbook().getNumberOfSheets() == 0
+				|| configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()) == null) {
+			configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
+			indexCell = configCriteria.getStartCell();
+		} else {
+			indexCell += 1;
+		}
+		return indexCell;
+	}
+	
+	/**
 	 * Convert the object to file with the PropagationType as
 	 * PROPAGATION_HORIZONTAL.
 	 * 
@@ -985,66 +1091,6 @@ public class Engine implements IEngine {
 		configCriteria.setResizeActive(false);
 
 		return counter;
-	}
-
-	/**
-	 * Process the annotation {@link XlsFreeElement}
-	 * 
-	 * @param configCriteria
-	 *            the {@link XConfigCriteria}
-	 * @param o
-	 *            the object
-	 * @param oC
-	 *            the object class
-	 * @param f
-	 *            the field
-	 * @throws ElementException
-	 * @throws ConverterException
-	 * @throws CustomizedRulesException
-	 */
-	private void processXlsFreeElement(final XConfigCriteria configCriteria, final Object o, final int cL,
-			final Field f) throws ElementException, ConverterException, CustomizedRulesException {
-
-		if (PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
-			XlsFreeElement xlsAnnotation = (XlsFreeElement) f.getAnnotation(XlsFreeElement.class);
-
-			/* validate the row/cell of the element */
-			if (PredicateFactory.isXlsFreeElementInvalid.test(xlsAnnotation)) {
-				throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
-			}
-
-			/* header treatment */
-			if (xlsAnnotation.showTitle()) {
-				/* initialize the row position */
-				int idxRow = initializeHeaderRowPosition(xlsAnnotation.row(), xlsAnnotation.titleOrientation());
-				/* initialize the cell position */
-				int idxCell = initializeHeaderCellPosition(xlsAnnotation.cell(), xlsAnnotation.titleOrientation());
-				/* obtain/initialize the row */
-				Row row = configCriteria.getSheet().getRow(idxRow);
-				if (row == null) {
-					row = initializeRow(configCriteria.getSheet(), idxRow);
-				}
-
-				/*
-				 * check if the cell to be applied the element is empty
-				 * otherwise one exception will be launched
-				 */
-				if (row.getCell(idxCell) != null) {
-					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
-				}
-
-				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell,
-						xlsAnnotation.title());
-			}
-
-			/* prepare the column width */
-			if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
-				configCriteria.getColumnWidthMap().put(xlsAnnotation.cell() - 1, xlsAnnotation.columnWidthInUnits());
-			}
-
-			/* content treatment */
-			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.cell() - 1, cL);
-		}
 	}
 
 	/**
@@ -1611,105 +1657,104 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects.
+	 * Generate the file from the collection of objects.
 	 * 
-	 * @param collection
-	 *            the collection of objects to apply at the workbook.
-	 * @param filename
-	 *            the file name
-	 * @param extensionFileType
-	 *            the file extension
+	 * @param listObject
+	 *            the collection of objects to apply at the file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
 	 * @throws Exception
 	 */
 	@Override
-	public void marshalAsCollection(final Collection<?> collection, final String filename,
-			final ExtensionFileType extensionFileType) throws Exception {
+	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws Exception {
 
-		// FIXME apply the ConfigCriteria, then remove cofiguration
-		// Temos que iniciar o config data neste ponto porque
-		// como estamos na escritura de uma coleccao
-		// temos que ter o nome e a extensao antes de iniciar o excel
-		configuration = new Configuration();
-		configuration.setExtensionFile(extensionFileType);
-		configuration.setNameFile(filename);
-		Configuration config = configuration;
-
+		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		configCriteria.setPropagation(config.getPropagationType());
-		configCriteria.setExtension(config.getExtensionFile());
 
-		// initialize Workbook
-		configCriteria.setWorkbook(initializeWorkbook(config.getExtensionFile()));
+		marshalAsCollectionAndSave(configCriteria, listObject, pathFile);
+	}
 
-		if (collection == null) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
-		}
-
-		try {
-			/* initialize the runtime class of the object */
-			Class<?> oC = initializeRuntimeClass(collection.iterator().next());
-			initializeCellStyleViaAnnotation(oC, configCriteria);
-		} catch (Exception e) {
-			throw new ElementException(ExceptionMessage.ElementException_EmptyObject.getMessage(), e);
-		}
-
-		// initialize style cell via default option
-		configCriteria.initializeCellDecorator();
+	/**
+	 * Generate the CSV file, based at {@link XConfigCriteria}, from the
+	 * collection of objects.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param listObject
+	 *            the collection of objects to apply at the file.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @throws Exception
+	 */
+	@Override
+	public void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
+			final String pathFile) throws Exception {
 
 		int idxRow;
 		int idxCell = 0;
 
-		@SuppressWarnings("rawtypes")
-		Iterator iterator = collection.iterator();
+		if (listObject == null || listObject.isEmpty()) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
+		Object objectRT;
+		try {
+			objectRT = listObject.stream().findFirst().get();
+		} catch (Exception e) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
 
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(objectRT);
+
+		/* initialize configuration data */
+		initializeConfigurationData(configCriteria, oC);
+
+		// initialize Workbook
+		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
+
+		// initialize style cell via annotation
+		initializeCellStyleViaAnnotation(oC, configCriteria);
+
+		// initialize style cell via default option
+		configCriteria.initializeCellDecorator();
+
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = listObject.iterator();
 		while (iterator.hasNext()) {
 			Object object = iterator.next();
-			// We get the class of the object
-			Class<?> objectClass = object.getClass();
-
-			// Process @XlsSheet
-			if (PredicateFactory.isAnnotationXlsSheetPresent.test(objectClass)) {
-				XlsSheet xlsAnnotation = (XlsSheet) objectClass.getAnnotation(XlsSheet.class);
-				config = initializeSheetConfiguration(xlsAnnotation);
-				configCriteria.setCascadeLevel(config.getCascadeLevel());
-				// initializeXlsSheet(configCriteria, xlsAnnotation);
-			}
 
 			// initialize rows according the PropagationType
-			if (PropagationType.PROPAGATION_HORIZONTAL.equals(config.getPropagationType())) {
-				idxCell = config.getStartCell();
-				if (configCriteria.getWorkbook().getNumberOfSheets() == 0
-						|| configCriteria.getWorkbook().getSheet(config.getTitleSheet()) == null) {
-					configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
-					idxRow = config.getStartRow();
-					configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
-					configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
-				} else {
-					idxRow = configCriteria.getSheet().getLastRowNum() + 1;
-					configCriteria.setRowHeader(null);
-					configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+				idxCell = configCriteria.getStartCell();
+				idxRow = preparePropagationHorizontal(configCriteria);
 
-				}
-				marshalAsPropagationHorizontal(configCriteria, object, objectClass, idxRow, idxCell, 0);
+				marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
+
 			} else {
-				idxRow = config.getStartRow();
-				if (configCriteria.getWorkbook().getNumberOfSheets() == 0
-						|| configCriteria.getWorkbook().getSheet(config.getTitleSheet()) == null) {
-					configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), config.getTitleSheet()));
-					idxCell = config.getStartCell();
-				} else {
-					idxCell += 1;
-				}
-				marshalAsPropagationVertical(configCriteria, object, objectClass, idxRow, idxCell, 0);
+				idxCell = preparePropagationVertical(configCriteria, idxCell);
+				idxRow = configCriteria.getStartRow();
+
+				marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 			}
 
 		}
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
 
-		// FIXME manage return value
-		workbookFileOutputStream(configCriteria.getWorkbook(),
-				"C:\\projects\\tests\\generated\\" + config.getNameFile() + config.getExtensionFile().getExtension());
+		/*
+		 * check if the path terminate with the file separator, otherwise will
+		 * be added to avoid any problem
+		 */
+		String internalPathFile = pathFile;
+		if (!pathFile.endsWith(File.separator)) {
+			internalPathFile = pathFile.concat(File.separator);
+		}
+
+		/* save the Workbook at a specified path (received as parameter) */
+		workbookFileOutputStream(configCriteria.getWorkbook(), internalPathFile + configCriteria.getCompleteFileName());
+
 	}
 
 	/* ######################## Unmarshal methods ######################## */
@@ -1897,71 +1942,4 @@ public class Engine implements IEngine {
 
 		return object;
 	}
-
-	/**
-	 * Initialize the configuration to apply at the Excel.
-	 * 
-	 * @deprecated s
-	 * @param oC
-	 *            the {@link Class<?>}
-	 * @return
-	 */
-	@Deprecated
-	private Configuration initializeConfigurationData(Class<?> oC) {
-		Configuration config = null;
-
-		/* Process @XlsConfiguration */
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
-			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
-			config = initializeConfiguration(xlsAnnotation);
-		}
-
-		/* Process @XlsSheet */
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
-			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			config = initializeSheetConfiguration(xlsAnnotation);
-		}
-		return config;
-	}
-
-	/**
-	 * Add the main xls configuration.
-	 * 
-	 * @deprecated s
-	 * @param config
-	 *            the {@link XlsConfiguration}
-	 * @return
-	 */
-	@Deprecated
-	private Configuration initializeConfiguration(XlsConfiguration config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setName(config.nameFile());
-		configuration.setNameFile(config.nameFile() + config.extensionFile().getExtension());
-		configuration.setExtensionFile(config.extensionFile());
-		return configuration;
-	}
-
-	/**
-	 * Add the sheet configuration.
-	 * 
-	 * @deprecated a
-	 * @param config
-	 *            the {@link XlsSheet}
-	 * @return
-	 */
-	@Deprecated
-	private Configuration initializeSheetConfiguration(XlsSheet config) {
-		if (configuration == null) {
-			configuration = new Configuration();
-		}
-		configuration.setTitleSheet(config.title());
-		configuration.setPropagationType(config.propagation());
-		configuration.setCascadeLevel(config.cascadeLevel());
-		configuration.setStartRow(config.startRow());
-		configuration.setStartCell(config.startCell());
-		return configuration;
-	}
-
 }

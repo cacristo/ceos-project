@@ -22,6 +22,7 @@ import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
@@ -34,6 +35,8 @@ public class ElementExceptionTest {
 
 	@DataProvider
 	public Object[][] collectionProvider() {
+		/* collection null */
+		List<Object> collectionNull = null;
 		/* Collection empty */
 		List<Object> collectionEmpty = new ArrayList<Object>();
 		/* Collection with object null */
@@ -42,6 +45,7 @@ public class ElementExceptionTest {
 		collection.add(so);
 		
 		return new Object[][] { 
+			{ collectionNull, "CollectionNull", ExtensionFileType.XLS },
 			{ collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS },
 			{ collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX }
 		};
@@ -99,26 +103,19 @@ public class ElementExceptionTest {
 	}
 
 	/**
-	 * Test an null list
-	 */
-	@Test(expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
-	public void testMarshalListNull() throws Exception {
-		List<Object> collectionNull = null;
-
-		IEngine en = new Engine();
-		en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
-	}
-
-	/**
 	 * Test an empty list & list with null object
 	 * 
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	@Test(dataProvider = "collectionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is empty. Make sure you are sending a correct object.")
-	public void testMarshalListEmpty(Collection collection, String fileName, ExtensionFileType extension) throws Exception {
+	@Test(dataProvider = "collectionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The entry object is null. Make sure you are sending a correct object.")
+	public void testMarshalList(Collection collection, String fileName, ExtensionFileType extension) throws Exception {
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName(fileName);
+		configCriteria.overrideExtensionType(extension);
+		
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, fileName, extension);
+		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 

@@ -108,19 +108,33 @@ public interface IEngine {
 			CustomizedRulesException, ConverterException, IOException;
 
 	/**
-	 * Generate the workbook from the collection of objects.
+	 * Generate the workbook from the collection of objects passed as parameter and save it at
+	 * the path send as parameter.
 	 * 
-	 * @param collection
-	 *            the collection of objects to apply at the workbook.
-	 * @param filename
-	 *            the file name
-	 * @param extensionFileType
-	 *            the file extension
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
 	 * @throws Exception
 	 */
-	void marshalAsCollection(final Collection<?> collection, final String filename, final ExtensionFileType extensionFileType)
-			throws Exception;
-
+	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws Exception;
+	
+	/**
+	 * Generate the workbook from the collection of objects passed as parameter and save it at
+	 * the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
+	 * @throws Exception
+	 */
+	void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
+			final String pathFile) throws Exception;
+	
+	
 	/* ######################## Unmarshal methods ######################## */
 
 	/**
