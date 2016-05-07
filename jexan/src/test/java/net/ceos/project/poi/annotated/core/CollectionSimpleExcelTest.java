@@ -121,7 +121,7 @@ public class CollectionSimpleExcelTest {
 		collectionSimpleObject.add(simpleObject2);
 		
 		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_simple_horiz" , ExtensionFileType.XLSX);
+		en.marshalAsCollectionAndSave(collectionSimpleObject, TestUtils.WORKING_DIR_GENERATED_II);
 /*
 		// start validation
 		Class<SimpleObject> oC = (Class<SimpleObject>) collectionSimpleObject.getClass();
@@ -293,8 +293,12 @@ public class CollectionSimpleExcelTest {
 		collectionSimpleObject.add(simpleObject);
 		collectionSimpleObject.add(simpleObject2);
 		
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("file_list_object_simple_vertical");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+		
 		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_simple_vertical" , ExtensionFileType.XLSX);
+		en.marshalAsCollectionAndSave(configCriteria, collectionSimpleObject, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	

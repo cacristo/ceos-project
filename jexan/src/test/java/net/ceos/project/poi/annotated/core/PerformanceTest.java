@@ -24,6 +24,10 @@ public class PerformanceTest {
 		List<PerformanceObject> collection = PerformanceObjectBuilder.buildListOfPerformanceObject(5000);
 
 		IEngine en = new Engine();
-		en.marshalAsCollection(collection, "performance_test_list", ExtensionFileType.XLS);
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("performance_test_list");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+		
+		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 }

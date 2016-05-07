@@ -74,15 +74,18 @@ public class CollectionMultiExcelTest {
 		collectionSimpleObject.add(fastTest1);
 		collectionSimpleObject.add(fastTest2);
 		collectionSimpleObject.add(fastTest3);
+		
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("file_list_object_multi_horizontal");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
 
 		Engine en = new Engine();
 		try {
-			en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_horizontal", ExtensionFileType.XLSX);
+			en.marshalAsCollectionAndSave(configCriteria, collectionSimpleObject, TestUtils.WORKING_DIR_GENERATED_II);
 		} catch (CustomizedRulesException e) {
 			assertEquals(e.getCause().getMessage(), "Pim Pam Pum!!");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			;
 		}
 	}
 
@@ -100,8 +103,11 @@ public class CollectionMultiExcelTest {
 		collectionSimpleObject.add(fastTest2);
 		// collectionSimpleObject.add(fastTest1);
 
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("file_list_object_multi_vertical");
+		
 		Engine en = new Engine();
-		en.marshalAsCollection(collectionSimpleObject, "file_list_object_multi_vertical", ExtensionFileType.XLSX);
+		en.marshalAsCollectionAndSave(configCriteria, collectionSimpleObject, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**

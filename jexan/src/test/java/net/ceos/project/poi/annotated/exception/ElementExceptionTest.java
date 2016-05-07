@@ -20,6 +20,7 @@ import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
@@ -63,9 +64,13 @@ public class ElementExceptionTest {
 	@Test(expected = ElementException.class)
 	public void testMarshalListNull() throws Exception {
 		List<Object> collectionNull = null;
-
+		
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionNull");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+		
 		IEngine en = new Engine();
-		en.marshalAsCollection(collectionNull, "CollectionNull", ExtensionFileType.XLS);
+		en.marshalAsCollectionAndSave(configCriteria, collectionNull, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -75,12 +80,15 @@ public class ElementExceptionTest {
 	 */
 	@Test(expected = ElementException.class)
 	public void testMarshalListEmpty() throws Exception {
-		IEngine en = new Engine();
-		
 		/* Collection empty */
 		List<Object> collectionEmpty = new ArrayList<Object>();
 		
-		en.marshalAsCollection(collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS);
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionEmpty");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+		
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, collectionEmpty, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -90,14 +98,18 @@ public class ElementExceptionTest {
 	 */
 	@Test(expected = ElementException.class)
 	public void testMarshalListWithElementEmpty() throws Exception {
-		IEngine en = new Engine();
-		
 		/* Collection with object null */
 		List<Object> collection = new ArrayList<Object>();
 		SimpleObject so = null;
 		collection.add(so);
+
 		
-		en.marshalAsCollection(collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX);
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionWithObjectEmpty");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+		
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
