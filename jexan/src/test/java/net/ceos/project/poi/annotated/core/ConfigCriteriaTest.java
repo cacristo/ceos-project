@@ -120,7 +120,7 @@ public class ConfigCriteriaTest {
 		
 		XConfigCriteria config = new XConfigCriteria();
 
-		config.setExtension(null);
+		config.overrideExtensionType(null);
 		config.overrideExtensionType(type);
 		
 		Assert.assertEquals(config.getExtension(), type);
