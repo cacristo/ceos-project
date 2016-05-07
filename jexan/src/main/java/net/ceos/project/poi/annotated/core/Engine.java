@@ -1658,8 +1658,6 @@ public class Engine implements IEngine {
 		Iterator iterator = listObject.iterator();
 		while (iterator.hasNext()) {
 			Object object = iterator.next();
-			// We get the class of the object
-			Class<?> objectClass = object.getClass();
 
 			// initialize rows according the PropagationType
 			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
