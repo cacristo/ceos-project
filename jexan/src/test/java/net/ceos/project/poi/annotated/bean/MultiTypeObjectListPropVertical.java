@@ -2,10 +2,13 @@ package net.ceos.project.poi.annotated.bean;
 
 import java.util.Date;
 
+import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
+@XlsConfiguration(nameFile = "file_list_object_multi_vert", extensionFile = ExtensionFileType.XLSX)
 @XlsSheet(title = "List multiple type obj vertical", propagation = PropagationType.PROPAGATION_VERTICAL)
 public class MultiTypeObjectListPropVertical {
 
