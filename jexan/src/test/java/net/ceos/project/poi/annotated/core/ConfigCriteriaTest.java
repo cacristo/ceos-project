@@ -58,7 +58,7 @@ public class ConfigCriteriaTest {
 
 		XConfigCriteria config = new XConfigCriteria();
 
-		config.setExtension(null);
+		config.overrideExtensionType(null);
 		config.overrideExtensionType(ExtensionFileType.XLSX);
 
 		Assert.assertEquals(config.getExtension(), ExtensionFileType.XLSX);

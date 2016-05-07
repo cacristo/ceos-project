@@ -316,7 +316,6 @@ public class XConfigCriteria {
 	 * @return the startRow
 	 */
 	protected int getStartRow() {
-		// to row 1 : return startRow - 2;
 		return startRow - 1;
 	}
 
@@ -332,7 +331,6 @@ public class XConfigCriteria {
 	 * @return the startCell
 	 */
 	protected int getStartCell() {
-		// to cell 1 : return startCell - 2;
 		return startCell - 1;
 	}
 
@@ -376,17 +374,21 @@ public class XConfigCriteria {
 
 
 	/**
+	 * Get the file name.
+	 * 
 	 * @return the fileName
 	 */
-	protected String getFileName() {
+	public String getFileName() {
 		return fileName;
 	}
 
 	/**
+	 * Set the file name.
+	 * 
 	 * @param fileName
 	 *            the fileName to set
 	 */
-	protected void setFileName(final String fileName) {
+	public void setFileName(final String fileName) {
 		this.fileName = fileName;
 	}
 
