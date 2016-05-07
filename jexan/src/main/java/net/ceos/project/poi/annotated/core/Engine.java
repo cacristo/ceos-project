@@ -107,9 +107,9 @@ public class Engine implements IEngine {
 	 * @return
 	 */
 	private void initializeXlsConfiguration(final XConfigCriteria configCriteria, final XlsConfiguration annotation) {
-		configCriteria.setFileName(annotation.nameFile());
-		configCriteria.setCompleteFileName(annotation.nameFile() + annotation.extensionFile().getExtension());
-		configCriteria.setExtension(annotation.extensionFile());
+		configCriteria.setFileName(StringUtils.isBlank(configCriteria.getFileName()) ? annotation.nameFile() : configCriteria.getFileName());
+		configCriteria.setExtension(configCriteria.getExtension() == null ? annotation.extensionFile() : configCriteria.getExtension());
+		configCriteria.setCompleteFileName(configCriteria.getFileName() + configCriteria.getExtension().getExtension());
 	}
 
 	/**
