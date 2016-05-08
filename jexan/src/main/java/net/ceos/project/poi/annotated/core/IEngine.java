@@ -107,6 +107,19 @@ public interface IEngine {
 			CustomizedRulesException, ConverterException, IOException;
 
 	/**
+	 * Generate the workbook from the object and return the byte[] generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link FileOutputStream} generated
+	 */
+	byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException;
+
+	/**
 	 * Generate the sheet from the collection of object and return the sheet generated.
 	 * 
 	 * @param listObject
@@ -181,7 +194,6 @@ public interface IEngine {
 	void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws Exception;
 
-
 	/**
 	 * Generate the workbook from the collection of objects and return the byte[] generated.
 	 * 
@@ -190,6 +202,17 @@ public interface IEngine {
 	 * @return the {@link FileOutputStream} generated
 	 */
 	byte[] marshalCollectionToByte(final Collection<?> listObject) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException;
+
+	/**
+	 * Generate the workbook from the collection of objects and return the byte[] generated.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link FileOutputStream} generated
+	 */
+	byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject) throws IllegalAccessException, InvocationTargetException,
 			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
 			CustomizedRulesException, ConverterException, IOException;
 
