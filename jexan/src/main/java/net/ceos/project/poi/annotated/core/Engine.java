@@ -562,43 +562,42 @@ public class Engine implements IEngine {
 		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.dateWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.stringWriter(configCriteria, o, cell);
-			
-		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
+
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName()) || CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.shortWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.integerWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.longWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.doubleWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.bigDecimalWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.floatWriter(configCriteria, o, cell);
-			
+
 		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.booleanWriter(configCriteria, o, cell);
-			
+
 		} else if (fT.isEnum()) {
 			cell = configCriteria.getRow().createCell(idxC);
 			isUpdated = CellHandler.enumWriter(configCriteria, o, cell);
@@ -635,43 +634,42 @@ public class Engine implements IEngine {
 		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
 			CellHandler.dateReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_STRING.equals(fT.getName())) {
 			CellHandler.stringReader(o, f, c);
 			isUpdated = true;
-			
-		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName())
-				|| CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
+
+		} else if (CellHandler.OBJECT_SHORT.equals(fT.getName()) || CellHandler.PRIMITIVE_SHORT.equals(fT.getName())) {
 			CellHandler.shortReader(o, f, c);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_INTEGER.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_INTEGER.equals(fT.getName())) {
 			CellHandler.integerReader(o, f, c);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_LONG.equals(fT.getName()) || CellHandler.PRIMITIVE_LONG.equals(fT.getName())) {
 			CellHandler.longReader(o, f, c);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_DOUBLE.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_DOUBLE.equals(fT.getName())) {
 			CellHandler.doubleReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_BIGDECIMAL.equals(fT.getName())) {
 			CellHandler.bigDecimalReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_FLOAT.equals(fT.getName()) || CellHandler.PRIMITIVE_FLOAT.equals(fT.getName())) {
 			CellHandler.floatReader(o, f, c);
 			isUpdated = true;
-			
+
 		} else if (CellHandler.OBJECT_BOOLEAN.equals(fT.getName())
 				|| CellHandler.PRIMITIVE_BOOLEAN.equals(fT.getName())) {
 			CellHandler.booleanReader(o, f, c, xlsAnnotation);
 			isUpdated = true;
-			
+
 		} else if (fT.isEnum()) {
 			CellHandler.enumReader(o, fT, f, c);
 			isUpdated = true;
@@ -1565,7 +1563,7 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the object passed as parameter and return the
+	 * Generate the workbook based the object passed as parameter and return the
 	 * respective {@link FileOutputStream}.
 	 * 
 	 * @param object
@@ -1589,6 +1587,36 @@ public class Engine implements IEngine {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
+		/* Generate the workbook from the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray(configCriteria.getWorkbook());
+	}
+
+	/**
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
+	 * passed as parameter and return the respective {@link FileOutputStream}.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 */
+	@Override
+	public byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException,
+			IOException {
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
@@ -1668,8 +1696,8 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the sheet based at the collection of objects passed as parameter and return the
-	 * sheet generated.
+	 * Generate the sheet based at the collection of objects passed as parameter
+	 * and return the sheet generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
@@ -1691,7 +1719,10 @@ public class Engine implements IEngine {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
-		/* Generate the workbook based at the list of objects passed as parameter */
+		/*
+		 * Generate the workbook based at the list of objects passed as
+		 * parameter
+		 */
 		marshalCollectionEngine(configCriteria, listObject);
 
 		/* Return the Sheet generated */
@@ -1699,8 +1730,9 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the sheet based at the {@link XConfigCriteria} and the collection of objects
-	 * passed as parameters and return the sheet generated.
+	 * Generate the sheet based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameters and return the sheet
+	 * generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
@@ -1721,7 +1753,10 @@ public class Engine implements IEngine {
 	public Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
 			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
-		/* Generate the workbook based at the list of objects passed as parameter */
+		/*
+		 * Generate the workbook based at the list of objects passed as
+		 * parameter
+		 */
 		marshalCollectionEngine(configCriteria, listObject);
 
 		/* Return the Sheet generated */
@@ -1729,8 +1764,8 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook based at the collection of objects passed as parameter and return
-	 * the workbook generated.
+	 * Generate the workbook based at the collection of objects passed as
+	 * parameter and return the workbook generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
@@ -1760,8 +1795,9 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook based at the {@link XConfigCriteria} and the collection of objects
-	 * passed as parameters and return the workbook generated.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameters and return the workbook
+	 * generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
@@ -1842,8 +1878,8 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter and return the
-	 * respective {@link FileOutputStream}.
+	 * Generate the workbook from the collection of objects passed as parameter
+	 * and return the respective {@link FileOutputStream}.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
@@ -1860,9 +1896,9 @@ public class Engine implements IEngine {
 	 * @throws IOException
 	 */
 	@Override
-	public byte[] marshalCollectionToByte(final Collection<?> listObject) throws IllegalAccessException, InvocationTargetException,
-			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
-			CustomizedRulesException, ConverterException, IOException {
+	public byte[] marshalCollectionToByte(final Collection<?> listObject) throws IllegalAccessException,
+			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
+			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
@@ -1872,8 +1908,36 @@ public class Engine implements IEngine {
 		/* Generate the byte array to return */
 		return workbookToByteAray(configCriteria.getWorkbook());
 	}
-	
-	
+
+	/**
+	 * Generate the workbook from the collection of objects passed as parameter
+	 * and return the respective {@link FileOutputStream}.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 */
+	@Override
+	public byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject) throws IllegalAccessException,
+			InvocationTargetException, InstantiationException, NoSuchMethodException, ElementException,
+			ConfigurationException, SheetException, CustomizedRulesException, ConverterException, IOException {
+		/* Generate the workbook from the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray(configCriteria.getWorkbook());
+	}
+
 	/* ######################## Unmarshal methods ######################## */
 
 	/**
