@@ -1,6 +1,6 @@
 # Welcome to ceos-project jexan.
 ------------------
-Manage POI using annotations. Manage excel files on the fly.
+Import/Export Excel files “on the fly”.
 
 
 Documentation
