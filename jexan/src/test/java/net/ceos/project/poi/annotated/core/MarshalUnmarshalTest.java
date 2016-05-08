@@ -133,15 +133,142 @@ public class MarshalUnmarshalTest {
 	 * return the byte[] generated.<br>
 	 */
 	@Test
-	public void testMarshalAsCollection() throws Exception {
-		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(500);
+	public void testMarshalToByteWithConfigCriteria() throws Exception {
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
+
+		XConfigCriteria configuration = new XConfigCriteria();
+		configuration.overrideExtensionType(ExtensionFileType.XLS);
+
+		IEngine en = new Engine();
+		byte[] generatedBytes = en.marshalToByte(configuration, mto);
+
+		Assert.assertNotNull(generatedBytes);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToSheet' to generate the Excel from the
+	 * collection of objects and return the {@link Sheet} generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToSheet() throws Exception {
+		List<MultiTypeObject> mto = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		IEngine en = new Engine();
+		Sheet s = en.marshalCollectionToSheet(mto);
+
+		Assert.assertNotNull(s);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToSheet', using {@link XConfigCriteria}
+	 * , to generate the Excel from the collection of objects and return the
+	 * {@link Sheet} generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToSheetWithConfigCriteria() throws Exception {
+		List<MultiTypeObject> mto = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		XConfigCriteria configuration = new XConfigCriteria();
+		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+
+		IEngine en = new Engine();
+		Sheet s = en.marshalCollectionToSheet(configuration, mto);
+
+		Assert.assertNotNull(s);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToWorkbook' to generate the Excel from
+	 * the collection of objects and return the {@link Workbook} generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToWorkbook() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		IEngine en = new Engine();
+		Workbook w = en.marshalCollectionToWorkbook(collection);
+
+		Assert.assertNotNull(w);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToWorkbook', using
+	 * {@link XConfigCriteria}, to generate the Excel from the object and return
+	 * the {@link Workbook} generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToWorkbookWithConfigCriteria() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		XConfigCriteria configuration = new XConfigCriteria();
+		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+
+		IEngine en = new Engine();
+		Workbook w = en.marshalCollectionToWorkbook(configuration, collection);
+
+		Assert.assertNotNull(w);
+	}
+
+	/**
+	 * Test the method 'marshalAsCollectionAndSave' to generate the Excel from
+	 * the collection of objects and save it at the path file indicated.
+	 */
+	@Test
+	public void testMarshalAsCollectionAndSave() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(collection, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test the method 'marshalAsCollectionAndSave', using
+	 * {@link XConfigCriteria}, to generate the Excel from the collection of
+	 * objects and save it at the path file indicated.
+	 */
+	@Test
+	public void testMarshalAsCollectionAndSaveWithConfigCriteria() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
 
 		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.setFileName("CollectionMultiType");
 		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
-		
+
 		IEngine en = new Engine();
 		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToByte' to generate the Excel from the
+	 * collection of objects and return the byte[] generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToByte() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		IEngine en = new Engine();
+		byte[] generatedBytes = en.marshalCollectionToByte(collection);
+
+		Assert.assertNotNull(generatedBytes);
+	}
+
+	/**
+	 * Test the method 'marshalCollectionToByte', using {@link XConfigCriteria},
+	 * to generate the Excel from the collection of objects and return the
+	 * byte[] generated.<br>
+	 */
+	@Test
+	public void testMarshalCollectionToByteWithConfigCriteria() throws Exception {
+		List<MultiTypeObject> collection = MultiTypeObjectBuilder.buildListOfMultiTypeObject(100);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.setFileName("CollectionMultiTypeII");
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+		
+		IEngine en = new Engine();
+		byte[] generatedBytes = en.marshalCollectionToByte(configCriteria, collection);
+
+		Assert.assertNotNull(generatedBytes);
 	}
 
 	/**
@@ -157,7 +284,7 @@ public class MarshalUnmarshalTest {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 		IEngine en = new Engine();
 		Workbook workbook = en.marshalToWorkbook(mto);
-		
+
 		MultiTypeObject charger = new MultiTypeObject();
 		IEngine en1 = new Engine();
 		en1.unmarshalFromWorkbook(charger, workbook);
@@ -178,7 +305,7 @@ public class MarshalUnmarshalTest {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 		IEngine en1 = new Engine();
 		byte[] generatedBytes = en1.marshalToByte(mto);
-		
+
 		MultiTypeObject charger = new MultiTypeObject();
 		IEngine en = new Engine();
 		en.unmarshalFromByte(charger, generatedBytes);
@@ -192,10 +319,16 @@ public class MarshalUnmarshalTest {
 	 */
 	@Test
 	public void testUnmarshalFromPath() throws Exception {
+		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
+		String outputPath = TestUtils.WORKING_DIR_GENERATED_I + "\\";
+
+		IEngine eW = new Engine();
+		eW.marshalAndSave(mto, outputPath);
+		
 		MultiTypeObject charger = new MultiTypeObject();
 
-		IEngine en = new Engine();
-		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
+		IEngine eR = new Engine();
+		eR.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 
 		MultiTypeObjectBuilder.validateMultiTypeObject(charger);
 	}
