@@ -5,9 +5,9 @@ import java.lang.annotation.Annotation;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 
-public interface XlsElementFactory {
+public class XlsElementFactory {
 
-	static XlsElement build(XlsFreeElement xlsAnnotation) {
+	static XlsElement build(final XlsFreeElement xlsAnnotation) {
 		return new XlsElement() {
 
 			@Override

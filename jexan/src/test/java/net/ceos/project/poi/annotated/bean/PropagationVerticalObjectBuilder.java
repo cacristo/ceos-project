@@ -45,7 +45,7 @@ public class PropagationVerticalObjectBuilder {
 	 */
 	public static List<PropagationVerticalObject> buildListOfPropagationVerticalObject(int entryNumber) {
 
-		List<PropagationVerticalObject> returnList = new ArrayList<>();
+		List<PropagationVerticalObject> returnList = new ArrayList<PropagationVerticalObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildPropagationVerticalObject(RandomUtils.nextInt(1, entryNumber)));
 		}

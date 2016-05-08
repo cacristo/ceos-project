@@ -40,7 +40,7 @@ public class ObjectNullBuilder {
 	 */
 	public static List<ObjectNull> buildListOfObjectNull(int entryNumber) {
 
-		List<ObjectNull> returnList = new ArrayList<>();
+		List<ObjectNull> returnList = new ArrayList<ObjectNull>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildObjectNull(RandomUtils.nextInt(1, entryNumber)));
 		}

@@ -49,7 +49,7 @@ public class BasicObjectBuilder {
 	 */
 	public static List<BasicObject> buildListOfBasicObject(int entryNumber) {
 
-		List<BasicObject> returnList = new ArrayList<>();
+		List<BasicObject> returnList = new ArrayList<BasicObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildBasicObject(RandomUtils.nextInt(1, entryNumber)));
 		}

@@ -46,7 +46,7 @@ public class FreeElementAdvancedObjectBuilder {
 	 */
 	public static List<FreeElementAdvancedObject> buildListOfFreeElementAdvancedObject(int entryNumber) {
 
-		List<FreeElementAdvancedObject> returnList = new ArrayList<>();
+		List<FreeElementAdvancedObject> returnList = new ArrayList<FreeElementAdvancedObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildFreeElementAdvancedObject(RandomUtils.nextInt(1, entryNumber)));
 		}

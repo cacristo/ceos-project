@@ -86,7 +86,7 @@ public class CGenTest {
 	 */
 	@Test
 	public void testUnmarshalAsCollection() throws Exception {
-		List<MultiTypeObject> charged = new ArrayList<>();
+		List<MultiTypeObject> charged = new ArrayList<MultiTypeObject>();
 		
 		IGeneratorCSV en = new CGen();
 		en.unmarshalAsCollectionFromPath(MultiTypeObject.class, charged, TestUtils.WORKING_DIR_GENERATED_II);
@@ -117,7 +117,7 @@ public class CGenTest {
 
 	@Test
 	public void testMarshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> listMulti = new ArrayList<>();
+		List<MultiTypeObject> listMulti = new ArrayList<MultiTypeObject>();
 
 		IGeneratorCSV en = new CGen();
 		en.marshalAsCollectionAndSave(listMulti, TestUtils.WORKING_DIR_GENERATED_I);
@@ -125,7 +125,7 @@ public class CGenTest {
 
 	@Test
 	public void testUnmarshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> charged = new ArrayList<>();
+		List<MultiTypeObject> charged = new ArrayList<MultiTypeObject>();
 
 		IGeneratorCSV en = new CGen();
 		en.unmarshalAsCollectionFromPath(MultiTypeObject.class, charged, TestUtils.WORKING_DIR_MANUALLY);

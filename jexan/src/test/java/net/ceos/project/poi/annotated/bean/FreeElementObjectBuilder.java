@@ -46,7 +46,7 @@ public class FreeElementObjectBuilder {
 	 */
 	public static List<FreeElementObject> buildListOfFreeElementObject(int entryNumber) {
 
-		List<FreeElementObject> returnList = new ArrayList<>();
+		List<FreeElementObject> returnList = new ArrayList<FreeElementObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildFreeElementObject(RandomUtils.nextInt(1, entryNumber)));
 		}

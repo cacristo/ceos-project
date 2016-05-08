@@ -79,7 +79,7 @@ public class ObjectMaskBuilder {
 	 */
 	public static List<ObjectMask> buildListOfObjectMask(int entryNumber) {
 
-		List<ObjectMask> returnList = new ArrayList<>();
+		List<ObjectMask> returnList = new ArrayList<ObjectMask>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildObjectMask(RandomUtils.nextInt(1, entryNumber)));
 		}
@@ -153,7 +153,9 @@ public class ObjectMaskBuilder {
 				}
 			}
 
-		} catch (NoSuchFieldException | SecurityException e) {
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
 		return value;
@@ -181,7 +183,9 @@ public class ObjectMaskBuilder {
 				}
 			}
 
-		} catch (NoSuchFieldException | SecurityException e) {
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
 		return value;

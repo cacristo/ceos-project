@@ -47,7 +47,7 @@ public class ObjectConfigurableBuilder {
 	 */
 	public static List<ObjectConfigurable> buildListOfObjectConfigurable(int entryNumber) {
 
-		List<ObjectConfigurable> returnList = new ArrayList<>();
+		List<ObjectConfigurable> returnList = new ArrayList<ObjectConfigurable>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildObjectConfigurable(RandomUtils.nextInt(1, entryNumber)));
 		}

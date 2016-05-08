@@ -23,8 +23,8 @@ public class CConfigCriteria {
 	private String separator = ",";
 	private String overrideSeparator;
 	private Boolean isHeaderPainted = Boolean.FALSE;
-	private Map<Integer, String> header = new HashMap<>();
-	private Map<Integer, String> content = new HashMap<>();
+	private Map<Integer, String> header = new HashMap<Integer, String>();
+	private Map<Integer, String> content = new HashMap<Integer, String>();
 	
 	public CConfigCriteria() {
 		/* empty constructor */

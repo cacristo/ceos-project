@@ -50,7 +50,7 @@ public class PropagationHorizontalObjectBuilder {
 	 */
 	public static List<PropagationHorizontalObject> buildListOfPropagationHorizontalObject(int entryNumber) {
 
-		List<PropagationHorizontalObject> returnList = new ArrayList<>();
+		List<PropagationHorizontalObject> returnList = new ArrayList<PropagationHorizontalObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildPropagationHorizontalObject(RandomUtils.nextInt(1, entryNumber)));
 		}

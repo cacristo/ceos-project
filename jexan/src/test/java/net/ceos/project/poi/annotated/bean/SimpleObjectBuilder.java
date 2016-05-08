@@ -42,7 +42,7 @@ public class SimpleObjectBuilder {
 	 */
 	public static List<SimpleObject> buildListOfSimpleObject(int entryNumber) {
 
-		List<SimpleObject> returnList = new ArrayList<>();
+		List<SimpleObject> returnList = new ArrayList<SimpleObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildSimpleObject(RandomUtils.nextInt(1, entryNumber)));
 		}

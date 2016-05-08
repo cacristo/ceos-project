@@ -72,7 +72,7 @@ public class MultiTypeObjectBuilder {
 	 */
 	public static List<MultiTypeObject> buildListOfMultiTypeObject(int entryNumber) {
 
-		List<MultiTypeObject> returnList = new ArrayList<>();
+		List<MultiTypeObject> returnList = new ArrayList<MultiTypeObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildMultiTypeObject(RandomUtils.nextInt(1, entryNumber)));
 		}

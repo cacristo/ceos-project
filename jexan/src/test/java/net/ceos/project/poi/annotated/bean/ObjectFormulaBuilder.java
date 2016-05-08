@@ -46,7 +46,7 @@ public class ObjectFormulaBuilder {
 	 */
 	public static List<ObjectFormula> buildListOfObjectFormula(int entryNumber) {
 
-		List<ObjectFormula> returnList = new ArrayList<>();
+		List<ObjectFormula> returnList = new ArrayList<ObjectFormula>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildObjectFormula(RandomUtils.nextInt(1, entryNumber)));
 		}

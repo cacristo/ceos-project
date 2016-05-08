@@ -105,7 +105,7 @@ public class PerformanceObjectBuilder {
 	 */
 	public static List<PerformanceObject> buildListOfPerformanceObject(int entryNumber) {
 
-		List<PerformanceObject> returnList = new ArrayList<>();
+		List<PerformanceObject> returnList = new ArrayList<PerformanceObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildPerformanceObject(RandomUtils.nextInt(1, entryNumber)));
 		}

@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -729,10 +728,16 @@ public class CGen implements IGeneratorCSV {
 		BufferedReader br = new BufferedReader(new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 
 		for (Object object : listObject) {
-			String[] values = br.lines().skip(1).map(line -> line.split(configCriteria.getSeparator()))
-					.collect(Collectors.toList()).get(0);
-
-			/* unmarshal the content list */
+			String[] values = null;
+			String line = StringUtils.EMPTY;
+			boolean isHeaderLine = true;
+			while ((line = br.readLine()) != null) {
+				if (isHeaderLine) {
+					isHeaderLine = false;
+					continue;
+				}
+				values = line.split(",");
+			}
 			unmarshal(configCriteria, object, oC, values, -1);
 		}
 
