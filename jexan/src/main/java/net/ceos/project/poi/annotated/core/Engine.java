@@ -1631,7 +1631,7 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the object passed as parameter and return the
+	 * Generate the workbook based at the object passed as parameter and return the
 	 * respective {@link FileOutputStream}.
 	 * 
 	 * @param object
@@ -1655,6 +1655,35 @@ public class Engine implements IEngine {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
+		/* Generate the workbook from the object passed as parameter */
+		marshalEngine(configCriteria, object);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray(configCriteria.getWorkbook());
+	}
+
+	/**
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object passed as parameter and return the
+	 * respective {@link FileOutputStream}.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 */
+	@Override
+	public byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException {
 		/* Generate the workbook from the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
@@ -1932,6 +1961,35 @@ public class Engine implements IEngine {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
+		/* Generate the workbook from the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray(configCriteria.getWorkbook());
+	}
+
+	/**
+	 * Generate the workbook from the collection of objects passed as parameter and return the
+	 * respective {@link FileOutputStream}.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 */
+	@Override
+	public byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException {
 		/* Generate the workbook from the object passed as parameter */
 		marshalCollectionEngine(configCriteria, listObject);
 
