@@ -100,8 +100,10 @@ public class Engine implements IEngine {
 	 * @return
 	 */
 	private void initializeXlsConfiguration(final XConfigCriteria configCriteria, final XlsConfiguration annotation) {
-		configCriteria.setFileName(StringUtils.isBlank(configCriteria.getFileName()) ? annotation.nameFile() : configCriteria.getFileName());
-		configCriteria.setExtension(configCriteria.getExtension() == null ? annotation.extensionFile() : configCriteria.getExtension());
+		configCriteria.setFileName(StringUtils.isBlank(configCriteria.getFileName()) ? annotation.nameFile()
+				: configCriteria.getFileName());
+		configCriteria.setExtension(
+				configCriteria.getExtension() == null ? annotation.extensionFile() : configCriteria.getExtension());
 		configCriteria.setCompleteFileName(configCriteria.getFileName() + configCriteria.getExtension().getExtension());
 	}
 
@@ -803,7 +805,7 @@ public class Engine implements IEngine {
 			initializeCellByField(configCriteria, xlsAnnotation, o, f, xlsAnnotation.cell() - 1, cL);
 		}
 	}
-	
+
 	/**
 	 * Prepare the propagation horizontal:<br>
 	 * 1. initialize sheet <br>
@@ -856,7 +858,7 @@ public class Engine implements IEngine {
 		}
 		return indexCell;
 	}
-	
+
 	/**
 	 * Convert the object to file with the PropagationType as
 	 * PROPAGATION_HORIZONTAL.
@@ -1429,6 +1431,81 @@ public class Engine implements IEngine {
 		}
 	}
 
+	/**
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
+	 * passed as parameters.
+	 * 
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use.
+	 * @param listObject
+	 *            the collection of objects to apply at the workbook.
+	 * @throws ElementException
+	 * @throws ConfigurationException
+	 * @throws SheetException
+	 * @throws CustomizedRulesException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 * @throws ConverterException
+	 * @throws NoSuchMethodException
+	 */
+	private void marshalCollectionEngine(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws ElementException, ConfigurationException, SheetException, CustomizedRulesException,
+			IllegalAccessException, InvocationTargetException, InstantiationException, ConverterException,
+			NoSuchMethodException {
+		int idxRow;
+		int idxCell = 0;
+
+		if (listObject == null || listObject.isEmpty()) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
+		Object objectRT;
+		try {
+			objectRT = listObject.stream().findFirst().get();
+		} catch (Exception e) {
+			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+		}
+
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(objectRT);
+
+		/* initialize configuration data */
+		initializeConfigurationData(configCriteria, oC);
+
+		// initialize Workbook
+		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
+
+		// initialize style cell via annotation
+		initializeCellStyleViaAnnotation(oC, configCriteria);
+
+		// initialize style cell via default option
+		configCriteria.initializeCellDecorator();
+
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = listObject.iterator();
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+
+			// initialize rows according the PropagationType
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+				idxCell = configCriteria.getStartCell();
+				idxRow = preparePropagationHorizontal(configCriteria);
+
+				marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
+
+			} else {
+				idxCell = preparePropagationVertical(configCriteria, idxCell);
+				idxRow = configCriteria.getStartRow();
+
+				marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
+			}
+
+		}
+		/* apply the column resize */
+		configCriteria.applyColumnWidthToSheet();
+	}
+
 	/* ######################## Marshal methods ########################## */
 
 	/**
@@ -1657,10 +1734,132 @@ public class Engine implements IEngine {
 	}
 
 	/**
+	 * Generate the sheet based at the collection of objects passed as parameter and return the
+	 * sheet generated.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	@Override
+	public Sheet marshalCollectionToSheet(final Collection<?> listObject)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
+		/* Initialize a basic ConfigCriteria */
+		XConfigCriteria configCriteria = new XConfigCriteria();
+
+		/* Generate the workbook based at the list of objects passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Return the Sheet generated */
+		return configCriteria.getWorkbook().getSheetAt(0);
+	}
+
+	/**
+	 * Generate the sheet based at the {@link XConfigCriteria} and the collection of objects
+	 * passed as parameters and return the sheet generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Sheet} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	@Override
+	public Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
+		/* Generate the workbook based at the list of objects passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Return the Sheet generated */
+		return configCriteria.getWorkbook().getSheetAt(0);
+	}
+
+	/**
+	 * Generate the workbook based at the collection of objects passed as parameter and return
+	 * the workbook generated.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	@Override
+	public Workbook marshalCollectionToWorkbook(final Collection<?> listObject)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
+		/* Initialize a basic ConfigCriteria */
+		XConfigCriteria configCriteria = new XConfigCriteria();
+
+		/* Generate the workbook based at the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Return the Workbook generated */
+		return configCriteria.getWorkbook();
+	}
+
+	/**
+	 * Generate the workbook based at the {@link XConfigCriteria} and the collection of objects
+	 * passed as parameters and return the workbook generated.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 */
+	@Override
+	public Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException,
+			ElementException, ConfigurationException, SheetException, CustomizedRulesException, ConverterException {
+		/* Generate the workbook from the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Return the Workbook generated */
+		return configCriteria.getWorkbook();
+	}
+
+	/**
 	 * Generate the file from the collection of objects.
 	 * 
 	 * @param listObject
-	 *            the collection of objects to apply at the file.
+	 *            the collection to apply at the file.
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
@@ -1682,7 +1881,7 @@ public class Engine implements IEngine {
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
-	 *            the collection of objects to apply at the file.
+	 *            the collection to apply at the file.
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
@@ -1691,57 +1890,8 @@ public class Engine implements IEngine {
 	@Override
 	public void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws Exception {
-
-		int idxRow;
-		int idxCell = 0;
-
-		if (listObject == null || listObject.isEmpty()) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
-		}
-		Object objectRT;
-		try {
-			objectRT = listObject.stream().findFirst().get();
-		} catch (Exception e) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
-		}
-
-		/* initialize the runtime class of the object */
-		Class<?> oC = initializeRuntimeClass(objectRT);
-
-		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, oC);
-
-		// initialize Workbook
-		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
-
-		// initialize style cell via annotation
-		initializeCellStyleViaAnnotation(oC, configCriteria);
-
-		// initialize style cell via default option
-		configCriteria.initializeCellDecorator();
-
-		@SuppressWarnings("rawtypes")
-		Iterator iterator = listObject.iterator();
-		while (iterator.hasNext()) {
-			Object object = iterator.next();
-
-			// initialize rows according the PropagationType
-			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-				idxCell = configCriteria.getStartCell();
-				idxRow = preparePropagationHorizontal(configCriteria);
-
-				marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
-
-			} else {
-				idxCell = preparePropagationVertical(configCriteria, idxCell);
-				idxRow = configCriteria.getStartRow();
-
-				marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
-			}
-
-		}
-		/* apply the column resize */
-		configCriteria.applyColumnWidthToSheet();
+		/* Generate the workbook from the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1757,6 +1907,39 @@ public class Engine implements IEngine {
 
 	}
 
+	/**
+	 * Generate the workbook from the collection of objects passed as parameter and return the
+	 * respective {@link FileOutputStream}.
+	 * 
+	 * @param listObject
+	 *            the collection to apply at the workbook.
+	 * @return the {@link Workbook} generated
+	 * @throws ConverterException
+	 * @throws CustomizedRulesException
+	 * @throws SheetException
+	 * @throws ConfigurationException
+	 * @throws ElementException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws InvocationTargetException
+	 * @throws IllegalAccessException
+	 * @throws IOException
+	 */
+	@Override
+	public byte[] marshalCollectionToByte(final Collection<?> listObject) throws IllegalAccessException, InvocationTargetException,
+			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
+			CustomizedRulesException, ConverterException, IOException {
+		/* Initialize a basic ConfigCriteria */
+		XConfigCriteria configCriteria = new XConfigCriteria();
+
+		/* Generate the workbook from the object passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject);
+
+		/* Generate the byte array to return */
+		return workbookToByteAray(configCriteria.getWorkbook());
+	}
+	
+	
 	/* ######################## Unmarshal methods ######################## */
 
 	/**
