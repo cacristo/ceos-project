@@ -60,7 +60,7 @@ public class Engine implements IEngine {
 			/* instance object class */
 			oC = object.getClass();
 		} catch (Exception e) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage(), e);
+			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage(), e);
 		}
 		return oC;
 	}
@@ -81,7 +81,7 @@ public class Engine implements IEngine {
 			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		} else {
 			throw new ConfigurationException(
-					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
+					ExceptionMessage.CONFIGURATION_XLSCONFIGURATION_MISSING.getMessage());
 		}
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
@@ -99,7 +99,7 @@ public class Engine implements IEngine {
 				}
 			}
 		} else {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_XLSSHEET_MISSING.getMessage());
 		}
 	}
 
@@ -156,7 +156,7 @@ public class Engine implements IEngine {
 			for (XlsDecorator decorator : xlsDecorators.values()) {
 				if (configCriteria.getStylesMap().containsKey(decorator.decoratorName())) {
 					throw new ConfigurationException(
-							ExceptionMessage.ConfigurationException_CellStyleDuplicated.getMessage());
+							ExceptionMessage.CONFIGURATION_CELLSTYLE_DUPLICATED.getMessage());
 				}
 				configCriteria.getStylesMap().put(decorator.decoratorName(),
 						CellStyleHandler.initializeCellStyleByXlsDecorator(configCriteria.getWorkbook(), decorator));
@@ -232,7 +232,7 @@ public class Engine implements IEngine {
 		try {
 			s = wb.createSheet(sheetName);
 		} catch (Exception e) {
-			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage(), e);
+			throw new SheetException(ExceptionMessage.SHEET_CREATION_SHEET.getMessage(), e);
 		}
 		return s;
 	}
@@ -251,10 +251,10 @@ public class Engine implements IEngine {
 			throws ConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
 
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
 		}
 	}
 
@@ -423,7 +423,7 @@ public class Engine implements IEngine {
 			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
 
 			if (!isAppliedObject && !fT.isPrimitive()) {
-				throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+				throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
 			}
 		}
 	}
@@ -579,7 +579,7 @@ public class Engine implements IEngine {
 		 * exception will be launched
 		 */
 		if (configCriteria.getRow().getCell(idxC) != null) {
-			throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
+			throw new ElementException(ExceptionMessage.ELEMENT_OVERWRITE_CELL.getMessage());
 		}
 
 		switch (fT.getName()) {
@@ -792,7 +792,7 @@ public class Engine implements IEngine {
 
 			/* validate the row/cell of the element */
 			if (xlsAnnotation.row() < 1 || xlsAnnotation.cell() < 1) {
-				throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+				throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 			}
 
 			/* header treatment */
@@ -812,7 +812,7 @@ public class Engine implements IEngine {
 				 * otherwise one exception will be launched
 				 */
 				if (row.getCell(idxCell) != null) {
-					throw new ElementException(ExceptionMessage.ElementException_OverwriteCell.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_OVERWRITE_CELL.getMessage());
 				}
 
 				CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, idxCell,
@@ -954,13 +954,13 @@ public class Engine implements IEngine {
 
 				/* validate the position of the element */
 				if (xlsAnnotation.position() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
 				/* validate the propagation type & formulas */
 				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
 						&& xlsAnnotation.formula().contains("idy")) {
-					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
 				}
 
 				/* update annotation at ConfigCriteria */
@@ -972,7 +972,7 @@ public class Engine implements IEngine {
 						CellHandler.applyCustomizedRules(o, xlsAnnotation.customizedRules());
 					} catch (NoSuchMethodException e) {
 						throw new CustomizedRulesException(
-								ExceptionMessage.CustomizedRulesException_NoSuchMethod.getMessage(), e);
+								ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_METHOD.getMessage(), e);
 					}
 				}
 
@@ -1084,13 +1084,13 @@ public class Engine implements IEngine {
 
 				/* validate the position of the element */
 				if (xlsAnnotation.position() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
 				/* validate the propagation type & formulas */
 				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
 						&& xlsAnnotation.formula().contains("idx")) {
-					throw new ElementException(ExceptionMessage.ConfigurationException_Conflict.getMessage());
+					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
 				}
 
 				/* update annotation at ConfigCriteria */
@@ -1195,7 +1195,7 @@ public class Engine implements IEngine {
 
 				/* validate the position of the element */
 				if (xlsAnnotation.position() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 				/*
 				 * increment of the counter related to the number of fields (if
@@ -1232,7 +1232,7 @@ public class Engine implements IEngine {
 
 				/* validate the row/cell of the element */
 				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
 				/* content row */
@@ -1245,7 +1245,7 @@ public class Engine implements IEngine {
 				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-					throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
 				}
 			}
 		}
@@ -1291,7 +1291,7 @@ public class Engine implements IEngine {
 
 				/* validate the position of the element */
 				if (xlsAnnotation.position() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
 				/*
@@ -1328,7 +1328,7 @@ public class Engine implements IEngine {
 
 				/* validate the row/cell of the element */
 				if (xlsFreeAnnotation.row() < 1 || xlsFreeAnnotation.cell() < 1) {
-					throw new ElementException(ExceptionMessage.ElementException_InvalidPosition.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
 				/* content row */
@@ -1341,7 +1341,7 @@ public class Engine implements IEngine {
 				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
 				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-					throw new ElementException(ExceptionMessage.ElementException_ComplexObject.getMessage());
+					throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
 				}
 			}
 		}
@@ -1410,7 +1410,7 @@ public class Engine implements IEngine {
 			InstantiationException, CustomizedRulesException, ConverterException, NoSuchMethodException {
 
 		if (object == null) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
 		}
 
 		/* initialize the runtime class of the object */
@@ -1478,7 +1478,7 @@ public class Engine implements IEngine {
 
 		/* initialize sheet */
 		if (StringUtils.isBlank(configCriteria.getTitleSheet())) {
-			throw new SheetException(ExceptionMessage.SheetException_CreationSheet.getMessage());
+			throw new SheetException(ExceptionMessage.SHEET_CREATION_SHEET.getMessage());
 		}
 		configCriteria.setSheet(configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()));
 
@@ -1520,7 +1520,7 @@ public class Engine implements IEngine {
 		int idxCell = 0;
 
 		if (listObject == null || listObject.isEmpty()) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
 		}
 		Object objectRT;
 		try {
@@ -1528,7 +1528,7 @@ public class Engine implements IEngine {
 			objectRT = listObject.iterator().next();
 			//objectRT = listObject.getClass().stream().findFirst().get();
 		} catch (Exception e) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage());
+			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage(), e);
 		}
 
 		/* initialize the runtime class of the object */

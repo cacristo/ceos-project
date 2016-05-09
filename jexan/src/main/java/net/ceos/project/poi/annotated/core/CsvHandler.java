@@ -138,7 +138,7 @@ public class CsvHandler {
 				 * if date decorator do not match with a valid mask launch
 				 * exception
 				 */
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateConverted;
@@ -357,7 +357,7 @@ public class CsvHandler {
 					dateMasked = applyMaskToDate(value, Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -393,7 +393,7 @@ public class CsvHandler {
 					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -429,7 +429,7 @@ public class CsvHandler {
 					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATETIME.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -449,7 +449,7 @@ public class CsvHandler {
 		if (dateFormated.equals(mask)) {
 			// if date decorator do not match with a valid mask
 			// launch exception
-			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage());
 		}
 		return dateFormated;
 	}
@@ -542,7 +542,7 @@ public class CsvHandler {
 			}
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
 		return StringUtils.EMPTY;
 	}

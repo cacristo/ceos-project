@@ -54,7 +54,7 @@ class CellCommentHandler {
 						(Boolean) applyCommentRules(object, configCriteria.getElement().commentRules()), cell);
 			} catch (Exception e) {
 				throw new CustomizedRulesException(
-						ExceptionMessage.CustomizedRulesException_NoSuchCommentMethod.getMessage(), e);
+						ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_COMMENT_METHOD.getMessage(), e);
 			}
 		}
 	}
