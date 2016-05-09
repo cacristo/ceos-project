@@ -207,7 +207,7 @@ public class CellHandler {
 					 * if date decorator do not match with a valid mask launch
 					 * exception
 					 */
-					throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+					throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 				}
 			}
 		}
@@ -308,7 +308,7 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_String.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
 		}
 
 		// apply the comment
@@ -342,7 +342,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
 		}
 
 		// apply the comment
@@ -376,7 +376,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Integer.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
 		}
 
 		// apply the comment
@@ -410,7 +410,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Long.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
 		}
 
 		// apply the comment
@@ -444,7 +444,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Double.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
 		}
 
 		// apply the comment
@@ -479,7 +479,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_BigDecimal.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
 		}
 
 		// apply the comment
@@ -516,7 +516,7 @@ public class CellHandler {
 			}
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
 
 		// apply the comment
@@ -551,7 +551,7 @@ public class CellHandler {
 					CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Float.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
 		}
 
 		// apply the comment
@@ -586,7 +586,7 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
 
 		// apply the comment
@@ -635,7 +635,7 @@ public class CellHandler {
 			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_ENUM, null);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
 
 		// apply the comment

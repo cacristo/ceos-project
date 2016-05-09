@@ -559,7 +559,7 @@ public class XConfigCriteria {
 	 */
 	protected CellStyle getCellStyle(final String type) throws ElementException {
 		if (StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null) {
-			throw new ElementException(ExceptionMessage.ConfigurationException_XlsDecoratorMissing.getMessage());
+			throw new ElementException(ExceptionMessage.CONFIGURATION_DECORATOR_MISSING.getMessage());
 		}
 		return StringUtils.isNotBlank(element.decorator()) ? stylesMap.get(element.decorator()) : stylesMap.get(type);
 	}
