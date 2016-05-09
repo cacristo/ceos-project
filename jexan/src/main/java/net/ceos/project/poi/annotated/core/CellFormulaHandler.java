@@ -329,12 +329,12 @@ class CellFormulaHandler {
 			if (dateFormated.equals(decorator)) {
 				// if date decorator do not match with a valid mask
 				// launch exception
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage());
 			}
 			CellValueHandler.consumeValue(cell, dateFormated);
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
 	}
 

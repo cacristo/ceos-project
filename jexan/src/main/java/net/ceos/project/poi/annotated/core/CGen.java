@@ -45,7 +45,7 @@ public class CGen implements IGeneratorCSV {
 			/* instance object class */
 			oC = object.getClass();
 		} catch (Exception e) {
-			throw new ElementException(ExceptionMessage.ElementException_NullObject.getMessage(), e);
+			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage(), e);
 		}
 		return oC;
 	}
@@ -66,14 +66,14 @@ public class CGen implements IGeneratorCSV {
 			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		} else {
 			throw new ConfigurationException(
-					ExceptionMessage.ConfigurationException_XlsConfigurationMissing.getMessage());
+					ExceptionMessage.CONFIGURATION_XLSCONFIGURATION_MISSING.getMessage());
 		}
 		/* Process @XlsSheet */
 		if (PredicateFactory.isAnnotationXlsSheetPresent.test(oC)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			initializeXlsSheet(configCriteria, xlsAnnotation);
 		} else {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_XlsSheetMissing.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_XLSSHEET_MISSING.getMessage());
 		}
 	}
 

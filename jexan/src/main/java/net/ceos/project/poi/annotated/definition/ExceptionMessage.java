@@ -8,44 +8,35 @@ package net.ceos.project.poi.annotated.definition;
  */
 public enum ExceptionMessage {
 	/* declared messages of ConfigurationException incompatible */
-	ConfigurationException_XlsConfigurationMissing("The annotation XlsConfiguration is missing. Review your configuration."),
-	ConfigurationException_XlsSheetMissing("The annotation XlsSheet is missing. Review your configuration."),
-	ConfigurationException_CellStyleMissing("Cell style configuration is missing. Review your configuration."),
-	ConfigurationException_CellStyleDuplicated("Cell style configuration is duplicated. Review your configuration."),
-	ConfigurationException_XlsDecoratorMissing("There is one XlsDecorator missing. Review your configuration."),
-	ConfigurationException_Conflict("Conflict at the configuration. Review your configuration."),
-	// TODO see the below message will be applied (remove if not)
-	ConfigurationException_Incompatible("Incompatible configuration. Review your configuration."),
-	
+	CONFIGURATION_XLSCONFIGURATION_MISSING("The annotation XlsConfiguration is missing. Review your configuration."),
+	CONFIGURATION_XLSSHEET_MISSING("The annotation XlsSheet is missing. Review your configuration."),
+	CONFIGURATION_CELLSTYLE_MISSING("Cell style configuration is missing. Review your configuration."),
+	CONFIGURATION_CELLSTYLE_DUPLICATED("Cell style configuration is duplicated. Review your configuration."),
+	CONFIGURATION_DECORATOR_MISSING("There is one XlsDecorator missing. Review your configuration."),
+	CONFIGURATION_CONFLICT("Conflict at the configuration. Review your configuration."),
 	/* declared messages of ConverterException */
-	ConverterException_Default("Problem while convert the element."),
-	ConverterException_String("Problem while convert the string element."),
-	ConverterException_BigDecimal("Problem while convert the BigDecimal element."),
-	ConverterException_Double("Problem while convert the double element."),
-	ConverterException_Float("Problem while convert the float element."),
-	ConverterException_Integer("Problem while convert the integer element."),
-	ConverterException_Long("Problem while convert the long element."),
-	ConverterException_Boolean("Problem while convert the boolean element."),
-	ConverterException_Date("Problem while convert the Date element, review your decorator mask."),
-	ConverterException_Decorator("Problem while apply the decorator."),
-
+	CONVERTER_DEFAULT("Problem while convert the element."),
+	CONVERTER_STRING("Problem while convert the string element."),
+	CONVERTER_BIGDECIMAL("Problem while convert the BigDecimal element."),
+	CONVERTER_DOUBLE("Problem while convert the double element."),
+	CONVERTER_FLOAT("Problem while convert the float element."),
+	CONVERTER_SHORT("Problem while convert the short element."),
+	CONVERTER_INTEGER("Problem while convert the integer element."),
+	CONVERTER_LONG("Problem while convert the long element."),
+	CONVERTER_BOOLEAN("Problem while convert the boolean element."),
+	CONVERTER_DATE("Problem while convert the Date element, review your decorator mask."),
+	CONVERTER_LOCALDATE("Problem while convert the LocalDate element, review your decorator mask."),
+	CONVERTER_LOCALDATETIME("Problem while convert the LocalDateTime element, review your decorator mask."),
 	/* declared messages of ElementException */
-	ElementException_NullObject("The entry object is null. Make sure you are sending a correct object."),
-	ElementException_EmptyObject("The entry object is empty. Make sure you are sending a correct object."),
-	ElementException_ComplexObject("Complex objects are not allowed for this type! Review your configuration."),
-	ElementException_OverwriteCell("The element entry is trying to be set at one position already used. Review your configuration."),
-	ElementException_InvalidPosition("The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration."),
-
+	ELEMENT_NULL_OBJECT("The entry object is null. Make sure you are sending a correct object."),
+	ELEMENT_COMPLEX_OBJECT("Complex objects are not allowed for this type! Review your configuration."),
+	ELEMENT_OVERWRITE_CELL("The element entry is trying to be set at one position already used. Review your configuration."),
+	ELEMENT_INVALID_POSITION("The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration."),
 	/* declared messages of SheetException */
-	SheetException_CreationWorkbook("Problem while creating the Workbook. Review your configuration."),
-	SheetException_CreationSheet("Problem while creating the Sheet. Review your configuration."),
-	// TODO see the below messages will be applied (remove if not)
-	SheetException_SaveWorkbook("Problem while saving the Workbook."),
-	SheetException_UpdateSheet("Problem while add a new Sheet."),
-
+	SHEET_CREATION_SHEET("Problem while creating the Sheet. Review your configuration."),
 	/* declared messages of SheetException */
-	CustomizedRulesException_NoSuchMethod("The customized method entry does not exist. Review your configuration."),
-	CustomizedRulesException_NoSuchCommentMethod("The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.");
+	CUSTOMIZEDRULES_NO_SUCH_METHOD("The customized method entry does not exist. Review your configuration."),
+	CUSTOMIZEDRULES_NO_SUCH_COMMENT_METHOD("The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.");
 	
 	
 	private String message;
