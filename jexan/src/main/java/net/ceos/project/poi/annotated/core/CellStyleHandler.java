@@ -479,7 +479,7 @@ public class CellStyleHandler {
 					decorator.getFontColor(), decorator.isFontBold(), decorator.isFontItalic(),
 					decorator.getFontUnderline());
 		} catch (Exception e) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), e);
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CELLSTYLE_MISSING.getMessage(), e);
 		}
 		return cs;
 	}
@@ -520,7 +520,7 @@ public class CellStyleHandler {
 			CellStyleHandler.applyFont(wb, cs, decorator.fontName(), decorator.fontSize(), decorator.fontColor(),
 					decorator.fontBold(), decorator.fontItalic(), decorator.fontUnderline());
 		} catch (Exception e) {
-			throw new ConfigurationException(ExceptionMessage.ConfigurationException_CellStyleMissing.getMessage(), e);
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CELLSTYLE_MISSING.getMessage(), e);
 		}
 		return cs;
 	}

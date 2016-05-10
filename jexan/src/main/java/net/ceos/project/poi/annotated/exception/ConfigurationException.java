@@ -1,6 +1,12 @@
 package net.ceos.project.poi.annotated.exception;
 
-public class ConfigurationException extends Exception {
+/**
+ * Manage the configuration exceptions at jexan.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
+public class ConfigurationException extends WorkbookException {
 	
 	private static final long serialVersionUID = 4656750405174036342L;
 

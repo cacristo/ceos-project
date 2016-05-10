@@ -144,11 +144,11 @@ public class ElementExceptionTest {
 	 * Test a {@link XlsFreeElement} trying write at invalid cell position<br>
 	 * Test a {@link XlsFreeElement} trying write at invalid row position<br>
 	 */
-	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
-	public void testMarshalXlsElementInvalidPosition(Object object) throws Exception {
-		IEngine en = new Engine();
-		en.marshalToFileOutputStream(object);
-	}
+//	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
+//	public void testMarshalXlsElementInvalidPosition(Object object) throws Exception {
+//		IEngine en = new Engine();
+//		en.marshalToFileOutputStream(object);
+//	}
 
 	/**
 	 * Test a horizontal configuration exception conflict

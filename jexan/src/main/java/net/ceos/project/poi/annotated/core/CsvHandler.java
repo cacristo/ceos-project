@@ -39,6 +39,8 @@ public class CsvHandler {
 		/* private constructor to hide the implicit public */
 	}
 
+	/* Reader methods */
+
 	/**
 	 * Read a Date value from the CSV file.
 	 * 
@@ -52,13 +54,16 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void dateReader(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException {
+	protected static void dateReader(final Object o, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(xlsAnnotation, values, idx));
+			try {
+				field.set(o, applyMaskToDate(xlsAnnotation, values, idx));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+			}
 		}
 	}
 
@@ -75,13 +80,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void localDateReader(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException {
+	protected static void localDateReader(final Object o, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			try {
+				field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDate());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATE.getMessage(), e);
+			}
 		}
 	}
 
@@ -98,13 +107,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void localDateTimeReader(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException {
+	protected static void localDateTimeReader(final Object o, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws ConverterException {
 		if (StringUtils.isNotBlank(values[idx])) {
-			field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			try {
+				field.set(o, applyMaskToDate(xlsAnnotation, values, idx).toInstant().atZone(ZoneId.systemDefault())
+						.toLocalDateTime());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATETIME.getMessage(), e);
+			}
 		}
 	}
 
@@ -117,18 +130,18 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	private static Date applyMaskToDate(final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException, ConverterException {
+	private static Date applyMaskToDate(final XlsElement xlsAnnotation, final String[] values, final int idx)
+			throws ConverterException {
 		Date dateConverted = null;
 		String date = values[idx];
 		if (StringUtils.isNotBlank(date)) {
 
 			String tM = xlsAnnotation.transformMask();
 			String fM = xlsAnnotation.formatMask();
-			String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? Constants.DD_MMM_YYYY_HH_MM_SS : fM) : tM;
+			String decorator = StringUtils.isEmpty(tM) ? (StringUtils.isEmpty(fM) ? Constants.DD_MMM_YYYY_HH_MM_SS : fM)
+					: tM;
 
 			SimpleDateFormat dt = new SimpleDateFormat(decorator);
 			try {
@@ -138,7 +151,7 @@ public class CsvHandler {
 				 * if date decorator do not match with a valid mask launch
 				 * exception
 				 */
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateConverted;
@@ -155,11 +168,15 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void stringReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
-		field.set(o, values[idx]);
+			throws ConverterException {
+		try {
+			field.set(o, values[idx]);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
+		}
 	}
 
 	/**
@@ -173,13 +190,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void shortReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
+			throws ConverterException {
 		String iValue = values[idx];
 		if (StringUtils.isNotBlank(iValue)) {
-			field.set(o, Short.valueOf(iValue));
+			try {
+				field.set(o, Short.valueOf(iValue));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
+			}
 		}
 	}
 
@@ -194,13 +215,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void integerReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
+			throws ConverterException {
 		String iValue = values[idx];
 		if (StringUtils.isNotBlank(iValue)) {
-			field.set(o, Integer.valueOf(iValue));
+			try {
+				field.set(o, Integer.valueOf(iValue));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
+			}
 		}
 	}
 
@@ -215,20 +240,24 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void longReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
+			throws ConverterException {
 		String dValue = values[idx];
 		if (StringUtils.isNotBlank(dValue)) {
-			field.set(o, Double.valueOf(dValue).longValue());
+			try {
+				field.set(o, Double.valueOf(dValue).longValue());
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
+			}
 		}
 	}
 
 	/**
 	 * Apply a Double value to the object.
 	 * 
-	 *@param o
+	 * @param o
 	 *            the object
 	 * @param field
 	 *            the field
@@ -238,18 +267,22 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 *  @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
-	protected static void doubleReader(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException {
+	protected static void doubleReader(final Object o, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws ConverterException {
 		String dPValue = values[idx];
 		if (StringUtils.isNotBlank(dPValue)) {
-			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-				field.set(o, Double.parseDouble(dPValue.replace(Constants.COMMA, Constants.DOT)));
-			} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
-				field.set(o, Double.parseDouble(dPValue.replace(Constants.COMMA, Constants.DOT)));
-			} else {
-				field.set(o, Double.parseDouble(dPValue));
+			try {
+				if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+					field.set(o, Double.parseDouble(dPValue.replace(Constants.COMMA, Constants.DOT)));
+				} else if (StringUtils.isNotBlank(xlsAnnotation.formatMask())) {
+					field.set(o, Double.parseDouble(dPValue.replace(Constants.COMMA, Constants.DOT)));
+				} else {
+					field.set(o, Double.parseDouble(dPValue));
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
 			}
 		}
 	}
@@ -265,13 +298,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void bigDecimalReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
+			throws ConverterException {
 		String dBdValue = values[idx];
 		if (dBdValue != null) {
-			field.set(o, BigDecimal.valueOf(Double.valueOf(dBdValue)));
+			try {
+				field.set(o, BigDecimal.valueOf(Double.valueOf(dBdValue)));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
+			}
 		}
 	}
 
@@ -286,13 +323,17 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
 	protected static void floatReader(final Object o, final Field field, final String[] values, final int idx)
-			throws IllegalAccessException {
+			throws ConverterException {
 		String fValue = values[idx];
 		if (StringUtils.isNotBlank(fValue)) {
-			field.set(o, Float.valueOf(fValue));
+			try {
+				field.set(o, Float.valueOf(fValue));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
+			}
 		}
 	}
 
@@ -309,24 +350,321 @@ public class CsvHandler {
 	 *            the array with the content at one line
 	 * @param idx
 	 *            the index of the field
-	 * @throws IllegalAccessException
+	 * @throws ConverterException
 	 */
-	protected static void booleanReader(final Object o, final Field field, final XlsElement xlsAnnotation, final String[] values,
-			final int idx) throws IllegalAccessException {
+	protected static void booleanReader(final Object o, final Field field, final XlsElement xlsAnnotation,
+			final String[] values, final int idx) throws ConverterException {
 		String bool = values[idx];
+		try {
+			if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
+				/* apply format mask defined at transform mask */
+				String[] split = xlsAnnotation.transformMask().split(Constants.SLASH);
+				field.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
 
-		if (StringUtils.isNotBlank(xlsAnnotation.transformMask())) {
-			/* apply format mask defined at transform mask */
-			String[] split = xlsAnnotation.transformMask().split(Constants.SLASH);
-			field.set(o, StringUtils.isNotBlank(bool) ? (split[0].equals(bool) ? true : false) : null);
-
-		} else {
-			/* locale mode */
-			field.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+			} else {
+				/* locale mode */
+				field.set(o, StringUtils.isNotBlank(bool) ? Boolean.valueOf(bool) : null);
+			}
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
 	}
 
-	
+	/* Writer methods */
+
+	/**
+	 * Read a Date value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean dateWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx, String tM, String fM) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx, CsvHandler.toDate((Date) field.get(object), fM, tM));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a LocalDate value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean localDateWriter(final CConfigCriteria configCriteria, final Object object,
+			final Field field, final int idx, String tM, String fM) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx, CsvHandler.toLocalDate((LocalDate) field.get(object), fM, tM));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATE.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a LocalDateTime value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean localDateTimeWriter(final CConfigCriteria configCriteria, final Object object,
+			final Field field, final int idx, String tM, String fM) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx, CsvHandler.toLocalDateTime((LocalDateTime) field.get(object), fM, tM));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATETIME.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a String value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean stringWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(String) field.get(object) != null ? (String) field.get(object) : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Short value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean shortWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(Short) field.get(object) != null ? ((Short) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Integer value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean integerWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(Integer) field.get(object) != null ? ((Integer) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Long value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean longWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(Long) field.get(object) != null ? ((Long) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Double value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean doubleWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx, String tM, String fM) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx, CsvHandler.toDouble((Double) field.get(object), fM, tM));
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a BigDecimal value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean bigDecimalWriter(final CConfigCriteria configCriteria, final Object object,
+			final Field field, final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx, (BigDecimal) field.get(object) != null
+					? ((BigDecimal) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Float value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean floatWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(Float) field.get(object) != null ? ((Float) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
+	/**
+	 * Read a Boolean value from the file.
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria}
+	 * @param object
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idx
+	 *            the index
+	 * @return
+	 * @throws ConverterException
+	 */
+	protected static boolean booleanWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
+			final int idx) throws ConverterException {
+		boolean isUpdated;
+		try {
+			configCriteria.getContent().put(idx,
+					(Boolean) field.get(object) != null ? ((Boolean) field.get(object)).toString() : StringUtils.EMPTY);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
+		}
+		isUpdated = true;
+		return isUpdated;
+	}
+
 	/**
 	 * Apply a date value at the field.
 	 * 
@@ -357,7 +695,7 @@ public class CsvHandler {
 					dateMasked = applyMaskToDate(value, Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -382,18 +720,21 @@ public class CsvHandler {
 			try {
 				if (StringUtils.isNotBlank(transformMask)) {
 					// apply transformation mask
-					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), transformMask);
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+							transformMask);
 
 				} else if (StringUtils.isNotBlank(formatMask)) {
 					// apply format mask
-					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), formatMask);
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+							formatMask);
 
 				} else {
 					// default mask
-					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()), Constants.DD_MMM_YYYY_HH_MM_SS);
+					dateMasked = applyMaskToDate(Date.from(value.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+							Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -411,25 +752,28 @@ public class CsvHandler {
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
 	 */
-	protected static String toLocalDateTime(final LocalDateTime value, final String formatMask, final String transformMask)
-			throws ConverterException {
+	protected static String toLocalDateTime(final LocalDateTime value, final String formatMask,
+			final String transformMask) throws ConverterException {
 		String dateMasked = StringUtils.EMPTY;
 		if (value != null) {
 			try {
 				if (StringUtils.isNotBlank(transformMask)) {
 					// apply transformation mask
-					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), transformMask);
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()),
+							transformMask);
 
 				} else if (StringUtils.isNotBlank(formatMask)) {
 					// apply format mask
-					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), formatMask);
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()),
+							formatMask);
 
 				} else {
 					// default mask
-					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()), Constants.DD_MMM_YYYY_HH_MM_SS);
+					dateMasked = applyMaskToDate(Date.from(value.atZone(ZoneId.systemDefault()).toInstant()),
+							Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -449,7 +793,7 @@ public class CsvHandler {
 		if (dateFormated.equals(mask)) {
 			// if date decorator do not match with a valid mask
 			// launch exception
-			throw new ConverterException(ExceptionMessage.ConverterException_Date.getMessage());
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage());
 		}
 		return dateFormated;
 	}
@@ -478,7 +822,9 @@ public class CsvHandler {
 				return df.format((Double) value).replace(Constants.COMMA, Constants.DOT);
 
 			} else {
-				return value.toString().replace(Constants.COMMA, Constants.DOT); // the exact value
+				return value.toString().replace(Constants.COMMA, Constants.DOT); // the
+																					// exact
+																					// value
 			}
 		}
 		return StringUtils.EMPTY; // empty field
@@ -542,7 +888,7 @@ public class CsvHandler {
 			}
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.ConverterException_Boolean.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_ENUM.getMessage(), e);
 		}
 		return StringUtils.EMPTY;
 	}

@@ -1,10 +1,7 @@
 package net.ceos.project.poi.annotated.exception;
 
-import static org.testng.Assert.assertEquals;
-
 import java.util.Date;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -24,52 +21,30 @@ import net.ceos.project.poi.annotated.core.TestUtils;
  * @author Carlos CRISTO ABREU
  */
 public class CustomizedRulesExceptionTest {
-	
-	private boolean exceptionDetected = false;
-
-	private void reset() {
-		this.exceptionDetected = false;
-
-	}
-
-	@BeforeMethod
-	protected void setUp() throws Exception {
-		reset();
-	}
 
 	@DataProvider
 	public Object[][] fantasticFourFactoryProvider() {
-		return new Object[][] { 
-			{ FantasticFourFactory.instanceMrFantastic() },
-			{ FantasticFourFactory.instanceInvisibleWoman() },
-			{ FantasticFourFactory.instanceThing() },
-			{ FantasticFourFactory.instanceHumanTorch() },
-			{ FantasticFourFactory.instanceAntMan() },
-			{ FantasticFourFactory.instanceBlackPanther() },
-			{ FantasticFourFactory.instanceCrystal() },
-			{ FantasticFourFactory.instanceDrDoom() },
-			{ FantasticFourFactory.instanceFlux() }
-		};
+		return new Object[][] { { FantasticFourFactory.instanceMrFantastic() },
+				{ FantasticFourFactory.instanceInvisibleWoman() }, { FantasticFourFactory.instanceThing() },
+				{ FantasticFourFactory.instanceHumanTorch() }, { FantasticFourFactory.instanceAntMan() },
+				{ FantasticFourFactory.instanceBlackPanther() }, { FantasticFourFactory.instanceCrystal() },
+				{ FantasticFourFactory.instanceDrDoom() }, { FantasticFourFactory.instanceFlux() } };
 	}
-	
+
 	/**
 	 * Test a simple customized rules defined if value under 450
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleAtNumeric() throws Exception {
 		XlsElementCustomizedRulesNumeric custom = new XlsElementCustomizedRulesNumeric();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -78,19 +53,15 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleAtString() throws Exception {
 		XlsElementCustomizedRulesString custom = new XlsElementCustomizedRulesString();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -98,7 +69,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleAtMultipleMethods1() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -106,13 +77,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(300);
 		custom.setDoublePrimitiveAttribute(10);
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -120,7 +87,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleAtMultipleMethods2() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -128,13 +95,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(300);
 		custom.setDoublePrimitiveAttribute(0);
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(custom);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalToSheet(custom);
 	}
 
 	/**
@@ -142,7 +105,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The customized method entry does not exist. Review your configuration.")
 	public void testCustomizedRuleAtMultipleMethods3() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -150,13 +113,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(200);
 		custom.setDoublePrimitiveAttribute(15);
-		try {
-			IEngine en = new Engine();
-			en.marshalToWorkbook(custom);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalToWorkbook(custom);
 	}
 
 	/**
@@ -180,9 +139,9 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider="fantasticFourFactoryProvider", expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.")
+	@Test(dataProvider = "fantasticFourFactoryProvider", expectedExceptions = CustomizedRulesException.class, expectedExceptionsMessageRegExp = "The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.")
 	public void testCommentRuleNoSuchMethod(Object fantasticFour) throws Exception {
 		IEngine en = new Engine();
 		en.marshalToWorkbook(fantasticFour);
-	}	
+	}
 }
