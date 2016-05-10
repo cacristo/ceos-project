@@ -2,6 +2,8 @@ package net.ceos.project.poi.annotated.core;
 
 import java.util.Collection;
 
+import net.ceos.project.poi.annotated.exception.WorkbookException;
+
 public interface IGeneratorCSV {
 
 	/**
@@ -14,7 +16,7 @@ public interface IGeneratorCSV {
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
 	 */
-	void marshalAndSave(final Object object, final String pathFile) throws Exception;
+	void marshalAndSave(final Object object, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the CSV file based at {@link CConfigCriteria} and the object
@@ -29,7 +31,7 @@ public interface IGeneratorCSV {
 	 *            information to the object
 	 */
 	void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
-			throws Exception;
+			throws WorkbookException;
 
 	/**
 	 * Generate the CSV file from the collection of objects.
@@ -41,7 +43,7 @@ public interface IGeneratorCSV {
 	 *            information to the object
 	 * @throws Exception
 	 */
-	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws Exception;
+	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the CSV file, based at {@link CConfigCriteria}, from the collection of objects.
@@ -56,7 +58,7 @@ public interface IGeneratorCSV {
 	 * @throws Exception
 	 */
 	void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
-			final String pathFile) throws Exception;
+			final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the object from the path file passed as parameter.
@@ -67,7 +69,7 @@ public interface IGeneratorCSV {
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
 	 */
-	void unmarshalFromPath(final Object object, final String pathFile) throws Exception;
+	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the object from, based at {@link CConfigCriteria}, the path file
@@ -82,7 +84,7 @@ public interface IGeneratorCSV {
 	 *            information to the object
 	 */
 	void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
-			throws Exception;
+			throws WorkbookException;
 
 	/**
 	 * Charge the collection of object from the path file passed as parameter.
@@ -96,7 +98,7 @@ public interface IGeneratorCSV {
 	 *            information to the collection
 	 */
 	void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
-			throws Exception;
+			throws WorkbookException;
 
 	/**
 	 * Charge the collection of object, based at {@link CConfigCriteria}, from
@@ -113,6 +115,6 @@ public interface IGeneratorCSV {
 	 *            information to the collection
 	 */
 	void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
-			final Collection<?> listObject, final String pathFile) throws Exception;
+			final Collection<?> listObject, final String pathFile) throws WorkbookException;
 
 }

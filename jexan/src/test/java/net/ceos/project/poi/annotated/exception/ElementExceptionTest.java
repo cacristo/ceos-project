@@ -11,11 +11,8 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsElementInvalidPosition;
 import net.ceos.project.poi.annotated.bean.XlsElementOverwriteCell;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidObject;
-import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidPositionCell;
-import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidPositionRow;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
@@ -139,33 +136,6 @@ public class ElementExceptionTest {
 	public void testMarshalXlsFreeElementOverwriteCell() throws Exception {
 		IEngine en = new Engine();
 		en.marshalToWorkbook(new XlsFreeElementOverwriteCell());
-	}
-
-	/**
-	 * Test a {@link XlsElement} trying write at invalid position<br>
-	 */
-	@Test(expected = ElementException.class)
-	public void testMarshalXlsElementInvalidPosition() throws Exception {
-		IEngine en = new Engine();
-		en.marshalToFileOutputStream(new XlsElementInvalidPosition());
-	}
-
-	/**
-	 * Test a {@link XlsFreeElement} trying write at invalid cell position<br>
-	 */
-	@Test(expected = ElementException.class)
-	public void testMarshalXlsFreeElementInvalidPositionCell() throws Exception {
-		IEngine en = new Engine();
-		en.marshalToFileOutputStream(new XlsFreeElementInvalidPositionCell());
-	}
-
-	/**
-	 * Test a {@link XlsFreeElement} trying write at invalid row position<br>
-	 */
-	@Test(expected = ElementException.class)
-	public void testMarshalXlsFreeElementInvalidPositionRow() throws Exception {
-		IEngine en = new Engine();
-		en.marshalToFileOutputStream(new XlsFreeElementInvalidPositionRow());
 	}
 
 	/**

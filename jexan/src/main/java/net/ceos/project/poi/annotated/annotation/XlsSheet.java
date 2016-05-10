@@ -19,8 +19,6 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 @Retention(RUNTIME)
 public @interface XlsSheet {
 
-	// FIXME pass the attribute at @XlsConfiguration to this annotation
-
 	/**
 	 * Define the sheet title.
 	 * 

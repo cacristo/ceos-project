@@ -1,10 +1,7 @@
 package net.ceos.project.poi.annotated.exception;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.FantasticFourFactory;
@@ -23,38 +20,21 @@ import net.ceos.project.poi.annotated.core.TestUtils;
  * @author Carlos CRISTO ABREU
  */
 public class CustomizedRulesExceptionTest {
-	
-	private boolean exceptionDetected = false;
 
-	private void reset() {
-		this.exceptionDetected = false;
-
-	}
-
-	@Before
-	public void setUp() throws Exception {
-		reset();
-	}
-
-	
 	/**
 	 * Test a simple customized rules defined if value under 450
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtNumeric() throws Exception {
 		XlsElementCustomizedRulesNumeric custom = new XlsElementCustomizedRulesNumeric();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -63,19 +43,15 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtString() throws Exception {
 		XlsElementCustomizedRulesString custom = new XlsElementCustomizedRulesString();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -83,7 +59,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods1() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -91,13 +67,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(300);
 		custom.setDoublePrimitiveAttribute(10);
-		try {
-			IEngine en = new Engine();
-			en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(custom, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -105,7 +77,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods2() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -113,13 +85,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(300);
 		custom.setDoublePrimitiveAttribute(0);
-		try {
-			IEngine en = new Engine();
-			en.marshalToSheet(custom);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalToSheet(custom);
 	}
 
 	/**
@@ -127,7 +95,7 @@ public class CustomizedRulesExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods3() throws Exception {
 		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
 		custom.setDateAttribute(new Date());
@@ -135,13 +103,9 @@ public class CustomizedRulesExceptionTest {
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(200);
 		custom.setDoublePrimitiveAttribute(15);
-		try {
-			IEngine en = new Engine();
-			en.marshalToWorkbook(custom);
-		} catch (Exception e) {
-			this.exceptionDetected = e.getCause().toString().contains(CustomizedRulesException.class.getSimpleName());
-		}
-		assertEquals(true, this.exceptionDetected);
+
+		IEngine en = new Engine();
+		en.marshalToWorkbook(custom);
 	}
 
 	/**

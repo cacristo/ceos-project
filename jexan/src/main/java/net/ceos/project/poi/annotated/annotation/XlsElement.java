@@ -98,14 +98,6 @@ public @interface XlsElement {
 	String customizedRules() default "";
 
 	/**
-	 * Define the decimal scale of the Double / BigDecimal objects.<br>
-	 * Apply at version 2.0
-	 * 
-	 * @return the decimal scale to apply
-	 */
-	// FIXME int decimalScale() default 2;
-
-	/**
 	 * Define the column size to apply at the column.<br>
 	 * Apply at version 2.0
 	 * 
