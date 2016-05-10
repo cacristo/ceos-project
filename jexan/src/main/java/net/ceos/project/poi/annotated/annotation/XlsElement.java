@@ -104,4 +104,6 @@ public @interface XlsElement {
 	 * @return the column size to apply
 	 */
 	int columnWidthInUnits() default 0;
+
+	boolean parentSheet() default false;
 }

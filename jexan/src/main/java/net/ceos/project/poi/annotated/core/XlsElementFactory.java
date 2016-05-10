@@ -68,6 +68,11 @@ public interface XlsElementFactory {
 			public int columnWidthInUnits() {
 				return xlsAnnotation.columnWidthInUnits();
 			}
+
+			@Override
+			public boolean parentSheet() {
+				return false;
+			}
 		};
 	}
 }

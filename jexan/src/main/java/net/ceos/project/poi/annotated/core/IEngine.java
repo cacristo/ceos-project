@@ -250,12 +250,13 @@ public interface IEngine {
 	 */
 	void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException;
 
-	Collection<?> unmarshalToCollection(final Object object);
-
 	/**
 	 * 
 	 * @param collection
 	 */
 	void marshalAsCollection(final Collection<?> collection);
+
+	Collection<?> unmarshalToCollection(XConfigCriteria configCriteria, Object object, String excelFilePath)
+			throws WorkbookException;
 
 }
