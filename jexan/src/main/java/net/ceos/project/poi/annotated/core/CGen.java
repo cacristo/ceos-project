@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -742,6 +743,27 @@ public class CGen implements IGeneratorCSV {
 		} catch (IOException e) {
 			throw new WorkbookException(e.getMessage(), e);
 		}
+	}
+
+	public static Object toCollection(Object o, Field f) {
+		
+
+		try {
+
+			@SuppressWarnings("rawtypes")
+			Class[] argTypes = {};
+
+			String method = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+
+			Method m = o.getClass().getDeclaredMethod(method, argTypes);
+
+			return  m.invoke(o, (Object[]) null);
+
+			
+		} catch (Exception e) {
+			
+		}
+		return null;
 	}
 
 }

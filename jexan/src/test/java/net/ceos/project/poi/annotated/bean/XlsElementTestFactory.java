@@ -69,6 +69,11 @@ public class XlsElementTestFactory {
 			public int columnWidthInUnits() {
 				return columnSize;
 			}
+
+			@Override
+			public boolean parentSheet() {
+				return false;
+			}
 		};
 	}
 }
