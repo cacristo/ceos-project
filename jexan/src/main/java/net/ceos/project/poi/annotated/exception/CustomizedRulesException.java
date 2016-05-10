@@ -1,6 +1,12 @@
 package net.ceos.project.poi.annotated.exception;
 
-public class CustomizedRulesException extends Exception {
+/**
+ * Manage the customized exceptions at jexan.
+ * 
+ * @version 1.0
+ * @author Carlos CRISTO ABREU
+ */
+public class CustomizedRulesException extends WorkbookException {
 
 	private static final long serialVersionUID = -606550650637642500L;
 
