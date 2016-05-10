@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -805,5 +806,27 @@ public class CGen implements IGeneratorCSV {
 		/* close the file */
 		br.close();
 	}
+
+	public static Object toCollection(Object o, Field f) {
+		
+
+		try {
+
+			@SuppressWarnings("rawtypes")
+			Class[] argTypes = {};
+
+			String method = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
+
+			Method m = o.getClass().getDeclaredMethod(method, argTypes);
+
+			return  m.invoke(o, (Object[]) null);
+
+			
+		} catch (Exception e) {
+			
+		}
+		return null;
+	}
+
 
 }

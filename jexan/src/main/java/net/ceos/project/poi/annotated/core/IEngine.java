@@ -254,14 +254,16 @@ public interface IEngine {
 	void unmarshalFromByte(final Object object, final byte[] byteArray) throws ElementException, ConfigurationException,
 			IOException, IllegalAccessException, InstantiationException, SheetException, ConverterException;
 
-	Collection<?> unmarshalToCollection(final Object object);
-
 	/**
 	 * 
 	 * @param collection
 	 */
 	void marshalAsCollection(final Collection<?> collection);
 
+	Collection<?> unmarshalToCollection(XConfigCriteria configCriteria, Object object, String excelFilePath)
+			throws ConfigurationException, InstantiationException, IllegalAccessException, InvocationTargetException,
+			ConverterException, ElementException, IOException;
+	
 	/* ############################################# */
 	/* ################## TO REVIEW ################ */
 	/* ############################################# */
@@ -279,4 +281,5 @@ public interface IEngine {
 			CustomizedRulesException, ConverterException, IOException;
 
 	Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws Exception;
+
 }
