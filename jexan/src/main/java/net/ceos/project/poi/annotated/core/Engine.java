@@ -7,9 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,7 +73,7 @@ public class Engine implements IEngine {
 	 * @return
 	 * @throws ConfigurationException
 	 */
-	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC)
+	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC, final  boolean insideCollection)
 			throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
@@ -83,6 +86,17 @@ public class Engine implements IEngine {
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			initializeXlsSheet(configCriteria, xlsAnnotation);
+			if(insideCollection && oC.isAnnotationPresent(XlsElement.class)){
+				/**
+				 * if the collection is an attribut inside an object
+				 * we get the sheet title name from the element
+				*/
+				XlsElement xlsElement = (XlsElement) oC.getAnnotation(XlsElement.class);
+				if(!xlsElement.parentSheet()){
+					configCriteria.setTitleSheet(xlsElement.title());
+					configCriteria.setElement(xlsElement);
+				}
+			}
 		} else {
 			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_XLSSHEET_MISSING.getMessage());
 		}
@@ -162,7 +176,7 @@ public class Engine implements IEngine {
 			return new XSSFWorkbook();
 		}
 	}
-
+	
 	/**
 	 * Initialize Workbook from FileInputStream.
 	 * 
@@ -175,16 +189,18 @@ public class Engine implements IEngine {
 	 */
 	private Workbook initializeWorkbook(final FileInputStream inputStream, final ExtensionFileType type)
 			throws WorkbookException {
-try {
-		if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
-			return new HSSFWorkbook(inputStream);
-		} else {
-			return new XSSFWorkbook(inputStream);
+		try {
+			if (type != null && ExtensionFileType.XLS.getExtension().equals(type.getExtension())) {
+				return new HSSFWorkbook(inputStream);
+			} else {
+				return new XSSFWorkbook(inputStream);
 			}
 		} catch (IOException e) {
 			throw new WorkbookException(e.getMessage(), e);
 		}
 	}
+
+	
 
 	/**
 	 * Initialize Workbook from byte[].
@@ -449,20 +465,29 @@ try {
 
 			Class<?> fT = configCriteria.getField().getType();
 
-			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+			if (Collection.class.isAssignableFrom(fT)) {
 
-			if (!isAppliedObject && !fT.isPrimitive()) {
-				try {
-					Object nO = configCriteria.getField().get(o);
-					/* manage null objects */
-					if (nO == null) {
-						nO = fT.newInstance();
+				// E uma lista entao ha que crear uma sheet nova
+				marshallCollectionEngineT(configCriteria,
+						(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, fT);
+			} else {
+
+				boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+
+				if (!isAppliedObject && !fT.isPrimitive()) {
+					try {
+
+						Object nO = configCriteria.getField().get(o);
+						/* manage null objects */
+						if (nO == null) {
+							nO = fT.newInstance();
+						}
+						Class<?> oC = nO.getClass();
+
+						counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
+					} catch (InstantiationException | IllegalAccessException e) {
+						throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 					}
-					Class<?> oC = nO.getClass();
-
-					counter = marshalAsPropagationHorizontal(configCriteria, nO, oC, idxR, idxC - 1, cL + 1);
-				} catch (InstantiationException | IllegalAccessException e) {
-					throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 				}
 			}
 		}
@@ -739,15 +764,18 @@ try {
 	 */
 	private int preparePropagationHorizontal(final XConfigCriteria configCriteria) throws SheetException {
 		int idxRow;
+		
 		if (configCriteria.getWorkbook().getNumberOfSheets() == 0
-				|| configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()) == null) {
+				|| configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet())) == null) {
 			configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 			idxRow = configCriteria.getStartRow();
 			configCriteria.setRowHeader(initializeRow(configCriteria.getSheet(), idxRow++));
 			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 
 		} else {
-			idxRow = configCriteria.getSheet().getLastRowNum() + 1;
+			//TOVERIFY se ha que aumentar a 5 pelo nestedheader
+			idxRow =configCriteria.getElement()!=null && configCriteria.getElement().parentSheet() ? configCriteria.getSheet().getLastRowNum() + 3 : configCriteria.getSheet().getLastRowNum() + 1;
+			//idxRow = configCriteria.getSheet().getLastRowNum() + 1;
 			configCriteria.setRowHeader(null);
 			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
 
@@ -770,12 +798,13 @@ try {
 	private int preparePropagationVertical(final XConfigCriteria configCriteria, int idxCell) throws SheetException {
 		int indexCell = idxCell;
 		if (configCriteria.getWorkbook().getNumberOfSheets() == 0
-				|| configCriteria.getWorkbook().getSheet(configCriteria.getTitleSheet()) == null) {
+				|| configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet())) == null) {
 			configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
 			indexCell = configCriteria.getStartCell();
 		} else {
 			indexCell += 1;
 		}
+		
 		return indexCell;
 	}
 
@@ -801,12 +830,26 @@ try {
 	 */
 	private int marshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, final Class<?> oC,
 			final int idxR, final int idxC, final int cL) throws WorkbookException {
+
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexCell = idxC;
-
+		int rem=0;
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		//Order by the list by position
+		Collections.sort(fL,new Comparator<Field>(){
+            public int compare(Field f1,Field f2){
+            	if(f2==null){
+            		return 0;
+            	}else if (f1!=null && f2!=null && f1.isAnnotationPresent(XlsElement.class) && f2.isAnnotationPresent(XlsElement.class)) {
+    				XlsElement element1 = (XlsElement) f1.getAnnotation(XlsElement.class);
+    				XlsElement element2 = (XlsElement) f2.getAnnotation(XlsElement.class);
+    				return element1.position() - element2.position();
+            	}else{
+            		return 0;
+            	}   	
+            }});
 		for (Field f : fL) {
 			/* update field at ConfigCriteria */
 			configCriteria.setField(f);
@@ -846,10 +889,17 @@ try {
 				 * new object)
 				 */
 				counter++;
-				if (configCriteria.getRowHeader() != null) {
+				int pos= idxC + xlsAnnotation.position();
+				//if is a list don't generate the head
+				if (configCriteria.getRowHeader() != null && !Collection.class.isAssignableFrom(f.getType())) {
+					pos = pos-rem;
 					/* header treatment */
 					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
 							indexCell + xlsAnnotation.position(), xlsAnnotation.title());
+					rem=0;
+				}else{
+					//
+					rem=rem+1;
 				}
 				/* prepare the column width */
 				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
@@ -908,6 +958,18 @@ try {
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
+		Collections.sort(fL,new Comparator<Field>(){
+            public int compare(Field f1,Field f2){
+            	if(f2==null){
+            		return 0;
+            	}else if (f1!=null && f2!=null && f1.isAnnotationPresent(XlsElement.class) && f2.isAnnotationPresent(XlsElement.class)) {
+    				XlsElement element1 = (XlsElement) f1.getAnnotation(XlsElement.class);
+    				XlsElement element2 = (XlsElement) f2.getAnnotation(XlsElement.class);
+    				return element1.position() - element2.position();
+            	}else{
+            		return 0;
+            	}   	
+            }});
 		for (Field f : fL) {
 			/* process each field from the object */
 			configCriteria.setField(f);
@@ -1037,6 +1099,7 @@ try {
 				counter++;
 
 				/* content row */
+				//MAL - ERRO AQUI
 				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
 				Cell contentCell = contentRow.getCell(indexCell + xlsAnnotation.position());
 
@@ -1250,7 +1313,7 @@ try {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, oC);
+		initializeConfigurationData(configCriteria, oC, false);
 
 		/* initialize Workbook */
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
@@ -1332,7 +1395,7 @@ try {
 	 *            the collection of objects to apply at the workbook.
 	 * @throws WorkbookException
 	 */
-	private void marshalCollectionEngine(final XConfigCriteria configCriteria, final Collection<?> listObject)
+	private void marshalCollectionEngine(final XConfigCriteria configCriteria, final Collection<?> listObject, final boolean insideCollection)
 			throws WorkbookException {
 		int idxRow;
 		int idxCell = 0;
@@ -1342,7 +1405,9 @@ try {
 		}
 		Object objectRT;
 		try {
-			objectRT = listObject.stream().findFirst().get();
+			//TOVERIFY 
+			objectRT = listObject.iterator().next();
+			//objectRT = listObject.getClass().stream().findFirst().get();
 		} catch (Exception e) {
 			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage(), e);
 		}
@@ -1351,7 +1416,7 @@ try {
 		Class<?> oC = initializeRuntimeClass(objectRT);
 
 		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, oC);
+	//	initializeConfigurationData(configCriteria, oC, insideCollection);
 
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
@@ -1362,19 +1427,31 @@ try {
 		// initialize style cell via default option
 		configCriteria.initializeCellDecorator();
 
+	
+		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC);
+	}
+
+	private void marshallCollectionEngineT(final XConfigCriteria configCriteria, final Collection<?> listObject,
+			int idxCell, Class<?> oC) throws WorkbookException {
+
+		int idxRow;
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = listObject.iterator();
 		while (iterator.hasNext()) {
 			Object object = iterator.next();
 
+			/* initialize configuration data */
+			initializeConfigurationData(configCriteria, object.getClass(), false);
+			
 			// initialize rows according the PropagationType
 			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 				idxCell = configCriteria.getStartCell();
 				idxRow = preparePropagationHorizontal(configCriteria);
 
-				marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
+				marshalAsPropagationHorizontal(configCriteria, object, object.getClass(), idxRow, idxCell, 0);
 
 			} else {
+				//parentsheet para fazer
 				idxCell = preparePropagationVertical(configCriteria, idxCell);
 				idxRow = configCriteria.getStartRow();
 
@@ -1385,6 +1462,7 @@ try {
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
 	}
+
 
 	/* ######################## Marshal methods ########################## */
 
@@ -1584,11 +1662,8 @@ try {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
-		/*
-		 * Generate the workbook based at the list of objects passed as
-		 * parameter
-		 */
-		marshalCollectionEngine(configCriteria, listObject);
+		/* Generate the workbook based at the list of objects passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject, false);
 
 		/* Return the Sheet generated */
 		return configCriteria.getWorkbook().getSheetAt(0);
@@ -1609,11 +1684,8 @@ try {
 	@Override
 	public Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException {
-		/*
-		 * Generate the workbook based at the list of objects passed as
-		 * parameter
-		 */
-		marshalCollectionEngine(configCriteria, listObject);
+		/* Generate the workbook based at the list of objects passed as parameter */
+		marshalCollectionEngine(configCriteria, listObject, false);
 
 		/* Return the Sheet generated */
 		return configCriteria.getWorkbook().getSheetAt(0);
@@ -1634,7 +1706,7 @@ try {
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook based at the object passed as parameter */
-		marshalCollectionEngine(configCriteria, listObject);
+		marshalCollectionEngine(configCriteria, listObject,false);
 
 		/* Return the Workbook generated */
 		return configCriteria.getWorkbook();
@@ -1656,7 +1728,7 @@ try {
 	public Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException {
 		/* Generate the workbook from the object passed as parameter */
-		marshalCollectionEngine(configCriteria, listObject);
+		marshalCollectionEngine(configCriteria, listObject,false);
 
 		/* Return the Workbook generated */
 		return configCriteria.getWorkbook();
@@ -1699,7 +1771,7 @@ try {
 	public void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws WorkbookException {
 		/* Generate the workbook from the object passed as parameter */
-		marshalCollectionEngine(configCriteria, listObject);
+		marshalCollectionEngine(configCriteria, listObject,false);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1730,7 +1802,7 @@ try {
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook from the object passed as parameter */
-		marshalCollectionEngine(configCriteria, listObject);
+		marshalCollectionEngine(configCriteria, listObject,false);
 
 		/* Generate the byte array to return */
 		return workbookToByteAray(configCriteria.getWorkbook());
@@ -1749,7 +1821,7 @@ try {
 	public byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException {
 		/* Generate the workbook from the object passed as parameter */
-		marshalCollectionEngine(configCriteria, listObject);
+		marshalCollectionEngine(configCriteria, listObject, false);
 
 		/* Generate the byte array to return */
 		return workbookToByteAray(configCriteria.getWorkbook());
@@ -1774,7 +1846,7 @@ try {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC);
+		initializeConfigurationData(configCriteria, oC, false);
 
 		/* set workbook */
 		configCriteria.setWorkbook(workbook);
@@ -1800,7 +1872,7 @@ try {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC);
+		initializeConfigurationData(configCriteria, oC, false);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -1842,7 +1914,7 @@ try {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC);
+		initializeConfigurationData(configCriteria, oC, false);
 
 		/* set workbook */
 		configCriteria.setWorkbook(initializeWorkbook(byteArray, configCriteria.getExtension()));
@@ -1858,8 +1930,90 @@ try {
 	}
 
 	@Override
-	public Collection<?> unmarshalToCollection(final Object object) {
-		// TODO Auto-generated method stub
-		return Collections.emptyList();
+	public Collection<?> unmarshalToCollection(final XConfigCriteria configCriteria,final Object object, String excelFilePath) throws ConfigurationException, InstantiationException, IllegalAccessException, InvocationTargetException, ConverterException, ElementException, IOException {
+		//FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+		
+		/* initialize configuration data */
+		initializeConfigurationData(configCriteria, object.getClass(), false);
+
+		/*
+		 * check if the path terminate with the file separator, otherwise will
+		 * be added to avoid any problem
+		 */
+		String internalPathFile = excelFilePath;
+		if (!excelFilePath.endsWith(File.separator)) {
+			internalPathFile = excelFilePath.concat(File.separator);
+		}
+
+		Collection<Object> collection = null;
+		try {
+			FileInputStream input = new FileInputStream(internalPathFile + configCriteria.getCompleteFileName());
+
+			/* set workbook */
+			configCriteria.setWorkbook(initializeWorkbook(input, configCriteria.getExtension()));
+
+			collection = unmarshalTreatementToCollection(object, configCriteria);
+		} catch (IOException e) {
+			throw new WorkbookException(e.getMessage(), e);
+		}
+		return collection;
+	}
+	
+	private Collection<Object> unmarshalTreatementToCollection(Object object, XConfigCriteria configCriteria)
+		throws  WorkbookException
+			 {
+		/* initialize the runtime class of the object */
+		Class<?> oC = initializeRuntimeClass(object);
+        
+        initializeConfigurationData(configCriteria, oC, false);
+     	
+     	
+     	Sheet s = configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()));
+     	configCriteria.setSheet(s);
+		/* initialize index row & cell */
+		int idxRow = configCriteria.getStartRow();
+		int idxCell = configCriteria.getStartCell();
+		Iterator<Row> iterator = s.iterator();
+        Collection<Object> collection = new ArrayList<>();
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+			 while (iterator.hasNext()) {
+				try {
+					Object obj = oC.newInstance();
+					unmarshalAsPropagationHorizontal(configCriteria, obj, oC, idxRow, idxCell);
+					if (obj != null) {
+						collection.add((Object) obj);
+						idxRow = idxRow + 1;
+					} else {
+						break;
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+				}
+		     }
+			
+		} else {
+			 while (iterator.hasNext()) {
+				 unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
+				 if(object!=null){
+					 collection.add((Object) object);
+					 idxCell= idxCell+1;
+				 }else{
+					 break;
+				 }
+				 
+		     }
+			
+		}
+		return collection;
+	}
+
+	/**
+	 * Method to truncate title of the sheet.
+	 * The length max is 31 caracters
+	 * @param title
+	 * @return
+	 */
+	private String truncateTitle(String title){
+		return title!=null && title.length()>31 ? title.substring(0,31) : title;
 	}
 }
