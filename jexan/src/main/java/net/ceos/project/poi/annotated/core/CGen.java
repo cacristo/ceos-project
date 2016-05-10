@@ -806,4 +806,8 @@ public class CGen implements IGeneratorCSV {
 		br.close();
 	}
 
+	public static Collection<?> toCollection(Object o, Field field) {
+		return null;
+	}
+
 }
