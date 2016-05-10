@@ -223,21 +223,4 @@ public interface IEngine {
 	 */
 	void marshalAsCollection(final Collection<?> collection);
 
-	/* ############################################# */
-	/* ################## TO REVIEW ################ */
-	/* ############################################# */
-
-	/**
-	 * Generate the workbook from the object and return the FileOutputStream
-	 * generated.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
-	 */
-//	FileOutputStream marshalToFileOutputStream(Object object) throws IllegalAccessException, InvocationTargetException,
-//			InstantiationException, NoSuchMethodException, ElementException, ConfigurationException, SheetException,
-//			CustomizedRulesException, ConverterException, IOException;
-//
-//	Object unmarshalFromFileInputStream(Object object, FileInputStream stream) throws Exception;
 }
