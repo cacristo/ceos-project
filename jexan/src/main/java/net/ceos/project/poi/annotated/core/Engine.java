@@ -1286,7 +1286,7 @@ public class Engine implements IEngine {
 		ByteArrayOutputStream bos = null;
 		try {
 			bos = new ByteArrayOutputStream();
-			
+
 			wb.write(bos);
 			bos.close();
 		} catch (IOException e) {
@@ -1540,7 +1540,7 @@ public class Engine implements IEngine {
 
 	/**
 	 * Generate the workbook based at the object passed as parameter and return
-	 * the respective {@link FileOutputStream}.
+	 * the byte[] generated.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
@@ -1561,8 +1561,10 @@ public class Engine implements IEngine {
 
 	/**
 	 * Generate the workbook based at the {@link XConfigCriteria} and the object
-	 * passed as parameter and return the respective {@link FileOutputStream}.
+	 * passed as parameter and return the byte[] generated.
 	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
@@ -1719,14 +1721,14 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the file from the collection of objects.
+	 * Generate the workbook based at the collection of objects passed as
+	 * parameter and save it at the path send as parameter.
 	 * 
 	 * @param listObject
-	 *            the collection to apply at the file.
+	 *            the collection to apply at the workbook.
 	 * @param pathFile
-	 *            the path where is found the file to read and pass the
-	 *            information to the object
-	 * @throws Exception
+	 *            the file path where will be the file saved
+	 * @throws WorkbookException
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile)
@@ -1739,16 +1741,16 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the CSV file, based at {@link XConfigCriteria}, from the
-	 * collection of objects.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameter and save it at the path send as
+	 * parameter.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
-	 *            the collection to apply at the file.
+	 *            the collection to apply at the workbook.
 	 * @param pathFile
-	 *            the path where is found the file to read and pass the
-	 *            information to the object
+	 *            the file path where will be the file saved
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1772,12 +1774,12 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter
-	 * and return the respective {@link FileOutputStream}.
+	 * Generate the workbook based at the collection of objects and return the
+	 * byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link Workbook} generated
+	 * @return the byte[] generated
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1793,12 +1795,12 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter
-	 * and return the respective {@link FileOutputStream}.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects and return the byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link Workbook} generated
+	 * @return the byte[] generated
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1888,7 +1890,7 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to fill up.
 	 * @param inputByte
-	 *            the byte array to read and pass the information to the object
+	 *            the byte[] to read and pass the information to the object
 	 * @throws WorkbookException
 	 */
 	@Override

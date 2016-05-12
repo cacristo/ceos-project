@@ -1,6 +1,5 @@
 package net.ceos.project.poi.annotated.core;
 
-import java.io.FileOutputStream;
 import java.util.Collection;
 
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,144 +12,172 @@ public interface IEngine {
 	/* ######################## Marshal methods ########################## */
 
 	/**
-	 * Generate the sheet from the object and return the sheet generated.
+	 * Generate the sheet based at the object passed as parameter and return the
+	 * sheet generated.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws WorkbookException
 	 */
 	Sheet marshalToSheet(final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the sheet from the object and return the sheet generated.
+	 * Generate the sheet based at the {@link XConfigCriteria} and the object
+	 * passed as parameters and return the sheet generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws WorkbookException
 	 */
 	Sheet marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the object and return the workbook generated.
+	 * Generate the workbook based at the object passed as parameter and return
+	 * the workbook generated.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
 	Workbook marshalToWorkbook(final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the object and return the workbook generated.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
+	 * passed as parameters and return the workbook generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
 	Workbook marshalToWorkbook(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the object passed as parameter and save it at
-	 * the path send as parameter.
+	 * Generate the workbook based at the object passed as parameter and return
+	 * the byte[] generated.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @param pathFile
-	 *            the file path where will be the file saved
-	 */
-	void marshalAndSave(final Object object, final String pathFile) throws WorkbookException;
-
-	/**
-	 * Generate the workbook from the object passed as parameter and save it at
-	 * the path send as parameter.
-	 * 
-	 * @param configCriteria
-	 *            the {@link XConfigCriteria} to use
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @param pathFile
-	 *            the file path where will be the file saved
-	 */
-	void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile) throws WorkbookException;
-
-	/**
-	 * Generate the workbook from the object and return the byte[] generated.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
+	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
 	byte[] marshalToByte(final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the object and return the byte[] generated.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
+	 * passed as parameter and return the byte[] generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
+	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
 	byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
 	/**
-	 * Generate the sheet from the collection of object and return the sheet generated.
+	 * Generate the workbook based at the object passed as parameters and save
+	 * it at the path send as parameter.
+	 * 
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
+	 * @throws WorkbookException
+	 */
+	void marshalAndSave(final Object object, final String pathFile) throws WorkbookException;
+
+	/**
+	 * Generate the workbook based at the {@link XConfigCriteria} and the object
+	 * passed as parameters and save it at the path send as parameter.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param object
+	 *            the object to apply at the workbook.
+	 * @param pathFile
+	 *            the file path where will be the file saved
+	 * @throws WorkbookException
+	 */
+	void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile)
+			throws WorkbookException;
+
+	/**
+	 * Generate the sheet based at the collection of objects passed as parameter
+	 * and return the sheet generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws WorkbookException
 	 */
 	Sheet marshalCollectionToSheet(final Collection<?> listObject) throws WorkbookException;
 
 	/**
-	 * Generate the sheet from the collection of object and return the sheet generated.
+	 * Generate the sheet based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameters and return the sheet
+	 * generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
+	 * @throws WorkbookException
 	 */
-	Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject) throws WorkbookException;
+	Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the list of objects and return the workbook generated.
+	 * Generate the workbook based at the collection of objects passed as
+	 * parameter and return the workbook generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
 	Workbook marshalCollectionToWorkbook(final Collection<?> listObject) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the collection of objects and return the workbook generated.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameters and return the workbook
+	 * generated.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
+	 * @throws WorkbookException
 	 */
-	Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject) throws WorkbookException;
+	Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter and save it at
-	 * the path send as parameter.
+	 * Generate the workbook based at the collection of objects passed as
+	 * parameter and save it at the path send as parameter.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @param pathFile
 	 *            the file path where will be the file saved
-	 * @throws Exception
+	 * @throws WorkbookException
 	 */
 	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws WorkbookException;
-	
+
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter and save it at
-	 * the path send as parameter.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameter and save it at the path send as
+	 * parameter.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
@@ -158,41 +185,35 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @param pathFile
 	 *            the file path where will be the file saved
-	 * @throws Exception
+	 * @throws WorkbookException
 	 */
 	void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws WorkbookException;
 
 	/**
-	 * Generate the workbook from the collection of objects and return the byte[] generated.
+	 * Generate the workbook based at the collection of objects and return the
+	 * byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
+	 * @return the byte[] generated
+	 * @throws WorkbookException
 	 */
 	byte[] marshalCollectionToByte(final Collection<?> listObject) throws WorkbookException;
+
 	/**
-	 * Generate the workbook from the collection of objects and return the byte[] generated.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects and return the byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
+	 * @return the byte[] generated
+	 * @throws WorkbookException
 	 */
-	byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject) throws WorkbookException;
+	byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject)
+			throws WorkbookException;
 
-	
 	/* ######################## Unmarshal methods ######################## */
-
-	/**
-	 * Generate the object from the path file passed as parameter.
-	 * 
-	 * @param object
-	 *            the object to fill up.
-	 * @param pathFile
-	 *            the path where is found the file to read and pass the
-	 *            information to the object
-	 */
-	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the object from the workbook passed as parameter.
@@ -202,8 +223,21 @@ public interface IEngine {
 	 * @param workbook
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
+	 * @throws WorkbookException
 	 */
 	void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws WorkbookException;
+
+	/**
+	 * Generate the object from the path file passed as parameter.
+	 * 
+	 * @param object
+	 *            the object to fill up.
+	 * @param pathFile
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @throws WorkbookException
+	 */
+	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the object from the byte array passed as parameter.
@@ -211,7 +245,8 @@ public interface IEngine {
 	 * @param object
 	 *            the object to fill up.
 	 * @param inputByte
-	 *            the byte array to read and pass the information to the object
+	 *            the byte[] to read and pass the information to the object
+	 * @throws WorkbookException
 	 */
 	void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException;
 
