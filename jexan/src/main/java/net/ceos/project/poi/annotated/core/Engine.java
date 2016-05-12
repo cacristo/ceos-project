@@ -1219,7 +1219,7 @@ try {
 		ByteArrayOutputStream bos = null;
 		try {
 			bos = new ByteArrayOutputStream();
-			
+
 			wb.write(bos);
 			bos.close();
 		} catch (IOException e) {
@@ -1477,8 +1477,12 @@ try {
 	 * respective {@link FileOutputStream}.
 =======
 	 * Generate the workbook based at the object passed as parameter and return
+<<<<<<< HEAD
 	 * the respective {@link FileOutputStream}.
 >>>>>>> 2b6250f... [8u60] Optimize exceptions management
+=======
+	 * the byte[] generated.
+>>>>>>> 94e088a... [8u60] Update JavaDoc
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
@@ -1499,8 +1503,10 @@ try {
 
 	/**
 	 * Generate the workbook based at the {@link XConfigCriteria} and the object
-	 * passed as parameter and return the respective {@link FileOutputStream}.
+	 * passed as parameter and return the byte[] generated.
 	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
@@ -1657,14 +1663,14 @@ try {
 	}
 
 	/**
-	 * Generate the file from the collection of objects.
+	 * Generate the workbook based at the collection of objects passed as
+	 * parameter and save it at the path send as parameter.
 	 * 
 	 * @param listObject
-	 *            the collection to apply at the file.
+	 *            the collection to apply at the workbook.
 	 * @param pathFile
-	 *            the path where is found the file to read and pass the
-	 *            information to the object
-	 * @throws Exception
+	 *            the file path where will be the file saved
+	 * @throws WorkbookException
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile)
@@ -1677,16 +1683,16 @@ try {
 	}
 
 	/**
-	 * Generate the CSV file, based at {@link XConfigCriteria}, from the
-	 * collection of objects.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects passed as parameter and save it at the path send as
+	 * parameter.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
-	 *            the collection to apply at the file.
+	 *            the collection to apply at the workbook.
 	 * @param pathFile
-	 *            the path where is found the file to read and pass the
-	 *            information to the object
+	 *            the file path where will be the file saved
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1710,12 +1716,12 @@ try {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter
-	 * and return the respective {@link FileOutputStream}.
+	 * Generate the workbook based at the collection of objects and return the
+	 * byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link Workbook} generated
+	 * @return the byte[] generated
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1731,12 +1737,12 @@ try {
 	}
 
 	/**
-	 * Generate the workbook from the collection of objects passed as parameter
-	 * and return the respective {@link FileOutputStream}.
+	 * Generate the workbook based at the {@link XConfigCriteria} and the
+	 * collection of objects and return the byte[] generated.
 	 * 
 	 * @param listObject
 	 *            the collection to apply at the workbook.
-	 * @return the {@link Workbook} generated
+	 * @return the byte[] generated
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1826,7 +1832,7 @@ try {
 	 * @param object
 	 *            the object to fill up.
 	 * @param inputByte
-	 *            the byte array to read and pass the information to the object
+	 *            the byte[] to read and pass the information to the object
 	 * @throws WorkbookException
 	 */
 	@Override
@@ -1856,72 +1862,4 @@ try {
 		// TODO Auto-generated method stub
 		return Collections.emptyList();
 	}
-
-	/* ############################################# */
-	/* ################## TO REVIEW ################ */
-	/* ############################################# */
-
-	/**
-	 * Generate the workbook from the object passed as parameter and return the
-	 * respective {@link FileOutputStream}.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @return the {@link FileOutputStream} generated
-	 * @throws ConverterException
-	 * @throws CustomizedRulesException
-	 * @throws SheetException
-	 * @throws ConfigurationException
-	 * @throws ElementException
-	 * @throws NoSuchMethodException
-	 * @throws InstantiationException
-	 * @throws InvocationTargetException
-	 * @throws IllegalAccessException
-	 * @throws IOException
-	 */
-	// @Override
-	// public FileOutputStream marshalToFileOutputStream(final Object object)
-	// throws IllegalAccessException,
-	// InvocationTargetException, InstantiationException, NoSuchMethodException,
-	// ElementException,
-	// ConfigurationException, SheetException, CustomizedRulesException,
-	// ConverterException, IOException {
-	// /* Initialize a basic ConfigCriteria */
-	// XConfigCriteria configCriteria = new XConfigCriteria();
-	//
-	// /* Generate the workbook from the object passed as parameter */
-	// marshalEngine(configCriteria, object);
-	//
-	// /* Generate the FileOutputStream to return */
-	// return workbookFileOutputStream(configCriteria.getWorkbook(),
-	// configCriteria.getFileName());
-	// }
-
-	/**
-	 * Generate the object from the {@link FileInputStream} passed as parameter.
-	 * 
-	 * @param object
-	 *            the object to apply at the workbook.
-	 * @param stream
-	 *            the {@link FileInputStream} to read
-	 * @return the {@link Object} filled up
-	 */
-	// @Override
-	// public Object unmarshalFromFileInputStream(final Object object, final
-	// FileInputStream stream) throws Exception {
-	// /* instance object class */
-	// Class<?> oC = object.getClass();
-	//
-	// /* initialize configuration data */
-	// XConfigCriteria configCriteria = new XConfigCriteria();
-	// initializeConfigurationData(configCriteria, oC);
-	//
-	// /* set workbook */
-	// configCriteria.setWorkbook(initializeWorkbook(stream,
-	// configCriteria.getExtension()));
-	//
-	// unmarshalEngine(configCriteria, object, oC);
-	//
-	// return object;
-	// }
 }
