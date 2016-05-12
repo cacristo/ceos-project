@@ -1,7 +1,9 @@
 package net.ceos.project.poi.annotated.bean;
 
+import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 
+@XlsConfiguration(nameFile="nameFileJob")
 public class Job {
 
 	@XlsElement(title = "Name", position = 1)
