@@ -11,6 +11,8 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
+import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleHoriz;
+import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleVerti;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsElementInvalidPosition;
@@ -73,6 +75,13 @@ public class ElementExceptionTest {
 		return new Object[][] { 
 			{ new XlsConflitFormulaHorizIncompatible() },
 			{ new XlsConflitFormulaVertiIncompatible() } };
+	}
+
+	@DataProvider
+	public Object[][] xlsConflictAnnotationProvider() {
+		return new Object[][] { 
+			{ new XlsConflictAnnotationIncompatibleHoriz() },
+			{ new XlsConflictAnnotationIncompatibleVerti() } };
 	}
 
 	/**
@@ -155,6 +164,15 @@ public class ElementExceptionTest {
 	 */
 	@Test(dataProvider = "xlsConflictConfigurationProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
 	public void testXlsConflictConfigurationException(Object incompatibleConfig) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a non-conflict annotation type
+	 */
+	@Test(dataProvider = "xlsConflictAnnotationProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict with annotation of type @XlsElement and @XlsFreeElement. Only one annotation type is valid per attribute.")
+	public void testXlsConflictAnnotation(Object incompatibleConfig) throws Exception {
 		IEngine en = new Engine();
 		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
