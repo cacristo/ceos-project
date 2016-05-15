@@ -9,6 +9,8 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
+import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleHoriz;
+import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleVerti;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsElementOverwriteCell;
@@ -155,5 +157,23 @@ public class ElementExceptionTest {
 		IEngine en = new Engine();
 		en.marshalAndSave(new XlsConflitFormulaVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
-	
+
+	/**
+	 * Test a horizontal non-conflict annotation type
+	 */
+	@Test(expected = ElementException.class)
+	public void testXlsConflictAnnotationHorizontal() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(new XlsConflictAnnotationIncompatibleHoriz(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a vertical non-conflict annotation type
+	 */
+	@Test(expected = ElementException.class)
+	public void testXlsConflictAnnotationVertical() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(new XlsConflictAnnotationIncompatibleVerti(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
 }

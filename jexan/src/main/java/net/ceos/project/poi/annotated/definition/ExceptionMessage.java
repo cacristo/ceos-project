@@ -49,6 +49,7 @@ public enum ExceptionMessage {
 	ELEMENT_OVERWRITE_CELL("The element entry is trying to be set at one position already used. Review your configuration."),
 	ELEMENT_INVALID_POSITION("The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration."),
 	ELEMENT_NO_SUCH_METHOD("Problem while attempt to instantiate the object."),
+	ELEMENT_CONFLICT_WITH_FREEELEMENT("Conflict with annotation of type @XlsElement and @XlsFreeElement. Only one annotation type is valid per attribute."),
 	/* declared messages of SheetException */
 	SHEET_CREATION_SHEET("Problem while creating the Sheet. Review your configuration."),
 	/* declared messages of SheetException */

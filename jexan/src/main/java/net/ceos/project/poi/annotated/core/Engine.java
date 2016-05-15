@@ -876,6 +876,13 @@ public class Engine implements IEngine {
 				/* apply merge region */
 				applyMergeRegion(configCriteria, null, tmpIdxRow, indexCell, true);
 			}
+
+			/* validate non-conflict annotation type */
+			if (f.isAnnotationPresent(XlsElement.class)
+					&& f.isAnnotationPresent(XlsFreeElement.class)) {
+				throw new ElementException(ExceptionMessage.ELEMENT_CONFLICT_WITH_FREEELEMENT.getMessage());
+			}
+
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
@@ -993,6 +1000,12 @@ public class Engine implements IEngine {
 
 			/* restart the index of the cell */
 			indexCell = baseIdxCell;
+
+			/* validate non-conflict annotation type */
+			if (f.isAnnotationPresent(XlsElement.class)
+					&& f.isAnnotationPresent(XlsFreeElement.class)) {
+				throw new ElementException(ExceptionMessage.ELEMENT_CONFLICT_WITH_FREEELEMENT.getMessage());
+			}
 
 			/* Process @XlsElement */
 			if (f.isAnnotationPresent(XlsElement.class)) {
