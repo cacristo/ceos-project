@@ -22,7 +22,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -941,8 +940,8 @@ public class Engine implements IEngine {
 			}
 
 			/* validate non-conflict annotation type */
-			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)
-					&& PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
+			if (f.isAnnotationPresent(XlsElement.class)
+					&& f.isAnnotationPresent(XlsFreeElement.class)) {
 				throw new ElementException(ExceptionMessage.ELEMENT_CONFLICT_WITH_FREEELEMENT.getMessage());
 			}
 
@@ -1063,8 +1062,8 @@ public class Engine implements IEngine {
 			indexCell = baseIdxCell;
 
 			/* validate non-conflict annotation type */
-			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(f)
-					&& PredicateFactory.isFieldAnnotationXlsFreeElementPresent.test(f)) {
+			if (f.isAnnotationPresent(XlsElement.class)
+					&& f.isAnnotationPresent(XlsFreeElement.class)) {
 				throw new ElementException(ExceptionMessage.ELEMENT_CONFLICT_WITH_FREEELEMENT.getMessage());
 			}
 
