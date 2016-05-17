@@ -8,10 +8,13 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
+import net.ceos.project.poi.annotated.bean.CascadeObject;
+import net.ceos.project.poi.annotated.bean.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObject;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObjectBuilder;
+import net.ceos.project.poi.annotated.exception.WorkbookException;
 
 /**
  * Test the core of the library.
@@ -128,10 +131,18 @@ public class EngineTest {
 
 	/**
 	 * Test with cascade type is CASCADE_FULL
+	 * @throws WorkbookException 
 	 */
 	@Test
-	public void testCascadeTypeFull() {
-		// FIXME apply test case
-		assertEquals(true, false);
+	public void testCascadeTypeFull() throws WorkbookException {
+		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
+		
+		IEngine en = new Engine();
+		en.marshalAndSave(cascadeObj, TestUtils.WORKING_DIR_GENERATED_II);
+
+		CascadeObject charger = new CascadeObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
+		CascadeObjectBuilder.validateCascadeObject(charger);
 	}
 }
