@@ -10,9 +10,11 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 
 public class TestUtils {
 
-	public static final String WORKING_DIR_GENERATED_I = "C:\\projects\\tests\\generated";
-	public static final String WORKING_DIR_GENERATED_II = "C:\\projects\\tests\\generated\\";
+	public static final String WORKING_DIR_GENERATED_I = "D:\\projects\\tests\\generated";
+	public static final String WORKING_DIR_GENERATED_II = "D:\\projects\\tests\\generated\\";
 	public static final String WORKING_DIR_MANUALLY = "C:\\projects\\tests\\manually\\";
+	public static final String WORKING_DIR_UNMARSHALL = "D:\\projects\\tests\\generated\\unmarshal\\";
+	public static final String WORKING_DIR_UNMARSHALL_M = "D:\\projects\\tests\\generated\\unmarshal\\marshal";
 	
 	public static void validationString(String string,
 			XlsElement xlsAnnotation, HSSFCell headerCell, HSSFCell contentCell) {

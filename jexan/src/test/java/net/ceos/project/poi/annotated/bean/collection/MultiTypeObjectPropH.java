@@ -1,24 +1,27 @@
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.collection;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.bean.AddressInfo;
+import net.ceos.project.poi.annotated.bean.Job;
+import net.ceos.project.poi.annotated.bean.UnitFamily;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
+import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
-@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_VERTICAL)
-@XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
-public class MultiTypeObject {
+@XlsConfiguration(nameFile="collection_object_multi_h",extensionFile=ExtensionFileType.XLSX)
+@XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL)
+public class MultiTypeObjectPropH {
 
-	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "date")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", position = 2)
+	@XlsElement(title = "String value", /*customizedRules="rules",*/ position = 2)
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3)
@@ -30,7 +33,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Long value", position = 5)
 	private Long longAttribute = 0L;
 
-	@XlsElement(title = "Boolean value", position = 6, comment = "boolean comment")
+	@XlsElement(title = "Boolean value", position = 6, comment="boolean comment")
 	private Boolean booleanAttribute = Boolean.TRUE;
 
 	@XlsElement(title = "job", position = 7)
@@ -39,7 +42,7 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive int value", position = 8)
 	private int integerPrimitiveAttribute = 0;
 
-	@XlsElement(title = "Primitive double value", position = 9, comment = "double comment")
+	@XlsElement(title = "Primitive double value", position = 9, comment="double comment")
 	private double doublePrimitiveAttribute = 0;
 
 	@XlsElement(title = "Primitive long value", position = 10)
@@ -57,28 +60,13 @@ public class MultiTypeObject {
 	@XlsElement(title = "Primitive float value", position = 14)
 	private float floatPrimitiveAttribute = 0f;
 
-	@XlsElement(title = "some sum", position = 15, isFormula = true)
+	@XlsElement(title="some sum", position = 15, isFormula = true)
 	private Double sumVal;
-
+	
 	@XlsElement(title = "Unit family", position = 16)
 	private UnitFamily unitFamily;
-
-	@XlsElement(title = "BigDecimal value", position = 17)
-	private BigDecimal bigDecimalAttribute;
-
-	@XlsElement(title = "Short value", position = 18)
-	private short shortPrimitiveAttribute = 0;
-
-	@XlsElement(title = "Short primitive value", position = 19)
-	private Short shortAttribute = 0;
-
-	@XlsElement(title = "Local date value", position = 20, formatMask = "yyyy-MM-dd", decorator = "date")
-	private LocalDate localDateAttribute;
-
-	@XlsElement(title = "Locel date time value", position = 21, formatMask = "yyyy-MM-dd HH:mm:ss", decorator = "date")
-	private LocalDateTime localDateTimeAttribute;
-
-	public MultiTypeObject() {
+	
+	public MultiTypeObjectPropH() {
 	}
 
 	/**
@@ -304,10 +292,9 @@ public class MultiTypeObject {
 	public Double formulaSumVal() {
 		return doubleAttribute + doubleAttribute * 5;
 	}
-
+	
 	/**
-	 * @param sumVal
-	 *            the sumVal to set
+	 * @param sumVal the sumVal to set
 	 */
 	public void setSumVal(Double sumVal) {
 		this.sumVal = sumVal;
@@ -321,85 +308,25 @@ public class MultiTypeObject {
 	}
 
 	/**
-	 * @param unitFamily
-	 *            the unitFamily to set
+	 * @param unitFamily the unitFamily to set
 	 */
 	public void setUnitFamily(UnitFamily unitFamily) {
 		this.unitFamily = unitFamily;
 	}
-
-	/**
-	 * @return the bigDecimalAttribute
-	 */
-	public BigDecimal getBigDecimalAttribute() {
-		return bigDecimalAttribute;
-	}
-
-	/**
-	 * @param bigDecimalAttribute
-	 *            the bigDecimalAttribute to set
-	 */
-	public void setBigDecimalAttribute(BigDecimal bigDecimalAttribute) {
-		this.bigDecimalAttribute = bigDecimalAttribute;
-	}
-
-	/**
-	 * @return the shortPrimitiveAttribute
-	 */
-	public final short getShortPrimitiveAttribute() {
-		return shortPrimitiveAttribute;
-	}
-
-	/**
-	 * @param shortPrimitiveAttribute
-	 *            the shortPrimitiveAttribute to set
-	 */
-	public final void setShortPrimitiveAttribute(short shortPrimitiveAttribute) {
-		this.shortPrimitiveAttribute = shortPrimitiveAttribute;
-	}
-
-	/**
-	 * @return the shortAttribute
-	 */
-	public final Short getShortAttribute() {
-		return shortAttribute;
-	}
-
-	/**
-	 * @param shortAttribute
-	 *            the shortAttribute to set
-	 */
-	public final void setShortAttribute(Short shortAttribute) {
-		this.shortAttribute = shortAttribute;
-	}
-
-	/**
-	 * @return the localDateAttribute
-	 */
-	public final LocalDate getLocalDateAttribute() {
-		return localDateAttribute;
-	}
-
-	/**
-	 * @param localDateAttribute
-	 *            the localDateAttribute to set
-	 */
-	public final void setLocalDateAttribute(LocalDate localDateAttribute) {
-		this.localDateAttribute = localDateAttribute;
-	}
-
-	/**
-	 * @return the localDateTimeAttribute
-	 */
-	public final LocalDateTime getLocalDateTimeAttribute() {
-		return localDateTimeAttribute;
-	}
-
-	/**
-	 * @param localDateTimeAttribute
-	 *            the localDateTimeAttribute to set
-	 */
-	public final void setLocalDateTimeAttribute(LocalDateTime localDateTimeAttribute) {
-		this.localDateTimeAttribute = localDateTimeAttribute;
+	public void rules() throws CustomizedRulesException {
+		if(StringUtils.isBlank(this.getStringAttribute())){
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
+		}
+		if(this.booleanPrimitiveAttribute){
+			/* some alert */
+			/* some treatment */
+			/* launch exception */
+		}
+		if(this.integerPrimitiveAttribute > 450){
+			/* launch exception */
+			throw new CustomizedRulesException("Pim Pam Pum!!");
+		}
 	}
 }

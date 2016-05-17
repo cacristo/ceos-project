@@ -239,8 +239,10 @@ public interface IEngine {
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
 	 * @throws WorkbookException
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
-	void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws WorkbookException;
+	void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws WorkbookException, IllegalArgumentException, IllegalAccessException;
 
 	/**
 	 * Generate the object from the path file passed as parameter.
@@ -250,9 +252,12 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @return 
 	 * @throws WorkbookException
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
-	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
+	Object unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException, IllegalArgumentException, IllegalAccessException;
 
 	/**
 	 * Generate the object from the byte array passed as parameter.
@@ -262,8 +267,10 @@ public interface IEngine {
 	 * @param inputByte
 	 *            the byte[] to read and pass the information to the object
 	 * @throws WorkbookException
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
 	 */
-	void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException;
+	void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException, IllegalArgumentException, IllegalAccessException;
 
 	/**
 	 * 
