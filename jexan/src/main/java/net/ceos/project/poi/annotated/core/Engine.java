@@ -420,30 +420,27 @@ public class Engine implements IEngine {
 	private void initializeCellByField(final XConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
 			final Object o, final Field field, final int idxC, final int cL) throws WorkbookException {
 
-		/* validate cascade level */
-		if (cL > configCriteria.getCascadeLevel().getCode()) {
+		/* make the field accessible to recover the value */
+		field.setAccessible(true);
 
-			/* make the field accessible to recover the value */
-			field.setAccessible(true);
+		Class<?> fT = field.getType();
 
-			Class<?> fT = field.getType();
-
-			if (configCriteria.getSheet().getRow(xlsAnnotation.row()) != null) {
-				configCriteria.setRow(configCriteria.getSheet().getRow(xlsAnnotation.row()));
-			} else {
-				configCriteria.setRow(configCriteria.getSheet().createRow(xlsAnnotation.row()));
-			}
-			configCriteria.setField(field);
-
-			// initialize Element
-			configCriteria.setElement(XlsElementFactory.build(xlsAnnotation));
-
-			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
-
-			if (!isAppliedObject && !fT.isPrimitive()) {
-				throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
-			}
+		if (configCriteria.getSheet().getRow(xlsAnnotation.row()) != null) {
+			configCriteria.setRow(configCriteria.getSheet().getRow(xlsAnnotation.row()));
+		} else {
+			configCriteria.setRow(configCriteria.getSheet().createRow(xlsAnnotation.row()));
 		}
+		configCriteria.setField(field);
+
+		// initialize Element
+		configCriteria.setElement(XlsElementFactory.build(xlsAnnotation));
+
+		boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+
+		if (!isAppliedObject && !fT.isPrimitive()) {
+			throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
+		}
+
 	}
 
 	/**
