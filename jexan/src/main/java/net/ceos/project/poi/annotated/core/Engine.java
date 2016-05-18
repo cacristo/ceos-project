@@ -421,7 +421,7 @@ public class Engine implements IEngine {
 			final Object o, final Field field, final int idxC, final int cL) throws WorkbookException {
 
 		/* validate cascade level */
-		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		if (cL > configCriteria.getCascadeLevel().getCode()) {
 
 			/* make the field accessible to recover the value */
 			field.setAccessible(true);
@@ -530,7 +530,7 @@ public class Engine implements IEngine {
 		int counter = 0;
 
 		/* validate cascade level */
-		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		if (cL > configCriteria.getCascadeLevel().getCode()) {
 			/* make the field accessible to recover the value */
 			configCriteria.getField().setAccessible(true);
 
@@ -914,7 +914,7 @@ public class Engine implements IEngine {
 		int rem = 0;
 
 		/* validate cascade level */
-		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		if (cL > configCriteria.getCascadeLevel().getCode()) {
 			return counter;
 		}
 
@@ -1053,7 +1053,7 @@ public class Engine implements IEngine {
 		int baseIdxCell = indexCell;
 
 		/* validate cascade level */
-		if (cL <= configCriteria.getCascadeLevel().getCode()) {
+		if (cL > configCriteria.getCascadeLevel().getCode()) {
 			return counter;
 		}
 
