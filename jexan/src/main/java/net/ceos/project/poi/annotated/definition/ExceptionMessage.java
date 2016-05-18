@@ -41,8 +41,6 @@ public enum ExceptionMessage {
 	CONVERTER_BOOLEAN("Problem while convert the boolean element."),
 	CONVERTER_ENUM("Problem while convert the enum element."),
 	CONVERTER_DATE("Problem while convert the Date element, review your decorator mask."),
-	CONVERTER_LOCALDATE("Problem while convert the LocalDate element, review your decorator mask."),
-	CONVERTER_LOCALDATETIME("Problem while convert the LocalDateTime element, review your decorator mask."),
 	/* declared messages of ElementException */
 	ELEMENT_NULL_OBJECT("The entry object is null. Make sure you are sending a correct object."),
 	ELEMENT_COMPLEX_OBJECT("Complex objects are not allowed for this type! Review your configuration."),

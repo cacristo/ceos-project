@@ -21,7 +21,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -187,7 +186,9 @@ public class CGen implements IGeneratorCSV {
 				Class<?> oC = nO.getClass();
 
 				counter = marshal(configCriteria, nO, oC, null, idx - 1);
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException e) {
+				throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 			}
 		}
@@ -330,7 +331,9 @@ public class CGen implements IGeneratorCSV {
 		} else if (!isUpdated && fT.isEnum()) {
 			try {
 				field.set(object, Enum.valueOf((Class<Enum>) fT, values[idx]));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new WorkbookException(e.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new WorkbookException(e.getMessage(), e);
 			}
 			isUpdated = true;
@@ -462,7 +465,9 @@ public class CGen implements IGeneratorCSV {
 
 						/* update the index */
 						index += internalCellCounter;
-					} catch (InstantiationException | IllegalAccessException e) {
+					} catch (InstantiationException e) {
+						throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+					} catch (IllegalAccessException e) {
 						throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 					}
 				}
@@ -765,26 +770,4 @@ public class CGen implements IGeneratorCSV {
 			throw new WorkbookException(e.getMessage(), e);
 		}
 	}
-
-	public static Object toCollection(Object o, Field f) {
-		
-
-		try {
-
-			@SuppressWarnings("rawtypes")
-			Class[] argTypes = {};
-
-			String method = "get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1);
-
-			Method m = o.getClass().getDeclaredMethod(method, argTypes);
-
-			return  m.invoke(o, (Object[]) null);
-
-			
-		} catch (Exception e) {
-			
-		}
-		return null;
-	}
-
 }

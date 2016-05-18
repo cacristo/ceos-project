@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -60,8 +61,18 @@ public class CellHandler {
 	public static final String PRIMITIVE_FLOAT = "float";
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
+	private static final String[] array = { OBJECT_DATE, OBJECT_STRING, OBJECT_SHORT, OBJECT_INTEGER, OBJECT_LONG,
+			OBJECT_DOUBLE, OBJECT_FLOAT, OBJECT_BIGDECIMAL, OBJECT_BOOLEAN, PRIMITIVE_SHORT, PRIMITIVE_INTEGER,
+			PRIMITIVE_LONG, PRIMITIVE_DOUBLE, PRIMITIVE_FLOAT, PRIMITIVE_BOOLEAN };
+
 	private CellHandler() {
 		/* private constructor to hide the implicit public */
+	}
+
+	/* authorized types */
+
+	protected static boolean isAuthorizedType(Field field) {
+		return Arrays.asList(array).contains(field.getType().getName()) || field.getType().isEnum();
 	}
 
 	/* Reader methods */
@@ -82,7 +93,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(readCell(cell))) {
 			try {
 				field.set(object, readCell(cell));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
 			}
 		}
@@ -104,7 +117,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(readCell(cell))) {
 			try {
 				field.set(object, Double.valueOf(readCell(cell)).shortValue());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
 			}
 		}
@@ -126,7 +141,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(readCell(cell))) {
 			try {
 				field.set(object, Double.valueOf(readCell(cell)).intValue());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
 			}
 		}
@@ -148,7 +165,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(readCell(cell))) {
 			try {
 				field.set(object, Double.valueOf(readCell(cell)).longValue());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
 			}
 		}
@@ -176,7 +195,9 @@ public class CellHandler {
 				} else {
 					field.set(object, Double.valueOf(readCell(cell)));
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
 			}
 		}
@@ -205,7 +226,9 @@ public class CellHandler {
 				} else {
 					field.set(object, BigDecimal.valueOf(Double.valueOf(readCell(cell))));
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
 			}
 		}
@@ -244,10 +267,12 @@ public class CellHandler {
 					field.set(object, dateConverted);
 				}
 			}
-		} catch (ParseException | IllegalArgumentException | IllegalAccessException e) {
-			/*
-			 * if date decorator do not match with a valid mask launch exception
-			 */
+			/* if date decorator do not match with a valid mask launch exception */
+		} catch (ParseException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+		} catch (IllegalArgumentException e) {
+			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+		} catch (IllegalAccessException e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
 	}
@@ -268,7 +293,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(readCell(cell))) {
 			try {
 				field.set(object, Double.valueOf(readCell(cell)).floatValue());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
 			}
 		}
@@ -302,7 +329,9 @@ public class CellHandler {
 					/* locale mode */
 					field.set(object, StringUtils.isNotBlank(booleanValue) ? Boolean.valueOf(booleanValue) : null);
 				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 			}
 		}
@@ -327,7 +356,9 @@ public class CellHandler {
 		if (StringUtils.isNotBlank(cell.getStringCellValue())) {
 			try {
 				field.set(object, Enum.valueOf((Class<Enum>) fT, cell.getStringCellValue()));
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_ENUM.getMessage(), e);
+			} catch (IllegalAccessException e) {
 				throw new ConverterException(ExceptionMessage.CONVERTER_ENUM.getMessage(), e);
 			}
 		}
@@ -696,7 +727,11 @@ public class CellHandler {
 		try {
 			Method m = object.getClass().getDeclaredMethod(methodRules, argTypes);
 			m.invoke(object, (Object[]) null);
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+		} catch (NoSuchMethodException e) {
+			throw new CustomizedRulesException(ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_METHOD.getMessage(), e);
+		} catch (IllegalAccessException e) {
+			throw new CustomizedRulesException(ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_METHOD.getMessage(), e);
+		} catch (InvocationTargetException e) {
 			throw new CustomizedRulesException(ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_METHOD.getMessage(), e);
 		}
 	}
