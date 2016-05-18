@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.function.BiFunction;
 
@@ -65,10 +66,20 @@ public class CellHandler {
 	public static final String PRIMITIVE_FLOAT = "float";
 	public static final String PRIMITIVE_BOOLEAN = "boolean";
 
+	private static final String[] array = { OBJECT_DATE, OBJECT_LOCALDATE, OBJECT_LOCALDATETIME, OBJECT_STRING,
+			OBJECT_SHORT, OBJECT_INTEGER, OBJECT_LONG, OBJECT_DOUBLE, OBJECT_FLOAT, OBJECT_BIGDECIMAL, OBJECT_BOOLEAN,
+			PRIMITIVE_SHORT, PRIMITIVE_INTEGER, PRIMITIVE_LONG, PRIMITIVE_DOUBLE, PRIMITIVE_FLOAT, PRIMITIVE_BOOLEAN };
+
 	protected static BiFunction<Row, Integer, Cell> cellFactory = (r, idx) -> r.createCell(idx);
 
 	private CellHandler() {
 		/* private constructor to hide the implicit public */
+	}
+
+	/* authorized types */
+
+	protected static boolean isAuthorizedType(Field field) {
+		return Arrays.asList(array).contains(field.getType().getName()) || field.getType().isEnum();
 	}
 
 	/* Reader methods */
