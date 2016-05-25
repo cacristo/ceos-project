@@ -10,7 +10,7 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 
 @XlsSheet(title = "Conflict Formula Vertical", propagation = PropagationType.PROPAGATION_VERTICAL)
 @XlsConfiguration(nameFile = "ConflictFormulaVertical")
-public class XlsConflitFormulaVertiIncompatible {
+public class XlsConflictFormulaVertiIncompatible {
 
 	@XlsElement(title = "Date value", position = 1)
 	private Date dateAttribute;
@@ -25,7 +25,7 @@ public class XlsConflitFormulaVertiIncompatible {
 	private BigDecimal avgSalary;
 
 
-	public XlsConflitFormulaVertiIncompatible() {
+	public XlsConflictFormulaVertiIncompatible() {
 	}
 
 	/**

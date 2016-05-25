@@ -9,7 +9,7 @@ import net.ceos.project.poi.annotated.annotation.XlsSheet;
 
 @XlsSheet(title = "Conflict Formula Horizontal")
 @XlsConfiguration(nameFile = "ConflictFormulaHorizontal")
-public class XlsConflitFormulaHorizIncompatible {
+public class XlsConflictFormulaHorizIncompatible {
 
 	@XlsElement(title = "Date value", position = 1)
 	private Date dateAttribute;
@@ -24,7 +24,7 @@ public class XlsConflitFormulaHorizIncompatible {
 	private BigDecimal avgSalary;
 
 
-	public XlsConflitFormulaHorizIncompatible() {
+	public XlsConflictFormulaHorizIncompatible() {
 	}
 
 	/**
