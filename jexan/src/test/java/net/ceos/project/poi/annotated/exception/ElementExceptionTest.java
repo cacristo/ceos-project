@@ -13,8 +13,8 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleHoriz;
 import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleVerti;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
+import net.ceos.project.poi.annotated.bean.XlsConflictFormulaHorizIncompatible;
+import net.ceos.project.poi.annotated.bean.XlsConflictFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsElementInvalidPosition;
 import net.ceos.project.poi.annotated.bean.XlsElementOverwriteCell;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidObject;
@@ -73,8 +73,8 @@ public class ElementExceptionTest {
 	@DataProvider
 	public Object[][] xlsConflictConfigurationProvider() {
 		return new Object[][] { 
-			{ new XlsConflitFormulaHorizIncompatible() },
-			{ new XlsConflitFormulaVertiIncompatible() } };
+			{ new XlsConflictFormulaHorizIncompatible() },
+			{ new XlsConflictFormulaVertiIncompatible() } };
 	}
 
 	@DataProvider
