@@ -526,8 +526,6 @@ public class Engine implements IEngine {
 
 		int counter = 0;
 
-		/* validate cascade level */
-		if (cL > configCriteria.getCascadeLevel().getCode()) {
 			/* make the field accessible to recover the value */
 			configCriteria.getField().setAccessible(true);
 
@@ -551,7 +549,7 @@ public class Engine implements IEngine {
 					throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 				}
 			}
-		}
+		
 		return counter;
 	}
 
