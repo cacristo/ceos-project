@@ -11,8 +11,8 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleHoriz;
 import net.ceos.project.poi.annotated.bean.XlsConflictAnnotationIncompatibleVerti;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaHorizIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsConflitFormulaVertiIncompatible;
+import net.ceos.project.poi.annotated.bean.XlsConflictFormulaHorizIncompatible;
+import net.ceos.project.poi.annotated.bean.XlsConflictFormulaVertiIncompatible;
 import net.ceos.project.poi.annotated.bean.XlsElementOverwriteCell;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementInvalidObject;
 import net.ceos.project.poi.annotated.bean.XlsFreeElementOverwriteCell;
@@ -146,7 +146,7 @@ public class ElementExceptionTest {
 	@Test(expected = ElementException.class)
 	public void testXlsConflictConfigurationExceptionHorizontal() throws Exception {
 		IEngine en = new Engine();
-		en.marshalAndSave(new XlsConflitFormulaHorizIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(new XlsConflictFormulaHorizIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class ElementExceptionTest {
 	@Test(expected = ElementException.class)
 	public void testXlsConflictConfigurationExceptionVertical() throws Exception {
 		IEngine en = new Engine();
-		en.marshalAndSave(new XlsConflitFormulaVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(new XlsConflictFormulaVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
