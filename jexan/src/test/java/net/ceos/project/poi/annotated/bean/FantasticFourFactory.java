@@ -1,3 +1,18 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.bean;
 
 import java.math.BigDecimal;
@@ -13,52 +28,82 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 public class FantasticFourFactory {
 
 	private static FantasticFourFactory factory = new FantasticFourFactory();
-	
-	public static MrFantastic instanceMrFantastic(){
+
+	/**
+	 * More info at {@link MrFantastic}
+	 */
+	public static MrFantastic instanceMrFantastic() {
 		return factory.new MrFantastic();
 	}
-	
-	public static InvisibleWoman instanceInvisibleWoman(){
+
+	/**
+	 * More info at {@link InvisibleWoman}
+	 */
+	public static InvisibleWoman instanceInvisibleWoman() {
 		return factory.new InvisibleWoman();
 	}
-	
-	public static Thing instanceThing(){
+
+	/**
+	 * More info at {@link Thing}
+	 */
+	public static Thing instanceThing() {
 		return factory.new Thing();
 	}
-	
-	public static HumanTorch instanceHumanTorch(){
+
+	/**
+	 * More info at {@link HumanTorch}
+	 */
+	public static HumanTorch instanceHumanTorch() {
 		return factory.new HumanTorch();
 	}
-	
-	public static AntMan instanceAntMan(){
+
+	/**
+	 * More info at {@link AntMan}
+	 */
+	public static AntMan instanceAntMan() {
 		return factory.new AntMan();
 	}
-	
-	public static BlackPanther instanceBlackPanther(){
+
+	/**
+	 * More info at {@link BlackPanther}
+	 */
+	public static BlackPanther instanceBlackPanther() {
 		return factory.new BlackPanther();
 	}
-	
-	public static Crystal instanceCrystal(){
+
+	/**
+	 * More info at {@link Crystal}
+	 */
+	public static Crystal instanceCrystal() {
 		return factory.new Crystal();
 	}
-	
-	public static DrDoom instanceDrDoom(){
+
+	/**
+	 * More info at {@link DrDoom}
+	 */
+	public static DrDoom instanceDrDoom() {
 		return factory.new DrDoom();
 	}
-	
-	public static Flux instanceFlux(){
+
+	/**
+	 * More info at {@link Flux}
+	 */
+	public static Flux instanceFlux() {
 		return factory.new Flux();
 	}
-	
+
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Mr. Fantastic <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Mr. Fantastic</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Mr. Fantastic")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -87,14 +132,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Human Torch <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Human Torch</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Human Torch")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -123,14 +171,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Invisible Woman <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Invisible Woman</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Invisible Woman")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -160,14 +211,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Thing <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Thing</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Thing")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -197,14 +251,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Crystal <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Crystal</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Crystal")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -233,14 +290,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Ant-Man <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Ant-Man</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Ant-Man")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -269,14 +329,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Black Panther <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Black Panther</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Black Panther")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -305,14 +368,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Flux <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Flux</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Flux")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
@@ -342,14 +408,17 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Dr. Doom <br>
-	 * File name : FantasticFour <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object to test a comment rules which does not exist a method<br>
+	 * <br>
+	 * Configuration :
+	 * <li>Sheet title : Dr. Doom</li>
+	 * <li>File name : FantasticFour</li>
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Dr. Doom")
 	@XlsConfiguration(nameFile = "FantasticFour", extensionFile = ExtensionFileType.XLSX)
