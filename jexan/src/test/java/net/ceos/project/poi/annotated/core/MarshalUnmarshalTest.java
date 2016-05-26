@@ -15,6 +15,7 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,6 +23,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ceos.project.poi.annotated.bean.CascadeObject;
+import net.ceos.project.poi.annotated.bean.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
@@ -44,9 +47,11 @@ public class MarshalUnmarshalTest {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 
 		IEngine en = new Engine();
-		Sheet s = en.marshalToSheet(mto);
+		Collection<Sheet> sheetList = en.marshalToSheet(mto);
 
-		Assert.assertNotNull(s);
+		Assert.assertNotNull(sheetList);
+		Assert.assertEquals(sheetList.size(), 1);
+		Assert.assertNotNull(sheetList.iterator().next());
 	}
 
 	/**
@@ -62,9 +67,32 @@ public class MarshalUnmarshalTest {
 		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
 
 		IEngine en = new Engine();
-		Sheet s = en.marshalToSheet(configuration, mto);
+		Collection<Sheet> sheetList = en.marshalToSheet(configuration, mto);
 
-		Assert.assertNotNull(s);
+		Assert.assertNotNull(sheetList);
+		Assert.assertEquals(sheetList.size(), 1);
+		Assert.assertNotNull(sheetList.iterator().next());
+	}
+
+	/**
+	 * Test the method 'marshalToSheet', using {@link XConfigCriteria}, to
+	 * generate the Excel from the object and return the {@link Sheet}
+	 * generated.<br>
+	 */
+	@Test
+	public void testMarshalToMultiSheetWithConfigCriteria() throws Exception {
+		CascadeObject cascade = CascadeObjectBuilder.buildCascadeObject();
+
+		XConfigCriteria configuration = new XConfigCriteria();
+		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+
+		// FIXME problem here in case of vertical propagation (Work ok at Horizontal)
+		
+		IEngine en = new Engine();
+		Collection<Sheet> sheetList = en.marshalToSheet(configuration, cascade);
+
+		Assert.assertNotNull(sheetList);
+		Assert.assertEquals(sheetList.size(), 6);
 	}
 
 	/**

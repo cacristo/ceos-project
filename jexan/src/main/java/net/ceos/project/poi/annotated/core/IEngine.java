@@ -32,10 +32,10 @@ public interface IEngine {
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @return the {@link Sheet} generated
+	 * @return the collection of {@link Sheet} generated
 	 * @throws WorkbookException
 	 */
-	Sheet marshalToSheet(final Object object) throws WorkbookException;
+	Collection<Sheet> marshalToSheet(final Object object) throws WorkbookException;
 
 	/**
 	 * Generate the sheet based at the {@link XConfigCriteria} and the object
@@ -45,10 +45,10 @@ public interface IEngine {
 	 *            the {@link XConfigCriteria} to use
 	 * @param object
 	 *            the object to apply at the workbook.
-	 * @return the {@link Sheet} generated
+	 * @return the collection of {@link Sheet} generated
 	 * @throws WorkbookException
 	 */
-	Sheet marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
+	Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
 	/**
 	 * Generate the workbook based at the object passed as parameter and return
