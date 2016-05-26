@@ -1,3 +1,18 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.bean;
 
 import java.util.Date;
@@ -32,24 +47,33 @@ public class XMenFactory {
 		return factory.new Cyclops();
 	}
 
-	/*
-	 * public static Iceman instanceIceman(){ return factory.new Iceman(); }
-	 * 
-	 * public static Archangel instanceArchangel(){ return factory.new
-	 * Archangel(); }
-	 * 
-	 * public static Beast instanceBeast(){ return factory.new Beast(); }
-	 * 
-	 * public static Phoenix instancePhoenix(){ return factory.new Phoenix(); }
-	 * 
-	 * public static Changeling instanceChangeling(){ return factory.new
-	 * Changeling(); }
-	 * 
-	 * public static Magnetrix instanceMagnetrix(){ return factory.new
-	 * Magnetrix(); }
-	 * 
-	 * public static Havok instanceHavok(){ return factory.new Havok(); }
-	 */
+	// public static Iceman instanceIceman() {
+	// return factory.new Iceman();
+	// }
+
+	// public static Archangel instanceArchangel() {
+	// return factory.new Archangel();
+	// }
+
+	// public static Beast instanceBeast() {
+	// return factory.new Beast();
+	// }
+
+	// public static Phoenix instancePhoenix() {
+	// return factory.new Phoenix();
+	// }
+
+	// public static Changeling instanceChangeling() {
+	// return factory.new Changeling();
+	// }
+
+	// public static Magnetrix instanceMagnetrix() {
+	// return factory.new Magnetrix();
+	// }
+
+	// public static Havok instanceHavok() {
+	// return factory.new Havok();
+	// }
 
 	/**
 	 * Object with the default configuration, all type of native objects /
@@ -596,7 +620,8 @@ public class XMenFactory {
 		}
 	}
 
-	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL, groupElement=@XlsGroupElement(groupColumns = { @XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 1, toRow = 2) }))
+	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL, groupElement = @XlsGroupElement(groupColumns = {
+			@XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 1, toRow = 2) }) )
 	public class IronMan {
 		@XlsNestedHeader(title = "Main info", startY = 1, endY = 2)
 		@XlsElement(title = "Date value", position = 1, comment = "This is a comment")
@@ -639,7 +664,8 @@ public class XMenFactory {
 		}
 	}
 
-	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL, groupElement= @XlsGroupElement(groupColumns = { @XlsGroupColumn(fromColumn = 1, toColumn = 3) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) }))
+	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL, groupElement = @XlsGroupElement(groupColumns = {
+			@XlsGroupColumn(fromColumn = 1, toColumn = 3) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) }) )
 	public class Wolverine {
 
 		@XlsNestedHeader(title = "Job details", startX = 1, endX = 3)

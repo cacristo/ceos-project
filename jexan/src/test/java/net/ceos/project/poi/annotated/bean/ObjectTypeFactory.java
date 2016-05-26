@@ -1,6 +1,23 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.bean;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
@@ -14,34 +31,72 @@ public class ObjectTypeFactory {
 
 	private static ObjectTypeFactory objectTypeBuilder = new ObjectTypeFactory();
 
+	/**
+	 * More info at {@link StringDeclaredAttribute}
+	 */
 	public static StringDeclaredAttribute instanceString() {
 		return objectTypeBuilder.new StringDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link DateDeclaredAttribute}
+	 */
 	public static DateDeclaredAttribute instanceDate() {
 		return objectTypeBuilder.new DateDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link LocalDateDeclaredAttribute}
+	 */
+	public static LocalDateDeclaredAttribute instanceLocalDate() {
+		return objectTypeBuilder.new LocalDateDeclaredAttribute();
+	}
+
+	/**
+	 * More info at {@link LocalDateTimeDeclaredAttribute}
+	 */
+	public static LocalDateTimeDeclaredAttribute instanceLocalDateTime() {
+		return objectTypeBuilder.new LocalDateTimeDeclaredAttribute();
+	}
+
+	/**
+	 * More info at {@link ShortDeclaredAttribute}
+	 */
 	public static ShortDeclaredAttribute instanceShort() {
 		return objectTypeBuilder.new ShortDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link IntegerDeclaredAttribute}
+	 */
 	public static IntegerDeclaredAttribute instanceInteger() {
 		return objectTypeBuilder.new IntegerDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link LongDeclaredAttribute}
+	 */
 	public static LongDeclaredAttribute instanceLong() {
 		return objectTypeBuilder.new LongDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link DoubleDeclaredAttribute}
+	 */
 	public static DoubleDeclaredAttribute instanceDouble() {
 		return objectTypeBuilder.new DoubleDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link BigDecimalDeclaredAttribute}
+	 */
 	public static BigDecimalDeclaredAttribute instanceBigDecimal() {
 		return objectTypeBuilder.new BigDecimalDeclaredAttribute();
 	}
 
+	/**
+	 * More info at {@link BooleanDeclaredAttribute}
+	 */
 	public static BooleanDeclaredAttribute instanceBoolean() {
 		return objectTypeBuilder.new BooleanDeclaredAttribute();
 	}
@@ -115,6 +170,76 @@ public class ObjectTypeFactory {
 		 *            the dateAttribute to set
 		 */
 		public void setDateAttribute(Date dateAttribute) {
+			this.dateAttribute = dateAttribute;
+		}
+	}
+
+	/**
+	 * Object with declared {@link Date} not initialized.<br>
+	 * <br>
+	 * Configuration : <br>
+	 * Sheet title : Date not initialized <br>
+	 * File name : ConverterExceptionTest <br>
+	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
+	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
+	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * 
+	 * @author CristoAbreu
+	 */
+	@XlsSheet(title = "Date not initialized")
+	@XlsConfiguration(nameFile = "ConverterExceptionTest")
+	public class LocalDateDeclaredAttribute {
+
+		@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
+		private LocalDate dateAttribute;
+
+		/**
+		 * @return the dateAttribute
+		 */
+		public LocalDate getDateAttribute() {
+			return dateAttribute;
+		}
+
+		/**
+		 * @param dateAttribute
+		 *            the dateAttribute to set
+		 */
+		public void setDateAttribute(LocalDate dateAttribute) {
+			this.dateAttribute = dateAttribute;
+		}
+	}
+
+	/**
+	 * Object with declared {@link Date} not initialized.<br>
+	 * <br>
+	 * Configuration : <br>
+	 * Sheet title : LocalDateTime not initialized <br>
+	 * File name : ConverterExceptionTest <br>
+	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
+	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
+	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * 
+	 * @author CristoAbreu
+	 */
+	@XlsSheet(title = "LocalDateTime not initialized")
+	@XlsConfiguration(nameFile = "ConverterExceptionTest")
+	public class LocalDateTimeDeclaredAttribute {
+
+		@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
+		private LocalDateTime dateAttribute;
+
+		/**
+		 * @return the dateAttribute
+		 */
+		public LocalDateTime getDateAttribute() {
+			return dateAttribute;
+		}
+
+		/**
+		 * @param dateAttribute
+		 *            the dateAttribute to set
+		 */
+		public void setDateAttribute(LocalDateTime dateAttribute) {
 			this.dateAttribute = dateAttribute;
 		}
 	}
