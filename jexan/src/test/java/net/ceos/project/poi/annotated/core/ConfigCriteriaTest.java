@@ -15,6 +15,8 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import java.util.Collection;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -45,8 +47,8 @@ public class ConfigCriteriaTest {
 	public Object[][] criteriaProvider() throws Exception {
 		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
 		IEngine en = new Engine();
-		Sheet sheet = en.marshalToSheet(mto);
-		return new Object[][] { { sheet } };
+		Collection<Sheet> sheet = en.marshalToSheet(mto);
+		return new Object[][] { { sheet.iterator().next() } };
 	}
 	
 	@DataProvider
