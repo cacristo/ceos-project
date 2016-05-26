@@ -1,19 +1,33 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.exception;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import net.ceos.project.poi.annotated.bean.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.AvengersFactory.SpiderWoman;
+import net.ceos.project.poi.annotated.bean.AvengersFactory.Thor;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
-import net.ceos.project.poi.annotated.bean.XlsConfigurationAbsent;
-import net.ceos.project.poi.annotated.bean.XlsNestedHeaderHorizIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsNestedHeaderVertiIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsSheetAbsent;
 import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 
 /**
  * Test the {@link ConfigurationException}
@@ -24,21 +38,13 @@ import net.ceos.project.poi.annotated.core.TestUtils;
 public class ConfigurationExceptionTest {
 
 	@DataProvider
-	public Object[][] xlsConflictConfigurationProvider() {
-		return new Object[][] { 
-			{ new XlsNestedHeaderHorizIncompatible() },
-			{ new XlsNestedHeaderVertiIncompatible() } };
-	}
-	
-	@DataProvider
 	public Object[][] configCriteriaProvider() {
-		
+
 		XConfigCriteria header = new XConfigCriteria();
 		header.overrideHeaderCellDecorator(null);
 
 		XConfigCriteria numeric = new XConfigCriteria();
 		numeric.overrideNumericCellDecorator(null);
-		
 
 		XConfigCriteria bool = new XConfigCriteria();
 		bool.overrideBooleanCellDecorator(null);
@@ -46,11 +52,7 @@ public class ConfigurationExceptionTest {
 		XConfigCriteria date = new XConfigCriteria();
 		date.overrideDateCellDecorator(null);
 
-		return new Object[][] { 
-			{ header }, 
-			{ numeric }, 
-			{ bool }, 
-			{ date } };
+		return new Object[][] { { header }, { numeric }, { bool }, { date } };
 	}
 
 	/**
@@ -58,8 +60,8 @@ public class ConfigurationExceptionTest {
 	 * XlsConfiguration definitions
 	 */
 	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsConfiguration is missing. Review your configuration.")
-	public void testMarshalMissingXlsConfigurationException() throws Exception {
-		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
+	public void marshalMissingXlsConfigurationException() throws Exception {
+		Thor missingConfig = AvengersFactory.instanceThor();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
@@ -70,8 +72,8 @@ public class ConfigurationExceptionTest {
 	 * XlsConfiguration definitions
 	 */
 	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsConfiguration is missing. Review your configuration.")
-	public void testUnmarshalMissingXlsConfigurationException() throws Exception {
-		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
+	public void unmarshalMissingXlsConfigurationException() throws Exception {
+		Thor missingConfig = AvengersFactory.instanceThor();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
@@ -82,8 +84,8 @@ public class ConfigurationExceptionTest {
 	 * definitions
 	 */
 	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsSheet is missing. Review your configuration.")
-	public void testMarshalMissingXlsSheetException() throws Exception {
-		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
+	public void marshalMissingXlsSheetException() throws Exception {
+		SpiderWoman missingConfig = AvengersFactory.instanceSpiderWoman();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
@@ -94,27 +96,18 @@ public class ConfigurationExceptionTest {
 	 * definitions
 	 */
 	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "The annotation XlsSheet is missing. Review your configuration.")
-	public void testUnmarshalMissingXlsSheetException() throws Exception {
-		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
+	public void unmarshalMissingXlsSheetException() throws Exception {
+		SpiderWoman missingConfig = AvengersFactory.instanceSpiderWoman();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
-	 * Test a horizontal configuration exception conflict
+	 * Test a missing configuration exception at override the header, numeric,
+	 * boolean or date {@link CellDecorator}
 	 */
-	@Test(dataProvider = "xlsConflictConfigurationProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
-	public void testXlsConflictConfigurationException(Object incompatibleConfig) throws Exception {
-		IEngine en = new Engine();
-		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	/**
-	 * Test a missing configuration exception at override the header, numeric, boolean or date
-	 * {@link CellDecorator}
-	 */
-	@Test(dataProvider="configCriteriaProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is missing. Review your configuration.")
+	@Test(dataProvider = "configCriteriaProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is missing. Review your configuration.")
 	public void testOverrideMissingException(XConfigCriteria configCriteria) throws Exception {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
