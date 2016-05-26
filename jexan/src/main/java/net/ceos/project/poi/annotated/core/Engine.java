@@ -1649,15 +1649,22 @@ public class Engine implements IEngine {
 	 * @throws WorkbookException
 	 */
 	@Override
-	public Sheet marshalToSheet(final Object object) throws WorkbookException {
+	public Collection<Sheet> marshalToSheet(final Object object) throws WorkbookException {
 		/* Initialize a basic ConfigCriteria */
 		XConfigCriteria configCriteria = new XConfigCriteria();
 
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
-		/* Return the Sheet generated */
-		return configCriteria.getWorkbook().getSheetAt(0);
+		/* Return the collection of Sheet generated */
+		List<Sheet> collection = new ArrayList<>();
+		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
+			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
+			collection.add(configCriteria.getWorkbook().getSheetAt(i));
+		} else {
+			return Collections.emptyList();
+		}
+		return collection;
 	}
 
 	/**
@@ -1672,12 +1679,19 @@ public class Engine implements IEngine {
 	 * @throws WorkbookException
 	 */
 	@Override
-	public Sheet marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
+	public Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
-		/* Return the Sheet generated */
-		return configCriteria.getWorkbook().getSheetAt(0);
+		/* Return the collection of Sheet generated */
+		List<Sheet> collection = new ArrayList<>();
+		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
+			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
+			collection.add(configCriteria.getWorkbook().getSheetAt(i));
+		} else {
+			return Collections.emptyList();
+		}
+		return collection;
 	}
 
 	/**
