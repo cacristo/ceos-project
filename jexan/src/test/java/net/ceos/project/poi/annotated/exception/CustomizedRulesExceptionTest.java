@@ -1,3 +1,18 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.exception;
 
 import java.util.Date;
@@ -5,10 +20,11 @@ import java.util.Date;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.FantasticFourFactory;
-import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesMultipleMethods;
-import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNoSuchMethod;
-import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesNumeric;
-import net.ceos.project.poi.annotated.bean.XlsElementCustomizedRulesString;
+import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory;
+import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Drax;
+import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Gamora;
+import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Groot;
+import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.RocketRaccoon;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
@@ -22,13 +38,29 @@ import net.ceos.project.poi.annotated.core.TestUtils;
 public class CustomizedRulesExceptionTest {
 
 	/**
+	 * Test a customized rules which does not exist a method
+	 * 
+	 * @throws Exception
+	 */
+	@Test(expected = CustomizedRulesException.class)
+	public void testCustomizedRuleNoSuchMethod() throws Exception {
+		Groot custom = GuardiansOfTheGalaxyFactory.instanceGroot();
+		custom.setDateAttribute(new Date());
+		custom.setStringAttribute("Touch this team!");
+		custom.setIntegerAttribute(300);
+
+		IEngine en = new Engine();
+		en.marshalToWorkbook(custom);
+	}
+
+	/**
 	 * Test a simple customized rules defined if value under 450
 	 * 
 	 * @throws Exception
 	 */
 	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtNumeric() throws Exception {
-		XlsElementCustomizedRulesNumeric custom = new XlsElementCustomizedRulesNumeric();
+		Gamora custom = GuardiansOfTheGalaxyFactory.instanceGamora();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
@@ -45,7 +77,7 @@ public class CustomizedRulesExceptionTest {
 	 */
 	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtString() throws Exception {
-		XlsElementCustomizedRulesString custom = new XlsElementCustomizedRulesString();
+		RocketRaccoon custom = GuardiansOfTheGalaxyFactory.instanceRocketRaccoon();
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute(300);
 		custom.setDateAttribute(new Date());
@@ -61,7 +93,7 @@ public class CustomizedRulesExceptionTest {
 	 */
 	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods1() throws Exception {
-		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
+		Drax custom = GuardiansOfTheGalaxyFactory.instanceDrax();
 		custom.setDateAttribute(new Date());
 		custom.setStringAttribute("Touch down to this team!");
 		custom.setIntegerAttribute1(300);
@@ -79,7 +111,7 @@ public class CustomizedRulesExceptionTest {
 	 */
 	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods2() throws Exception {
-		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
+		Drax custom = GuardiansOfTheGalaxyFactory.instanceDrax();
 		custom.setDateAttribute(new Date());
 		custom.setStringAttribute("Touch this team!");
 		custom.setIntegerAttribute1(300);
@@ -97,28 +129,12 @@ public class CustomizedRulesExceptionTest {
 	 */
 	@Test(expected = CustomizedRulesException.class)
 	public void testCustomizedRuleAtMultipleMethods3() throws Exception {
-		XlsElementCustomizedRulesMultipleMethods custom = new XlsElementCustomizedRulesMultipleMethods();
+		Drax custom = GuardiansOfTheGalaxyFactory.instanceDrax();
 		custom.setDateAttribute(new Date());
 		custom.setStringAttribute("Touch this team!");
 		custom.setIntegerAttribute1(300);
 		custom.setIntegerAttribute2(200);
 		custom.setDoublePrimitiveAttribute(15);
-
-		IEngine en = new Engine();
-		en.marshalToWorkbook(custom);
-	}
-
-	/**
-	 * Test a customized rules which does not exist a method
-	 * 
-	 * @throws Exception
-	 */
-	@Test(expected = CustomizedRulesException.class)
-	public void testCustomizedRuleNoSuchMethod() throws Exception {
-		XlsElementCustomizedRulesNoSuchMethod custom = new XlsElementCustomizedRulesNoSuchMethod();
-		custom.setDateAttribute(new Date());
-		custom.setStringAttribute("Touch this team!");
-		custom.setIntegerAttribute(300);
 
 		IEngine en = new Engine();
 		en.marshalToWorkbook(custom);

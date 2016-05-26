@@ -1,18 +1,32 @@
+/**
+ * Copyright 2016 Carlos CRISTO ABREU
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.ceos.project.poi.annotated.exception;
 
 import org.junit.Test;
 
+import net.ceos.project.poi.annotated.bean.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.AvengersFactory.SpiderWoman;
+import net.ceos.project.poi.annotated.bean.AvengersFactory.Thor;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
-import net.ceos.project.poi.annotated.bean.XlsConfigurationAbsent;
-import net.ceos.project.poi.annotated.bean.XlsNestedHeaderHorizIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsNestedHeaderVertiIncompatible;
-import net.ceos.project.poi.annotated.bean.XlsSheetAbsent;
 import net.ceos.project.poi.annotated.core.CellDecorator;
-import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 
 /**
  * Test the {@link ConfigurationException}
@@ -28,7 +42,7 @@ public class ConfigurationExceptionTest {
 	 */
 	@Test(expected = ConfigurationException.class)
 	public void testMarshalMissingXlsConfigurationException() throws Exception {
-		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
+		Thor missingConfig = AvengersFactory.instanceThor();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
@@ -40,7 +54,7 @@ public class ConfigurationExceptionTest {
 	 */
 	@Test(expected = ConfigurationException.class)
 	public void testUnmarshalMissingXlsConfigurationException() throws Exception {
-		XlsConfigurationAbsent missingConfig = new XlsConfigurationAbsent();
+		Thor missingConfig = AvengersFactory.instanceThor();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_II);
@@ -52,7 +66,7 @@ public class ConfigurationExceptionTest {
 	 */
 	@Test(expected = ConfigurationException.class)
 	public void testMarshalMissingXlsSheetException() throws Exception {
-		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
+		SpiderWoman missingConfig = AvengersFactory.instanceSpiderWoman();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
@@ -64,28 +78,10 @@ public class ConfigurationExceptionTest {
 	 */
 	@Test(expected = ConfigurationException.class)
 	public void testUnmarshalMissingXlsSheetException() throws Exception {
-		XlsSheetAbsent missingConfig = new XlsSheetAbsent();
+		SpiderWoman missingConfig = AvengersFactory.instanceSpiderWoman();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	/**
-	 * Test a horizontal configuration exception conflict
-	 */
-	@Test(expected = ConfigurationException.class)
-	public void testXlsConflictXlsNestedHeaderHorizIncompatible() throws Exception {
-		IEngine en = new Engine();
-		en.marshalAndSave(new XlsNestedHeaderHorizIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	/**
-	 * Test a horizontal configuration exception conflict
-	 */
-	@Test(expected = ConfigurationException.class)
-	public void testXlsConflictXlsNestedHeaderVertiIncompatible() throws Exception {
-		IEngine en = new Engine();
-		en.marshalAndSave(new XlsNestedHeaderVertiIncompatible(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
