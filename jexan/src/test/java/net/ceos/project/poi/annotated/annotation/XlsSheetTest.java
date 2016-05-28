@@ -145,7 +145,7 @@ public class XlsSheetTest {
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
-			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_LEVEL_ONE);
+			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_L1);
 		}
 	}
 
@@ -162,7 +162,7 @@ public class XlsSheetTest {
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 
 			// add here the annotations attributes
-			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_LEVEL_TWO);
+			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_L2);
 		}
 	}
 

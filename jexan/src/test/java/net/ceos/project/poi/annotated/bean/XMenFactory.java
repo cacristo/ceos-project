@@ -289,13 +289,13 @@ public class XMenFactory {
 	 * <li>File name : SimpleSample
 	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
 	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_L1
 	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, startRow = 4, startCell = 1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4) )
+	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_L1, startRow = 4, startCell = 1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4) )
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
 	public class ProfessorX {
 
@@ -694,14 +694,14 @@ public class XMenFactory {
 	 * <li>Sheet title : Cascade type level one
 	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
 	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_L1
 	 * <li>{@link XlsGroupElement} = XlsGroupColumn(fromColumn = 1, toColumn = 3)
 	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL, groupElement = @XlsGroupElement(groupColumns = {
+	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_L1, propagation = PropagationType.PROPAGATION_HORIZONTAL, groupElement = @XlsGroupElement(groupColumns = {
 			@XlsGroupColumn(fromColumn = 1, toColumn = 3) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) }) )
 	public class Wolverine {
 
@@ -738,13 +738,13 @@ public class XMenFactory {
 	 * <li>Sheet title : Cascade type level two
 	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
 	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_TWO
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_L2
 	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_LEVEL_TWO)
+	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_L2)
 	public class SpiderMan {
 
 	}

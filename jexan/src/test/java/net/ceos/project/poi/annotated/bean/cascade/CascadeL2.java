@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.cascade;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.bean.Job;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Cascade L3", propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_LEVEL_ONE)
+@XlsSheet(title = "Cascade L2", propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_L2)
 @XlsConfiguration(nameFile = "CascadeObject")
-public class CascadeL3 {
+public class CascadeL2 {
 
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "date")
 	private Date dateAttribute;
@@ -47,8 +49,11 @@ public class CascadeL3 {
 
 	@XlsElement(title = "job", position = 7)
 	private Job job;
+
+	@XlsElement(title = "Collections", position = 8)
+	private ArrayList<CascadeL3> objectsList;
 	
-	public CascadeL3() {
+	public CascadeL2() {
 	}
 
 	/**
@@ -154,5 +159,19 @@ public class CascadeL3 {
 	 */
 	public void setJob(Job job) {
 		this.job = job;
+	}
+
+	/**
+	 * @return the objectsList
+	 */
+	public final ArrayList<CascadeL3> getObjectsList() {
+		return objectsList;
+	}
+
+	/**
+	 * @param objectsList the objectsList to set
+	 */
+	public final void setObjectsList(ArrayList<CascadeL3> objectsList) {
+		this.objectsList = objectsList;
 	}
 }

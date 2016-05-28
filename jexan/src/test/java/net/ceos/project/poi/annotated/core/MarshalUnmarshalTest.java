@@ -23,10 +23,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.bean.CascadeObject;
-import net.ceos.project.poi.annotated.bean.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
+import net.ceos.project.poi.annotated.bean.cascade.CascadeObject;
+import net.ceos.project.poi.annotated.bean.cascade.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
