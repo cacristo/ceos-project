@@ -72,8 +72,9 @@ public class ConfigCriteriaTest {
 	public Object[][] criteriaCascadeLevelProvider() throws Exception {
 		return new Object[][] { 
 			{ CascadeType.CASCADE_BASE },
-			{ CascadeType.CASCADE_LEVEL_ONE },
-			{ CascadeType.CASCADE_LEVEL_TWO },
+			{ CascadeType.CASCADE_L1 },
+			{ CascadeType.CASCADE_L2 },
+			{ CascadeType.CASCADE_L3 },
 			{ CascadeType.CASCADE_FULL }
 		};
 	}

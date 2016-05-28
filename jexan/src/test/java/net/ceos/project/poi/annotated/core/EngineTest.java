@@ -23,12 +23,12 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
-import net.ceos.project.poi.annotated.bean.CascadeObject;
-import net.ceos.project.poi.annotated.bean.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObject;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObjectBuilder;
+import net.ceos.project.poi.annotated.bean.cascade.CascadeObject;
+import net.ceos.project.poi.annotated.bean.cascade.CascadeObjectBuilder;
 import net.ceos.project.poi.annotated.exception.WorkbookException;
 
 /**

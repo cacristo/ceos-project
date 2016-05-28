@@ -30,7 +30,7 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 @XlsConfiguration(nameFile = "Employees", extensionFile = ExtensionFileType.XLSX)
-@XlsSheet(title = "Employee Details", startCell=2, startRow=2, propagation=PropagationType.PROPAGATION_VERTICAL, cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 1) , 
+@XlsSheet(title = "Employee Details", startCell=2, startRow=2, propagation=PropagationType.PROPAGATION_VERTICAL, cascadeLevel = CascadeType.CASCADE_L1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 1) , 
 		groupElement = @XlsGroupElement(groupColumns = { @XlsGroupColumn(fromColumn = 1, toColumn = 3), @XlsGroupColumn(fromColumn = 6, toColumn = 12) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) }) )
 public class EmployeeSample {
 

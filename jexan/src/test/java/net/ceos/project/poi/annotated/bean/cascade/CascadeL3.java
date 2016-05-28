@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.cascade;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.bean.Job;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Cascade full mode", propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_LEVEL_ONE)
+@XlsSheet(title = "Cascade L3", propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_L3)
 @XlsConfiguration(nameFile = "CascadeObject")
-public class CascadeObject {
+public class CascadeL3 {
 
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "date")
 	private Date dateAttribute;
@@ -49,17 +48,8 @@ public class CascadeObject {
 
 	@XlsElement(title = "job", position = 7)
 	private Job job;
-
-	@XlsElement(title = "Collection as List", position = 8)
-	private List<BasicObject> basicObjectList;
-
-	@XlsElement(title = "Collection as ArrayList", position = 9)
-	private ArrayList<ObjectConfigurable> objectConfList;
-
-	@XlsElement(title = "Collections", position = 10)
-	private ArrayList<CascadeL1> objectsList;
 	
-	public CascadeObject() {
+	public CascadeL3() {
 	}
 
 	/**
@@ -165,47 +155,5 @@ public class CascadeObject {
 	 */
 	public void setJob(Job job) {
 		this.job = job;
-	}
-
-	/**
-	 * @return the basicObjectList
-	 */
-	public final List<BasicObject> getBasicObjectList() {
-		return basicObjectList;
-	}
-
-	/**
-	 * @param basicObjectList the basicObjectList to set
-	 */
-	public final void setBasicObjectList(List<BasicObject> basicObjectList) {
-		this.basicObjectList = basicObjectList;
-	}
-
-	/**
-	 * @return the objectConfList
-	 */
-	public final ArrayList<ObjectConfigurable> getObjectConfList() {
-		return objectConfList;
-	}
-
-	/**
-	 * @param objectConfList the objectConfList to set
-	 */
-	public final void setObjectConfList(ArrayList<ObjectConfigurable> objectConfList) {
-		this.objectConfList = objectConfList;
-	}
-
-	/**
-	 * @return the objectsList
-	 */
-	public final ArrayList<CascadeL1> getObjectsList() {
-		return objectsList;
-	}
-
-	/**
-	 * @param objectsList the objectsList to set
-	 */
-	public final void setObjectsList(ArrayList<CascadeL1> objectsList) {
-		this.objectsList = objectsList;
 	}
 }
