@@ -1580,7 +1580,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(objectRT);
 
 		/* initialize configuration data */
-		// initializeConfigurationData(configCriteria, oC, insideCollection);
+		initializeConfigurationData(configCriteria, oC, false, true);
 
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
