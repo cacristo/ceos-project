@@ -954,7 +954,6 @@ public class Engine implements IEngine {
 		int rem = 0;
 
 		/* validate cascade level */
-		//if (cL > configCriteria.getCascadeLevel().getCode()) {
 		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
 			return counter;
 		}
@@ -1095,7 +1094,6 @@ public class Engine implements IEngine {
 		int baseIdxCell = indexCell;
 
 		/* validate cascade level */
-		//if (cL > configCriteria.getCascadeLevel().getCode()) {
 		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
 			return counter;
 		}
