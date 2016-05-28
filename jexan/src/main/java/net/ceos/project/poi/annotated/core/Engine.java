@@ -87,11 +87,13 @@ public class Engine implements IEngine {
 	 *            the {@link Class<?>}
 	 * @param insideCollection
 	 *            true if this configuration is inside of one collection
+	 * @param excludeCascadeInit
+	 *            true if to exclude the initialization of the parameter cascade level
 	 * @throws ConfigurationException
 	 *             given when basic configuration is missing.
 	 */
-	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC, final  boolean insideCollection)
-			throws ConfigurationException {
+	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC,
+			final boolean insideCollection, final boolean excludeCascadeInit) throws ConfigurationException {
 		/* Process @XlsConfiguration */
 		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
@@ -102,8 +104,8 @@ public class Engine implements IEngine {
 		/* Process @XlsSheet */
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-			initializeXlsSheet(configCriteria, xlsAnnotation);
-			if(insideCollection && oC.isAnnotationPresent(XlsElement.class)){
+			initializeXlsSheet(configCriteria, xlsAnnotation, excludeCascadeInit);
+			if (insideCollection && oC.isAnnotationPresent(XlsElement.class)) {
 				/**
 				 * if the collection is an attribut inside an object
 				 * we get the sheet title name from the element
@@ -143,12 +145,17 @@ public class Engine implements IEngine {
 	 * @param annotation
 	 *            the {@link XlsSheet}
 	 */
-	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation) {
+	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation, final boolean excludeCascadeInit) {
 		configCriteria.setTitleSheet(annotation.title());
+
 		configCriteria.setPropagation(annotation.propagation());
-		configCriteria.setCascadeLevel(annotation.cascadeLevel());
+		if(excludeCascadeInit){
+			configCriteria.setCascadeLevel(annotation.cascadeLevel());
+		}
+
 		configCriteria.setStartRow(annotation.startRow());
 		configCriteria.setStartCell(annotation.startCell());
+
 		configCriteria.setFreezePane(annotation.freezePane());
 		configCriteria.setGroupElement(annotation.groupElement());
 
@@ -505,7 +512,7 @@ public class Engine implements IEngine {
 
 				// E uma lista entao ha que crear uma sheet nova
 				marshallCollectionEngineT(configCriteria,
-						(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, fT);
+						(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, fT, cL + 1);
 			} else {
 
 				boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
@@ -578,7 +585,7 @@ public class Engine implements IEngine {
 					Class<?> oC = initializeRuntimeClass(objectRT);
 				
 					// E uma lista entao ha que crear uma sheet nova
-					marshallCollectionEngineT(configCriteria,(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, oC);
+					marshallCollectionEngineT(configCriteria,(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, oC, cL + 1);
 				}
 				
 			} else {
@@ -972,7 +979,13 @@ public class Engine implements IEngine {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexCell = idxC;
-		int rem=0;
+		int rem = 0;
+
+		/* validate cascade level */
+		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
+			return counter;
+		}
+
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		//Order by the list by position
@@ -1103,6 +1116,12 @@ public class Engine implements IEngine {
 		/* backup base index of the cell */
 		int baseIdxCell = indexCell;
 		int rem =0;
+
+		/* validate cascade level */
+		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
+			return counter;
+		}
+
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
 		Collections.sort(fL,new Comparator<Field>(){
@@ -1528,7 +1547,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, oC, false);
+		initializeConfigurationData(configCriteria, oC, false, true);
 
 		/* initialize Workbook */
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
@@ -1647,37 +1666,40 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 	
-		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC);
+		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC, 0);
 	}
 
 	private void marshallCollectionEngineT(final XConfigCriteria configCriteria, final Collection<?> listObject,
-			int idxCell, Class<?> oC) throws WorkbookException {
+			int idxCell, Class<?> oC, int cL) throws WorkbookException {
 
+		if(!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, listObject)){
+			return;
+		}
+		
 		int idxRow;
-		if(listObject!=null){
-			@SuppressWarnings("rawtypes")
-			Iterator iterator = listObject.iterator();
-			while (iterator.hasNext()) {
-				Object object = iterator.next();
-	
-				/* initialize configuration data */
-				initializeConfigurationData(configCriteria, object.getClass(), false);
-				
-				// initialize rows according the PropagationType
-				if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-					idxCell = configCriteria.getStartCell();
-					idxRow = preparePropagationHorizontal(configCriteria);
-	
-					marshalAsPropagationHorizontal(configCriteria, object, object.getClass(), idxRow, idxCell, 0);
-	
-				} else {
-					//parentsheet para fazer
-					idxCell = preparePropagationVertical(configCriteria, idxCell);
-					idxRow = configCriteria.getStartRow();
-	
-					marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
-				}
-	
+		int indexCellCalculated = idxCell;
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = listObject.iterator();
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+
+			/* initialize configuration data */
+			initializeConfigurationData(configCriteria, object.getClass(), false, false);
+
+			// initialize rows according the PropagationType
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
+				indexCellCalculated = configCriteria.getStartCell();
+				idxRow = preparePropagationHorizontal(configCriteria);
+
+				marshalAsPropagationHorizontal(configCriteria, object, object.getClass(), idxRow, indexCellCalculated,
+						cL + 1);
+
+			} else {
+				// parentsheet para fazer
+				indexCellCalculated = preparePropagationVertical(configCriteria, indexCellCalculated);
+				idxRow = configCriteria.getStartRow();
+
+				marshalAsPropagationVertical(configCriteria, object, oC, idxRow, indexCellCalculated, cL + 1);
 			}
 		}
 		/* apply the column resize */
@@ -2091,7 +2113,7 @@ throws WorkbookException {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC, false);
+		initializeConfigurationData(configCriteria, oC, false, true);
 
 		/* set workbook */
 		configCriteria.setWorkbook(workbook);
@@ -2118,7 +2140,7 @@ throws WorkbookException {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC, false);
+		initializeConfigurationData(configCriteria, oC, false, true);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -2163,7 +2185,7 @@ throws WorkbookException {
 
 		/* initialize configuration data */
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		initializeConfigurationData(configCriteria, oC, false);
+		initializeConfigurationData(configCriteria, oC, false, true);
 
 		/* set workbook */
 		configCriteria.setWorkbook(initializeWorkbook(byteArray, configCriteria.getExtension()));
@@ -2185,7 +2207,7 @@ throws WorkbookException {
 		// File(excelFilePath));
 
 		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, object.getClass(), false);
+		initializeConfigurationData(configCriteria, object.getClass(), false, true);
 
 		/*
 		 * check if the path terminate with the file separator, otherwise will
@@ -2215,12 +2237,11 @@ throws WorkbookException {
 			 {
 		/* initialize the runtime class of the object */
 		Class<?> oC = initializeRuntimeClass(object);
-        
-        initializeConfigurationData(configCriteria, oC, false);
-     	
-     	
-     	Sheet s = configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()));
-     	configCriteria.setSheet(s);
+
+		initializeConfigurationData(configCriteria, oC, false, true);
+
+		Sheet s = configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()));
+		configCriteria.setSheet(s);
 		/* initialize index row & cell */
 		int idxRow = configCriteria.getStartRow();
 		int idxCell = configCriteria.getStartCell();

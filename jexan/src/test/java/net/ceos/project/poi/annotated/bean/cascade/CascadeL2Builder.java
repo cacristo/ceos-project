@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.cascade;
 
 import static org.testng.Assert.assertEquals;
 
@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import net.ceos.project.poi.annotated.bean.Job;
+
 /**
  * Builder to:
  * <ul>
@@ -31,33 +33,33 @@ import org.apache.commons.lang3.RandomUtils;
  * <li>inject
  * <li>validate
  * </ul>
- * data at the object {@link CascadeObject}
+ * data at the object {@link CascadeL2}
  * <p>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class CascadeObjectBuilder {
+public class CascadeL2Builder {
 
 	/**
-	 * Create a CascadeObject for tests.
+	 * Create a CascadeL2 for tests.
 	 * 
-	 * @return the {@link CascadeObject}
+	 * @return the {@link CascadeL2}
 	 */
-	public static CascadeObject buildCascadeObject() {
-		return buildCascadeObject(2);
+	public static CascadeL2 buildCascadeL2() {
+		return buildCascadeL2(2);
 	}
 
 	/**
-	 * Create a CascadeObject for tests.
+	 * Create a CascadeL2 for tests.
 	 * 
-	 * @return the {@link CascadeObject}
+	 * @return the {@link CascadeL2}
 	 */
-	public static CascadeObject buildCascadeObject(int multiplier) {
-		CascadeObject toValidate = new CascadeObject();
+	public static CascadeL2 buildCascadeL2(int multiplier) {
+		CascadeL2 toValidate = new CascadeL2();
 
 		toValidate.setDateAttribute(new Date());
-		toValidate.setStringAttribute("some string");
+		toValidate.setStringAttribute("Cascade L2");
 		toValidate.setIntegerAttribute(46 * multiplier);
 		toValidate.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
 		toValidate.setLongAttribute(Long.valueOf("1234567890") * multiplier);
@@ -65,67 +67,47 @@ public class CascadeObjectBuilder {
 		/* create sub object Job */
 		Job job = new Job();
 		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name");
-		job.setJobName("Job Name");
+		job.setJobFamily("Family Job Name L2");
+		job.setJobName("Job Name L2");
 		toValidate.setJob(job);
 
-		BasicObject bo = BasicObjectBuilder.buildBasicObject();
-		List<BasicObject> boList = new ArrayList<>();
-		boList.add(bo);
-		boList.add(bo);
-		boList.add(bo);
-		boList.add(bo);
-		boList.add(bo);
+		CascadeL3 l3 = CascadeL3Builder.buildCascadeL3();
+		ArrayList<CascadeL3> l3List = new ArrayList<>();
+		l3List.add(l3);
+		l3List.add(l3);
+		l3List.add(l3);
+		l3List.add(l3);
+		l3List.add(l3);
 		
-		toValidate.setBasicObjectList(boList);
-		
-		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
-		ArrayList<ObjectConfigurable> ocList = new ArrayList<>();
-		ocList.add(oc);
-		ocList.add(oc);
-		ocList.add(oc);
-		
-		toValidate.setObjectConfList(ocList);
-		
-		CascadeL1 l1 = CascadeL1Builder.buildCascadeL1();
-		ArrayList<CascadeL1> objectsList = new ArrayList<>();
-		objectsList.add(l1);
-		objectsList.add(l1);
-		
-		toValidate.setObjectsList(objectsList);
-		/*ArrayList<CascadeObject> ownList = new ArrayList<>();
-		ownList.add(toValidate);
-		ownList.add(toValidate);
-		
-		toValidate.setObjectsList(ownList);*/
+		toValidate.setObjectsList(l3List);
 		// TODO add new fields below
 
 		return toValidate;
 	}
 
 	/**
-	 * Create a list of CascadeObject for tests.
+	 * Create a list of CascadeL2 for tests.
 	 * 
-	 * @return the {@link CascadeObject}
+	 * @return the {@link CascadeL2}
 	 */
-	public static List<CascadeObject> buildListOfCascadeObject(int entryNumber) {
+	public static List<CascadeL2> buildListOfCascadeL2(int entryNumber) {
 
-		List<CascadeObject> returnList = new ArrayList<>();
+		List<CascadeL2> returnList = new ArrayList<>();
 		for (int i = 0; i < entryNumber; i++) {
-			returnList.add(buildCascadeObject(RandomUtils.nextInt(1, entryNumber)));
+			returnList.add(buildCascadeL2(RandomUtils.nextInt(1, entryNumber)));
 		}
 		return returnList;
 	}
 
 	/**
-	 * Validate the CascadeObject based on the object build with the method
-	 * 'buildCascadeObject'
+	 * Validate the CascadeL2 based on the object build with the method
+	 * 'buildCascadeL2'
 	 * 
 	 * @param toValidate
 	 *            the object to validate
 	 */
-	public static void validateCascadeObject(CascadeObject toValidate) {
-		CascadeObject base = buildCascadeObject();
+	public static void validateCascadeL2(CascadeL2 toValidate) {
+		CascadeL2 base = buildCascadeL2();
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -145,8 +127,6 @@ public class CascadeObjectBuilder {
 		assertEquals(base.getJob().getJobFamily(), toValidate.getJob().getJobFamily());
 		assertEquals(base.getJob().getJobName(), toValidate.getJob().getJobName());
 
-		assertEquals(base.getBasicObjectList(), toValidate.getBasicObjectList());
-		assertEquals(base.getObjectConfList(), toValidate.getObjectConfList());
 		// TODO add new validation below
 	}
 

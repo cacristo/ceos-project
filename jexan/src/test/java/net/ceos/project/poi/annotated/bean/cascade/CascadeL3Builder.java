@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.cascade;
 
 import static org.testng.Assert.assertEquals;
 
@@ -24,6 +24,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import net.ceos.project.poi.annotated.bean.Job;
+
 /**
  * Builder to:
  * <ul>
@@ -31,33 +33,33 @@ import org.apache.commons.lang3.RandomUtils;
  * <li>inject
  * <li>validate
  * </ul>
- * data at the object {@link CascadeL2}
+ * data at the object {@link CascadeL3}
  * <p>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class CascadeL2Builder {
+public class CascadeL3Builder {
 
 	/**
-	 * Create a CascadeL2 for tests.
+	 * Create a CascadeL3 for tests.
 	 * 
-	 * @return the {@link CascadeL2}
+	 * @return the {@link CascadeL3}
 	 */
-	public static CascadeL2 buildCascadeL2() {
-		return buildCascadeL2(2);
+	public static CascadeL3 buildCascadeL3() {
+		return buildCascadeL3(2);
 	}
 
 	/**
-	 * Create a CascadeL2 for tests.
+	 * Create a CascadeL3 for tests.
 	 * 
-	 * @return the {@link CascadeL2}
+	 * @return the {@link CascadeL3}
 	 */
-	public static CascadeL2 buildCascadeL2(int multiplier) {
-		CascadeL2 toValidate = new CascadeL2();
+	public static CascadeL3 buildCascadeL3(int multiplier) {
+		CascadeL3 toValidate = new CascadeL3();
 
 		toValidate.setDateAttribute(new Date());
-		toValidate.setStringAttribute("Cascade L2");
+		toValidate.setStringAttribute("Cascade L3");
 		toValidate.setIntegerAttribute(46 * multiplier);
 		toValidate.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
 		toValidate.setLongAttribute(Long.valueOf("1234567890") * multiplier);
@@ -69,43 +71,34 @@ public class CascadeL2Builder {
 		job.setJobName("Job Name L2");
 		toValidate.setJob(job);
 
-		CascadeL3 l3 = CascadeL3Builder.buildCascadeL3();
-		ArrayList<CascadeL3> l3List = new ArrayList<>();
-		l3List.add(l3);
-		l3List.add(l3);
-		l3List.add(l3);
-		l3List.add(l3);
-		l3List.add(l3);
-		
-		toValidate.setObjectsList(l3List);
 		// TODO add new fields below
 
 		return toValidate;
 	}
 
 	/**
-	 * Create a list of CascadeL2 for tests.
+	 * Create a list of CascadeL3 for tests.
 	 * 
-	 * @return the {@link CascadeL2}
+	 * @return the {@link CascadeL3}
 	 */
-	public static List<CascadeL2> buildListOfCascadeL2(int entryNumber) {
+	public static List<CascadeL3> buildListOfCascadeL3(int entryNumber) {
 
-		List<CascadeL2> returnList = new ArrayList<>();
+		List<CascadeL3> returnList = new ArrayList<>();
 		for (int i = 0; i < entryNumber; i++) {
-			returnList.add(buildCascadeL2(RandomUtils.nextInt(1, entryNumber)));
+			returnList.add(buildCascadeL3(RandomUtils.nextInt(1, entryNumber)));
 		}
 		return returnList;
 	}
 
 	/**
-	 * Validate the CascadeL2 based on the object build with the method
-	 * 'buildCascadeL2'
+	 * Validate the CascadeL3 based on the object build with the method
+	 * 'buildCascadeL3'
 	 * 
 	 * @param toValidate
 	 *            the object to validate
 	 */
-	public static void validateCascadeL2(CascadeL2 toValidate) {
-		CascadeL2 base = buildCascadeL2();
+	public static void validateCascadeL3(CascadeL3 toValidate) {
+		CascadeL3 base = buildCascadeL3();
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.bean;
+package net.ceos.project.poi.annotated.bean.cascade;
 
 import static org.testng.Assert.assertEquals;
 
@@ -24,6 +24,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import net.ceos.project.poi.annotated.bean.BasicObject;
+import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
+import net.ceos.project.poi.annotated.bean.Job;
+import net.ceos.project.poi.annotated.bean.ObjectConfigurable;
+import net.ceos.project.poi.annotated.bean.ObjectConfigurableBuilder;
+
 /**
  * Builder to:
  * <ul>
@@ -31,33 +37,33 @@ import org.apache.commons.lang3.RandomUtils;
  * <li>inject
  * <li>validate
  * </ul>
- * data at the object {@link CascadeL1}
+ * data at the object {@link CascadeObject}
  * <p>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class CascadeL1Builder {
+public class CascadeObjectBuilder {
 
 	/**
-	 * Create a CascadeL1 for tests.
+	 * Create a CascadeObject for tests.
 	 * 
-	 * @return the {@link CascadeL1}
+	 * @return the {@link CascadeObject}
 	 */
-	public static CascadeL1 buildCascadeL1() {
-		return buildCascadeL1(2);
+	public static CascadeObject buildCascadeObject() {
+		return buildCascadeObject(2);
 	}
 
 	/**
-	 * Create a CascadeL1 for tests.
+	 * Create a CascadeObject for tests.
 	 * 
-	 * @return the {@link CascadeL1}
+	 * @return the {@link CascadeObject}
 	 */
-	public static CascadeL1 buildCascadeL1(int multiplier) {
-		CascadeL1 toValidate = new CascadeL1();
+	public static CascadeObject buildCascadeObject(int multiplier) {
+		CascadeObject toValidate = new CascadeObject();
 
 		toValidate.setDateAttribute(new Date());
-		toValidate.setStringAttribute("cascade L1");
+		toValidate.setStringAttribute("some string");
 		toValidate.setIntegerAttribute(46 * multiplier);
 		toValidate.setDoubleAttribute(Double.valueOf("25.3") * multiplier);
 		toValidate.setLongAttribute(Long.valueOf("1234567890") * multiplier);
@@ -65,48 +71,67 @@ public class CascadeL1Builder {
 		/* create sub object Job */
 		Job job = new Job();
 		job.setJobCode(0005);
-		job.setJobFamily("Family Job Name L1");
-		job.setJobName("Job Name L1");
+		job.setJobFamily("Family Job Name");
+		job.setJobName("Job Name");
 		toValidate.setJob(job);
 
-		CascadeL2 l2 = CascadeL2Builder.buildCascadeL2();
-		ArrayList<CascadeL2> l2List = new ArrayList<>();
-		l2List.add(l2);
-		l2List.add(l2);
-		l2List.add(l2);
-		l2List.add(l2);
-		l2List.add(l2);
+		BasicObject bo = BasicObjectBuilder.buildBasicObject();
+		List<BasicObject> boList = new ArrayList<>();
+		boList.add(bo);
+		boList.add(bo);
+		boList.add(bo);
+		boList.add(bo);
+		boList.add(bo);
 		
-		toValidate.setObjectsList(l2List);
-
+		toValidate.setBasicObjectList(boList);
+		
+		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
+		ArrayList<ObjectConfigurable> ocList = new ArrayList<>();
+		ocList.add(oc);
+		ocList.add(oc);
+		ocList.add(oc);
+		
+		toValidate.setObjectConfList(ocList);
+		
+		CascadeL1 l1 = CascadeL1Builder.buildCascadeL1();
+		ArrayList<CascadeL1> objectsList = new ArrayList<>();
+		objectsList.add(l1);
+		objectsList.add(l1);
+		
+		toValidate.setObjectsList(objectsList);
+		/*ArrayList<CascadeObject> ownList = new ArrayList<>();
+		ownList.add(toValidate);
+		ownList.add(toValidate);
+		
+		toValidate.setObjectsList(ownList);*/
 		// TODO add new fields below
 
 		return toValidate;
 	}
 
 	/**
-	 * Create a list of CascadeL1 for tests.
+	 * Create a list of CascadeObject for tests.
 	 * 
-	 * @return the {@link CascadeL1}
+	 * @return the {@link CascadeObject}
 	 */
-	public static List<CascadeL1> buildListOfCascadeL1(int entryNumber) {
+	public static List<CascadeObject> buildListOfCascadeObject(int entryNumber) {
 
-		List<CascadeL1> returnList = new ArrayList<>();
+		List<CascadeObject> returnList = new ArrayList<>();
 		for (int i = 0; i < entryNumber; i++) {
-			returnList.add(buildCascadeL1(RandomUtils.nextInt(1, entryNumber)));
+			returnList.add(buildCascadeObject(RandomUtils.nextInt(1, entryNumber)));
 		}
 		return returnList;
 	}
 
 	/**
-	 * Validate the CascadeL1 based on the object build with the method
-	 * 'buildCascadeL1'
+	 * Validate the CascadeObject based on the object build with the method
+	 * 'buildCascadeObject'
 	 * 
 	 * @param toValidate
 	 *            the object to validate
 	 */
-	public static void validateCascadeL1(CascadeL1 toValidate) {
-		CascadeL1 base = buildCascadeL1();
+	public static void validateCascadeObject(CascadeObject toValidate) {
+		CascadeObject base = buildCascadeObject();
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -126,6 +151,8 @@ public class CascadeL1Builder {
 		assertEquals(base.getJob().getJobFamily(), toValidate.getJob().getJobFamily());
 		assertEquals(base.getJob().getJobName(), toValidate.getJob().getJobName());
 
+		assertEquals(base.getBasicObjectList(), toValidate.getBasicObjectList());
+		assertEquals(base.getObjectConfList(), toValidate.getObjectConfList());
 		// TODO add new validation below
 	}
 

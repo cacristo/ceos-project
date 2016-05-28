@@ -22,6 +22,7 @@ package net.ceos.project.poi.annotated.definition;
  * <li><b>CascadeType.CASCADE_BASE</b> Will propagate the writing only at the main objects.
  * <li><b>CascadeType.CASCADE_LEVEL_ONE</b> Will propagate the writing at level one of the objects at the any collection.
  * <li><b>CascadeType.CASCADE_LEVEL_TWO</b> Will propagate the writing at level two at any collection of the child objects.
+ * <li><b>CascadeType.CASCADE_LEVEL_THREE</b> Will propagate the writing at level three at any collection of the child objects.
  * <li><b>CascadeType.CASCADE_FULL</b> Will propagate the writing fully as objects exists at any collection.
  * </ul>
  * 
@@ -30,8 +31,7 @@ package net.ceos.project.poi.annotated.definition;
  */
 public enum CascadeType {
 
-	// TODO review cascade level
-	CASCADE_BASE(2), CASCADE_LEVEL_ONE(4), CASCADE_LEVEL_TWO(20), CASCADE_FULL(100);
+	CASCADE_BASE(1), CASCADE_L1(3), CASCADE_L2(5), CASCADE_L3(7), CASCADE_FULL(100);
 
 	private int code;
 
