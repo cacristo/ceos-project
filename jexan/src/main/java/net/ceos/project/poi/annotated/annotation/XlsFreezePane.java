@@ -23,10 +23,10 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation create a split (freeze pane). Be aware if any existing freeze
- * pane or split pane is overwritten.<br>
+ * pane or split pane is overwritten.<p>
  * 
- * If both colSplit & rowSplit are zero then the existing freeze pane is
- * removed.<br>
+ * If both, colSplit and rowSplit, are zero then the existing freeze pane is
+ * removed.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

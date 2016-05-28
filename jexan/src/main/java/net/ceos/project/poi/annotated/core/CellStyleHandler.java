@@ -46,20 +46,22 @@ import net.ceos.project.poi.annotated.exception.ElementException;
 import net.ceos.project.poi.annotated.functional.interfaces.PoiConstructor;
 
 /**
- * Manage the style to apply to the cell.<br>
- * <br>
- * Available attributes :<br>
- * . <i>font name</i><br>
- * . <i>font size</i><br>
- * . <i>font color</i><br>
- * . <i>font italic</i><br>
- * . <i>font bold</i><br>
- * . <i>font underline</i><br>
- * . <i>font alignment</i><br>
- * . <i>font vertical alignment</i><br>
- * . <i>cell wrap text</i><br>
- * . <i>cell border</i><br>
- * . <i>cell background color</i><br>
+ * Manage the style to apply to the cell.
+ * <p>
+ * Available attributes :
+ * <ul>
+ * <li><i>font name</i>
+ * <li><i>font size</i>
+ * <li><i>font color</i>
+ * <li><i>font italic</i>
+ * <li><i>font bold</i>
+ * <li><i>font underline</i>
+ * <li><i>font alignment</i>
+ * <li><i>font vertical alignment</i>
+ * <li><i>cell wrap text</i>
+ * <li><i>cell border</i>
+ * <li><i>cell background color</i>
+ * </ul>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -107,7 +109,7 @@ public class CellStyleHandler {
 	 *            the {@link Cell} to use
 	 * @param cs
 	 *            the cell style
-	 * @param formatMask
+	 * @param formatMask the mask to apply
 	 */
 	protected static void applyDataFormat(final Workbook wb, final Cell cell, final CellStyle cs,
 			final String formatMask) {
@@ -162,7 +164,8 @@ public class CellStyleHandler {
 	}
 
 	/**
-	 * Apply the horizontal alignment to the cell style.<br>
+	 * Apply the horizontal alignment to the cell style.
+	 * <p>
 	 * By default the vertical alignment is 0.
 	 * 
 	 * @param cs
@@ -175,7 +178,7 @@ public class CellStyleHandler {
 	}
 
 	/**
-	 * Apply the horizontal & vertical alignment to the cell style.
+	 * Apply the horizontal and vertical alignment to the cell style.
 	 * 
 	 * @param cs
 	 *            the {@link CellStyle} to use
@@ -307,6 +310,7 @@ public class CellStyleHandler {
 	 * @param maskDecoratorType
 	 *            the format mask by default
 	 * @throws ElementException
+	 *             given when {@link CellStyle} is not defined
 	 */
 	protected static void applyCellStyle(final XConfigCriteria configCriteria, final Cell cell,
 			final String cellDecoratorType, final String maskDecoratorType) throws ElementException {
@@ -353,6 +357,8 @@ public class CellStyleHandler {
 	/**
 	 * Initialize the header cell.
 	 * 
+	 * @param stylesMap
+	 *            map container with {@link CellStyle} declared
 	 * @param row
 	 *            {@link Row} to add the cell
 	 * @param idxC
@@ -474,6 +480,8 @@ public class CellStyleHandler {
 	 * @param decorator
 	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
+	 * @throws ConfigurationException
+	 *             given when {@link CellStyle} is missing
 	 */
 	protected static CellStyle initializeCellStyleByCellDecorator(final Workbook wb, final CellDecorator decorator)
 			throws ConfigurationException {
@@ -512,6 +520,8 @@ public class CellStyleHandler {
 	 * @param decorator
 	 *            the {@link CellDecorator} to use
 	 * @return the {@link CellStyle} decorator
+	 * @throws ConfigurationException
+	 *             given when {@link CellStyle} is missing
 	 */
 	protected static CellStyle initializeCellStyleByXlsDecorator(final Workbook wb, final XlsDecorator decorator)
 			throws ConfigurationException {

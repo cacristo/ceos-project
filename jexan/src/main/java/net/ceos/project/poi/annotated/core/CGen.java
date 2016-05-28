@@ -552,7 +552,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
@@ -596,7 +596,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile)
@@ -619,7 +619,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
@@ -671,7 +671,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException {
@@ -692,6 +692,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
@@ -738,7 +739,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
@@ -762,7 +763,7 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	@Override
 	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,

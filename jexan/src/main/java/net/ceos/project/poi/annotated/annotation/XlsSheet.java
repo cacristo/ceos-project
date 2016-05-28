@@ -26,6 +26,10 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Annotation responsible to manage the basic Sheet configuration.
+ * <p>
+ * The required attribute is the title which you can define the sheet title. Be
+ * aware of the limitations already detected at the Excel, in this case, the
+ * sheet name allows only 31 characters.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -42,7 +46,8 @@ public @interface XlsSheet {
 	String title();
 
 	/**
-	 * Define the row start position.<br>
+	 * Define the row start position.
+	 * <p>
 	 * By default is 1.
 	 * 
 	 * @return the initial row position
@@ -50,7 +55,8 @@ public @interface XlsSheet {
 	int startRow() default 1;
 
 	/**
-	 * Define the cell start position.<br>
+	 * Define the cell start position.
+	 * <p>
 	 * By default is 1.
 	 * 
 	 * @return the initial cell position
@@ -76,7 +82,8 @@ public @interface XlsSheet {
 	;
 
 	/**
-	 * Define the propagation type when writing/reading at the Excel.<br>
+	 * Define the propagation type when writing/reading at the Excel.
+	 * <p>
 	 * By default is PROPAGATION_HORIZONTAL.
 	 * 
 	 * @return the {@link PropagationType}
@@ -84,7 +91,8 @@ public @interface XlsSheet {
 	PropagationType propagation() default PropagationType.PROPAGATION_HORIZONTAL;
 
 	/**
-	 * Define the cascade level.<br>
+	 * Define the cascade level.
+	 * <p>
 	 * By default is CASCADE_BASE.
 	 * 
 	 * @return the {@link CascadeType}

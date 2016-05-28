@@ -34,7 +34,7 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
- * Factory responsible to manage all predicate. <br>
+ * Factory responsible to manage all predicate.
  * 
  * @version 2.0
  * @author Carlos CRISTO ABREU

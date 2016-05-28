@@ -66,7 +66,7 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object
 	 * @return the runtime class
-	 * @throws ElementException
+	 * @throws ElementException given when null object.
 	 */
 	private Class<?> initializeRuntimeClass(final Object object) throws ElementException {
 		Class<?> oC = null;
@@ -82,10 +82,14 @@ public class Engine implements IEngine {
 	/**
 	 * Initialize the configuration to apply at the Excel.
 	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
 	 * @param oC
 	 *            the {@link Class<?>}
-	 * @return
+	 * @param insideCollection
+	 *            true if this configuration is inside of one collection
 	 * @throws ConfigurationException
+	 *             given when basic configuration is missing.
 	 */
 	private void initializeConfigurationData(final XConfigCriteria configCriteria, final Class<?> oC,
 			final boolean insideCollection) throws ConfigurationException {
@@ -117,13 +121,12 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Add the main xls configuration.
+	 * Add the main XlsConfiguration configuration.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
 	 * @param annotation
 	 *            the {@link XlsConfiguration}
-	 * @return
 	 */
 	private void initializeXlsConfiguration(final XConfigCriteria configCriteria, final XlsConfiguration annotation) {
 		configCriteria.setFileName(StringUtils.isBlank(configCriteria.getFileName()) ? annotation.nameFile()
@@ -134,13 +137,12 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Add the sheet configuration.
+	 * Add the XlsSheet configuration.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
 	 * @param annotation
 	 *            the {@link XlsSheet}
-	 * @return
 	 */
 	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation) {
 		configCriteria.setTitleSheet(annotation.title());
@@ -177,7 +179,7 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Initialize Workbook.
+	 * Initialize the Workbook.
 	 * 
 	 * @param type
 	 *            the {@link ExtensionFileType} of workbook
@@ -223,6 +225,7 @@ public class Engine implements IEngine {
 	 *            the {@link ExtensionFileType} of workbook
 	 * @return the {@link Workbook} created
 	 * @throws WorkbookException
+	 *             given when problem at the initialization of the workbook.
 	 */
 	private Workbook initializeWorkbook(final byte[] byteArray, final ExtensionFileType type) throws WorkbookException {
 		try {
@@ -245,6 +248,7 @@ public class Engine implements IEngine {
 	 *            the name of the sheet
 	 * @return the {@link Sheet} created
 	 * @throws SheetException
+	 *             given when problem at the initialization of the sheet.
 	 */
 	private Sheet initializeSheet(final Workbook wb, final String sheetName) throws SheetException {
 		Sheet s = null;
@@ -265,6 +269,7 @@ public class Engine implements IEngine {
 	 * @param annotation
 	 *            the {@link XlsNestedHeader} annotation
 	 * @throws ConfigurationException
+	 *             given when conflict between NestedHeader and propagation type.
 	 */
 	private void isValidNestedHeaderConfiguration(final boolean isPH, final XlsNestedHeader annotation)
 			throws ConfigurationException {
@@ -292,6 +297,7 @@ public class Engine implements IEngine {
 	 *            true if propagation horizontally, false if propagation
 	 *            vertically
 	 * @throws ConfigurationException
+	 *             given when problem at the applying the merge region.
 	 */
 	private void applyMergeRegion(final XConfigCriteria configCriteria, Row r, final int idxR, final int idxC,
 			final boolean isPH) throws ConfigurationException {
@@ -417,6 +423,24 @@ public class Engine implements IEngine {
 		return idxRow;
 	}
 
+	/**
+	 * Initialization of the cell by the field.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param xlsAnnotation
+	 *            the {@link XlsFreeElement}
+	 * @param o
+	 *            the object
+	 * @param field
+	 *            the field
+	 * @param idxC
+	 *            the position of the cell
+	 * @param cL
+	 *            the cascade level
+	 * @throws WorkbookException
+	 *             given when the object is complex.
+	 */
 	private void initializeCellByField(final XConfigCriteria configCriteria, final XlsFreeElement xlsAnnotation,
 			final Object o, final Field field, final int idxC, final int cL) throws WorkbookException {
 
@@ -457,9 +481,10 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @return in case of the object return the number of cell created,
+	 * @return in case of the object return the number of cells created,
 	 *         otherwise 0
 	 * @throws WorkbookException
+	 *             given when no such element.
 	 */
 	private int initializeCellByFieldHorizontal(final XConfigCriteria configCriteria, final Object o, final int idxR,
 			final int idxC, final int cL) throws WorkbookException {
@@ -518,8 +543,10 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @return
+	 * @return in case of the object return the number of cells created,
+	 *         otherwise 0
 	 * @throws WorkbookException
+	 *             given when the object is complex.
 	 */
 	private int initializeCellByFieldVertical(final XConfigCriteria configCriteria, final Object o, final Row r,
 			final int idxR, final int idxC, int cL) throws WorkbookException {
@@ -564,8 +591,9 @@ public class Engine implements IEngine {
 	 *            the field type
 	 * @param idxC
 	 *            the position of the cell
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private boolean toExcel(final XConfigCriteria configCriteria, final Object o, final Class<?> fT, final int idxC)
 			throws WorkbookException {
@@ -676,8 +704,9 @@ public class Engine implements IEngine {
 	 *            the cell
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} annotation
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private boolean toObject(final Object o, final Class<?> fT, final Field f, final Cell c,
 			final XlsElement xlsAnnotation) throws WorkbookException {
@@ -779,6 +808,7 @@ public class Engine implements IEngine {
 	 * @param f
 	 *            the field
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private void processXlsFreeElement(final XConfigCriteria configCriteria, final Object o, final int cL,
 			final Field f) throws WorkbookException {
@@ -826,15 +856,18 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Prepare the propagation horizontal:<br>
-	 * 1. initialize sheet <br>
-	 * 2. initialize header row <br>
-	 * 3. initialize row <br>
+	 * Prepare the propagation horizontal:
+	 * <ul>
+	 * <li>1. initialize sheet
+	 * <li>2. initialize header row
+	 * <li>3. initialize row
+	 * </ul>
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
-	 * @return
+	 * @return the the position of the row
 	 * @throws SheetException
+	 *             given when problem at the sheet initialization.
 	 */
 	private int preparePropagationHorizontal(final XConfigCriteria configCriteria) throws SheetException {
 		int idxRow;
@@ -858,16 +891,19 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * Prepare the propagation vertical:<br>
-	 * 1. initialize sheet <br>
-	 * 2. define next cell index value <br>
+	 * Prepare the propagation vertical:
+	 * <ul>
+	 * <li>initialize sheet
+	 * <li>define next cell index value
+	 * </ul>
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
 	 * @param idxCell
 	 *            the cell index
-	 * @return
+	 * @return the the position of the cell
 	 * @throws SheetException
+	 *             given when problem at the sheet initialization.
 	 */
 	private int preparePropagationVertical(final XConfigCriteria configCriteria, int idxCell) throws SheetException {
 		int indexCell = idxCell;
@@ -897,8 +933,10 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @return
+	 * @return in case of the object return the number of cells created,
+	 *         otherwise 0
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 * 
 	 */
 	private int marshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, final Class<?> oC,
@@ -1034,9 +1072,10 @@ public class Engine implements IEngine {
 	 *            the position of the cell
 	 * @param cL
 	 *            the cascade level
-	 * @return
+	 * @return in case of the object return the number of cells created,
+	 *         otherwise 0
 	 * @throws WorkbookException
-	 * 
+	 *             given when a not supported action.
 	 */
 	private int marshalAsPropagationVertical(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC, final int cL) throws WorkbookException {
@@ -1178,8 +1217,10 @@ public class Engine implements IEngine {
 	 *            the position of the row
 	 * @param idxC
 	 *            the position of the cell
-	 * @return
+	 * @return in case of the object return the number of cells created,
+	 *         otherwise 0
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private int unmarshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC) throws WorkbookException {
@@ -1274,8 +1315,10 @@ public class Engine implements IEngine {
 	 *            the position of the row
 	 * @param idxC
 	 *            the position of the cell
-	 * @return
+	 * @return in case of the object return the number of cells created,
+	 *         otherwise 0
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private int unmarshalAsPropagationVertical(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
 			final int idxR, final int idxC) throws WorkbookException {
@@ -1364,8 +1407,9 @@ public class Engine implements IEngine {
 	 *            the {@link Workbook}
 	 * @param name
 	 *            the name
-	 * @return
+	 * @return the {@link FileOutputStream} generated
 	 * @throws WorkbookException
+	 *             given when problem at the generation of the FileOutputStream.
 	 */
 	private FileOutputStream workbookFileOutputStream(final Workbook wb, final String name) throws WorkbookException {
 		FileOutputStream output = null;
@@ -1386,6 +1430,7 @@ public class Engine implements IEngine {
 	 *            the {@link Workbook}
 	 * @return the byte[]
 	 * @throws WorkbookException
+	 *             given when problem at the generation of the byte[].
 	 */
 	private byte[] workbookToByteAray(final Workbook wb) throws WorkbookException {
 		ByteArrayOutputStream bos = null;
@@ -1411,6 +1456,7 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object to apply at the workbook.
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private void marshalEngine(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
 
@@ -1472,6 +1518,7 @@ public class Engine implements IEngine {
 	 * @param oC
 	 *            the object class
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private void unmarshalEngine(final XConfigCriteria configCriteria, final Object object, final Class<?> oC)
 			throws WorkbookException {
@@ -1504,6 +1551,7 @@ public class Engine implements IEngine {
 	 *            the collection of objects to apply at the workbook.
 	 * @param insideCollection
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	private void marshalCollectionEngine(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final boolean insideCollection) throws WorkbookException {
@@ -1581,6 +1629,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Collection<Sheet> marshalToSheet(final Object object) throws WorkbookException {
@@ -1611,6 +1660,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
@@ -1636,6 +1686,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Workbook marshalToWorkbook(final Object object) throws WorkbookException {
@@ -1659,6 +1710,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Workbook marshalToWorkbook(final XConfigCriteria configCriteria, final Object object)
@@ -1678,6 +1730,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public byte[] marshalToByte(final Object object) throws WorkbookException {
@@ -1701,6 +1754,7 @@ public class Engine implements IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
@@ -1720,6 +1774,7 @@ public class Engine implements IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAndSave(final Object object, final String pathFile) throws WorkbookException {
@@ -1740,6 +1795,7 @@ public class Engine implements IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile)
@@ -1768,6 +1824,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Sheet marshalCollectionToSheet(final Collection<?> listObject) throws WorkbookException {
@@ -1795,6 +1852,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
@@ -1817,6 +1875,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Workbook marshalCollectionToWorkbook(final Collection<?> listObject) throws WorkbookException {
@@ -1841,6 +1900,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject)
@@ -1861,6 +1921,7 @@ public class Engine implements IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile)
@@ -1884,6 +1945,7 @@ public class Engine implements IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
@@ -1913,6 +1975,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the byte[] generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public byte[] marshalCollectionToByte(final Collection<?> listObject) throws WorkbookException {
@@ -1934,6 +1997,7 @@ public class Engine implements IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the byte[] generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject)
@@ -1956,6 +2020,7 @@ public class Engine implements IEngine {
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws WorkbookException {
@@ -1982,6 +2047,7 @@ public class Engine implements IEngine {
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException {
@@ -2021,9 +2087,10 @@ public class Engine implements IEngine {
 	 * 
 	 * @param object
 	 *            the object to fill up.
-	 * @param inputByte
+	 * @param byteArray
 	 *            the byte[] to read and pass the information to the object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException {

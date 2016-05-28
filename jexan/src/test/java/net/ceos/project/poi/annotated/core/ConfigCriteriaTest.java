@@ -130,7 +130,7 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override extension file type at {@link XConfigCriteria}.<br>
+	 * Test the override extension file type at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="criteriaExtensionProvider")
 	public void testOverrideExtension(ExtensionFileType type) throws Exception {
@@ -144,7 +144,7 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override propagation type at {@link XConfigCriteria}.<br>
+	 * Test the override propagation type at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="criteriaPropagationProvider")
 	public void testOverridePropagation(PropagationType type) throws Exception {
@@ -158,7 +158,7 @@ public class ConfigCriteriaTest {
 	}
 	
 	/**
-	 * Test the override cascade level at {@link XConfigCriteria}.<br>
+	 * Test the override cascade level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="criteriaCascadeLevelProvider")
 	public void testOverrideCascadeLevel(CascadeType type) throws Exception {
@@ -172,7 +172,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override header {@link CellDecorator} level at {@link XConfigCriteria}.<br>
+	 * Test the override header {@link CellDecorator} level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="headerCellDecoratorProvider")
 	public void testOverrideHeaderCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -202,7 +202,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override generic {@link CellDecorator} level at {@link XConfigCriteria}.<br>
+	 * Test the override generic {@link CellDecorator} level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="genericCellDecoratorProvider")
 	public void testOverrideGenericCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -232,7 +232,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override date {@link CellDecorator} level at {@link XConfigCriteria}.<br>
+	 * Test the override date {@link CellDecorator} level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="dateCellDecoratorProvider")
 	public void testOverrideDateCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -262,7 +262,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override numeric {@link CellDecorator} level at {@link XConfigCriteria}.<br>
+	 * Test the override numeric {@link CellDecorator} level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="numericCellDecoratorProvider")
 	public void testOverrideNumericCellDecorator(String decoratorName, short alignment, short verticalAlignment,
@@ -292,7 +292,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override boolean {@link CellDecorator} level at {@link XConfigCriteria}.<br>
+	 * Test the override boolean {@link CellDecorator} level at {@link XConfigCriteria}.
 	 */
 	@Test(dataProvider="booleanCellDecoratorProvider")
 	public void testOverrideBooleanCellDecorator(String decoratorName, short alignment, short verticalAlignment,

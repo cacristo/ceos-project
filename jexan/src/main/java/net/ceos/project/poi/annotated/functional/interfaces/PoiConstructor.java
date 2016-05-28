@@ -22,7 +22,9 @@ package net.ceos.project.poi.annotated.functional.interfaces;
  * @author Carlos CRISTO ABREU
  * 
  * @param <I>
+ *            input object
  * @param <O>
+ *            output object
  */
 @FunctionalInterface
 public interface PoiConstructor<I, O> {

@@ -34,24 +34,23 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 
 /**
- * This class manage the formula or value to apply to one cell.<br>
- * <br>
- * 
- * You can apply a formula by :<br>
- * (1) <b>Create a basic formula</b><br>
+ * This class manage the formula or value to apply to one cell.
+ * <p>
+ * You can apply a formula by :
+ * <ul>
+ * <li><b>Create a basic formula</b><br>
  * To create a basic <i>formula</i> using the Excel orientation is simple as “H3
  * * 1.21”<br>
- * 
- * (2) <b>Using the generic function in a formula</b><br>
- * Apply a generic Excel functions: <i>formula</i> as “SUM(E3,F3,G3)”.<br>
- * 
- * (3) <b>Create your own formula</b><br>
+ * <li><b>Using the generic function in a formula</b><br>
+ * Apply a generic Excel functions: <i>formula</i> as “SUM(E3,F3,G3)”.
+ * <p>
+ * <li><b>Create your own formula</b><br>
  * You have to declare a method where the name start with “formula” + the field
- * will appear at the excel. <br>
- * <br>
- * 
+ * will appear at the excel.
+ * <p>
  * You will need to indicate to jexan you are declaring a field such the type is
  * a <i>formula</i>, active the attribute <i>isFormula</i> as true.
+ * </ul>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -89,6 +88,7 @@ class CellFormulaHandler {
 	}
 
 	/**
+	 * Apply a double value to the cell.
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
@@ -111,7 +111,8 @@ class CellFormulaHandler {
 			// normal manage cell
 			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-				CellValueHandler.consumeValue(cell, df.format((Double) configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+				CellValueHandler.consumeValue(cell, df.format((Double) configCriteria.getField().get(object))
+						.replace(Constants.COMMA, Constants.DOT));
 			} else {
 				// apply the value
 				CellValueHandler.consumeValue(cell, configCriteria.getField().get(object));
@@ -147,7 +148,8 @@ class CellFormulaHandler {
 				Double dBigDecimal = bd.doubleValue();
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-					CellValueHandler.consumeValue(cell, Double.valueOf(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT)));
+					CellValueHandler.consumeValue(cell,
+							Double.valueOf(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT)));
 				} else {
 					CellValueHandler.consumeValue(cell, dBigDecimal);
 				}
@@ -172,7 +174,8 @@ class CellFormulaHandler {
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 			// apply format mask defined at transform mask
 			String[] split = configCriteria.getElement().transformMask().split(Constants.SLASH);
-			CellValueHandler.consumeValue(cell, bBoolean == null ? StringUtils.EMPTY : (bBoolean ? split[0] : split[1]));
+			CellValueHandler.consumeValue(cell,
+					bBoolean == null ? StringUtils.EMPTY : (bBoolean ? split[0] : split[1]));
 
 		} else {
 			// locale mode
@@ -202,7 +205,7 @@ class CellFormulaHandler {
 		} else if (StringUtils.isNotBlank(configCriteria.getElement().formatMask())) {
 			// apply format mask
 			CellValueHandler.consumeValue(cell, date);
-			
+
 		} else {
 			// apply default date mask
 			CellValueHandler.consumeValue(cell, date);
@@ -249,8 +252,8 @@ class CellFormulaHandler {
 	 * @throws IllegalAccessException
 	 * @throws ConverterException
 	 */
-	protected static void localDateTimeHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws IllegalAccessException, ConverterException {
+	protected static void localDateTimeHandler(final XConfigCriteria configCriteria, final Object object,
+			final Cell cell) throws IllegalAccessException, ConverterException {
 		LocalDateTime date = (LocalDateTime) configCriteria.getField().get(object);
 		if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 			// apply transformation mask
@@ -284,8 +287,8 @@ class CellFormulaHandler {
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
 			if (configCriteria.getElement().formula().contains(Constants.INDX)) {
-				cell.setCellFormula(
-						configCriteria.getElement().formula().replace(Constants.INDX, String.valueOf(cell.getRowIndex() + 1)));
+				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.INDX,
+						String.valueOf(cell.getRowIndex() + 1)));
 				isFormulaApplied = true;
 
 			} else if (configCriteria.getElement().formula().contains(Constants.INDY)) {
@@ -318,7 +321,8 @@ class CellFormulaHandler {
 		@SuppressWarnings("rawtypes")
 		Class[] argTypes = {};
 
-		String method = Constants.FORMULA + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+		String method = Constants.FORMULA + field.getName().substring(0, 1).toUpperCase()
+				+ field.getName().substring(1);
 
 		Method m = object.getClass().getDeclaredMethod(method, argTypes);
 
@@ -336,7 +340,8 @@ class CellFormulaHandler {
 	 *            the mask to apply
 	 * @throws ConverterException
 	 */
-	private static void convertDate(final Cell cell, final Date date, final String decorator) throws ConverterException {
+	private static void convertDate(final Cell cell, final Date date, final String decorator)
+			throws ConverterException {
 		try {
 			SimpleDateFormat dt = new SimpleDateFormat(decorator);
 

@@ -16,12 +16,14 @@
 package net.ceos.project.poi.annotated.definition;
 
 /**
- * This will define the cascade type when reading one attribute of the object. <br>
- * 
- * {@value = CascadeType.CASCADE_BASE } Will propagate the writing only at the main objects. <br>
- * {@value = CascadeType.CASCADE_LEVEL_ONE } Will propagate the writing at level one of the objects at the any collection. <br>
- * {@value = CascadeType.CASCADE_LEVEL_TWO } Will propagate the writing at level two at any collection of the child objects. <br>
- * {@value = CascadeType.CASCADE_FULL } Will propagate the writing fully as objects exists at any collection. <br>
+ * This will define the cascade type when reading one attribute of the object.
+ * <p>
+ * <ul>
+ * <li><b>CascadeType.CASCADE_BASE</b> Will propagate the writing only at the main objects.
+ * <li><b>CascadeType.CASCADE_LEVEL_ONE</b> Will propagate the writing at level one of the objects at the any collection.
+ * <li><b>CascadeType.CASCADE_LEVEL_TWO</b> Will propagate the writing at level two at any collection of the child objects.
+ * <li><b>CascadeType.CASCADE_FULL</b> Will propagate the writing fully as objects exists at any collection.
+ * </ul>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

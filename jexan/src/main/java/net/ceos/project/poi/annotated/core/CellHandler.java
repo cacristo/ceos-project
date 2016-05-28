@@ -37,8 +37,8 @@ import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 import net.ceos.project.poi.annotated.exception.WorkbookException;
 
 /**
- * Manage all the default type of values to apply/read to one cell.<br>
- * <br>
+ * Manage all the default type of values to apply/read to one cell.
+ * <p>
  * <b>To improve: </b> manage correctly the cached formulas
  * 
  * @version 1.0
@@ -93,7 +93,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void stringReader(final Object object, final Field field, final Cell cell)
 			throws ConverterException {
@@ -115,7 +115,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void shortReader(final Object object, final Field field, final Cell cell)
 			throws ConverterException {
@@ -137,7 +137,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void integerReader(final Object object, final Field field, final Cell cell)
 			throws ConverterException {
@@ -159,7 +159,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void longReader(final Object object, final Field field, final Cell cell)
 			throws ConverterException {
@@ -183,7 +183,7 @@ public class CellHandler {
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void doubleReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -211,7 +211,7 @@ public class CellHandler {
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void bigDecimalReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -240,7 +240,7 @@ public class CellHandler {
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void dateReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -281,7 +281,7 @@ public class CellHandler {
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void localDateReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -314,15 +314,15 @@ public class CellHandler {
 	/**
 	 * Read a date time value from the Cell.
 	 * 
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param f
+	 * @param field
 	 *            the {@link Field} to set
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void localDateTimeReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -360,7 +360,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void floatReader(final Object object, final Field field, final Cell cell)
 			throws ConverterException {
@@ -384,7 +384,7 @@ public class CellHandler {
 	 *            the {@link Cell} to read
 	 * @param xlsAnnotation
 	 *            the {@link XlsElement} element
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	protected static void booleanReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
@@ -418,7 +418,7 @@ public class CellHandler {
 	 *            the {@link Field} to set
 	 * @param cell
 	 *            the {@link Cell} to read
-	 * @throws ConverterException
+	 * @throws ConverterException the conversion exception type
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected static void enumReader(final Object object, final Class<?> fT, final Field field, final Cell cell)
@@ -444,7 +444,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean stringWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -476,7 +476,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean shortWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -509,7 +509,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean integerWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -542,7 +542,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean longWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -575,7 +575,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean doubleWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -608,7 +608,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean bigDecimalWriter(final XConfigCriteria configCriteria, final Object object,
 			final Cell cell) throws WorkbookException {
@@ -641,7 +641,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean dateWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -671,12 +671,12 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean localDateWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -706,12 +706,12 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean localDateTimeWriter(final XConfigCriteria configCriteria, final Object object,
 			final Cell cell) throws WorkbookException {
@@ -746,7 +746,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean floatWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -775,12 +775,12 @@ public class CellHandler {
 	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} object
-	 * @param o
+	 * @param object
 	 *            the object
-	 * @param c
+	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean booleanWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -813,7 +813,7 @@ public class CellHandler {
 	 * @param cell
 	 *            the {@link Cell} to use
 	 * @return false if problem otherwise true
-	 * @throws WorkbookException
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	protected static boolean enumWriter(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws WorkbookException {
@@ -855,7 +855,7 @@ public class CellHandler {
 	 *            the object
 	 * @param methodRules
 	 *            the method rules to use
-	 * @throws CustomizedRulesException
+	 * @throws CustomizedRulesException given when no such method.
 	 */
 	protected static void applyCustomizedRules(final Object object, final String methodRules)
 			throws CustomizedRulesException {

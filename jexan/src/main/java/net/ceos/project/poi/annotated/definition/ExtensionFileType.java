@@ -16,11 +16,13 @@
 package net.ceos.project.poi.annotated.definition;
 
 /**
- * This will define the file extension type. <br>
- * 
- * {@value = ExtensionFileType.XLSX } Related to the files with the extension .xlsx. <br>
- * {@value = ExtensionFileType.XLS } Related to the files with the extension .xls. <br>
- * {@value = ExtensionFileType.CSV } Related to the files with the extension .csv. <br>
+ * This will define the file extension type.
+ * <p>
+ * <ul>
+ * <li><b>ExtensionFileType.XLSX</b> Related to the files with the extension .xlsx.
+ * <li><b>ExtensionFileType.XLS</b> Related to the files with the extension .xls.
+ * <li><b>ExtensionFileType.CSV</b> Related to the files with the extension .csv.
+ * </ul>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

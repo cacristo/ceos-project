@@ -77,16 +77,19 @@ public class XMenFactory {
 
 	/**
 	 * Object with the default configuration, all type of native objects /
-	 * primitives attributes and non native objects. <br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Default configuration sample <br>
-	 * File name : DefaultConfigurationSample <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * primitives attributes and non native objects.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Default configuration sample
+	 * <li>File name : DefaultConfigurationSample
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Default configuration sample")
 	@XlsConfiguration(nameFile = "DefaultConfigurationSample")
@@ -278,14 +281,19 @@ public class XMenFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Simple object sample <br>
-	 * File name : SimpleSample <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE <br>
 	 * 
-	 * @author CristoAbreu
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Simple object sample
+	 * <li>File name : SimpleSample
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE
+	 * </ul>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, startRow = 4, startCell = 1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4) )
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
@@ -494,14 +502,18 @@ public class XMenFactory {
 	}
 
 	/**
-	 * Configuration : <br>
-	 * Sheet title : Simple object sample <br>
-	 * File name : SimpleSample <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLSX <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Simple object sample
+	 * <li>File name : SimpleSample
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
-	 * @author CristoAbreu
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "Simple object sample", freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4, topRow = 1, leftMostColumn = 1) )
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
@@ -620,6 +632,16 @@ public class XMenFactory {
 		}
 	}
 
+	/**
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
+	 *
+	 */
 	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL, groupElement = @XlsGroupElement(groupColumns = {
 			@XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 1, toRow = 2) }) )
 	public class IronMan {
@@ -664,6 +686,21 @@ public class XMenFactory {
 		}
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Cascade type level one
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_ONE
+	 * <li>{@link XlsGroupElement} = XlsGroupColumn(fromColumn = 1, toColumn = 3)
+	 * </ul>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
+	 */
 	@XlsSheet(title = "Cascade type level one", cascadeLevel = CascadeType.CASCADE_LEVEL_ONE, propagation = PropagationType.PROPAGATION_HORIZONTAL, groupElement = @XlsGroupElement(groupColumns = {
 			@XlsGroupColumn(fromColumn = 1, toColumn = 3) }, groupRows = { @XlsGroupRow(fromRow = 0, toRow = 0) }) )
 	public class Wolverine {
@@ -693,17 +730,59 @@ public class XMenFactory {
 
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Cascade type level two
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_LEVEL_TWO
+	 * </ul>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
+	 */
 	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_LEVEL_TWO)
 	public class SpiderMan {
 
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Cascade type full
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_FULL
+	 * </ul>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
+	 */
 	@XlsSheet(title = "Cascade type full", cascadeLevel = CascadeType.CASCADE_FULL, propagation = PropagationType.PROPAGATION_HORIZONTAL)
 	public class DoctorX {
 
 	}
 
-	@XlsSheet(title = "Cascade type full", propagation = PropagationType.PROPAGATION_HORIZONTAL)
+	/**
+	 * 
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Cascade base
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
+	 * 
+	 * @version 1.0
+	 * @author Carlos CRISTO ABREU
+	 */
+	@XlsSheet(title = "Cascade base", propagation = PropagationType.PROPAGATION_HORIZONTAL)
 	public class Thor {
 
 	}

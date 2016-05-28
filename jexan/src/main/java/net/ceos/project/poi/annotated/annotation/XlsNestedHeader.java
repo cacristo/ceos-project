@@ -38,7 +38,8 @@ public @interface XlsNestedHeader {
 	String title();
 
 	/**
-	 * Define the start cell position.<br>
+	 * Define the start cell position.
+	 * <p>
 	 * By default is 0.
 	 * 
 	 * @return the start cell position
@@ -46,7 +47,8 @@ public @interface XlsNestedHeader {
 	int startX() default 0;
 
 	/**
-	 * Define the end cell position.<br>
+	 * Define the end cell position.
+	 * <p>
 	 * By default is 0.
 	 * 
 	 * @return the end cell position
@@ -54,7 +56,8 @@ public @interface XlsNestedHeader {
 	int endX() default 0;
 
 	/**
-	 * Define the start row position.<br>
+	 * Define the start row position.
+	 * <p>
 	 * By default is 0.
 	 * 
 	 * @return the start row position
@@ -62,7 +65,8 @@ public @interface XlsNestedHeader {
 	int startY() default 0;
 
 	/**
-	 * Define the end row position.<br>
+	 * Define the end row position.
+	 * <p>
 	 * By default is 0.
 	 * 
 	 * @return the end row position

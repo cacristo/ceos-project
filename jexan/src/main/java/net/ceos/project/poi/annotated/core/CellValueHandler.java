@@ -44,7 +44,8 @@ class CellValueHandler {
 	}
 
 	/**
-	 * Apply a value to a cell.<br>
+	 * Apply a value to a cell.
+	 * <p>
 	 * Both values are passed as parameter.
 	 * 
 	 * @param cell

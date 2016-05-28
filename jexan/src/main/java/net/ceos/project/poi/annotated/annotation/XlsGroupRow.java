@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * This annotation create an outline for the provided row range.<br>
+ * This annotation create an outline for the provided row range.<p>
  * In another words, tie a range of rows together and give us the possibility to
  * collapse or expand the group.
  * 

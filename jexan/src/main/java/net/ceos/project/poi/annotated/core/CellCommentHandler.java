@@ -25,19 +25,19 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
 /**
- * This class manage the comment to apply to one cell.<br><br>
- * 
+ * This class manage the comment to apply to one cell.
+ * <p>
  * By default, all comments are enabled. If you need to show this comment only
  * in certain conditions you may need to define the rules where the comment
  * appears or not, and for that, you have to declare a method inside your
- * object.<br><br>
- * 
+ * object.
+ * <p>
  * This method will manage for you, according the rules you declare, if the
- * comment will appear or not.<br><br>
- * 
+ * comment will appear or not.
+ * <p>
  * At the attribute commentRules you have to indicate exactly the name of the
- * method you have created.<br><br>
- * 
+ * method you have created.
+ * <p>
  * Be aware, this method has to return a Boolean value and no other type.
  * 
  * @version 1.0
@@ -68,8 +68,8 @@ class CellCommentHandler {
 				CellStyleHandler.applyComment(configCriteria,
 						(Boolean) applyCommentRules(object, configCriteria.getElement().commentRules()), cell);
 			} catch (Exception e) {
-				throw new CustomizedRulesException(
-						ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_COMMENT_METHOD.getMessage(), e);
+				throw new CustomizedRulesException(ExceptionMessage.CUSTOMIZEDRULES_NO_SUCH_COMMENT_METHOD.getMessage(),
+						e);
 			}
 		}
 	}

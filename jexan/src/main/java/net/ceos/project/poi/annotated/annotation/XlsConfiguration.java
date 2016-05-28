@@ -24,8 +24,8 @@ import java.lang.annotation.Target;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
- * This annotation define all the attributes related to the Excel definitions.
- * <br>
+ * This annotation define all the attributes related to the Excel file
+ * definitions.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -42,8 +42,9 @@ public @interface XlsConfiguration {
 	String nameFile();
 
 	/**
-	 * Define the Excel extension file.<br>
-	 * By default is {@value = ExtensionFileType.XLS}.
+	 * Define the Excel extension file.
+	 * <p>
+	 * By default is ExtensionFileType.XLS.
 	 * 
 	 * @return the {@link ExtensionFileType}
 	 */

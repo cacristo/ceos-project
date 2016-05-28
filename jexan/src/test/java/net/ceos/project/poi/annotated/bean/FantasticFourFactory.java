@@ -93,14 +93,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Mr. Fantastic</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Mr. Fantastic
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -132,14 +134,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Human Torch</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Human Torch
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -171,14 +175,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Invisible Woman</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Invisible Woman
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -211,14 +217,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Thing</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Thing
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -251,14 +259,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Crystal</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Crystal
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -290,14 +300,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Ant-Man</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Ant-Man
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -329,14 +341,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Black Panther</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Black Panther
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -368,14 +382,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Flux</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Flux
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -408,14 +424,16 @@ public class FantasticFourFactory {
 	}
 
 	/**
-	 * Object to test a comment rules which does not exist a method<br>
-	 * <br>
+	 * Object to test a comment rules which does not exist a method
+	 * <p>
 	 * Configuration :
-	 * <li>Sheet title : Dr. Doom</li>
-	 * <li>File name : FantasticFour</li>
-	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX</li>
-	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL</li>
-	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE</li><br>
+	 * <ul>
+	 * <li>Sheet title : Dr. Doom
+	 * <li>File name : FantasticFour
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLSX
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU

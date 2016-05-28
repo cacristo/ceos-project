@@ -20,8 +20,8 @@ package net.ceos.project.poi.annotated.functional.interfaces;
  * @version 2.0
  * @author Carlos CRISTO ABREU
  *
- * @param <C>
- * @param <CS>
+ * @param <C> the cell
+ * @param <CS> the cell style
  */
 @FunctionalInterface
 public interface CellStyle<C, CS> {

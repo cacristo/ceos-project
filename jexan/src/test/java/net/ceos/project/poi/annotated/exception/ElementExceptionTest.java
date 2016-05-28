@@ -147,9 +147,11 @@ public class ElementExceptionTest {
 	}
 
 	/**
-	 * Test a {@link XlsElement} trying write at invalid position<br>
-	 * Test a {@link XlsFreeElement} trying write at invalid cell position<br>
-	 * Test a {@link XlsFreeElement} trying write at invalid row position<br>
+	 * <ul>
+	 * <li>Test a {@link XlsElement} trying write at invalid position
+	 * <li>Test a {@link XlsFreeElement} trying write at invalid cell position
+	 * <li>Test a {@link XlsFreeElement} trying write at invalid row position
+	 * </ul>
 	 */
 	// @Test(dataProvider = "invalidPositionProvider", expectedExceptions =
 	// ElementException.class, expectedExceptionsMessageRegExp = "The element

@@ -22,7 +22,9 @@ package net.ceos.project.poi.annotated.functional.interfaces;
  * @author Carlos CRISTO ABREU
  *
  * @param <C>
+ *            the cell
  * @param <V>
+ *            the value
  */
 @FunctionalInterface
 public interface CellConsumer<C, V> {

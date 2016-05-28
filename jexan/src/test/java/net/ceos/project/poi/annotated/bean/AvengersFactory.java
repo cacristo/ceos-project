@@ -145,12 +145,14 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test a conflict annotation type: impossible to have
-	 * {@link XlsElement} & {@link XlsFreeElement} at the same attribute<br>
-	 * <br>
+	 * {@link XlsElement} & {@link XlsFreeElement} at the same attribute
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : HORIZONTAL</li>
+	 * <ul>
+	 * <li>{@link PropagationType} : HORIZONTAL
 	 * <li>attribute dateAttribute : declared {@link XlsElement} &
-	 * {@link XlsFreeElement}</li><br>
+	 * {@link XlsFreeElement}
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -176,12 +178,14 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test a conflict annotation type: impossible to have
-	 * {@link XlsElement} & {@link XlsFreeElement} at the same attribute<br>
-	 * <br>
+	 * {@link XlsElement} & {@link XlsFreeElement} at the same attribute
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : VERTICAL</li>
+	 * <ul>
+	 * <li>{@link PropagationType} : VERTICAL<
 	 * <li>attribute dateAttribute : declared {@link XlsElement} &
-	 * {@link XlsFreeElement}</li><br>
+	 * {@link XlsFreeElement}
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -207,11 +211,13 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test a configuration conflict caused by the
-	 * {@link PropagationType} and formula orientation<br>
-	 * <br>
+	 * {@link PropagationType} and formula orientation
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : HORIZONTAL</li>
-	 * <li>attribute avgSalary : configured to VERTICAL</li><br>
+	 * <ul>
+	 * <li>{@link PropagationType} : HORIZONTAL
+	 * <li>attribute avgSalary : configured to VERTICAL
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -236,11 +242,13 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test a configuration conflict caused by the
-	 * {@link PropagationType} and formula orientation<br>
-	 * <br>
+	 * {@link PropagationType} and formula orientation
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : VERTICAL</li>
-	 * <li>attribute avgSalary : configured to HORIZONTAL</li><br>
+	 * <ul>
+	 * <li>{@link PropagationType} : VERTICAL
+	 * <li>attribute avgSalary : configured to HORIZONTAL
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -264,10 +272,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsElement} with an invalid position<br>
-	 * <br>
+	 * Object to test a {@link XlsElement} with an invalid position
+	 * <p>
 	 * Configuration :
-	 * <li>attribute dateAttribute : position = 0</li><br>
+	 * <ul>
+	 * <li>attribute dateAttribute : position = 0
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -289,11 +299,13 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test multiple {@link XlsElement} at the same position<br>
-	 * <br>
+	 * Object to test multiple {@link XlsElement} at the same position
+	 * <p>
 	 * Configuration :
-	 * <li>attribute dateAttribute : position = 1</li>
-	 * <li>attribute stringAttribute : position = 1</li><br>
+	 * <ul>
+	 * <li>attribute dateAttribute : position = 1
+	 * <li>attribute stringAttribute : position = 1
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -315,10 +327,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsFreeElement} with a complex object<br>
-	 * <br>
+	 * Object to test a {@link XlsFreeElement} with a complex object
+	 * <p>
 	 * Configuration :
-	 * <li>attribute unit : {@link Unit}</li><br>
+	 * <ul>
+	 * <li>attribute unit : {@link Unit}
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -347,10 +361,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsFreeElement} at invalid position<br>
-	 * <br>
+	 * Object to test a {@link XlsFreeElement} at invalid position
+	 * <p>
 	 * Configuration :
-	 * <li>attribute freeString : cell = 0</li><br>
+	 * <ul>
+	 * <li>attribute freeString : cell = 0
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -379,10 +395,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsFreeElement} at invalid position<br>
-	 * <br>
+	 * Object to test a {@link XlsFreeElement} at invalid position
+	 * <p>
 	 * Configuration :
-	 * <li>attribute freeDouble : row = 0</li><br>
+	 * <ul>
+	 * <li>attribute freeDouble : row = 0
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -411,11 +429,13 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test multiple {@link XlsFreeElement} at the same position<br>
-	 * <br>
+	 * Object to test multiple {@link XlsFreeElement} at the same position
+	 * <p>
 	 * Configuration :
-	 * <li>attribute freeString : row = 1, cell = 1</li>
-	 * <li>attribute freeDouble : row = 1, cell = 1</li><br>
+	 * <ul>
+	 * <li>attribute freeString : row = 1, cell = 1
+	 * <li>attribute freeDouble : row = 1, cell = 1
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -445,11 +465,13 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test the conflict between the {@link PropagationType} and the
-	 * configuration of the {@link XlsNestedHeader}<br>
-	 * <br>
+	 * configuration of the {@link XlsNestedHeader}
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : HORIZONTAL</li>
-	 * <li>{@link XlsNestedHeader} : VERTICAL</li><br>
+	 * <ul>
+	 * <li>{@link PropagationType} : HORIZONTAL
+	 * <li>{@link XlsNestedHeader} : VERTICAL
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -472,11 +494,13 @@ public class AvengersFactory {
 
 	/**
 	 * Object to test the conflict between the {@link PropagationType} and the
-	 * configuration of the {@link XlsNestedHeader}<br>
-	 * <br>
+	 * configuration of the {@link XlsNestedHeader}
+	 * <p>
 	 * Configuration :
-	 * <li>{@link PropagationType} : VERTICAL</li>
-	 * <li>{@link XlsNestedHeader} : HORIZONTAL</li><br>
+	 * <ul>
+	 * <li>{@link PropagationType} : VERTICAL
+	 * <li>{@link XlsNestedHeader} : HORIZONTAL
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -498,10 +522,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test the absent annotation {@link XlsSheet}<br>
-	 * <br>
+	 * Object to test the absent annotation {@link XlsSheet}
+	 * <p>
 	 * Configuration :
-	 * <li>{@link XlsSheet} : absent</li><br>
+	 * <ul>
+	 * <li>{@link XlsSheet} : absent
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -536,10 +562,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test the absent annotation {@link XlsConfiguration}<br>
-	 * <br>
+	 * Object to test the absent annotation {@link XlsConfiguration}
+	 * <p>
 	 * Configuration :
-	 * <li>{@link XlsConfiguration} : absent</li><br>
+	 * <ul>
+	 * <li>{@link XlsConfiguration} : absent
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -574,10 +602,12 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test the empty title at {@link @XlsSheet}<br>
-	 * <br>
+	 * Object to test the empty title at {@link @XlsSheet}
+	 * <p>
 	 * Configuration :
-	 * <li>{@link @XlsSheet} : empty title</li><br>
+	 * <ul>
+	 * <li>{@link @XlsSheet} : empty title
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
