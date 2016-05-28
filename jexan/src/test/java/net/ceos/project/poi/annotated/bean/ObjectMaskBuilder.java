@@ -32,10 +32,13 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 
 /**
  * Builder to:
- * <li>generate</li>
- * <li>inject</li>
- * <li>validate</li><br>
- * data at the object {@link ObjectMask}<br>
+ * <ul>
+ * <li>generate
+ * <li>inject
+ * <li>validate
+ * </ul>
+ * data at the object {@link ObjectMask}
+ * <p>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

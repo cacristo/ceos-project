@@ -26,10 +26,13 @@ import org.apache.commons.lang3.RandomUtils;
 
 /**
  * Builder to:
- * <li>generate</li>
- * <li>inject</li>
- * <li>validate</li><br>
- * data at the object {@link FreeElementAdvancedObject}<br>
+ * <ul>
+ * <li>generate
+ * <li>inject
+ * <li>validate
+ * </ul>
+ * data at the object {@link FreeElementAdvancedObject}
+ * <p>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

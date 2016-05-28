@@ -23,10 +23,11 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is responsible for grouping, columns or rows, according the
- * column range or row range respectively.<br>
+ * column range or row range respectively.
+ * <p>
+ * To manage the group of columns use {@link XlsGroupColumn} for each group <br>
+ * To manage the group of rows use {@link XlsGroupRow} for each group
  * 
- * To manage the group of columns use {@link XlsGroupColumn} for each group<br>
- * To manage the group of rows use {@link XlsGroupRow} for each group<br>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

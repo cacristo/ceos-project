@@ -38,7 +38,7 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
 public class ConfigCriteriaTest {
 
 	/**
-	 * Test the override extension file type at {@link XConfigCriteria}.<br>
+	 * Test the override extension file type at {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideExtensionCSV() throws Exception {
@@ -80,7 +80,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override propagation type at {@link XConfigCriteria}.<br>
+	 * Test the override propagation type at {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverridePropagationHorizontal() throws Exception {
@@ -136,7 +136,7 @@ public class ConfigCriteriaTest {
 	}
 
 	/**
-	 * Test the override cascade level at {@link XConfigCriteria}.<br>
+	 * Test the override cascade level at {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideCascadeLevelTWO() throws Exception {
@@ -207,7 +207,7 @@ public class ConfigCriteriaTest {
 
 	/**
 	 * Test the override header {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideHeaderCellDecorator2() throws Exception {
@@ -333,7 +333,7 @@ public class ConfigCriteriaTest {
 
 	/**
 	 * Test the override generic {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideGenericCellDecorator2() throws Exception {
@@ -375,7 +375,7 @@ public class ConfigCriteriaTest {
 
 	/**
 	 * Test the override date {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideDateCellDecorator1() throws Exception {
@@ -501,7 +501,7 @@ public class ConfigCriteriaTest {
 
 	/**
 	 * Test the override numeric {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideNumericCellDecorator2() throws Exception {
@@ -585,7 +585,7 @@ public class ConfigCriteriaTest {
 
 	/**
 	 * Test the override boolean {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
 	public void testOverrideBooleanCellDecorator() throws Exception {

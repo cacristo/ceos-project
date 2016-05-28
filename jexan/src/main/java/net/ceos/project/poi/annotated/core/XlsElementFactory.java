@@ -22,7 +22,7 @@ import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 
 /**
  * Factory responsible to convert the {@link XlsFreeElement} into
- * {@link XlsElement}. <br>
+ * {@link XlsElement}.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

@@ -104,14 +104,16 @@ public class ObjectTypeFactory {
 	/* Inner Objects */
 
 	/**
-	 * Object with declared {@link String} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : String not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link String} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : String not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -140,14 +142,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Date} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Date not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Date} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Date not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -175,14 +179,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Date} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Date not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Date} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Date not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -210,14 +216,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Date} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : LocalDateTime not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Date} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : LocalDateTime not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -245,14 +253,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Integer} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Integer not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Integer} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Integer not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -279,14 +289,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Integer} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Integer not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Integer} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Integer not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -314,14 +326,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Long} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Long not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Long} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Long not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -349,14 +363,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Double} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Double not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Double} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Double not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -384,14 +400,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link BigDecimal} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : BigDecimal not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link BigDecimal} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : BigDecimal not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */
@@ -419,14 +437,16 @@ public class ObjectTypeFactory {
 	}
 
 	/**
-	 * Object with declared {@link Boolean} not initialized.<br>
-	 * <br>
-	 * Configuration : <br>
-	 * Sheet title : Boolean not initialized <br>
-	 * File name : ConverterExceptionTest <br>
-	 * {@link ExtensionFileType} = ExtensionFileType.XLS <br>
-	 * {@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL <br>
-	 * {@link CascadeType} = CascadeType.CASCADE_BASE <br>
+	 * Object with declared {@link Boolean} not initialized.
+	 * <p>
+	 * Configuration :
+	 * <ul>
+	 * <li>Sheet title : Boolean not initialized
+	 * <li>File name : ConverterExceptionTest
+	 * <li>{@link ExtensionFileType} = ExtensionFileType.XLS
+	 * <li>{@link PropagationType} = PropagationType.PROPAGATION_HORIZONTAL
+	 * <li>{@link CascadeType} = CascadeType.CASCADE_BASE
+	 * </ul>
 	 * 
 	 * @author CristoAbreu
 	 */

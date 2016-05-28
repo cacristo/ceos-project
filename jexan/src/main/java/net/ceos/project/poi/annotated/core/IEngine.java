@@ -34,6 +34,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the collection of {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Collection<Sheet> marshalToSheet(final Object object) throws WorkbookException;
 
@@ -47,6 +48,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the collection of {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
@@ -58,6 +60,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Workbook marshalToWorkbook(final Object object) throws WorkbookException;
 
@@ -71,6 +74,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Workbook marshalToWorkbook(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
@@ -82,6 +86,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	byte[] marshalToByte(final Object object) throws WorkbookException;
 
@@ -95,6 +100,7 @@ public interface IEngine {
 	 *            the object to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	byte[] marshalToByte(final XConfigCriteria configCriteria, final Object object) throws WorkbookException;
 
@@ -107,6 +113,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void marshalAndSave(final Object object, final String pathFile) throws WorkbookException;
 
@@ -121,6 +128,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void marshalAndSave(final XConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws WorkbookException;
@@ -133,6 +141,7 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Sheet marshalCollectionToSheet(final Collection<?> listObject) throws WorkbookException;
 
@@ -147,6 +156,7 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Sheet} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Sheet marshalCollectionToSheet(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException;
@@ -159,6 +169,7 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Workbook marshalCollectionToWorkbook(final Collection<?> listObject) throws WorkbookException;
 
@@ -173,6 +184,7 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the {@link Workbook} generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	Workbook marshalCollectionToWorkbook(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException;
@@ -186,6 +198,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws WorkbookException;
 
@@ -201,6 +214,7 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the file path where will be the file saved
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void marshalAsCollectionAndSave(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws WorkbookException;
@@ -213,6 +227,7 @@ public interface IEngine {
 	 *            the collection to apply at the workbook.
 	 * @return the byte[] generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	byte[] marshalCollectionToByte(final Collection<?> listObject) throws WorkbookException;
 
@@ -220,10 +235,13 @@ public interface IEngine {
 	 * Generate the workbook based at the {@link XConfigCriteria} and the
 	 * collection of objects and return the byte[] generated.
 	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
 	 * @param listObject
 	 *            the collection to apply at the workbook.
 	 * @return the byte[] generated
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	byte[] marshalCollectionToByte(final XConfigCriteria configCriteria, final Collection<?> listObject)
 			throws WorkbookException;
@@ -239,6 +257,7 @@ public interface IEngine {
 	 *            the {@link Workbook} to read and pass the information to the
 	 *            object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void unmarshalFromWorkbook(final Object object, final Workbook workbook) throws WorkbookException;
 
@@ -251,6 +270,7 @@ public interface IEngine {
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
@@ -259,18 +279,33 @@ public interface IEngine {
 	 * 
 	 * @param object
 	 *            the object to fill up.
-	 * @param inputByte
+	 * @param byteArray
 	 *            the byte[] to read and pass the information to the object
 	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	void unmarshalFromByte(final Object object, final byte[] byteArray) throws WorkbookException;
 
 	/**
 	 * 
 	 * @param collection
+	 *            the collection to apply at the workbook.
 	 */
 	void marshalAsCollection(final Collection<?> collection);
 
+	/**
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} to use
+	 * @param object
+	 *            the object to fill up.
+	 * @param excelFilePath
+	 *            the path where is found the file to read and pass the
+	 *            information to the object
+	 * @return the collection
+	 * @throws WorkbookException
+	 *             given when a not supported action.
+	 */
 	Collection<?> unmarshalToCollection(XConfigCriteria configCriteria, Object object, String excelFilePath)
 			throws WorkbookException;
 

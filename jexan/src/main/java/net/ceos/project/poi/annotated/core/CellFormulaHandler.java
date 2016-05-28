@@ -31,24 +31,23 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 
 /**
- * This class manage the formula or value to apply to one cell.<br>
- * <br>
- * 
- * You can apply a formula by :<br>
- * (1) <b>Create a basic formula</b><br>
+ * This class manage the formula or value to apply to one cell.
+ * <p>
+ * You can apply a formula by :
+ * <ul>
+ * <li><b>Create a basic formula</b><br>
  * To create a basic <i>formula</i> using the Excel orientation is simple as “H3
  * * 1.21”<br>
- * 
- * (2) <b>Using the generic function in a formula</b><br>
- * Apply a generic Excel functions: <i>formula</i> as “SUM(E3,F3,G3)”.<br>
- * 
- * (3) <b>Create your own formula</b><br>
+ * <li><b>Using the generic function in a formula</b><br>
+ * Apply a generic Excel functions: <i>formula</i> as “SUM(E3,F3,G3)”.
+ * <p>
+ * <li><b>Create your own formula</b><br>
  * You have to declare a method where the name start with “formula” + the field
- * will appear at the excel. <br>
- * <br>
- * 
+ * will appear at the excel.
+ * <p>
  * You will need to indicate to jexan you are declaring a field such the type is
  * a <i>formula</i>, active the attribute <i>isFormula</i> as true.
+ * </ul>
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

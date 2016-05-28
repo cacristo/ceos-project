@@ -22,7 +22,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation responsible to manage the fields attributes. <br>
+ * Annotation responsible to manage the attributes.
+ * <br>
+ * The cell management is realized by using the start configuration at @XlsSheet
+ * with the attributes startCell which you indicate where is placed the first
+ * cell to start writing/reading. Combining this definition and
+ * the @XlsElement#position you have the cell where be used by jexan at the
+ * moment of the write/read.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -46,7 +52,7 @@ public @interface XlsElement {
 	int position();
 
 	/**
-	 * Define the commentary of the element.<br>
+	 * Define the commentary of the element.<p>
 	 * By default is empty.
 	 * 
 	 * @return the commentary
@@ -54,7 +60,7 @@ public @interface XlsElement {
 	String comment() default "";
 
 	/**
-	 * Define the commentary of the element applying determined rule(s).<br>
+	 * Define the commentary of the element applying determined rule(s).<p>
 	 * By default is empty.
 	 * 
 	 * @return the rules to apply
@@ -62,7 +68,7 @@ public @interface XlsElement {
 	String commentRules() default "";
 
 	/**
-	 * The decorator to apply to the element.<br>
+	 * The decorator to apply to the element.<p>
 	 * By default is empty.
 	 * 
 	 * @return the decorator name
@@ -71,7 +77,7 @@ public @interface XlsElement {
 
 	/**
 	 * Format the field visually and the original value will remains at the
-	 * element.<br>
+	 * element.<p>
 	 * By default is empty.
 	 * 
 	 * @return the format mask
@@ -80,7 +86,7 @@ public @interface XlsElement {
 
 	/**
 	 * Transform the field with the mask applied and we will lost the original
-	 * value at the element.<br>
+	 * value at the element.<p>
 	 * By default is empty.
 	 * 
 	 * @return the transformation mask
@@ -88,7 +94,7 @@ public @interface XlsElement {
 	String transformMask() default "";
 
 	/**
-	 * Define if the cell is a formula.<br>
+	 * Define if the cell is a formula.<p>
 	 * By default is false.
 	 * 
 	 * @return true if formula, otherwise false
@@ -96,7 +102,7 @@ public @interface XlsElement {
 	boolean isFormula() default false;
 
 	/**
-	 * Define the formula to apply at the cell.<br>
+	 * Define the formula to apply at the cell.<p>
 	 * By default is empty.
 	 * 
 	 * @return the formula to apply
@@ -105,7 +111,7 @@ public @interface XlsElement {
 
 	/**
 	 * Define the name of the method which contains the customized rules to
-	 * apply at the object.<br>
+	 * apply at the object.<p>
 	 * By default is empty.
 	 * 
 	 * @return the name of the method
@@ -113,7 +119,7 @@ public @interface XlsElement {
 	String customizedRules() default "";
 
 	/**
-	 * Define the column size to apply at the column.<br>
+	 * Define the column size to apply at the column.<p>
 	 * By default is 0.
 	 * 
 	 * @return the column size to apply
