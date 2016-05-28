@@ -30,6 +30,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void marshalAndSave(final Object object, final String pathFile) throws WorkbookException;
 
@@ -44,6 +45,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws WorkbookException;
@@ -56,7 +58,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws Exception
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile) throws WorkbookException;
 
@@ -70,7 +72,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws Exception
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
 			final String pathFile) throws WorkbookException;
@@ -83,6 +85,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
@@ -97,6 +100,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws WorkbookException;
@@ -111,6 +115,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
 			throws WorkbookException;
@@ -128,6 +133,7 @@ public interface IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
+	 * @throws WorkbookException given when a not supported action.
 	 */
 	void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
 			final Collection<?> listObject, final String pathFile) throws WorkbookException;

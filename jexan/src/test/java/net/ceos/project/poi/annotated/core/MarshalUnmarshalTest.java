@@ -65,7 +65,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalToSheet' to generate the Excel from the object
-	 * and return the {@link Sheet} generated.<br>
+	 * and return the {@link Sheet} generated.
 	 */
 	@Test
 	public void testMarshalToSheet() throws Exception {
@@ -82,7 +82,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalToSheet', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and return the {@link Sheet}
-	 * generated.<br>
+	 * generated.
 	 */
 	@Test
 	public void testMarshalToSheetWithConfigCriteria() throws Exception {
@@ -102,7 +102,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalToSheet', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and return the {@link Sheet}
-	 * generated.<br>
+	 * generated.
 	 */
 	@Test
 	public void testMarshalToMultiSheetWithConfigCriteria() throws Exception {
@@ -122,7 +122,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalToWorkbook' to generate the Excel from the object
-	 * and return the {@link Workbook} generated.<br>
+	 * and return the {@link Workbook} generated.
 	 */
 	@Test
 	public void testMarshalToWorkbook() throws Exception {
@@ -137,7 +137,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalToWorkbook', using {@link XConfigCriteria}, to
 	 * generate the Excel from the object and return the {@link Workbook}
-	 * generated.<br>
+	 * generated.
 	 */
 	@Test
 	public void testMarshalToWorkbookWithConfigCriteria() throws Exception {
@@ -184,7 +184,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalToByte' to generate the Excel from the object and
-	 * return the byte[] generated.<br>
+	 * return the byte[] generated.
 	 */
 	@Test
 	public void testMarshalToByte() throws Exception {
@@ -198,7 +198,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalToByte' to generate the Excel from the object and
-	 * return the byte[] generated.<br>
+	 * return the byte[] generated.
 	 */
 	@Test
 	public void testMarshalToByteWithConfigCriteria() throws Exception {
@@ -215,7 +215,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalCollectionToSheet' to generate the Excel from the
-	 * collection of objects and return the {@link Sheet} generated.<br>
+	 * collection of objects and return the {@link Sheet} generated.
 	 */
 	@Test
 	public void testMarshalCollectionToSheet() throws Exception {
@@ -230,7 +230,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalCollectionToSheet', using {@link XConfigCriteria}
 	 * , to generate the Excel from the collection of objects and return the
-	 * {@link Sheet} generated.<br>
+	 * {@link Sheet} generated.
 	 */
 	@Test
 	public void testMarshalCollectionToSheetWithConfigCriteria() throws Exception {
@@ -247,7 +247,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalCollectionToWorkbook' to generate the Excel from
-	 * the collection of objects and return the {@link Workbook} generated.<br>
+	 * the collection of objects and return the {@link Workbook} generated.
 	 */
 	@Test
 	public void testMarshalCollectionToWorkbook() throws Exception {
@@ -262,7 +262,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalCollectionToWorkbook', using
 	 * {@link XConfigCriteria}, to generate the Excel from the object and return
-	 * the {@link Workbook} generated.<br>
+	 * the {@link Workbook} generated.
 	 */
 	@Test
 	public void testMarshalCollectionToWorkbookWithConfigCriteria() throws Exception {
@@ -308,7 +308,7 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * Test the method 'marshalCollectionToByte' to generate the Excel from the
-	 * collection of objects and return the byte[] generated.<br>
+	 * collection of objects and return the byte[] generated.
 	 */
 	@Test
 	public void testMarshalCollectionToByte() throws Exception {
@@ -323,7 +323,7 @@ public class MarshalUnmarshalTest {
 	/**
 	 * Test the method 'marshalCollectionToByte', using {@link XConfigCriteria},
 	 * to generate the Excel from the collection of objects and return the
-	 * byte[] generated.<br>
+	 * byte[] generated.
 	 */
 	@Test
 	public void testMarshalCollectionToByteWithConfigCriteria() throws Exception {
@@ -340,7 +340,7 @@ public class MarshalUnmarshalTest {
 	}
 	/**
 	 * DataProvider : Test the method 'marshalToWorkbook' to generate the Excel
-	 * from the object and return the Workbook generated.<br>
+	 * from the object and return the Workbook generated.
 	 * 
 	 * Test the method 'unmarshalFromWorkbook' reading the Excel from the
 	 * Workbook passed as parameter and bring the data to the object.
@@ -357,8 +357,8 @@ public class MarshalUnmarshalTest {
 
 	/**
 	 * DataProvider : Test the method 'marshalToByte' to generate the Excel from
-	 * the object and return the byte[] generated.<br>
-	 * 
+	 * the object and return the byte[] generated.
+	 * <p>
 	 * Test the method 'unmarshalFromByte' reading the Excel from the byte[]
 	 * passed as parameter and bring the data to the object.
 	 */

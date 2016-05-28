@@ -22,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * This annotation define the array of decorators. <br>
+ * This annotation define the array of decorators.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

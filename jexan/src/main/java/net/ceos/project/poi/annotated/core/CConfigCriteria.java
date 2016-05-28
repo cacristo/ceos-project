@@ -23,7 +23,7 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**
  * This class will define all the configuration criteria to be used internally
- * by the framework. <br>
+ * by the framework.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

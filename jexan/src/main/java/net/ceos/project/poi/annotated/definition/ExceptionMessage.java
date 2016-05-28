@@ -16,7 +16,7 @@
 package net.ceos.project.poi.annotated.definition;
 
 /**
- * This will define all the error messages related to the framework. <br>
+ * This will define all the error messages related to the framework.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU

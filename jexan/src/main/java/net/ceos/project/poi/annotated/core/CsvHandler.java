@@ -33,7 +33,7 @@ import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 
 /**
- * Manage all the default type of values to apply/read to one field.<br>
+ * Manage all the default type of values to apply/read to one field.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -76,6 +76,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void dateReader(final Object o, final Field field, final XlsElement xlsAnnotation,
 			final String[] values, final int idx) throws ConverterException {
@@ -102,6 +103,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void localDateReader(final Object o, final Field field, final XlsElement xlsAnnotation,
 			final String[] values, final int idx) throws ConverterException {
@@ -129,6 +131,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void localDateTimeReader(final Object o, final Field field, final XlsElement xlsAnnotation,
 			final String[] values, final int idx) throws ConverterException {
@@ -152,6 +155,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	private static Date applyMaskToDate(final XlsElement xlsAnnotation, final String[] values, final int idx)
 			throws ConverterException {
@@ -190,6 +194,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void stringReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -212,6 +217,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void shortReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -237,6 +243,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void integerReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -262,6 +269,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void longReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -289,6 +297,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void doubleReader(final Object o, final Field field, final XlsElement xlsAnnotation,
 			final String[] values, final int idx) throws ConverterException {
@@ -320,6 +329,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void bigDecimalReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -345,6 +355,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void floatReader(final Object o, final Field field, final String[] values, final int idx)
 			throws ConverterException {
@@ -372,6 +383,7 @@ public class CsvHandler {
 	 * @param idx
 	 *            the index of the field
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static void booleanReader(final Object o, final Field field, final XlsElement xlsAnnotation,
 			final String[] values, final int idx) throws ConverterException {
@@ -404,8 +416,13 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @param tM
+	 *            the transformation mask
+	 * @param fM
+	 *            the format mask
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean dateWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx, String tM, String fM) throws ConverterException {
@@ -430,8 +447,13 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @param tM
+	 *            the transformation mask
+	 * @param fM
+	 *            the format mask
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean localDateWriter(final CConfigCriteria configCriteria, final Object object,
 			final Field field, final int idx, String tM, String fM) throws ConverterException {
@@ -456,8 +478,13 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @param tM
+	 *            the transformation mask
+	 * @param fM
+	 *            the format mask
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean localDateTimeWriter(final CConfigCriteria configCriteria, final Object object,
 			final Field field, final int idx, String tM, String fM) throws ConverterException {
@@ -482,8 +509,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean stringWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -509,8 +537,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean shortWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -536,8 +565,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean integerWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -563,8 +593,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean longWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -590,8 +621,13 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @param tM
+	 *            the transformation mask
+	 * @param fM
+	 *            the format mask
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean doubleWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx, String tM, String fM) throws ConverterException {
@@ -616,8 +652,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean bigDecimalWriter(final CConfigCriteria configCriteria, final Object object,
 			final Field field, final int idx) throws ConverterException {
@@ -643,8 +680,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean floatWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -670,8 +708,9 @@ public class CsvHandler {
 	 *            the field
 	 * @param idx
 	 *            the index
-	 * @return
+	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static boolean booleanWriter(final CConfigCriteria configCriteria, final Object object, final Field field,
 			final int idx) throws ConverterException {
@@ -697,6 +736,7 @@ public class CsvHandler {
 	 *            the transformation mask
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static String toDate(final Date value, final String formatMask, final String transformMask)
 			throws ConverterException {
@@ -733,6 +773,7 @@ public class CsvHandler {
 	 *            the transformation mask
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static String toLocalDate(final LocalDate value, final String formatMask, final String transformMask)
 			throws ConverterException {
@@ -772,6 +813,7 @@ public class CsvHandler {
 	 *            the transformation mask
 	 * @return false if problem otherwise true
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static String toLocalDateTime(final LocalDateTime value, final String formatMask,
 			final String transformMask) throws ConverterException {
@@ -807,6 +849,7 @@ public class CsvHandler {
 	 * @param mask
 	 * @return
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	private static String applyMaskToDate(final Date value, final String mask) throws ConverterException {
 		SimpleDateFormat dt = new SimpleDateFormat(mask);
@@ -889,8 +932,9 @@ public class CsvHandler {
 	 *            the object
 	 * @param f
 	 *            the field
-	 * @return
+	 * @return the enum value as String
 	 * @throws ConverterException
+	 *             the conversion exception type
 	 */
 	protected static String toEnum(final Object o, final Field f) throws ConverterException {
 		try {

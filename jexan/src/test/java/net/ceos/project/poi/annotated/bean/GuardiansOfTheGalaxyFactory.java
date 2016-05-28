@@ -60,10 +60,12 @@ public class GuardiansOfTheGalaxyFactory {
 	// }
 
 	/**
-	 * Test a scenario of calling a customized rules which is not defined<br>
-	 * <br>
+	 * Test a scenario of calling a customized rules which is not defined
+	 * <p>
 	 * Configuration :
-	 * <li>{@link XlsElement} : apply customized rule inexistent</li><br>
+	 * <ul>
+	 * <li>{@link XlsElement} : apply customized rule inexistent
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -141,11 +143,12 @@ public class GuardiansOfTheGalaxyFactory {
 
 	/**
 	 * Test a multiples customized rules defined at the same object. According
-	 * the rule some action will be launched<br>
-	 * <br>
+	 * the rule some action will be launched
+	 * <p>
 	 * Configuration :
+	 * <ul>
 	 * <li>{@link XlsElement} : apply customized rules if true launch exception
-	 * </li><br>
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -283,11 +286,13 @@ public class GuardiansOfTheGalaxyFactory {
 
 	/**
 	 * Test a simple customized rules defined if value under 450. According the
-	 * rule some action will be launched<br>
-	 * <br>
+	 * rule some action will be launched
+	 * <p>
 	 * Configuration :
+	 * <ul>
 	 * <li>{@link XlsElement} : apply customized rules value under 450 jexan
-	 * launch an exception</li><br>
+	 * launch an exception
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
@@ -365,10 +370,12 @@ public class GuardiansOfTheGalaxyFactory {
 
 	/**
 	 * Test a simple customized rules defined if a string contains the word
-	 * "down". According the rule some action will be launched<br>
-	 * <br>
+	 * "down". According the rule some action will be launched
+	 * <p>
 	 * Configuration :
-	 * <li>{@link XlsElement} : apply customized rules</li><br>
+	 * <ul>
+	 * <li>{@link XlsElement} : apply customized rules
+	 * </ul>
 	 * 
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU

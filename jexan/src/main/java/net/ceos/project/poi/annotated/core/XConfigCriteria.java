@@ -37,7 +37,7 @@ import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
  * This class will define all the configuration criteria to be used internally
- * by the framework. <br>
+ * by the framework.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -175,9 +175,8 @@ public class XConfigCriteria {
 	/**
 	 * Initialize Cell Decorator system.
 	 * 
-	 * @param wb
-	 *            the {@link Workbook} in use
 	 * @throws ConfigurationException
+	 *             given when {@link CellStyle} initialization failed
 	 */
 	protected final void initializeCellDecorator() throws ConfigurationException {
 
@@ -569,8 +568,8 @@ public class XConfigCriteria {
 	 * 
 	 * @param type
 	 *            the {@link CellStyleHandler} type
-	 * @return
-	 * @throws ElementException
+	 * @return the {@link CellStyle}
+	 * @throws ElementException given when {@link CellStyle} initialization failed
 	 */
 	protected CellStyle getCellStyle(final String type) throws ElementException {
 		if (StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null) {
@@ -584,7 +583,7 @@ public class XConfigCriteria {
 	 * 
 	 * @param maskDecoratorType
 	 *            the {@link CellStyleHandler} mask decorator
-	 * @return
+	 * @return the format mask
 	 */
 	protected String getFormatMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType;
@@ -595,7 +594,7 @@ public class XConfigCriteria {
 	 * 
 	 * @param maskDecoratorType
 	 *            the {@link CellStyleHandler} mask decorator
-	 * @return
+	 * @return the transformed mask
 	 */
 	protected String getTransformMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask() : maskDecoratorType;
@@ -607,7 +606,8 @@ public class XConfigCriteria {
 	 * 
 	 * @param maskDecoratorType
 	 *            the {@link CellStyleHandler} mask decorator
-	 * @return
+	 * @return the transform mask if present or the format mask (if present)
+	 *         otherwise the default mask
 	 */
 	protected String getMask(final String maskDecoratorType) {
 		return StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
@@ -621,7 +621,7 @@ public class XConfigCriteria {
 	 *            the decorator name
 	 * @param maskDecoratorType
 	 *            the mask format to apply
-	 * @return the key based at : <mask><decorator>
+	 * @return the key based at : mask_decorator
 	 */
 	protected String generateCellStyleKey(final String cellDecoratorType, final String maskDecoratorType) {
 		String decorator = StringUtils.isNotBlank(element.decorator()) ? element.decorator() : cellDecoratorType;

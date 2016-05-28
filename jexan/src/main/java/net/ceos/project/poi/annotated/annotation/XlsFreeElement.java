@@ -24,7 +24,11 @@ import java.lang.annotation.Target;
 import net.ceos.project.poi.annotated.definition.TitleOrientationType;
 
 /**
- * Annotation responsible to manage the fields attributes defining the exact position into the Excel. <br>
+ * Annotation responsible to manage the attributes defined in the exact position
+ * into the sheet of one workbook.
+ * <p>
+ * The value indicate at the row/cell attributes is the exact value that will be
+ * use when write/read the element.
  * 
  * @version 1.0
  * @author Carlos CRISTO ABREU
@@ -41,7 +45,8 @@ public @interface XlsFreeElement {
 	String title();
 
 	/**
-	 * Define if the title is visible or not at the element.<br>
+	 * Define if the title is visible or not at the element.
+	 * <p>
 	 * By default is false.
 	 * 
 	 * @return boolean indicating if the title will be visible or not
@@ -49,15 +54,17 @@ public @interface XlsFreeElement {
 	boolean showTitle() default false;
 
 	/**
-	 * Define the title orientation.<br>
+	 * Define the title orientation.
+	 * <p>
 	 * By default is TitleOrientationType.TOP.
 	 * 
 	 * @return boolean indicating if the title will be visible or not
 	 */
-	TitleOrientationType titleOrientation() default TitleOrientationType.TOP; 
-	
+	TitleOrientationType titleOrientation() default TitleOrientationType.TOP;
+
 	/**
-	 * Define the row position.<br>
+	 * Define the row position.
+	 * <p>
 	 * By default is 1.
 	 * 
 	 * @return the initial row position
@@ -65,7 +72,8 @@ public @interface XlsFreeElement {
 	int row() default 1;
 
 	/**
-	 * Define the cell position.<br>
+	 * Define the cell position.
+	 * <p>
 	 * By default is 1.
 	 * 
 	 * @return the initial cell position
@@ -73,7 +81,8 @@ public @interface XlsFreeElement {
 	int cell() default 1;
 
 	/**
-	 * Define the commentary of the element.<br>
+	 * Define the commentary of the element.
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the commentary
@@ -81,7 +90,8 @@ public @interface XlsFreeElement {
 	String comment() default "";
 
 	/**
-	 * Define the commentary of the element applying determined rule(s).<br>
+	 * Define the commentary of the element applying determined rule(s).
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the rules to apply
@@ -89,7 +99,8 @@ public @interface XlsFreeElement {
 	String commentRules() default "";
 
 	/**
-	 * The decorator to apply to the element.<br>
+	 * The decorator to apply to the element.
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the decorator name
@@ -98,7 +109,8 @@ public @interface XlsFreeElement {
 
 	/**
 	 * Format the field visually and the original value will remains at the
-	 * element.<br>
+	 * element.
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the format mask
@@ -107,7 +119,8 @@ public @interface XlsFreeElement {
 
 	/**
 	 * Transform the field with the mask applied and we will lost the original
-	 * value at the element.<br>
+	 * value at the element.
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the transformation mask
@@ -115,7 +128,8 @@ public @interface XlsFreeElement {
 	String transformMask() default "";
 
 	/**
-	 * Define if the cell is a formula.<br>
+	 * Define if the cell is a formula.
+	 * <p>
 	 * By default is false.
 	 * 
 	 * @return true if formula, otherwise false
@@ -123,7 +137,8 @@ public @interface XlsFreeElement {
 	boolean isFormula() default false;
 
 	/**
-	 * Define the formula to apply at the cell.<br>
+	 * Define the formula to apply at the cell.
+	 * <p>
 	 * By default is empty.
 	 * 
 	 * @return the formula to apply
@@ -139,7 +154,8 @@ public @interface XlsFreeElement {
 	String customizedRules() default "";
 
 	/**
-	 * Define the column size to apply at the column.<br>
+	 * Define the column size to apply at the column.
+	 * <p>
 	 * Apply at version 2.0
 	 * 
 	 * @return the column size to apply
