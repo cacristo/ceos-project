@@ -77,6 +77,12 @@ public class ObjectNull {
 	@XlsElement(title = "BigDecimal value", position = 17)
 	private BigDecimal bigDecimalAttribute;
 
+	@XlsElement(title = "Short value", position = 18)
+	private short shortPrimitiveAttribute;
+
+	@XlsElement(title = "Short primitive value", position = 19)
+	private Short shortAttribute;
+
 	/**
 	 * @return the dateAttribute
 	 */
@@ -320,5 +326,33 @@ public class ObjectNull {
 	 */
 	public void setBigDecimalAttribute(BigDecimal bigDecimalAttribute) {
 		this.bigDecimalAttribute = bigDecimalAttribute;
+	}
+
+	/**
+	 * @return the shortPrimitiveAttribute
+	 */
+	public final short getShortPrimitiveAttribute() {
+		return shortPrimitiveAttribute;
+	}
+
+	/**
+	 * @param shortPrimitiveAttribute the shortPrimitiveAttribute to set
+	 */
+	public final void setShortPrimitiveAttribute(short shortPrimitiveAttribute) {
+		this.shortPrimitiveAttribute = shortPrimitiveAttribute;
+	}
+
+	/**
+	 * @return the shortAttribute
+	 */
+	public final Short getShortAttribute() {
+		return shortAttribute;
+	}
+
+	/**
+	 * @param shortAttribute the shortAttribute to set
+	 */
+	public final void setShortAttribute(Short shortAttribute) {
+		this.shortAttribute = shortAttribute;
 	}
 }
