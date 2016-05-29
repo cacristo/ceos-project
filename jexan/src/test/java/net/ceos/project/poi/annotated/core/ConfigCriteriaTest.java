@@ -130,9 +130,9 @@ public class ConfigCriteriaTest {
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_LEVEL_ONE);
+		config.overrideCascadeLevel(CascadeType.CASCADE_L1);
 
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_LEVEL_ONE);
+		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L1);
 	}
 
 	/**
@@ -144,9 +144,9 @@ public class ConfigCriteriaTest {
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_LEVEL_TWO);
+		config.overrideCascadeLevel(CascadeType.CASCADE_L2);
 
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_LEVEL_TWO);
+		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L2);
 	}
 
 	/**
