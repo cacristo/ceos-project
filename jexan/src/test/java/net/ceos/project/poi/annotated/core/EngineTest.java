@@ -15,8 +15,6 @@
  */
 package net.ceos.project.poi.annotated.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Test;
@@ -112,41 +110,5 @@ public class EngineTest {
 
 		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
 		PropagationVerticalObjectBuilder.validatePropagationVerticalObject(charger);
-	}
-
-	/**
-	 * Test with different ROW & CELL
-	 */
-	@Test
-	public void testRowCellSpecified() {
-		// FIXME apply test case
-		assertEquals(true, false);
-	}
-
-	/**
-	 * Test with cascade type is CASCADE_LEVEL_ONE
-	 */
-	@Test
-	public void testCascadeTypeLevelOne() {
-		// FIXME apply test case
-		assertEquals(true, false);
-	}
-
-	/**
-	 * Test with cascade type is CASCADE_LEVEL_TWO
-	 */
-	@Test
-	public void testCascadeTypeLevelTwo() {
-		// FIXME apply test case
-		assertEquals(true, false);
-	}
-
-	/**
-	 * Test with cascade type is CASCADE_FULL
-	 */
-	@Test
-	public void testCascadeTypeFull() {
-		// FIXME apply test case
-		assertEquals(true, false);
 	}
 }
