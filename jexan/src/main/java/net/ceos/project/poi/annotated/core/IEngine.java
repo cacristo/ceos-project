@@ -269,11 +269,10 @@ public interface IEngine {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @return the object
 	 * @throws WorkbookException
 	 *             given when a not supported action.
 	 */
-	Object unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
+	void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException;
 
 	/**
 	 * Generate the object from the byte array passed as parameter.

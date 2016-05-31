@@ -42,7 +42,7 @@ public class ObjectConfigurable {
 	@XlsElement(title = "String value", customizedRules="rules", position = 2)
 	private String stringAttribute;
 
-	@XlsElement(title = "Integer value", position = 3, decorator = "extendedInteger")
+	@XlsElement(title = "Integer value", position = 3/*, decorator = "extendedInteger"*/)
 	private Integer integerAttribute = 0;
 
 	@XlsElement(title = "Double value", position = 4, formatMask = "0.0")

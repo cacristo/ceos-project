@@ -116,12 +116,14 @@ public class UnmarshalCollectionSimpleExcelTest {
 	 */
 	@Test
 	public void testObjectCollectionMultiExcelP() throws Exception {
-		
+		SimpleObjectWithCollectionH collection = new SimpleObjectWithCollectionH();
+				
 		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.setFileName("collection_object_simple_with_collec_h");
 		
 		Engine en = new Engine();
-		SimpleObjectWithCollectionH collection =  (SimpleObjectWithCollectionH) en.unmarshalFromPath( new SimpleObjectWithCollectionH(), TestUtils.WORKING_DIR_UNMARSHALL);
+		en.unmarshalFromPath(collection, TestUtils.WORKING_DIR_UNMARSHALL);
+
 		configCriteria.setFileName("unmarshal_5");
 		en.marshalAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
 	}
