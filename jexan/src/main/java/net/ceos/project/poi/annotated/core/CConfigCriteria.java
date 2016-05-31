@@ -34,7 +34,7 @@ public class CConfigCriteria {
 	private CascadeType cascadeLevel;
 
 	private String titleSheet;
-
+	// TODO see enclosure
 	private String separator = ",";
 	private String overrideSeparator;
 	private Boolean isHeaderPainted = Boolean.FALSE;

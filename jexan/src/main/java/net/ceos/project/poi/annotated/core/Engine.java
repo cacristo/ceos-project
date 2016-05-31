@@ -508,7 +508,7 @@ public class Engine implements IEngine {
 			try {
 				// E uma lista entao ha que crear uma sheet nova
 				marshallCollectionEngineT(configCriteria, (Collection<?>) configCriteria.getField().get(o), idxC, fT,
-						0);
+						cL + 1);
 			} catch (IllegalAccessException e) {
 				throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 			}
@@ -1558,7 +1558,7 @@ public class Engine implements IEngine {
 				idxRow = preparePropagationHorizontal(configCriteria);
 
 				marshalAsPropagationHorizontal(configCriteria, object, object.getClass(), idxRow, indexCellCalculated,
-						0);
+						cL + 1);
 
 			} else {
 				// parentsheet para fazer
@@ -1677,12 +1677,8 @@ public class Engine implements IEngine {
 	}
 
 	/**
-	 * <<<<<<< HEAD Generate the workbook based the object passed as parameter
-	 * and return the respective {@link FileOutputStream}. ======= Generate the
-	 * workbook based at the object passed as parameter and return <<<<<<< HEAD
-	 * the respective {@link FileOutputStream}. >>>>>>> 2b6250f... [8u60]
-	 * Optimize exceptions management ======= the byte[] generated. >>>>>>>
-	 * 94e088a... [8u60] Update JavaDoc
+	 * Generate the workbook based at the object passed as parameter and return
+	 * the byte[] generated.
 	 * 
 	 * @param object
 	 *            the object to apply at the workbook.

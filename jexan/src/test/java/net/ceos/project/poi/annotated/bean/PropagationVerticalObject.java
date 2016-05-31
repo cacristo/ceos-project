@@ -20,8 +20,8 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Propagation Horizontal Obj", propagation = PropagationType.PROPAGATION_VERTICAL)
-@XlsConfiguration(nameFile = "PropagationHorizontalObjects")
+@XlsSheet(title = "Propagation Vertical Obj", propagation = PropagationType.PROPAGATION_VERTICAL)
+@XlsConfiguration(nameFile = "PropagationVerticalObjects")
 public class PropagationVerticalObject {
 
 	@XlsElement(title = "Primitive int value", position = 1)
