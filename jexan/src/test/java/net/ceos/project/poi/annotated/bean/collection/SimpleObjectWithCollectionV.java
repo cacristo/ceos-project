@@ -27,10 +27,9 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 @XlsConfiguration(nameFile = "collection_object_simple_with_collec_h", extensionFile = ExtensionFileType.XLSX)
-@XlsSheet(title = "object", propagation = PropagationType.PROPAGATION_VERTICAL)
+@XlsSheet(title = "object",startCell=3, propagation = PropagationType.PROPAGATION_VERTICAL)
 public class SimpleObjectWithCollectionV {
 
-	@XlsNestedHeader(title = "Main info", startY = 1, endY = 3)
 	@XlsElement(title = "Date value", position = 1)
 	private Date dateAttribute;
 

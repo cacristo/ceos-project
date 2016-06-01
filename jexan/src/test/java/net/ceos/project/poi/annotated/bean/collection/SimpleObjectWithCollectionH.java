@@ -15,7 +15,10 @@
  */
 package net.ceos.project.poi.annotated.bean.collection;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +44,7 @@ public class SimpleObjectWithCollectionH {
 	private Integer integerAttribute = 0;
 	
 	@XlsElement(title = "Integer value", position = 4, parentSheet=true)
-	private Set<SimpleObjectPropH> setSimpleObjectPropH;
+	private List<SimpleObjectPropH> setSimpleObjectPropH;
 	
 	@XlsElement(title = "list multi", position = 5,parentSheet=true)
 	private List<MultiTypeObjectPropH>  listMultiObjectPropH;
@@ -94,11 +97,11 @@ public class SimpleObjectWithCollectionH {
 		this.integerAttribute = integerAttribute;
 	}
 
-	public Set<SimpleObjectPropH> getSetSimpleObjectPropH() {
+	public List<SimpleObjectPropH> getSetSimpleObjectPropH() {
 		return setSimpleObjectPropH;
 	}
 
-	public void setSetSimpleObjectPropH(Set<SimpleObjectPropH> setSimpleObjectPropH) {
+	public void setSetSimpleObjectPropH(List<SimpleObjectPropH> setSimpleObjectPropH) {
 		this.setSimpleObjectPropH = setSimpleObjectPropH;
 	}
 

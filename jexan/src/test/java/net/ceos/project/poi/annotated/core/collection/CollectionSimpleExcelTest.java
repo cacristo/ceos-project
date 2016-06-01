@@ -243,7 +243,7 @@ public class CollectionSimpleExcelTest {
 			simpleObject.setIntegerAttribute(i);
 			collectionSimpleObject.add(simpleObject);
 		}
-		simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
+	//	simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
 		
 		
 		XConfigCriteria configCriteria = new XConfigCriteria();
@@ -303,7 +303,7 @@ public class CollectionSimpleExcelTest {
 				simpleObject.setIntegerAttribute(i);
 				collectionSimpleObject.add(simpleObject);
 			}
-			simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
+		//	simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
 			collection.add(simpleObjectWithCollection);
 		}
 		
@@ -373,7 +373,7 @@ public class CollectionSimpleExcelTest {
 				simpleObject.setIntegerAttribute(i);
 				collectionSimpleObject.add(simpleObject);
 			}
-			simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
+		//	simpleObjectWithCollection.setSetSimpleObjectPropH(collectionSimpleObject);
 			object.setSimpleObjectCollH(simpleObjectWithCollection);
 		
 		
@@ -429,11 +429,12 @@ public class CollectionSimpleExcelTest {
 	public void testCascadePH() throws Exception {
 		
 		Object1 object = new Object1();
-		//object.setString("object 1");
+		object.setString("object 1");
 		List<Object2> listObject2 = new ArrayList<Object2>();
 			for (int i = 0; i < 5; i++) {
 				Object2 simpleObject = new Object2();
-			//	simpleObject.setString("object 2");
+				
+			simpleObject.setString("object 2 "+i);
 				List<SimpleObjectPropH> listObject3 = new ArrayList<SimpleObjectPropH>();
 				for (int j = 0; j < 5; j++) {
 					SimpleObjectPropH simpleObject3 = new SimpleObjectPropH();

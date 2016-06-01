@@ -28,6 +28,7 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.cascade.CascadeObject;
 import net.ceos.project.poi.annotated.bean.cascade.CascadeObjectBuilder;
+import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
@@ -111,10 +112,10 @@ public class MarshalUnmarshalTest {
 		XConfigCriteria configuration = new XConfigCriteria();
 		configuration.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
 
-		// FIXME problem here in case of vertical propagation (Work ok at Horizontal)
-		
+		configuration.overrideCascadeLevel(CascadeType.CASCADE_L3);
 		IEngine en = new Engine();
 		Collection<Sheet> sheetList = en.marshalToSheet(configuration, cascade);
+
 
 		Assert.assertNotNull(sheetList);
 		Assert.assertEquals(sheetList.size(), 6);

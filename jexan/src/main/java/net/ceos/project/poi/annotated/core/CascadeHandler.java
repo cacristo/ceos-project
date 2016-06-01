@@ -38,7 +38,7 @@ class CascadeHandler {
 	protected static boolean isAuthorizedCascadeLevel(final XConfigCriteria configCriteria, final int current,
 			final Object object) {
 
-		if (current > configCriteria.getCascadeLevel().getCode()) {
+		if (object == null || current > configCriteria.getCascadeLevel().getCode()) {
 			return false;
 		}
 		

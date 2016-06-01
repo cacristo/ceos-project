@@ -194,7 +194,7 @@ public class CollectionMultiExcelTest {
 		
 		
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		configCriteria.setFileName("Col_object_simple_with_collec_M_H");
+		configCriteria.setFileName("Col_object_simple_with_collec_M_H_PPP");
 		Engine en = new Engine();
 
 		en.marshalAsCollectionAndSave(configCriteria,collection, TestUtils.WORKING_DIR_GENERATED_I);
@@ -246,8 +246,8 @@ public class CollectionMultiExcelTest {
 		for (int i = 0; i < 3; i++) {
 			SimpleObjectWithCollectionV simpleObjectWithCollection = new SimpleObjectWithCollectionV();
 			simpleObjectWithCollection.setDateAttribute(new Date());
-			simpleObjectWithCollection.setIntegerAttribute(10);
-			simpleObjectWithCollection.setStringAttribute("Test");
+			simpleObjectWithCollection.setIntegerAttribute(10+i);
+			simpleObjectWithCollection.setStringAttribute("Test "+i);
 			List<MultiTypeObjectPropV> collectionMultiObject= new ArrayList<MultiTypeObjectPropV>();
 			for (int j = 0;j < 3; j++) {
 				MultiTypeObjectPropV fastTest = buildMultiTypeObjectVert(j);
@@ -353,8 +353,8 @@ public class CollectionMultiExcelTest {
 
 		Job job = new Job();
 		job.setJobCode(0005 + i);
-		job.setJobFamily("Family Job Name "+i);
-		job.setJobName("Job Name "+i);
+		job.setJobFamily("Family Job Nome "+i);
+		job.setJobName("Job Nome "+i);
 		mto.setJob(job);
 
 		mto.setIntegerPrimitiveAttribute(121);

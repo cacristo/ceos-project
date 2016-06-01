@@ -26,8 +26,8 @@ import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_VERTICAL)
-@XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
+@XlsSheet(title = "Multiple type obj",  propagation = PropagationType.PROPAGATION_VERTICAL)
+@XlsConfiguration(nameFile = "MultipleTypeOfObjects",  extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "date")
