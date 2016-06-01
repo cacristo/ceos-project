@@ -97,8 +97,7 @@ public class ObjectFormulaBuilder {
 		assertEquals(base.getValueRegion(), toValidate.getValueRegion());
 		assertEquals(base.getValueCountry(), toValidate.getValueCountry());
 		// FIXME review how get formula result
-		// assertEquals(base.getSomeString(), toValidate.getSomeString());
-		assertEquals("0.0", toValidate.getSomeString());
+		 assertEquals(base.getSomeString(), toValidate.getSomeString());
 		// TODO add new validation below
 	}
 
