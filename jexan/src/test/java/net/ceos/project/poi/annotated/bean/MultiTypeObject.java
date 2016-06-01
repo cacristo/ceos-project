@@ -37,13 +37,13 @@ public class MultiTypeObject {
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3)
-	private Integer integerAttribute = 0;
+	private Integer integerAttribute;
 
 	@XlsElement(title = "Double value", position = 4, formatMask = "0.00000")
-	private Double doubleAttribute = 0.0;
+	private Double doubleAttribute;
 
 	@XlsElement(title = "Long value", position = 5)
-	private Long longAttribute = 0L;
+	private Long longAttribute;
 
 	@XlsElement(title = "Boolean value", position = 6, comment = "boolean comment")
 	private Boolean booleanAttribute = Boolean.TRUE;
@@ -52,13 +52,13 @@ public class MultiTypeObject {
 	private Job job;
 
 	@XlsElement(title = "Primitive int value", position = 8)
-	private int integerPrimitiveAttribute = 0;
+	private int integerPrimitiveAttribute;
 
 	@XlsElement(title = "Primitive double value", position = 9, comment = "double comment")
-	private double doublePrimitiveAttribute = 0;
+	private double doublePrimitiveAttribute;
 
 	@XlsElement(title = "Primitive long value", position = 10)
-	private long longPrimitiveAttribute = 0;
+	private long longPrimitiveAttribute;
 
 	@XlsElement(title = "Primitive boolean value", position = 11)
 	private boolean booleanPrimitiveAttribute = false;
@@ -67,10 +67,10 @@ public class MultiTypeObject {
 	private AddressInfo addressInfo;
 
 	@XlsElement(title = "Float value", position = 13)
-	private Float floatAttribute = 0f;
+	private Float floatAttribute;
 
 	@XlsElement(title = "Primitive float value", position = 14)
-	private float floatPrimitiveAttribute = 0f;
+	private float floatPrimitiveAttribute;
 
 	@XlsElement(title = "some sum", position = 15, isFormula = true)
 	private Double sumVal;
@@ -82,10 +82,10 @@ public class MultiTypeObject {
 	private BigDecimal bigDecimalAttribute;
 
 	@XlsElement(title = "Short value", position = 18)
-	private short shortPrimitiveAttribute = 0;
+	private short shortPrimitiveAttribute;
 
 	@XlsElement(title = "Short primitive value", position = 19)
-	private Short shortAttribute = 0;
+	private Short shortAttribute;
 
 	@XlsElement(title = "Local date value", position = 20, formatMask = "yyyy-MM-dd", decorator = "date")
 	private LocalDate localDateAttribute;
