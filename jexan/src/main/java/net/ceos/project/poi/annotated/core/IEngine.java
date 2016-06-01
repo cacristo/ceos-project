@@ -288,13 +288,6 @@ public interface IEngine {
 
 	/**
 	 * 
-	 * @param collection
-	 *            the collection to apply at the workbook.
-	 */
-	void marshalAsCollection(final Collection<?> collection);
-
-	/**
-	 * 
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria} to use
 	 * @param object

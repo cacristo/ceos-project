@@ -34,7 +34,9 @@ public class TestUtils {
 	public static final String WORKING_DIR_GENERATED_I = "C:\\projects\\tests\\generated";
 	public static final String WORKING_DIR_GENERATED_II = "C:\\projects\\tests\\generated\\";
 	public static final String WORKING_DIR_MANUALLY = "C:\\projects\\tests\\manually\\";
-	
+	public static final String WORKING_DIR_UNMARSHALL = "C:\\projects\\tests\\generated\\unmarshal\\";
+	public static final String WORKING_DIR_UNMARSHALL_M = "C:\\projects\\tests\\generated\\unmarshal\\marshal";
+
 	public static void validationString(String string,
 			XlsElement xlsAnnotation, HSSFCell headerCell, HSSFCell contentCell) {
 		assertEquals(xlsAnnotation.title(), headerCell.getStringCellValue());

@@ -560,15 +560,38 @@ public class Engine implements IEngine {
 
 		int counter = 0;
 
-			/* make the field accessible to recover the value */
-			configCriteria.getField().setAccessible(true);
+		/* make the field accessible to recover the value */
+		configCriteria.getField().setAccessible(true);
 
-			Class<?> fT = configCriteria.getField().getType();
+		Class<?> fT = configCriteria.getField().getType();
 
-			configCriteria.setRow(r);
+		configCriteria.setRow(r);
 
+		if (Collection.class.isAssignableFrom(fT)) {
+			Collection<?> collection = null;
+			try {
+				collection = (Collection<?>) configCriteria.getField().get(o);
+			} catch (IllegalArgumentException | IllegalAccessException e1) {
+				throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
+			}
+			if (collection != null) {
+				Object objectRT;
+				try {
+					objectRT = collection.stream().findFirst().get();
+				} catch (Exception e) {
+					throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
+				}
+
+				/* initialize the runtime class of the object */
+				Class<?> oC = initializeRuntimeClass(objectRT);
+
+				// E uma lista entao ha que crear uma sheet nova
+				marshallCollectionEngineT(configCriteria, collection, idxC, oC, cL + 1);
+			}
+
+		} else {
 			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
-
+	
 			if (!isAppliedObject && !fT.isPrimitive()) {
 				try {
 					Object nO = configCriteria.getField().get(o);
@@ -577,13 +600,13 @@ public class Engine implements IEngine {
 						nO = fT.newInstance();
 					}
 					Class<?> oC = nO.getClass();
-
+	
 					counter = marshalAsPropagationVertical(configCriteria, nO, oC, idxR - 1, idxC - 1, cL + 1);
 				} catch (InstantiationException | IllegalAccessException e) {
 					throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 				}
 			}
-		
+		}
 		return counter;
 	}
 
@@ -888,10 +911,14 @@ public class Engine implements IEngine {
 		} else {
 			// TOVERIFY se ha que aumentar a 5 pelo nestedheader
 			idxRow = configCriteria.getElement() != null && configCriteria.getElement().parentSheet()
-					? configCriteria.getSheet().getLastRowNum() + 3 : configCriteria.getSheet().getLastRowNum() + 1;
+					? configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()))
+							.getLastRowNum() + 3
+					: configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()))
+							.getLastRowNum() + 1;
 			// idxRow = configCriteria.getSheet().getLastRowNum() + 1;
 			configCriteria.setRowHeader(null);
-			configCriteria.setRow(initializeRow(configCriteria.getSheet(), idxRow++));
+			configCriteria.setRow(initializeRow(
+					configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet())), idxRow++));
 
 		}
 		return idxRow;
@@ -917,9 +944,11 @@ public class Engine implements IEngine {
 		if (configCriteria.getWorkbook().getNumberOfSheets() == 0
 				|| configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet())) == null) {
 			configCriteria.setSheet(initializeSheet(configCriteria.getWorkbook(), configCriteria.getTitleSheet()));
-			indexCell = configCriteria.getStartCell();
+			indexCell = configCriteria.getStartCell() + 1;
 		} else {
-			indexCell += 1;
+			configCriteria.setSheet(configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet())));
+			   short sh= configCriteria.getSheet().getRow(configCriteria.getStartRow()+1).getLastCellNum();
+			   indexCell = sh-1;
 		}
 		return indexCell;
 	}
@@ -1092,6 +1121,7 @@ public class Engine implements IEngine {
 		int indexRow = idxR;
 		/* backup base index of the cell */
 		int baseIdxCell = indexCell;
+		int rem = 0;
 
 		/* validate cascade level */
 		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
@@ -1161,7 +1191,7 @@ public class Engine implements IEngine {
 
 				/* create the row */
 				Row row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
-				if (row == null) {
+				if (row == null || baseIdxCell == 0 || baseIdxCell == 1) {
 					/* header treatment with nested header */
 					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
@@ -1170,16 +1200,26 @@ public class Engine implements IEngine {
 					/* apply merge region */
 					applyMergeRegion(configCriteria, row, indexRow, tmpIdxCell, false);
 
-					if (CellHandler.isAuthorizedType(f)) {
+					int pos = indexRow + xlsAnnotation.position();
+					// if is a list don't generate the head
+					if (row != null && !Collection.class.isAssignableFrom(f.getType())
+							&& CellHandler.isAuthorizedType(f)) {
+						pos = pos - rem;
 						/* header treatment */
 						CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
 								xlsAnnotation.title());
+						rem = 0;
+					} else {
+						//
+						rem = rem + 1;
 					}
 
 				} else {
+					row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
 					/* header treatment without nested header */
-					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), row, indexCell,
-							xlsAnnotation.title());
+					// CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(),
+					// row, indexCell,
+					// xlsAnnotation.title());
 				}
 
 				/* prepare the column width */
@@ -1229,7 +1269,7 @@ public class Engine implements IEngine {
 	 * @throws WorkbookException
 	 *             given when a not supported action.
 	 */
-	private int unmarshalAsPropagationHorizontal(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
+	private int unmarshalAsPropagationHorizontal(final XConfigCriteria configCriteria, Object o, Class<?> oC,
 			final int idxR, final int idxC) throws WorkbookException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
@@ -1258,27 +1298,50 @@ public class Engine implements IEngine {
 				/* content row */
 				// MAL - ERRO AQUI
 				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
-				Cell contentCell = contentRow.getCell(indexCell + xlsAnnotation.position());
+				if (contentRow != null && idxR < configCriteria.getSheet().getLastRowNum()) {
+					Cell contentCell = contentRow.getCell(indexCell + xlsAnnotation.position());
+					if (contentCell != null) {
+						if (Collection.class.isAssignableFrom(fT)) {
 
-				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
+							try {
+								f.set(o, unmarshalTreatementToCollection(o, configCriteria));
+							} catch (IllegalArgumentException | IllegalAccessException e) {
+								throw new ElementException(ExceptionMessage.ELEMENT_COMPLEX_OBJECT.getMessage());
+							}
+						} else {
+							boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
-				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
-					try {
-						Object subObjbect = fT.newInstance();
+							if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+								try {
+									Object subObjbect = fT.newInstance();
 
-						Class<?> subObjbectClass = subObjbect.getClass();
+									Class<?> subObjbectClass = subObjbect.getClass();
 
-						int internalCellCounter = unmarshalAsPropagationHorizontal(configCriteria, subObjbect,
-								subObjbectClass, idxR, indexCell + xlsAnnotation.position() - 1);
+									int internalCellCounter = unmarshalAsPropagationHorizontal(configCriteria,
+											subObjbect, subObjbectClass, idxR,
+											indexCell + xlsAnnotation.position() - 1);
 
-						/* add the sub object to the parent object */
-						f.set(o, subObjbect);
+									/*
+									 * add the sub object to the parent object
+									 */
+									f.set(o, subObjbect);
 
-						/* update the index */
-						indexCell += internalCellCounter;
-					} catch (InstantiationException | IllegalAccessException e) {
-						throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+									/* update the index */
+									indexCell += internalCellCounter;
+								} catch (InstantiationException | IllegalAccessException e) {
+									throw new CustomizedRulesException(
+											ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+
+								}
+							}
+						}
+
 					}
+				} else {
+					counter = -5;
+					o = null;
+					break;
+
 				}
 			}
 
@@ -1327,7 +1390,7 @@ public class Engine implements IEngine {
 	 * @throws WorkbookException
 	 *             given when a not supported action.
 	 */
-	private int unmarshalAsPropagationVertical(final XConfigCriteria configCriteria, final Object o, Class<?> oC,
+	private int unmarshalAsPropagationVertical(final XConfigCriteria configCriteria, Object o, Class<?> oC,
 			final int idxR, final int idxC) throws WorkbookException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
@@ -1356,28 +1419,45 @@ public class Engine implements IEngine {
 
 				/* content row */
 				Row contentRow = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
-				Cell contentCell = contentRow.getCell(idxC + 1);
+				Cell contentCell = contentRow.getCell(idxC + 2);
+				if (contentCell != null) {
+					if (Collection.class.isAssignableFrom(fT)) {
 
-				boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
+						// E uma lista entao ha que crear uma sheet nova
+						try {
+							f.set(o, unmarshalTreatementToCollection(o, configCriteria));
+						} catch (IllegalArgumentException | IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else {
+						boolean isAppliedToBaseObject = toObject(o, fT, f, contentCell, xlsAnnotation);
 
-				if (!isAppliedToBaseObject && !fT.isPrimitive()) {
+						if (!isAppliedToBaseObject && !fT.isPrimitive()) {
 
-					try {
-						Object subObjbect = fT.newInstance();
+							try {
+								Object subObjbect = fT.newInstance();
 
-						Class<?> subObjbectClass = subObjbect.getClass();
+								Class<?> subObjbectClass = subObjbect.getClass();
 
-						int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
-								subObjbectClass, indexRow + xlsAnnotation.position() - 1, idxC);
+								int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
+										subObjbectClass, indexRow + xlsAnnotation.position() - 1, idxC);
 
-						/* add the sub object to the parent object */
-						f.set(o, subObjbect);
+								/* add the sub object to the parent object */
+								f.set(o, subObjbect);
 
-						/* update the index */
-						indexRow += internalCellCounter;
-					} catch (InstantiationException | IllegalAccessException e) {
-						throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+								/* update the index */
+								indexRow += internalCellCounter;
+							} catch (InstantiationException | IllegalAccessException e) {
+								throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(),
+										e);
+							}
+						}
 					}
+				} else {
+					o = null;
+					counter = -5;
+					break;
 				}
 			}
 
@@ -1500,6 +1580,8 @@ public class Engine implements IEngine {
 			marshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		} else {
+			//FiXME 
+			idxCell = configCriteria.getStartCell() + 1;
 			marshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 
 		}
@@ -1563,7 +1645,6 @@ public class Engine implements IEngine {
 	private void marshalCollectionEngine(final XConfigCriteria configCriteria, final Collection<?> listObject,
 			final boolean insideCollection) throws WorkbookException {
 		int idxCell = 0;
-
 		if (listObject == null || listObject.isEmpty()) {
 			throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
 		}
@@ -1578,7 +1659,7 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(objectRT);
 
 		/* initialize configuration data */
-		initializeConfigurationData(configCriteria, oC, false, true);
+		initializeConfigurationData(configCriteria, oC, insideCollection, true);
 
 		// initialize Workbook
 		configCriteria.setWorkbook(initializeWorkbook(configCriteria.getExtension()));
@@ -2120,12 +2201,6 @@ public class Engine implements IEngine {
 	}
 
 	@Override
-	public void marshalAsCollection(Collection<?> collection) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public Collection<?> unmarshalToCollection(final XConfigCriteria configCriteria, final Object object,
 			String excelFilePath) throws WorkbookException {
 		// FileInputStream inputStream = new FileInputStream(new
@@ -2163,7 +2238,6 @@ public class Engine implements IEngine {
 		Class<?> oC = initializeRuntimeClass(object);
 
 		initializeConfigurationData(configCriteria, oC, false, true);
-
 		Sheet s = configCriteria.getWorkbook().getSheet(truncateTitle(configCriteria.getTitleSheet()));
 		configCriteria.setSheet(s);
 		/* initialize index row & cell */
@@ -2175,8 +2249,8 @@ public class Engine implements IEngine {
 			while (iterator.hasNext()) {
 				try {
 					Object obj = oC.newInstance();
-					unmarshalAsPropagationHorizontal(configCriteria, obj, oC, idxRow, idxCell);
-					if (obj != null) {
+					int counter = unmarshalAsPropagationHorizontal(configCriteria, obj, oC, idxRow, idxCell);
+					if (obj != null && counter != -5) {
 						collection.add((Object) obj);
 						idxRow = idxRow + 1;
 					} else {
@@ -2190,12 +2264,18 @@ public class Engine implements IEngine {
 
 		} else {
 			while (iterator.hasNext()) {
-				unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
-				if (object != null) {
-					collection.add((Object) object);
-					idxCell = idxCell + 1;
-				} else {
-					break;
+				try {
+					Object obj = oC.newInstance();
+					int counter = unmarshalAsPropagationVertical(configCriteria, obj, oC, idxRow, idxCell);
+					if (obj != null && counter != -5) {
+						collection.add((Object) obj);
+						idxCell = idxCell + 1;
+						// idxRow = idxRow+1;
+					} else {
+						break;
+					}
+				} catch (InstantiationException | IllegalAccessException e) {
+					throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
 				}
 
 			}
