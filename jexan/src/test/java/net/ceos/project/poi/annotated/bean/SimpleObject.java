@@ -34,7 +34,7 @@ public class SimpleObject {
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3, columnWidthInUnits = 5)
-	private Integer integerAttribute = 0;
+	private Integer integerAttribute;
 
 	public SimpleObject() {
 	}
