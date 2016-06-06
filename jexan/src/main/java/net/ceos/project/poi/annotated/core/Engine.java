@@ -1592,6 +1592,9 @@ public class Engine implements IEngine {
 		/* apply the elements as group */
 		SheetGroupElementHandler.applyGroupElements(configCriteria);
 
+		/* TODO apply background color to sheet tab */
+		SheetStyleHandler.applyTabColor(configCriteria, 3);
+
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
 	}
