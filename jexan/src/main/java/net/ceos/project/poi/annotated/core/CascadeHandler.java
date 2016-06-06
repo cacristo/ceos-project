@@ -58,11 +58,6 @@ class CascadeHandler {
 			return levelFull(current, object);
 
 		}
-
-		if (current <= configCriteria.getCascadeLevel().getCode()) {
-			return true;
-		}
-		Collection.class.isAssignableFrom(object.getClass());
 		return false;
 	}
 
