@@ -32,6 +32,7 @@ public class CConfigCriteria {
 
 	private String fileName;
 	private CascadeType cascadeLevel;
+	private CascadeType overrideCascadeLevel;
 
 	private String titleSheet;
 	// TODO see enclosure
@@ -40,7 +41,7 @@ public class CConfigCriteria {
 	private Boolean isHeaderPainted = Boolean.FALSE;
 	private Map<Integer, String> header = new HashMap<>();
 	private Map<Integer, String> content = new HashMap<>();
-	
+
 	public CConfigCriteria() {
 		/* empty constructor */
 	}
@@ -53,7 +54,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param fileName the fileName to set
+	 * @param fileName
+	 *            the fileName to set
 	 */
 	protected final void setFileName(String fileName) {
 		this.fileName = fileName;
@@ -77,11 +79,15 @@ public class CConfigCriteria {
 	 * @return the cascadeLevel
 	 */
 	protected final CascadeType getCascadeLevel() {
+		if (overrideCascadeLevel != null) {
+			return overrideCascadeLevel;
+		}
 		return cascadeLevel;
 	}
 
 	/**
-	 * @param cascadeLevel the cascadeLevel to set
+	 * @param cascadeLevel
+	 *            the cascadeLevel to set
 	 */
 	protected final void setCascadeLevel(CascadeType cascadeLevel) {
 		this.cascadeLevel = cascadeLevel;
@@ -95,7 +101,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param titleSheet the titleSheet to set
+	 * @param titleSheet
+	 *            the titleSheet to set
 	 */
 	protected final void setTitleSheet(String titleSheet) {
 		this.titleSheet = titleSheet;
@@ -112,24 +119,27 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param separator the separator to set
+	 * @param separator
+	 *            the separator to set
 	 */
 	protected final void setSeparator(String separator) {
 		this.separator = separator;
 	}
 
 	/**
-	 * @return the overrideSeparator
+	 * @param overrideSeparator
+	 *            the overrideSeparator to set
 	 */
-	protected final String getOverrideSeparator() {
-		return overrideSeparator;
+	public final void overrideSeparator(String overrideSeparator) {
+		this.overrideSeparator = overrideSeparator;
 	}
 
 	/**
-	 * @param overrideSeparator the overrideSeparator to set
+	 * @param overrideSeparator
+	 *            the overrideSeparator to set
 	 */
-	protected final void setOverrideSeparator(String overrideSeparator) {
-		this.overrideSeparator = overrideSeparator;
+	public final void overrideCascadeLevel(CascadeType cascadeLevel) {
+		this.overrideCascadeLevel = cascadeLevel;
 	}
 
 	/**
@@ -140,7 +150,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param isHeaderPainted the isHeaderPainted to set
+	 * @param isHeaderPainted
+	 *            the isHeaderPainted to set
 	 */
 	protected final void setIsHeaderPainted(Boolean isHeaderPainted) {
 		this.isHeaderPainted = isHeaderPainted;
@@ -154,7 +165,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param header the header to set
+	 * @param header
+	 *            the header to set
 	 */
 	protected final void setHeader(Map<Integer, String> header) {
 		this.header = header;
@@ -168,7 +180,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param content the content to set
+	 * @param content
+	 *            the content to set
 	 */
 	protected final void setContent(Map<Integer, String> content) {
 		this.content = content;
