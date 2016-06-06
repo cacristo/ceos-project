@@ -15,9 +15,14 @@
  */
 package net.ceos.project.poi.annotated.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.apache.commons.lang3.StringUtils;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
@@ -33,123 +38,129 @@ import net.ceos.project.poi.annotated.bean.SimpleObjectBuilder;
  */
 public class CGenTest {
 
-	/**
-	 * Test a simple object marshal.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testMarshalSimpleObject() throws Exception {
-		SimpleObject fastTest = SimpleObjectBuilder.buildSimpleObject();
-
-		IGeneratorCSV en = new CGen();
-		en.marshalAndSave(fastTest, TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	/**
-	 * Test a simple object unmarshal.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testUnmarshalSimpleObject() throws Exception {
-		SimpleObject charged = new SimpleObject();
-		
-		IGeneratorCSV en = new CGen();
-		en.unmarshalFromPath(charged, TestUtils.WORKING_DIR_GENERATED_I);
-
-		SimpleObjectBuilder.validateSimpleObject(charged);
-	}
-
-	/**
-	 * Test a multiple type object marshal.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testMarshalMultipleTypes() throws Exception {
-		MultiTypeObject mto = MultiTypeObjectBuilder.buildMultiTypeObject();
-
-		IGeneratorCSV en = new CGen();
-		en.marshalAndSave(mto, TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	/**
-	 * Test a multiple type object unmarshal.
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testUnmarshalMultipleTypes() throws Exception {
-		MultiTypeObject charged = new MultiTypeObject();
-
-		IGeneratorCSV en = new CGen();
-		en.unmarshalFromPath(charged, TestUtils.WORKING_DIR_GENERATED_I);
-
-		MultiTypeObjectBuilder.validateMultiTypeObject(charged);
-	}
+	private int objectNo = 10000;
 	
-	/**
-	 * Test a list of multiple type object marshal.
-	 * @throws Exception
-	 */
-	@Test
-	public void testMarshalAsCollection() throws Exception {
-		List<MultiTypeObject> listMulti = MultiTypeObjectBuilder.buildListOfMultiTypeObject(10000);
+	@DataProvider
+	public Object[][] objectProvider() throws Exception {
+		return new Object[][] { 
+			{ new SimpleObject(), "csvEmptyObject" },
+			{ SimpleObjectBuilder.buildSimpleObject(), null },
+			{ MultiTypeObjectBuilder.buildMultiTypeObject(), "multiObject" }	};
+	}
 
-		IGeneratorCSV en = new CGen();
-		en.marshalAsCollectionAndSave(listMulti, TestUtils.WORKING_DIR_GENERATED_I);
+	@DataProvider
+	public Object[][] collectionProvider() throws Exception {
+		return new Object[][] { 
+			{ new ArrayList<>(), MultiTypeObject.class, "csvEmptyCollection" },
+			{ MultiTypeObjectBuilder.buildListOfMultiTypeObject(objectNo), MultiTypeObject.class, null } };
 	}
 
 	/**
-	 * Test a list of multiple type object unmarshal.
+	 * Test the marshal with:
+	 * <ul>
+	 * <li>ConfigCrieria and empty object.
+	 * <li>basic object
+	 * </ul>
+	 * 
 	 * @throws Exception
 	 */
-	@Test
-	public void testUnmarshalAsCollection() throws Exception {
-		List<MultiTypeObject> charged = new ArrayList<>();
-		
+	@Test(dataProvider = "objectProvider")
+	public void marshalObject(Object object, String filename) throws Exception {
+
 		IGeneratorCSV en = new CGen();
-		en.unmarshalAsCollectionFromPath(MultiTypeObject.class, charged, TestUtils.WORKING_DIR_GENERATED_II);
+
+		if (StringUtils.isNotBlank(filename)) {
+			/* marshal with criteria */
+			CConfigCriteria criteria = new CConfigCriteria();
+			criteria.setFileName(filename);
+
+			en.marshalAndSave(criteria, object, TestUtils.WORKING_DIR_GENERATED_I);
+		} else {
+			/* marshal without criteria */
+			en.marshalAndSave(object, TestUtils.WORKING_DIR_GENERATED_I);
+		}
 	}
 
-	@Test
-	public void testMarshalObjectEmpty() throws Exception {
-		SimpleObject mto = new SimpleObject();
+	/**
+	 * Test the unmarshal with:
+	 * <ul>
+	 * <li>ConfigCrieria and empty object.
+	 * <li>basic object
+	 * </ul>
+	 * 
+	 * @throws Exception
+	 */
+	@Test(dataProvider = "objectProvider")
+	public void unmarshalObject(Object object, String filename) throws Exception {
 
-		CConfigCriteria criteria = new CConfigCriteria();
-		criteria.setFileName("csvEmptyTest");
-		
 		IGeneratorCSV en = new CGen();
-		en.marshalAndSave(criteria, mto, TestUtils.WORKING_DIR_GENERATED_I);
+
+		if (StringUtils.isNotBlank(filename)) {
+			/* unmarshal with criteria */
+			CConfigCriteria criteria = new CConfigCriteria();
+			criteria.setFileName(filename);
+
+			en.unmarshalFromPath(criteria, object, TestUtils.WORKING_DIR_GENERATED_I);
+		} else {
+			/* unmarshal without criteria */
+			en.unmarshalFromPath(object, TestUtils.WORKING_DIR_GENERATED_I);
+		}
 	}
 
-	@Test
-	public void testUnmarshalObjectEmpty() throws Exception {
-		SimpleObject charged = new SimpleObject();
-		
-		CConfigCriteria criteria = new CConfigCriteria();
-		criteria.setFileName("csvEmptyTest");
-		
+	/**
+	 * Test the marshal collection with:
+	 * <ul>
+	 * <li>ConfigCrieria and empty collection.
+	 * <li>collection with 10 000 entries
+	 * </ul>
+	 * 
+	 * @throws Exception
+	 */
+	@Test(dataProvider="collectionProvider")
+	public void marshalAsCollection(Collection<?> collection, Class<?> clazz, String filename) throws Exception {
+
 		IGeneratorCSV en = new CGen();
-		en.unmarshalFromPath(criteria, charged, TestUtils.WORKING_DIR_GENERATED_I);
+
+		if (StringUtils.isNotBlank(filename)) {
+			/* marshal with criteria */
+			CConfigCriteria criteria = new CConfigCriteria();
+			criteria.setFileName(filename);
+
+			en.marshalAsCollectionAndSave(criteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
+
+			assertNotNull(collection);
+			assertEquals(collection.size(), 0);
+		} else {
+			/* marshal without criteria */
+			en.marshalAsCollectionAndSave(collection, TestUtils.WORKING_DIR_GENERATED_I);
+
+			assertNotNull(collection);
+			assertEquals(collection.size(), objectNo);
+		}
 	}
 
+	
 
-	@Test
-	public void testMarshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> listMulti = new ArrayList<>();
-
-		IGeneratorCSV en = new CGen();
-		en.marshalAsCollectionAndSave(listMulti, TestUtils.WORKING_DIR_GENERATED_I);
-	}
-
-	@Test
-	public void testUnmarshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> charged = new ArrayList<>();
+	/**
+	 * Test the marshal with an empty list.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	@Test(dataProvider="collectionProvider")
+	public void unmarshalAsCollectionEmpty(Collection collection, Class<?> clazz, String filename) throws Exception {
 
 		IGeneratorCSV en = new CGen();
-		en.unmarshalAsCollectionFromPath(MultiTypeObject.class, charged, TestUtils.WORKING_DIR_MANUALLY);
 
+		if (StringUtils.isNotBlank(filename)) {
+			/* unmarshal with criteria */
+			CConfigCriteria criteria = new CConfigCriteria();
+			criteria.setFileName(filename);
+
+			en.unmarshalAsCollectionFromPath(criteria, clazz, collection, TestUtils.WORKING_DIR_GENERATED_I);
+		} else {
+			/* unmarshal without criteria */
+			en.unmarshalAsCollectionFromPath(clazz, collection, TestUtils.WORKING_DIR_GENERATED_I);
+		}
 	}
 }

@@ -117,7 +117,8 @@ public interface IGeneratorCSV {
 	 *            information to the collection
 	 * @throws WorkbookException given when a not supported action.
 	 */
-	void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
+	@SuppressWarnings("rawtypes")
+	void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection listObject, final String pathFile)
 			throws WorkbookException;
 
 	/**
@@ -135,7 +136,8 @@ public interface IGeneratorCSV {
 	 *            information to the collection
 	 * @throws WorkbookException given when a not supported action.
 	 */
+	@SuppressWarnings("rawtypes")
 	void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
-			final Collection<?> listObject, final String pathFile) throws WorkbookException;
+			final Collection listObject, final String pathFile) throws WorkbookException;
 
 }
