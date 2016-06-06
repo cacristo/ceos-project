@@ -508,11 +508,13 @@ public class Engine implements IEngine {
 		Class<?> fT = configCriteria.getField().getType();
 
 		if (Collection.class.isAssignableFrom(fT)) {
-
-
-			// E uma lista entao ha que crear uma sheet nova
-			marshallCollectionEngineT(configCriteria,
-					(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, fT, cL + 1);
+			try {
+				// E uma lista entao ha que crear uma sheet nova
+				marshallCollectionEngineT(configCriteria, (Collection<?>) configCriteria.getField().get(o), idxC, fT,
+						cL + 1);
+			} catch (IllegalAccessException e) {
+				throw new CustomizedRulesException(ExceptionMessage.ELEMENT_NO_SUCH_METHOD.getMessage(), e);
+			}
 		} else {
 
 			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
@@ -570,11 +572,17 @@ public class Engine implements IEngine {
 		configCriteria.setRow(r);
 
 		if (Collection.class.isAssignableFrom(fT)) {
-			if ((Collection<?>) CGen.toCollection(o, configCriteria.getField()) != null) {
+			Collection<?> collection = null;
+			try {
+				collection = (Collection<?>) configCriteria.getField().get(o);
+			} catch (IllegalArgumentException | IllegalAccessException e1) {
+				throw new ElementException(ExceptionMessage.ELEMENT_NULL_OBJECT.getMessage());
+			}
+			if (collection != null) {
 				Object objectRT;
 				try {
 					// TOVERIFY
-					objectRT = ((Collection<?>) CGen.toCollection(o, configCriteria.getField())).iterator().next();
+					objectRT = ((Collection<?>) configCriteria.getField().get(o)).iterator().next();
 					// objectRT =
 					// listObject.getClass().stream().findFirst().get();
 				} catch (Exception e) {
@@ -585,8 +593,7 @@ public class Engine implements IEngine {
 				Class<?> oC = initializeRuntimeClass(objectRT);
 
 				// E uma lista entao ha que crear uma sheet nova
-				marshallCollectionEngineT(configCriteria,
-						(Collection<?>) CGen.toCollection(o, configCriteria.getField()), idxC, oC, cL + 1);
+				marshallCollectionEngineT(configCriteria, collection, idxC, oC, cL + 1);
 			}
 
 		} else {
