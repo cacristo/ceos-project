@@ -142,20 +142,29 @@ public class CGenTest {
 
 	@Test
 	public void marshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> listMulti = new ArrayList<MultiTypeObject>();
+		List<MultiTypeObject> collection = new ArrayList<MultiTypeObject>();
+
+		CConfigCriteria criteria = new CConfigCriteria();
+		criteria.setFileName("csvEmptyCollection");
 
 		IGeneratorCSV en = new CGen();
-		en.marshalAsCollectionAndSave(listMulti, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAsCollectionAndSave(criteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
+
+		assertNotNull(collection);
+		assertEquals(collection.size(), 0);
 	}
 
 	@Test
 	public void unmarshalAsCollectionEmpty() throws Exception {
-		List<MultiTypeObject> charged = new ArrayList<MultiTypeObject>();
+		List<MultiTypeObject> collection = new ArrayList<MultiTypeObject>();
+
+		CConfigCriteria criteria = new CConfigCriteria();
+		criteria.setFileName("csvEmptyCollection");
 
 		IGeneratorCSV en = new CGen();
-		en.unmarshalAsCollectionFromPath(MultiTypeObject.class, charged, TestUtils.WORKING_DIR_MANUALLY);
+		en.unmarshalAsCollectionFromPath(criteria, MultiTypeObject.class, collection, TestUtils.WORKING_DIR_GENERATED_I);
 
-		assertNotNull(charged);
-		assertEquals(charged.size(), 0);
+		assertNotNull(collection);
+		assertEquals(collection.size(), 0);
 	}
 }

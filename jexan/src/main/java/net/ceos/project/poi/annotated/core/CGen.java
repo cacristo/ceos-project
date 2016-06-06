@@ -101,7 +101,8 @@ public class CGen implements IGeneratorCSV {
 	 * @return
 	 */
 	private void initializeXlsConfiguration(final CConfigCriteria configCriteria, final XlsConfiguration annotation) {
-		configCriteria.setFileName(annotation.nameFile());
+		configCriteria.setFileName(StringUtils.isBlank(configCriteria.getFileName()) ? annotation.nameFile()
+				: configCriteria.getFileName());
 	}
 
 	/**
@@ -508,7 +509,8 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAndSave(final CConfigCriteria configCriteria, final Object object, final String pathFile)
@@ -552,7 +554,8 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final Collection<?> listObject, final String pathFile)
@@ -575,7 +578,8 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void marshalAsCollectionAndSave(final CConfigCriteria configCriteria, final Collection<?> listObject,
@@ -627,7 +631,8 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromPath(final Object object, final String pathFile) throws WorkbookException {
@@ -648,7 +653,8 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the object
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
 	@Override
 	public void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
@@ -681,6 +687,11 @@ public class CGen implements IGeneratorCSV {
 				}
 				values = line.split(",");
 			}
+
+			if (values.length == 0) {
+				return;
+			}
+
 			unmarshal(configCriteria, object, oC, values, -1);
 
 			/* close the file */
@@ -701,10 +712,12 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection<?> listObject, final String pathFile)
+	public void unmarshalAsCollectionFromPath(final Class<?> oC, final Collection listObject, final String pathFile)
 			throws WorkbookException {
 		/* initialize configuration data */
 		CConfigCriteria configCriteria = new CConfigCriteria();
@@ -725,13 +738,15 @@ public class CGen implements IGeneratorCSV {
 	 * @param pathFile
 	 *            the path where is found the file to read and pass the
 	 *            information to the collection
-	 * @throws WorkbookException given when a not supported action.
+	 * @throws WorkbookException
+	 *             given when a not supported action.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void unmarshalAsCollectionFromPath(final CConfigCriteria configCriteria, final Class<?> oC,
-			final Collection<?> listObject, final String pathFile) throws WorkbookException {
+			final Collection listObject, final String pathFile) throws WorkbookException {
 
-		if (listObject == null || listObject.isEmpty() || oC == null) {
+		if (listObject == null || oC == null) {
 			return;
 		}
 
@@ -751,24 +766,51 @@ public class CGen implements IGeneratorCSV {
 			BufferedReader br = new BufferedReader(
 					new FileReader(internalPathFile + configCriteria.getCompleteFileName()));
 
-			for (Object object : listObject) {
-				String[] values = null;
-				String line = StringUtils.EMPTY;
-				boolean isHeaderLine = true;
-				while ((line = br.readLine()) != null) {
-					if (isHeaderLine) {
-						isHeaderLine = false;
-						continue;
-					}
-					values = line.split(",");
+			String line = StringUtils.EMPTY;
+			boolean isHeaderLine = true;
+			while ((line = br.readLine()) != null) {
+				if (isHeaderLine) {
+					isHeaderLine = false;
+					continue;
 				}
-				unmarshal(configCriteria, object, oC, values, -1);
+				prepareUnmarshal(configCriteria, oC, listObject, line);
 			}
 			/* close the file */
 			br.close();
 
 		} catch (IOException e) {
 			throw new WorkbookException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * 
+	 * @param configCriteria
+	 *            the {@link CConfigCriteria} to use
+	 * @param oC
+	 *            the object class will read and inserted into the collection
+	 * @param listObject
+	 *            the collection to fill up.
+	 * @param line
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void prepareUnmarshal(final CConfigCriteria configCriteria, final Class<?> oC, final Collection listObject,
+			String line) {
+		try {
+			String[] values = line.split(configCriteria.getSeparator());
+
+			if (values.length != 0) {
+				/* instance object */
+				Object object = oC.newInstance();
+
+				/* unmarshal the object */
+				unmarshal(configCriteria, object, oC, values, -1);
+
+				/* add object to list */
+				listObject.add(object);
+			}
+		} catch (Exception e) {
+			;
 		}
 	}
 }
