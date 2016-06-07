@@ -28,8 +28,7 @@ import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
  * @author Carlos CRISTO ABREU
  */
 public interface XlsElementFactory {
-
-	static XlsElement build(XlsFreeElement xlsAnnotation) {
+	static XlsElement build(final XlsFreeElement xlsAnnotation) {
 		return new XlsElement() {
 
 			@Override
