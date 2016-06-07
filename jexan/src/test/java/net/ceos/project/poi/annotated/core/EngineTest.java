@@ -15,8 +15,6 @@
  */
 package net.ceos.project.poi.annotated.core;
 
-import static org.testng.Assert.assertEquals;
-
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.testng.annotations.Test;
@@ -24,7 +22,6 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
-import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
 import net.ceos.project.poi.annotated.bean.PropagationVerticalObject;
@@ -64,6 +61,22 @@ public class EngineTest {
 
 		IEngine en = new Engine();
 		en.marshalAndSave(bO, TestUtils.WORKING_DIR_GENERATED_I);
+
+		BasicObject charger = new BasicObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_I);
+		BasicObjectBuilder.validateBasicObject(charger);
+	}
+
+	/**
+	 * Test empty object
+	 */
+	@Test
+	public void testEmptyObject() throws Exception {
+		MultiTypeObject mto = new MultiTypeObject();
+
+		IEngine en = new Engine();
+		en.marshalAndSave(mto, TestUtils.WORKING_DIR_GENERATED_I);
 
 		BasicObject charger = new BasicObject();
 

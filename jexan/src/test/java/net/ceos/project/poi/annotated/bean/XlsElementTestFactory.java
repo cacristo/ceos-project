@@ -21,8 +21,8 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 
 public interface XlsElementTestFactory {
 
-	static XlsElement build(String title, String comment, String decorator, String formatMask, String transformMask,
-			boolean isFormula, String formula, String customizedRules, int columnSize) {
+	static XlsElement build(final String title, final String comment, final String decorator, final String formatMask, final String transformMask,
+			final boolean isFormula, final String formula, final String customizedRules, final int columnSize) {
 		return new XlsElement() {
 
 			@Override

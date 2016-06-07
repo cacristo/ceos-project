@@ -35,7 +35,7 @@ public class CConfigCriteria {
 	private CascadeType overrideCascadeLevel;
 
 	private String titleSheet;
-	// TODO see enclosure
+
 	private String separator = ",";
 	private String overrideSeparator;
 	private Boolean isHeaderPainted = Boolean.FALSE;
@@ -57,7 +57,7 @@ public class CConfigCriteria {
 	 * @param fileName
 	 *            the fileName to set
 	 */
-	protected final void setFileName(String fileName) {
+	public final void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 

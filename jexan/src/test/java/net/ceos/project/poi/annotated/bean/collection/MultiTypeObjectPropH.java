@@ -25,12 +25,13 @@ import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.bean.AddressInfo;
 import net.ceos.project.poi.annotated.bean.Job;
 import net.ceos.project.poi.annotated.bean.UnitFamily;
+import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
 
 @XlsConfiguration(nameFile="collection_object_multi_h",extensionFile=ExtensionFileType.XLSX)
-@XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL)
+@XlsSheet(title = "List multiple type obj horizont", propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel=CascadeType.CASCADE_FULL)
 public class MultiTypeObjectPropH {
 
 	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")

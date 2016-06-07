@@ -63,6 +63,12 @@ public class ObjectConfigurableBuilder {
 		toValidate.setLongAttribute(9870012L * multiplier);
 		toValidate.setStringAttribute("This is a sample string");
 		toValidate.setDateAttribute1(new Date());
+		/* create sub object Job */
+		Job job = new Job();
+		job.setJobCode(0001);
+		job.setJobFamily("Family Job 0001");
+		job.setJobName("Job 0001");
+		toValidate.setJob(job);
 		// TODO add new fields below
 
 		return toValidate;
@@ -111,11 +117,9 @@ public class ObjectConfigurableBuilder {
 		assertEquals(calendar1.get(Calendar.YEAR), calendarUnmarshal1.get(Calendar.YEAR));
 		assertEquals(calendar1.get(Calendar.MONTH), calendarUnmarshal1.get(Calendar.MONTH));
 		assertEquals(calendar1.get(Calendar.DAY_OF_MONTH), calendarUnmarshal1.get(Calendar.DAY_OF_MONTH));
-
-		// TODO the object is null : review
-		assertEquals(0, toValidate.getJob().getJobCode());
-		assertEquals(null, toValidate.getJob().getJobFamily());
-		assertEquals(null, toValidate.getJob().getJobName());
+		assertEquals(base.getJob().getJobCode(), toValidate.getJob().getJobCode());
+		assertEquals(base.getJob().getJobFamily(), toValidate.getJob().getJobFamily());
+		assertEquals(base.getJob().getJobName(), toValidate.getJob().getJobName());
 		// TODO add new validation below
 	}
 

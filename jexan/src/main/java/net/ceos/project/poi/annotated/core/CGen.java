@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -79,14 +78,14 @@ public class CGen implements IGeneratorCSV {
 	private void initializeConfigurationData(final CConfigCriteria configCriteria, final Class<?> oC)
 			throws ConfigurationException {
 		/* Process @XlsConfiguration */
-		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+		if (PredicateFactory.isAnnotationXlsConfigurationPresent.test(oC)) {
 			XlsConfiguration xlsAnnotation = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
 			initializeXlsConfiguration(configCriteria, xlsAnnotation);
 		} else {
 			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_XLSCONFIGURATION_MISSING.getMessage());
 		}
 		/* Process @XlsSheet */
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
+		if (PredicateFactory.isAnnotationXlsSheetPresent.test(oC)) {
 			XlsSheet xlsAnnotation = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			initializeXlsSheet(configCriteria, xlsAnnotation);
 		} else {
@@ -133,19 +132,9 @@ public class CGen implements IGeneratorCSV {
 	 */
 	private void addLine(final FileWriter fW, final Map<Integer, String> values, final String separator)
 			throws IOException {
-		Set<Integer> keys = values.keySet();
-		boolean isFirst = true;
-		for (Integer integer : keys) {
-
-			/* add separator */
-			if (!isFirst) {
-				fW.append(separator);
-			}
-
-			/* append value */
-			fW.append(values.get(integer));
-			isFirst = false;
-		}
+		/* append all values at the Map to the file */
+		fW.append(values.values().stream().collect(Collectors.joining(separator)));
+		/* add end of line */
 		fW.append(Constants.END_OF_LINE);
 	}
 
@@ -433,7 +422,7 @@ public class CGen implements IGeneratorCSV {
 		for (Field field : fL) {
 
 			/* Process @XlsElement */
-			if (field.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(field)) {
 				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
 
 				/*
@@ -495,7 +484,7 @@ public class CGen implements IGeneratorCSV {
 			Class<?> fT = field.getType();
 
 			/* Process @XlsElement */
-			if (field.isAnnotationPresent(XlsElement.class)) {
+			if (PredicateFactory.isFieldAnnotationXlsElementPresent.test(field)) {
 				XlsElement xlsAnnotation = (XlsElement) field.getAnnotation(XlsElement.class);
 
 				/*
@@ -537,7 +526,6 @@ public class CGen implements IGeneratorCSV {
 	}
 
 	/* ######################## Marshal methods ########################## */
-
 	/**
 	 * Generate the CSV file based at the object passed as parameters and save
 	 * it at the path send as parameter.

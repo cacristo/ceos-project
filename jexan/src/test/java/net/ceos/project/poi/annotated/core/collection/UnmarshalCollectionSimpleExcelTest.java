@@ -61,9 +61,9 @@ public class UnmarshalCollectionSimpleExcelTest {
 		configCriteria.setFileName("collection_object_simple_h");
 		
 		Engine en = new Engine();
-		Collection<SimpleObjectPropH> collection = (Collection<SimpleObjectPropH>) en.unmarshalToCollection(configCriteria, new SimpleObjectPropH(), TestUtils.WORKING_DIR_UNMARSHALL);
+		Collection<SimpleObjectPropH> collection = (Collection<SimpleObjectPropH>) en.unmarshalToCollection(configCriteria, new SimpleObjectPropH(), TestUtils.WORKING_DIR_GENERATED_I);
 		configCriteria.setFileName("unmarshal_1");
-		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
+		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	/**
@@ -76,9 +76,9 @@ public class UnmarshalCollectionSimpleExcelTest {
 		configCriteria.setFileName("collection_object_simple_v");
 		
 		Engine en = new Engine();
-		Collection<SimpleObjectPropV> collection = (Collection<SimpleObjectPropV>) en.unmarshalToCollection(configCriteria, new SimpleObjectPropV(), TestUtils.WORKING_DIR_UNMARSHALL);
+		Collection<SimpleObjectPropV> collection = (Collection<SimpleObjectPropV>) en.unmarshalToCollection(configCriteria, new SimpleObjectPropV(), TestUtils.WORKING_DIR_GENERATED_I);
 		configCriteria.setFileName("unmarshal_3_1");
-		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
+		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	/**
@@ -91,9 +91,9 @@ public class UnmarshalCollectionSimpleExcelTest {
 		configCriteria.setFileName("collection_object_multi_h");
 		
 		Engine en = new Engine();
-		Collection<MultiTypeObjectPropH> collection = (Collection<MultiTypeObjectPropH>) en.unmarshalToCollection(configCriteria, new MultiTypeObjectPropH(), TestUtils.WORKING_DIR_UNMARSHALL);
+		Collection<MultiTypeObjectPropH> collection = (Collection<MultiTypeObjectPropH>) en.unmarshalToCollection(configCriteria, new MultiTypeObjectPropH(), TestUtils.WORKING_DIR_GENERATED_I);
 		configCriteria.setFileName("unmarshal_2");
-		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
+		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	/**
@@ -106,9 +106,9 @@ public class UnmarshalCollectionSimpleExcelTest {
 		configCriteria.setFileName("collection_object_multi_v");
 		
 		Engine en = new Engine();
-		Collection<MultiTypeObjectPropV> collection = (Collection<MultiTypeObjectPropV>) en.unmarshalToCollection(configCriteria, new MultiTypeObjectPropV(), TestUtils.WORKING_DIR_UNMARSHALL);
+		Collection<MultiTypeObjectPropV> collection = (Collection<MultiTypeObjectPropV>) en.unmarshalToCollection(configCriteria, new MultiTypeObjectPropV(), TestUtils.WORKING_DIR_GENERATED_I);
 		configCriteria.setFileName("unmarshal_4");
-		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
+		en.marshalAsCollectionAndSave(configCriteria,collection,TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	/**
@@ -122,10 +122,10 @@ public class UnmarshalCollectionSimpleExcelTest {
 		configCriteria.setFileName("collection_object_simple_with_collec_h");
 		
 		Engine en = new Engine();
-		en.unmarshalFromPath(collection, TestUtils.WORKING_DIR_UNMARSHALL);
+		en.unmarshalFromPath(collection, TestUtils.WORKING_DIR_GENERATED_I);
 
 		configCriteria.setFileName("unmarshal_5");
-		en.marshalAndSave(configCriteria,collection,TestUtils.WORKING_DIR_UNMARSHALL_M);
+		en.marshalAndSave(configCriteria,collection,TestUtils.WORKING_DIR_GENERATED_I);
 	}
 	
 	

@@ -15,14 +15,8 @@
  */
 package net.ceos.project.poi.annotated.bean;
 
-import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
-import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
-import net.ceos.project.poi.annotated.annotation.XlsSheet;
-import net.ceos.project.poi.annotated.definition.PropagationType;
 
-//@XlsConfiguration(nameFile="nameFileJob")
-//@XlsSheet(title = "List multiple type obj v", propagation = PropagationType.PROPAGATION_VERTICAL)
 public class Job {
 
 	@XlsElement(title = "Name", position = 1)

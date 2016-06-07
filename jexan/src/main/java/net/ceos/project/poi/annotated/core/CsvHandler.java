@@ -796,7 +796,7 @@ public class CsvHandler {
 							Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATE.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -836,7 +836,7 @@ public class CsvHandler {
 							Constants.DD_MMM_YYYY_HH_MM_SS);
 				}
 			} catch (Exception e) {
-				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+				throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATETIME.getMessage(), e);
 			}
 		}
 		return dateMasked;
@@ -953,7 +953,7 @@ public class CsvHandler {
 			}
 
 		} catch (Exception e) {
-			throw new ConverterException(ExceptionMessage.CONVERTER_ENUM.getMessage(), e);
+			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
 		return StringUtils.EMPTY;
 	}

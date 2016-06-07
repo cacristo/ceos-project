@@ -15,6 +15,9 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.ceos.project.poi.annotated.annotation.XlsGroupColumn;
 import net.ceos.project.poi.annotated.annotation.XlsGroupRow;
 
@@ -51,12 +54,12 @@ class SheetGroupElementHandler {
 	 *            the {@link XConfigCriteria}
 	 */
 	private static void applyToColumns(final XConfigCriteria configCriteria) {
-		XlsGroupColumn[] columns = configCriteria.getGroupElement().groupColumns();
-		for (int i = 0; i < columns.length; i++) {
-			if (columns[i].fromColumn() != 0 || columns[i].toColumn() != 0) {
-				configCriteria.getSheet().groupColumn(columns[i].fromColumn(), columns[i].toColumn());
+		List<XlsGroupColumn> columnsList = Arrays.asList(configCriteria.getGroupElement().groupColumns());
+		columnsList.stream().forEach(group -> {
+			if(PredicateFactory.isGroupColumnValid.test(group)) {
+				configCriteria.getSheet().groupColumn(group.fromColumn(), group.toColumn());
 			}
-		}
+		});
 	}
 
 	/**
@@ -66,11 +69,11 @@ class SheetGroupElementHandler {
 	 *            the {@link XConfigCriteria}
 	 */
 	private static void applyToRows(final XConfigCriteria configCriteria) {
-		XlsGroupRow[] rows = configCriteria.getGroupElement().groupRows();
-		for (int i = 0; i < rows.length; i++) {
-			if (rows[i].fromRow() != 0 || rows[i].toRow() != 0) {
-				configCriteria.getSheet().groupRow(rows[i].fromRow(), rows[i].toRow());
+		List<XlsGroupRow> rowsList = Arrays.asList(configCriteria.getGroupElement().groupRows());
+		rowsList.stream().forEach(group -> {
+			if(PredicateFactory.isGroupRowValid.test(group)) {
+				configCriteria.getSheet().groupRow(group.fromRow(), group.toRow());
 			}
-		}
+		});
 	}
 }
