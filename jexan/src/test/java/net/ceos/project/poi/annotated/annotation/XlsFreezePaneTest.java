@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.XMenFactory;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Test the annotation {@link XlsFreezePane}
@@ -34,54 +35,104 @@ public class XlsFreezePaneTest {
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkDefaultConfiguration() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
-
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertNotNull(xlsSheet.freezePane());
 			assertEquals(xlsSheet.freezePane().topRow(), 0);
 			assertEquals(xlsSheet.freezePane().leftMostColumn(), 0);
 		}
 	}
 
+	/**
+	 * Test initialization of the basic freeze pane according the
+	 * {@link PropagationType} horizontal
+	 */
 	@Test
-	public void testFreezePaneHorizontal() {
+	public void checkFreezePaneHorizontal() {
 		Class<XMenFactory.ProfessorX> o = XMenFactory.ProfessorX.class;
-
 		// Process @XlsSheet
 		if (o.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) o.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertNotNull(xlsSheet.freezePane());
 			assertEquals(xlsSheet.freezePane().colSplit(), 0);
 			assertEquals(xlsSheet.freezePane().rowSplit(), 4);
-
 		}
 	}
 
+	/**
+	 * Test initialization of the advanced freeze pane according the
+	 * {@link PropagationType} horizontal
+	 */
 	@Test
-	public void testFreezePaneHorizontalAdvanced() {
+	public void checkFreezePaneHorizontalAdvanced() {
 		Class<XMenFactory.Cyclops> o = XMenFactory.Cyclops.class;
-
 		// Process @XlsSheet
 		if (o.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = o.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertNotNull(xlsSheet.freezePane());
 			assertEquals(xlsSheet.freezePane().colSplit(), 0);
 			assertEquals(xlsSheet.freezePane().rowSplit(), 4);
 			assertEquals(xlsSheet.freezePane().topRow(), 1);
 			assertEquals(xlsSheet.freezePane().leftMostColumn(), 1);
+		}
+	}
 
+	/**
+	 * Test initialization of the basic freeze pane according the
+	 * {@link PropagationType} vertical
+	 */
+	@Test
+	public void checkFreezePaneVertical() {
+		Class<XMenFactory.IronMan> o = XMenFactory.IronMan.class;
+		// Process @XlsSheet
+		if (o.isAnnotationPresent(XlsSheet.class)) {
+
+			XlsSheet xlsSheet = (XlsSheet) o.getAnnotation(XlsSheet.class);
+			assertNotNull(xlsSheet.freezePane());
+			assertEquals(xlsSheet.freezePane().colSplit(), 2);
+			assertEquals(xlsSheet.freezePane().rowSplit(), 0);
+		}
+	}
+
+	/**
+	 * Test initialization of the advanced freeze pane according the
+	 * {@link PropagationType} vertical
+	 */
+	@Test
+	public void checkFreezePaneVerticalAdvanced() {
+		Class<XMenFactory.Thor> o = XMenFactory.Thor.class;
+		// Process @XlsSheet
+		if (o.isAnnotationPresent(XlsSheet.class)) {
+
+			XlsSheet xlsSheet = o.getAnnotation(XlsSheet.class);
+			assertNotNull(xlsSheet.freezePane());
+			assertEquals(xlsSheet.freezePane().colSplit(), 3);
+			assertEquals(xlsSheet.freezePane().rowSplit(), 0);
+			assertEquals(xlsSheet.freezePane().topRow(), 1);
+			assertEquals(xlsSheet.freezePane().leftMostColumn(), 1);
+		}
+	}
+
+	/**
+	 * Test initialization of the freeze pane according the
+	 * {@link PropagationType} horizontal split by row and column.
+	 */
+	@Test
+	public void checkFreezePaneHorizontalSplitRowColumn() {
+		Class<XMenFactory.SpiderMan> o = XMenFactory.SpiderMan.class;
+		// Process @XlsSheet
+		if (o.isAnnotationPresent(XlsSheet.class)) {
+
+			XlsSheet xlsSheet = (XlsSheet) o.getAnnotation(XlsSheet.class);
+			assertNotNull(xlsSheet.freezePane());
+			assertEquals(xlsSheet.freezePane().colSplit(), 3);
+			assertEquals(xlsSheet.freezePane().rowSplit(), 2);
 		}
 	}
 

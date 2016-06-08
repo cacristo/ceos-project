@@ -37,7 +37,7 @@ public class XlsNestedHeaderTest {
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkDefaultConfiguration() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -57,10 +57,10 @@ public class XlsNestedHeaderTest {
 	}
 
 	/**
-	 * Test cell configuration.
+	 * Test initialization of the cell configuration.
 	 */
 	@Test
-	public void testCellConfiguration() {
+	public void checkCellConfiguration() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -69,8 +69,6 @@ public class XlsNestedHeaderTest {
 			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
 
 				XlsNestedHeader xlsNestedHeader = (XlsNestedHeader) f.getAnnotation(XlsNestedHeader.class);
-
-				// add here the annotations attributes
 				assertEquals(xlsNestedHeader.startX(), 1);
 				assertEquals(xlsNestedHeader.endX(), 3);
 			}
@@ -78,10 +76,10 @@ public class XlsNestedHeaderTest {
 	}
 
 	/**
-	 * Test row configuration.
+	 * Test initialization of the row configuration.
 	 */
 	@Test
-	public void testRowConfiguration() {
+	public void checkRowConfiguration() {
 		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -90,8 +88,6 @@ public class XlsNestedHeaderTest {
 			if (f.isAnnotationPresent(XlsNestedHeader.class)) {
 
 				XlsNestedHeader xlsNestedHeader = (XlsNestedHeader) f.getAnnotation(XlsNestedHeader.class);
-
-				// add here the annotations attributes
 				assertEquals(xlsNestedHeader.startY(), 1);
 				assertEquals(xlsNestedHeader.endY(), 2);
 			}

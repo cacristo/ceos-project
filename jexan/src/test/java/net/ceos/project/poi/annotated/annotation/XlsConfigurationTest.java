@@ -31,52 +31,43 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 public class XlsConfigurationTest {
 
 	/**
-	 * Test default configuration.
+	 * Test initialization of the file name attribute with specific value.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkNameFileAttribute() {
 		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
-
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
 			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
-			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLS);
-		}
-	}
-
-	/**
-	 * Test name file attribute.
-	 */
-	@Test
-	public void testNameFileAttribute() {
-		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
-
-		// Process @XlsConfiguration
-		if (o.isAnnotationPresent(XlsConfiguration.class)) {
-
-			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsConfig.nameFile(), "DefaultConfigurationSample");
 		}
 	}
 
 	/**
-	 * Test name file attribute.
+	 * Test initialization of the extension file attribute with type XLS.
 	 */
 	@Test
-	public void testExtensionFileAttribute() {
-		Class<XMenFactory.Cyclops> o = XMenFactory.Cyclops.class;
-
+	public void checkExtensionFileAttributeXls() {
+		Class<?> oC = XMenFactory.DefaultConfig.class;
 		// Process @XlsConfiguration
-		if (o.isAnnotationPresent(XlsConfiguration.class)) {
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
 
-			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
+			XlsConfiguration xlsConfig = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
+			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLS);
+		}
+	}
 
-			// add here the annotations attributes
+	/**
+	 * Test initialization of the extension file attribute with type XLSX.
+	 */
+	@Test
+	public void checkExtensionFileAttributeXlsx() {
+		Class<?> oC = XMenFactory.Cyclops.class;
+		// Process @XlsConfiguration
+		if (oC.isAnnotationPresent(XlsConfiguration.class)) {
+
+			XlsConfiguration xlsConfig = (XlsConfiguration) oC.getAnnotation(XlsConfiguration.class);
 			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLSX);
 		}
 	}

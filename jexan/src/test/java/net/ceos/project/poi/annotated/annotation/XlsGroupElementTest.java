@@ -35,9 +35,8 @@ public class XlsGroupElementTest {
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkDefaultConfiguration() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
-
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
@@ -55,10 +54,12 @@ public class XlsGroupElementTest {
 		}
 	}
 
+	/**
+	 * Test initialization of the group elements by column with specific value.
+	 */
 	@Test
-	public void testGroupElementByColumns() {
+	public void checkGroupElementByColumns() {
 		Class<XMenFactory.Wolverine> o = XMenFactory.Wolverine.class;
-
 		// Process @XlsDecorator
 		if (o.isAnnotationPresent(XlsSheet.class)) {
 
@@ -71,10 +72,12 @@ public class XlsGroupElementTest {
 		}
 	}
 
+	/**
+	 * Test initialization of the group elements by row with specific value.
+	 */
 	@Test
-	public void testGroupElementByRows() {
+	public void checkGroupElementByRows() {
 		Class<XMenFactory.IronMan> o = XMenFactory.IronMan.class;
-
 		// Process @XlsDecorator
 		if (o.isAnnotationPresent(XlsSheet.class)) {
 

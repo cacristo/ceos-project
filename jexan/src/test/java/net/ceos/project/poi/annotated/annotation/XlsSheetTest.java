@@ -36,7 +36,7 @@ public class XlsSheetTest {
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfigurationAttibutes() {
+	public void checkDefaultConfigurationAttibutes() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		// Process @XlsSheet
@@ -65,121 +65,119 @@ public class XlsSheetTest {
 	}
 
 	/**
-	 * Test title attribute.
+	 * Test initialization of the title sheet attribute with specific value.
 	 */
 	@Test
-	public void testTitleAttibute() {
+	public void checkTitleAttibute() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
-
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsSheet.title(), "Default configuration sample");
 		}
 	}
 
 	/**
-	 * Test propagation attribute with type PROPAGATION_VERTICAL.
+	 * Test initialization of the propagation attribute with type
+	 * PROPAGATION_HORIZONTAL.
 	 */
 	@Test
-	public void testPropagationVerticalAttibute() {
-		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
-
+	public void checkPropagationAttibuteHorizontal() {
+		Class<?> oC = XMenFactory.SpiderMan.class;
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
-			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_VERTICAL);
-		}
-	}
-
-	/**
-	 * Test propagation attribute with type PROPAGATION_HORIZONTAL.
-	 */
-	@Test
-	public void testPropagationHorizontalAttibute() {
-		Class<XMenFactory.Thor> oC = XMenFactory.Thor.class;
-
-		// Process @XlsSheet
-		if (oC.isAnnotationPresent(XlsSheet.class)) {
-
-			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_HORIZONTAL);
 		}
 	}
 
 	/**
-	 * Test cascade level attribute with type CASCADE_BASE.
+	 * Test initialization of the propagation attribute with type
+	 * PROPAGATION_VERTICAL.
 	 */
 	@Test
-	public void testCascadeLevelBaseAttibute() {
-		Class<XMenFactory.IronMan> oC = XMenFactory.IronMan.class;
-
+	public void checkPropagationAttibuteVertical() {
+		Class<?> oC = XMenFactory.IronMan.class;
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			assertEquals(xlsSheet.propagation(), PropagationType.PROPAGATION_VERTICAL);
+		}
+	}
 
-			// add here the annotations attributes
+	/**
+	 * Test initialization of the cascade level attribute with type
+	 * CASCADE_BASE.
+	 */
+	@Test
+	public void checkCascadeLevelAttibuteBase() {
+		Class<?> oC = XMenFactory.IronMan.class;
+		// Process @XlsSheet
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_BASE);
 		}
 	}
 
 	/**
-	 * Test cascade level attribute with type CASCADE_LEVEL_ONE.
+	 * Test initialization of the cascade level attribute with type CASCADE_L1.
 	 */
 	@Test
-	public void testCascadeLevelOneAttibute() {
-		Class<XMenFactory.Wolverine> oC = XMenFactory.Wolverine.class;
-
+	public void checkCascadeLevelAttibuteL1() {
+		Class<?> oC = XMenFactory.Wolverine.class;
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_L1);
 		}
 	}
 
 	/**
-	 * Test cascade level attribute with type CASCADE_LEVEL_TWO.
+	 * Test initialization of the cascade level attribute with type CASCADE_L2.
 	 */
 	@Test
-	public void testCascadeLevelTwoAttibute() {
-		Class<XMenFactory.SpiderMan> oC = XMenFactory.SpiderMan.class;
-
+	public void checkCascadeLevelBaseAttibute() {
+		Class<?> oC = XMenFactory.SpiderMan.class;
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_L2);
 		}
 	}
 
 	/**
-	 * Test cascade level attribute with type CASCADE_FULL.
+	 * Test initialization of the cascade level attribute with type CASCADE_L3.
 	 */
 	@Test
-	public void testCascadeLevelFullAttibute() {
-		Class<XMenFactory.DoctorX> oC = XMenFactory.DoctorX.class;
-
+	public void checkCascadeLevelAttibuteL3() {
+		Class<?> oC = XMenFactory.Cyclops.class;
 		// Process @XlsSheet
 		if (oC.isAnnotationPresent(XlsSheet.class)) {
 
 			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
+			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_L3);
+		}
+	}
 
-			// add here the annotations attributes
+	/**
+	 * Test initialization of the cascade level attribute with type
+	 * CASCADE_FULL.
+	 */
+	@Test
+	public void checkCascadeLevelAttibuteFull() {
+		Class<?> oC = XMenFactory.DoctorX.class;
+		// Process @XlsSheet
+		if (oC.isAnnotationPresent(XlsSheet.class)) {
+
+			XlsSheet xlsSheet = (XlsSheet) oC.getAnnotation(XlsSheet.class);
 			assertEquals(xlsSheet.cascadeLevel(), CascadeType.CASCADE_FULL);
 		}
 	}
+
 }

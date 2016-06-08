@@ -39,7 +39,7 @@ public class XlsFreeElementTest {
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkDefaultConfiguration() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -67,10 +67,16 @@ public class XlsFreeElementTest {
 	}
 
 	/**
-	 * Test title attribute.
+	 * Test initialization of the title attribute according
+	 * <ul>
+	 * <li>the title
+	 * <li>is title visible
+	 * <li>title orientation
+	 * <li>start row and cell
+	 * </ul>
 	 */
 	@Test
-	public void testTitleAttribute() {
+	public void checkTitleAttribute() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -111,10 +117,10 @@ public class XlsFreeElementTest {
 	}
 
 	/**
-	 * Test comment attribute.
+	 * Test initialization of the comment attribute with specific value.
 	 */
 	@Test
-	public void testCommentAttribute() {
+	public void checkCommentAttribute() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -132,10 +138,10 @@ public class XlsFreeElementTest {
 	}
 
 	/**
-	 * Test decorator attribute.
+	 * Test initialization of the decorator attribute with specific value.
 	 */
 	@Test
-	public void testDecoratorAttribute() {
+	public void checkDecoratorAttribute() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -153,10 +159,10 @@ public class XlsFreeElementTest {
 	}
 
 	/**
-	 * Test formatMask attribute.
+	 * Test initialization of the formatMask attribute with specific value.
 	 */
 	@Test
-	public void testFormatMaskAttribute() {
+	public void checkFormatMaskAttribute() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -174,10 +180,10 @@ public class XlsFreeElementTest {
 	}
 
 	/**
-	 * Test transformMask attribute.
+	 * Test initialization of the transformMask attribute with specific value.
 	 */
 	@Test
-	public void testTransformMaskAttribute() {
+	public void checkTransformMaskAttribute() {
 		Class<XMenFactory.ProfessorX> oC = XMenFactory.ProfessorX.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
