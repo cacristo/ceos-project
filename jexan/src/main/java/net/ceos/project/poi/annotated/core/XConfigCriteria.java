@@ -28,6 +28,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreezePane;
 import net.ceos.project.poi.annotated.annotation.XlsGroupElement;
+import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
@@ -52,11 +53,14 @@ public class XConfigCriteria {
 	private Row row;
 	private int startRow;
 	private int startCell;
+	private int startRowInmutable = -1;
+	private int startCellInmutable = -1;
+	private int lastCellIndex;
 
 	/* sheet parameters */
 	private XlsFreezePane freezePane;
 	private XlsGroupElement groupElement;
-	
+
 	/* element parameters */
 	private XlsElement element;
 	private Field field;
@@ -79,7 +83,7 @@ public class XConfigCriteria {
 	private Map<String, CellStyle> cellStyleManager = new HashMap<String, CellStyle>();
 
 	private Map<Integer, Integer> columnWidthMap = new HashMap<Integer, Integer>();
-	
+
 	/**
 	 * Force the header cell decorator.
 	 * 
@@ -234,7 +238,7 @@ public class XConfigCriteria {
 					CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
 		}
 	}
-	
+
 	/**
 	 * @return the columnWidthMap
 	 */
@@ -245,8 +249,8 @@ public class XConfigCriteria {
 	/**
 	 * Apply to sheet the column width defined.
 	 */
-	protected final void applyColumnWidthToSheet(){
-		for(Map.Entry<Integer, Integer> column : columnWidthMap.entrySet()) {
+	protected final void applyColumnWidthToSheet() {
+		for (Map.Entry<Integer, Integer> column : columnWidthMap.entrySet()) {
 			getSheet().setColumnWidth(column.getKey(), column.getValue() * 256);
 		}
 	}
@@ -339,6 +343,20 @@ public class XConfigCriteria {
 	 */
 	protected void setStartRow(final int startRow) {
 		this.startRow = startRow;
+		/* set only the defined startRow value */
+		if (this.startRowInmutable == -1) {
+			this.startRowInmutable = startRow;
+		}
+	}
+
+	/**
+	 * Return the defined startRow position at {@link XlsSheet}
+	 * 
+	 * @return the startRowInmutable
+	 */
+	protected int getStartRowInmutable() {
+		return startRowInmutable + 1;
+
 	}
 
 	/**
@@ -354,6 +372,38 @@ public class XConfigCriteria {
 	 */
 	protected void setStartCell(final int startCell) {
 		this.startCell = startCell;
+		/* set only the defined startCell value */
+		if (this.startCellInmutable == -1) {
+			this.startCellInmutable = startCell;
+		}
+	}
+
+	/**
+	 * Return the defined startCell position at {@link XlsSheet}
+	 * 
+	 * @return the startCellInmutable
+	 */
+	protected int getStartCellInmutable() {
+		return startCellInmutable + 1;
+	}
+
+	/**
+	 * @return the lastCellIndex
+	 */
+	protected final int getLastCellIndex() {
+		return lastCellIndex;
+	}
+
+	/**
+	 * Define the last cell index. Used for the case of {@link PropagationType}
+	 * vertical.
+	 * 
+	 * @param lastCellIndex
+	 *            the lastCellIndex to set
+	 */
+	protected final void setLastCellIndex(int lastCellIndex) {
+		this.lastCellIndex = lastCellIndex > this.lastCellIndex ? lastCellIndex : this.lastCellIndex;
+
 	}
 
 	/**
@@ -378,14 +428,13 @@ public class XConfigCriteria {
 		return resizeActive;
 	}
 
-
 	/**
-	 * @param resizeActive the resizeActive to set
+	 * @param resizeActive
+	 *            the resizeActive to set
 	 */
 	protected final void setResizeActive(Boolean resizeActive) {
 		this.resizeActive = resizeActive;
 	}
-
 
 	/**
 	 * Get the file name.
@@ -543,7 +592,8 @@ public class XConfigCriteria {
 	}
 
 	/**
-	 * @param freezePane the freezePane to set
+	 * @param freezePane
+	 *            the freezePane to set
 	 */
 	public final void setFreezePane(XlsFreezePane freezePane) {
 		this.freezePane = freezePane;
@@ -557,7 +607,8 @@ public class XConfigCriteria {
 	}
 
 	/**
-	 * @param groupElement the groupElement to set
+	 * @param groupElement
+	 *            the groupElement to set
 	 */
 	public final void setGroupElement(XlsGroupElement groupElement) {
 		this.groupElement = groupElement;
@@ -569,7 +620,8 @@ public class XConfigCriteria {
 	 * @param type
 	 *            the {@link CellStyleHandler} type
 	 * @return the {@link CellStyle}
-	 * @throws ElementException given when {@link CellStyle} initialization failed
+	 * @throws ElementException
+	 *             given when {@link CellStyle} initialization failed
 	 */
 	protected CellStyle getCellStyle(final String type) throws ElementException {
 		if (StringUtils.isNotBlank(element.decorator()) && stylesMap.get(element.decorator()) == null) {

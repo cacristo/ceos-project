@@ -19,8 +19,10 @@ package net.ceos.project.poi.annotated.definition;
  * This will define the propagation type when writing into the Excel.
  * <p>
  * <ul>
- * <li><b>PropagationType.PROPAGATION_HORIZONTAL</b> Will propagate horizontally all the elements.
- * <li><b>PropagationType.PROPAGATION_VERTICAL</b> Will propagate vertically all the elements.
+ * <li><b>PropagationType.PROPAGATION_HORIZONTAL</b> Will propagate horizontally
+ * all the elements.
+ * <li><b>PropagationType.PROPAGATION_VERTICAL</b> Will propagate vertically all
+ * the elements. Be aware the index cell range is (0..255)
  * </ul>
  * 
  * @version 1.0
