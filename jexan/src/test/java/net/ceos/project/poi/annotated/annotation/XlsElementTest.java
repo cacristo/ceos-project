@@ -33,12 +33,12 @@ import net.ceos.project.poi.annotated.bean.XMenFactory;
  * @author Carlos CRISTO ABREU
  */
 public class XlsElementTest {
-	
+
 	/**
 	 * Test default configuration.
 	 */
 	@Test
-	public void testDefaultConfiguration() {
+	public void checkDefaultConfiguration() {
 		Class<XMenFactory.DefaultConfig> oC = XMenFactory.DefaultConfig.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -61,10 +61,11 @@ public class XlsElementTest {
 	}
 
 	/**
-	 * Test title attribute.
+	 * Test initialization of the title attribute over multiples types with
+	 * specific value.
 	 */
 	@Test
-	public void testTitleAttribute() {
+	public void checkTitleAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -76,32 +77,26 @@ public class XlsElementTest {
 
 				if (f.getName().equals("dateAttribute")) {
 					assertEquals(xlsElement.title(), "Date value");
-
 				} else if (f.getName().equals("stringAttribute")) {
 					assertEquals(xlsElement.title(), "String value");
-
 				} else if (f.getName().equals("integerAttribute")) {
 					assertEquals(xlsElement.title(), "Integer value");
-
 				} else if (f.getName().equals("doubleAttribute1")) {
 					assertEquals(xlsElement.title(), "Double value 1");
-
 				} else if (f.getName().equals("doubleAttribute2")) {
 					assertEquals(xlsElement.title(), "Double value 2");
-
 				} else if (f.getName().equals("sum")) {
 					assertEquals(xlsElement.title(), "Sum double 1 & double 2");
-
 				}
 			}
 		}
 	}
 
 	/**
-	 * Test comment attribute.
+	 * Test initialization of the comment attribute with specific value.
 	 */
 	@Test
-	public void testCommentAttribute() {
+	public void checkCommentAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -119,10 +114,10 @@ public class XlsElementTest {
 	}
 
 	/**
-	 * Test decorator attribute.
+	 * Test initialization of the decorator attribute with specific value.
 	 */
 	@Test
-	public void testDecoratorAttribute() {
+	public void checkDecoratorAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -140,10 +135,10 @@ public class XlsElementTest {
 	}
 
 	/**
-	 * Test formatMask attribute.
+	 * Test initialization of the formatMask attribute with specific value.
 	 */
 	@Test
-	public void testFormatMaskAttribute() {
+	public void checkFormatMaskAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -161,10 +156,10 @@ public class XlsElementTest {
 	}
 
 	/**
-	 * Test transformMask attribute.
+	 * Test initialization of the transformMask attribute with specific value.
 	 */
 	@Test
-	public void testTransformMaskAttribute() {
+	public void checkTransformMaskAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -182,10 +177,11 @@ public class XlsElementTest {
 	}
 
 	/**
-	 * Test isFormula & formula attribute.
+	 * Test initialization of the isFormula & formula attribute with specific
+	 * value.
 	 */
 	@Test
-	public void testFormulaAttribute() {
+	public void checkFormulaAttribute() {
 		Class<XMenFactory.Cyclops> oC = XMenFactory.Cyclops.class;
 
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
