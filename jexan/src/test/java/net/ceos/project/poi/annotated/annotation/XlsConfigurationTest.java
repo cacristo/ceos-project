@@ -17,6 +17,7 @@ package net.ceos.project.poi.annotated.annotation;
 
 import static org.testng.Assert.assertEquals;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.XMenFactory;
@@ -30,54 +31,44 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
  */
 public class XlsConfigurationTest {
 
-	/**
-	 * Test default configuration.
-	 */
-	@Test
-	public void testDefaultConfiguration() {
-		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
-
-		// Process @XlsConfiguration
-		if (o.isAnnotationPresent(XlsConfiguration.class)) {
-
-			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
-			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLS);
-		}
+	@DataProvider
+	public Object[][] objectProvider() throws Exception {
+		return new Object[][] {
+				/* default extension file type configuration */
+				{ XMenFactory.DefaultConfig.class, ExtensionFileType.XLS },
+				/* another extension file type configuration */
+				{ XMenFactory.Cyclops.class, ExtensionFileType.XLSX } };
 	}
 
 	/**
-	 * Test name file attribute.
+	 * Test initialization of the file name attribute with specific value.
 	 */
 	@Test
-	public void testNameFileAttribute() {
+	public void checkNameFileAttribute() {
 		Class<XMenFactory.DefaultConfig> o = XMenFactory.DefaultConfig.class;
-
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
 			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
 			assertEquals(xlsConfig.nameFile(), "DefaultConfigurationSample");
 		}
 	}
 
 	/**
-	 * Test name file attribute.
+	 * Test initialization of the extension file attribute with
+	 * <ul>
+	 * <li>type XLS.
+	 * <li>type XLSX.
+	 * </ul>
 	 */
-	@Test
-	public void testExtensionFileAttribute() {
-		Class<XMenFactory.Cyclops> o = XMenFactory.Cyclops.class;
-
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test(dataProvider = "objectProvider")
+	public void checkExtensionFileAttribute(Class o, ExtensionFileType expectedType) {
 		// Process @XlsConfiguration
 		if (o.isAnnotationPresent(XlsConfiguration.class)) {
 
 			XlsConfiguration xlsConfig = (XlsConfiguration) o.getAnnotation(XlsConfiguration.class);
-
-			// add here the annotations attributes
-			assertEquals(xlsConfig.extensionFile(), ExtensionFileType.XLSX);
+			assertEquals(xlsConfig.extensionFile(), expectedType);
 		}
 	}
 }

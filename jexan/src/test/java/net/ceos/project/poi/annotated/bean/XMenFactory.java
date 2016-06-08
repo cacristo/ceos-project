@@ -17,7 +17,12 @@ package net.ceos.project.poi.annotated.bean;
 
 import java.util.Date;
 
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
+
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
+import net.ceos.project.poi.annotated.annotation.XlsDecorator;
+import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreezePane;
@@ -295,6 +300,10 @@ public class XMenFactory {
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
+	@XlsDecorators(values = {
+			@XlsDecorator(decoratorName = "header", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
+			@XlsDecorator(decoratorName = "myDecorator", fontItalic = true, fontBold = true, fontSize = 8),
+			@XlsDecorator(decoratorName = "extendedIntDecorator", border = CellStyle.BORDER_MEDIUM, fontBold = true, foregroundColor = HSSFColor.BLUE.index) })
 	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_L1, startRow = 4, startCell = 1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4) )
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
 	public class ProfessorX {
@@ -515,7 +524,7 @@ public class XMenFactory {
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Simple object sample", freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4, topRow = 1, leftMostColumn = 1) )
+	@XlsSheet(title = "Simple object sample", cascadeLevel= CascadeType.CASCADE_L3, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4, topRow = 1, leftMostColumn = 1) )
 	@XlsConfiguration(nameFile = "SimpleSample", extensionFile = ExtensionFileType.XLSX)
 	public class Cyclops {
 
@@ -643,7 +652,8 @@ public class XMenFactory {
 	 *
 	 */
 	@XlsSheet(title = "Cascade type base", cascadeLevel = CascadeType.CASCADE_BASE, propagation = PropagationType.PROPAGATION_VERTICAL, groupElement = @XlsGroupElement(groupColumns = {
-			@XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 1, toRow = 2) }) )
+			@XlsGroupColumn(fromColumn = 0, toColumn = 0) }, groupRows = { @XlsGroupRow(fromRow = 1, toRow = 2) }),
+			freezePane = @XlsFreezePane(colSplit = 2, rowSplit = 0))
 	public class IronMan {
 		@XlsNestedHeader(title = "Main info", startY = 1, endY = 2)
 		@XlsElement(title = "Date value", position = 1, comment = "This is a comment")
@@ -744,7 +754,7 @@ public class XMenFactory {
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_L2)
+	@XlsSheet(title = "Cascade type level two", cascadeLevel = CascadeType.CASCADE_L2, freezePane = @XlsFreezePane(colSplit = 3, rowSplit = 2))
 	public class SpiderMan {
 
 	}
@@ -782,7 +792,7 @@ public class XMenFactory {
 	 * @version 1.0
 	 * @author Carlos CRISTO ABREU
 	 */
-	@XlsSheet(title = "Cascade base", propagation = PropagationType.PROPAGATION_HORIZONTAL)
+	@XlsSheet(title = "Cascade base", propagation = PropagationType.PROPAGATION_VERTICAL, freezePane = @XlsFreezePane(colSplit = 3, rowSplit = 0, topRow = 1, leftMostColumn = 1))
 	public class Thor {
 
 	}
