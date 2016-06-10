@@ -27,7 +27,7 @@ import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class XlsElementFactory {
+class XlsElementFactory {
 	static XlsElement build(final XlsFreeElement xlsAnnotation) {
 		return new XlsElement() {
 
