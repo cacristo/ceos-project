@@ -24,10 +24,10 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
-import net.ceos.project.poi.annotated.bean.AvengersFactory;
-import net.ceos.project.poi.annotated.bean.AvengersFactory.Hawkeye;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Hawkeye;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;

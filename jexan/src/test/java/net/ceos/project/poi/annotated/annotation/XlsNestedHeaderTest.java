@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.XMenFactory;
+import net.ceos.project.poi.annotated.bean.factory.XMenFactory;
 
 /**
  * Test the annotation {@link XlsNestedHeader}

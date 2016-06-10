@@ -106,6 +106,18 @@ public class ObjectMask {
 
 	@XlsElement(title = "Boolean primitive with format mask (2)", position = 27, formatMask = "Bah Oui/No No")
 	private boolean booleanAttribute4;
+
+	@XlsElement(title = "Integer with format mask (1)", position = 28, formatMask = "0.0000")
+	private Integer IntegerAttribute1;
+
+	@XlsElement(title = "Integer with transform mask (1)", position = 29, transformMask = "0.0")
+	private int intAttribute2;
+
+	@XlsElement(title = "Short with format mask (1)", position = 30, formatMask = "0.0000")
+	private short shortAttribute1;
+
+	@XlsElement(title = "Short with transform mask (1)", position = 31, transformMask = "0.0")
+	private Short shortAttribute2;
 	
 	public ObjectMask() {
 	}
@@ -486,5 +498,61 @@ public class ObjectMask {
 	 */
 	public void setBooleanAttribute4(boolean booleanAttribute4) {
 		this.booleanAttribute4 = booleanAttribute4;
+	}
+
+	/**
+	 * @return the integerAttribute1
+	 */
+	public final Integer getIntegerAttribute1() {
+		return IntegerAttribute1;
+	}
+
+	/**
+	 * @param integerAttribute1 the integerAttribute1 to set
+	 */
+	public final void setIntegerAttribute1(Integer integerAttribute1) {
+		IntegerAttribute1 = integerAttribute1;
+	}
+
+	/**
+	 * @return the intAttribute2
+	 */
+	public final int getIntAttribute2() {
+		return intAttribute2;
+	}
+
+	/**
+	 * @param intAttribute2 the intAttribute2 to set
+	 */
+	public final void setIntAttribute2(int intAttribute2) {
+		this.intAttribute2 = intAttribute2;
+	}
+
+	/**
+	 * @return the shortAttribute1
+	 */
+	public final short getShortAttribute1() {
+		return shortAttribute1;
+	}
+
+	/**
+	 * @param shortAttribute1 the shortAttribute1 to set
+	 */
+	public final void setShortAttribute1(short shortAttribute1) {
+		this.shortAttribute1 = shortAttribute1;
+	}
+
+	/**
+	 * @return the shortAttribute2
+	 */
+	public final Short getShortAttribute2() {
+		return shortAttribute2;
+	}
+
+	/**
+	 * @param shortAttribute2 the shortAttribute2 to set
+	 */
+	public final void setShortAttribute2(Short shortAttribute2) {
+		this.shortAttribute2 = shortAttribute2;
 	}
 }

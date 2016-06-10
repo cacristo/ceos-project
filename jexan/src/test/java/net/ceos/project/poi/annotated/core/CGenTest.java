@@ -139,16 +139,17 @@ public class CGenTest {
 		}
 	}
 
-	
-
 	/**
-	 * Test the marshal with an empty list.
-	 * 
+	 * Test the unmarshal collection with:
+	 * <ul>
+	 * <li>ConfigCrieria and empty collection.
+	 * <li>collection with 10 000 entries
+	 * </ul>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
 	@Test(dataProvider="collectionProvider")
-	public void unmarshalAsCollectionEmpty(Collection collection, Class<?> clazz, String filename) throws Exception {
+	public void unmarshalAsCollection(Collection collection, Class<?> clazz, String filename) throws Exception {
 
 		IGeneratorCSV en = new CGen();
 

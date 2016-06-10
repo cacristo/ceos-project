@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.annotation.visibility;
+package net.ceos.project.poi.annotated.modifier.visibility;
 
 import static org.testng.Assert.assertEquals;
 

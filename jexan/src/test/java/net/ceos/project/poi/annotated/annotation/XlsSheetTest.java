@@ -21,7 +21,7 @@ import static org.testng.Assert.assertNotNull;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.XMenFactory;
+import net.ceos.project.poi.annotated.bean.factory.XMenFactory;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 

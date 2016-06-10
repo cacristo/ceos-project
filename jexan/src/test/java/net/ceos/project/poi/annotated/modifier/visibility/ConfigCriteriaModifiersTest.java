@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.annotation.visibility;
+package net.ceos.project.poi.annotated.modifier.visibility;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.core.CGen;
-import net.ceos.project.poi.annotated.core.Engine;
-import net.ceos.project.poi.annotated.core.IEngine;
-import net.ceos.project.poi.annotated.core.IGeneratorCSV;
+import net.ceos.project.poi.annotated.core.CConfigCriteria;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 
 /**
  * Validate the number of public modifiers declared as fields or methods.
@@ -44,7 +42,7 @@ import net.ceos.project.poi.annotated.core.IGeneratorCSV;
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class EngineModifiersTest {
+public class ConfigCriteriaModifiersTest {
 
 	/* number of methods to ignore */
 	private int defaultMethods = 9;
@@ -52,32 +50,21 @@ public class EngineModifiersTest {
 	@DataProvider
 	public Object[][] objectModifiersFieldsProvider() throws Exception {
 		return new Object[][] {
-				/* Engine object & expected public fields */
-				{ new Engine(), 0 },
-				/* CGen object & expected public fields */
-				{ new CGen(), 0 } };
+				/* XConfigCriteria object & expected public fields */
+				{ new XConfigCriteria(), 0 },
+				/* CConfigCriteria object & expected public fields */
+				{ new CConfigCriteria(), 0 } };
 	}
 
 	@DataProvider
 	public Object[][] objectModifiersMethodsProvider() throws Exception {
 		return new Object[][] {
-				/* Engine object & expected public methods */
-				{ new Engine(), 20 },
-				/* CGen object & expected public methods */
-				{ new CGen(), 8 } };
+				/* XConfigCriteria object & expected public methods */
+				{ new XConfigCriteria(), 10 },
+				/* CConfigCriteria object & expected public methods */
+				{ new CConfigCriteria(), 3 } };
 	}
 
-	@DataProvider
-	public Object[][] objectModifiersMethodsInterfaceProvider() throws Exception {
-		return new Object[][] {
-				/* Engine object & expected public methods */
-				{ Engine.class, IEngine.class, 20 },
-				/* CGen object & expected public methods */
-				{ CGen.class, IGeneratorCSV.class, 8 } };
-	}
-
-	
-	
 	/**
 	 * Validate the access level modifiers at the fields
 	 * 
@@ -104,18 +91,4 @@ public class EngineModifiersTest {
 		assertEquals(object.getClass().getMethods().length - defaultMethods, expectedValue);
 	}
 
-	/**
-	 * Validate the access level modifiers at the methods
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public methods
-	 */
-	@SuppressWarnings("rawtypes")
-	@Test(dataProvider = "objectModifiersMethodsInterfaceProvider")
-	public void checkModifiersMethodsInterfaces(Class objClass, Class objInterface, int expectedValue) {
-		assertEquals(objClass.getMethods().length - defaultMethods, expectedValue);
-		assertEquals(objInterface.getDeclaredMethods().length, expectedValue);
-	}
 }

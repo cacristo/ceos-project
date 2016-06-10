@@ -35,53 +35,55 @@ import net.ceos.project.poi.annotated.exception.WorkbookException;
 public class CascadeTest {
 
 	/**
-	 * Test with cascade type is CASCADE_BASE
-	 * @throws WorkbookException 
+	 * Test cascade type CASCADE_BASE
+	 * 
+	 * @throws WorkbookException
 	 */
 	@Test
-	public void testCascadeTypeBase() throws WorkbookException {
+	public void checkCascadeTypeBase() throws WorkbookException {
 		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
-		
+
 		XConfigCriteria criteria = new XConfigCriteria();
 		criteria.overrideCascadeLevel(CascadeType.CASCADE_BASE);
 
 		IEngine en = new Engine();
 		Workbook wb = en.marshalToWorkbook(criteria, cascadeObj);
-		
+
 		assertNotNull(wb);
 		assertNotNull(wb.getSheet("Cascade analyser"));
 		assertEquals(wb.getNumberOfSheets(), 1);
 	}
 
 	/**
-	 * Test with cascade type is CASCADE_L1
-	 * @throws WorkbookException 
+	 * Test cascade type CASCADE_L1
+	 * 
+	 * @throws WorkbookException
 	 */
 	@Test
-	public void testCascadeTypeLevelOne() throws WorkbookException {
+	public void checkCascadeTypeLevelOne() throws WorkbookException {
 		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
-		
+
 		XConfigCriteria criteria = new XConfigCriteria();
 		criteria.overrideCascadeLevel(CascadeType.CASCADE_L1);
-		
+
 		IEngine en = new Engine();
 		Workbook wb = en.marshalToWorkbook(criteria, cascadeObj);
-		
+
 		assertNotNull(wb);
 		assertNotNull(wb.getSheet("Cascade analyser"));
 		assertNotNull(wb.getSheet("Basic object"));
 		assertNotNull(wb.getSheet("Decorators"));
 		assertNotNull(wb.getSheet("Cascade L1"));
 		assertEquals(wb.getNumberOfSheets(), 4);
-		
 	}
 
 	/**
-	 * Test with cascade type is CASCADE_L2
-	 * @throws WorkbookException 
+	 * Test cascade type CASCADE_L2
+	 * 
+	 * @throws WorkbookException
 	 */
 	@Test
-	public void testCascadeTypeLevelTwo() throws WorkbookException {
+	public void checkCascadeTypeLevelTwo() throws WorkbookException {
 		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
 
 		XConfigCriteria criteria = new XConfigCriteria();
@@ -89,7 +91,7 @@ public class CascadeTest {
 
 		IEngine en = new Engine();
 		Workbook wb = en.marshalToWorkbook(criteria, cascadeObj);
-		
+
 		assertNotNull(wb);
 		assertNotNull(wb.getSheet("Cascade analyser"));
 		assertNotNull(wb.getSheet("Basic object"));
@@ -100,19 +102,45 @@ public class CascadeTest {
 	}
 
 	/**
-	 * Test with cascade type is CASCADE_L3
-	 * @throws WorkbookException 
+	 * Test cascade type CASCADE_L3
+	 * 
+	 * @throws WorkbookException
 	 */
 	@Test
-	public void testCascadeTypeLevelThree() throws WorkbookException {
+	public void checkCascadeTypeLevelThree() throws WorkbookException {
 		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
 
 		XConfigCriteria criteria = new XConfigCriteria();
 		criteria.overrideCascadeLevel(CascadeType.CASCADE_L3);
-		
+
 		IEngine en = new Engine();
 		Workbook wb = en.marshalToWorkbook(criteria, cascadeObj);
-		
+
+		assertNotNull(wb);
+		assertNotNull(wb.getSheet("Cascade analyser"));
+		assertNotNull(wb.getSheet("Basic object"));
+		assertNotNull(wb.getSheet("Decorators"));
+		assertNotNull(wb.getSheet("Cascade L1"));
+		assertNotNull(wb.getSheet("Cascade L2"));
+		assertNotNull(wb.getSheet("Cascade L3"));
+		assertEquals(wb.getNumberOfSheets(), 6);
+	}
+
+	/**
+	 * Test cascade type CASCADE_FULL
+	 * 
+	 * @throws WorkbookException
+	 */
+	@Test
+	public void checkCascadeTypeFull() throws WorkbookException {
+		CascadeObject cascadeObj = CascadeObjectBuilder.buildCascadeObject();
+
+		XConfigCriteria criteria = new XConfigCriteria();
+		criteria.overrideCascadeLevel(CascadeType.CASCADE_FULL);
+
+		IEngine en = new Engine();
+		Workbook wb = en.marshalToWorkbook(criteria, cascadeObj);
+
 		assertNotNull(wb);
 		assertNotNull(wb.getSheet("Cascade analyser"));
 		assertNotNull(wb.getSheet("Basic object"));
