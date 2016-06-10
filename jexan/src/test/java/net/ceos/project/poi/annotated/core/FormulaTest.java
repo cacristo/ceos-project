@@ -34,7 +34,7 @@ public class FormulaTest {
 	 * {@link XlsElement}
 	 */
 	@Test
-	public void testMarshalObjectFormula() throws Exception {
+	public void validateMarshalObjectFormula() throws Exception {
 		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
 
 		IEngine en = new Engine();
@@ -42,11 +42,11 @@ public class FormulaTest {
 	}
 
 	/**
-	 * Test if the object who applied formulas at the {@link XlsElement} cause any damage at the moment
-	 * of unmarshal.
+	 * Test if the object who applied formulas at the {@link XlsElement} cause
+	 * any damage at the moment of unmarshal.
 	 */
 	@Test
-	public void testUnmarshalObjectFormula() throws Exception {
+	public void validateUnmarshalObjectFormula() throws Exception {
 		ObjectFormula of = new ObjectFormula();
 
 		IEngine en = new Engine();

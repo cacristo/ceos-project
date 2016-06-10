@@ -27,7 +27,7 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 @XlsConfiguration(nameFile = "PropagationHorizontalObjects", extensionFile = ExtensionFileType.XLSX)
 public class PropagationHorizontalObject {
 
-	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "anotherDate")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
 	private Date dateAttribute;
 
 	@XlsElement(title = "String value", position = 2)

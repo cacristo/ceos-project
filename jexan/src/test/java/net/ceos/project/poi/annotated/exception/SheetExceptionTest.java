@@ -19,8 +19,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
-import net.ceos.project.poi.annotated.bean.AvengersFactory;
-import net.ceos.project.poi.annotated.bean.AvengersFactory.Vision;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Vision;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;

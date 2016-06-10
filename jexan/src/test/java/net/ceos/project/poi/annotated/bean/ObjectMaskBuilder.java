@@ -95,6 +95,12 @@ public class ObjectMaskBuilder {
 		toValidate.setBooleanAttribute2(true);
 		toValidate.setBooleanAttribute3(false);
 		toValidate.setBooleanAttribute4(false);
+		// Integer
+		toValidate.setIntegerAttribute1(23);
+		toValidate.setIntAttribute2(10);
+		// Short
+		toValidate.setShortAttribute1((short)5);
+		toValidate.setShortAttribute2((short)44);
 		// TODO add new fields below
 
 		return toValidate;
@@ -156,6 +162,10 @@ public class ObjectMaskBuilder {
 		assertEquals(base.getBooleanAttribute3(), toValidate.getBooleanAttribute3());
 		assertEquals(base.isBooleanAttribute4(), toValidate.isBooleanAttribute4());
 		// TODO add new validation below
+		assertEquals(base.getIntegerAttribute1(), toValidate.getIntegerAttribute1());
+		assertEquals(base.getIntAttribute2(), toValidate.getIntAttribute2());
+		assertEquals(base.getShortAttribute1(), toValidate.getShortAttribute1());
+		assertEquals(base.getShortAttribute2(), toValidate.getShortAttribute2());
 	}
 
 	/**

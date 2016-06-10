@@ -21,7 +21,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.testng.annotations.Test;
 
-import net.ceos.project.poi.annotated.bean.XMenFactory;
+import net.ceos.project.poi.annotated.bean.factory.XMenFactory;
 
 /**
  * Test the annotation {@link XlsDecorator}
