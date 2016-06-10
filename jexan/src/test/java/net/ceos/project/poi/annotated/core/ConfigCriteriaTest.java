@@ -15,16 +15,19 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.junit.Assert;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.bean.ObjectConfigurable;
 import net.ceos.project.poi.annotated.bean.ObjectConfigurableBuilder;
-import net.ceos.project.poi.annotated.bean.XlsElementTestFactory;
+import net.ceos.project.poi.annotated.bean.factory.XlsElementTestFactory;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
@@ -41,145 +44,169 @@ public class ConfigCriteriaTest {
 	 * Test the override extension file type at {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideExtensionCSV() throws Exception {
-
-		XConfigCriteria config = new XConfigCriteria();
-
-		config.setExtension(null);
-		config.overrideExtensionType(ExtensionFileType.CSV);
-
-		Assert.assertEquals(config.getExtension(), ExtensionFileType.CSV);
-	}
-
-	/**
-	 * Test the override extension file type at {@link XConfigCriteria}.<br>
-	 */
-	@Test
-	public void testOverrideExtensionXLS() throws Exception {
-
-		XConfigCriteria config = new XConfigCriteria();
-
-		config.setExtension(null);
-		config.overrideExtensionType(ExtensionFileType.XLS);
-
-		Assert.assertEquals(config.getExtension(), ExtensionFileType.XLS);
-	}
-
-	/**
-	 * Test the override extension file type at {@link XConfigCriteria}.<br>
-	 */
-	@Test
-	public void testOverrideExtensionXLSX() throws Exception {
+	public void checkOverrideExtensionCsv() throws Exception {
 
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.overrideExtensionType(null);
-		config.overrideExtensionType(ExtensionFileType.XLSX);
+		assertNull(config.getExtension());
 
-		Assert.assertEquals(config.getExtension(), ExtensionFileType.XLSX);
+		config.overrideExtensionType(ExtensionFileType.CSV);
+		assertEquals(config.getExtension(), ExtensionFileType.CSV);
+	}
+
+	/**
+	 * Test the override extension file type at {@link XConfigCriteria}.
+	 */
+	@Test
+	public void checkOverrideExtensionXls() throws Exception {
+
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.overrideExtensionType(null);
+		assertNull(config.getExtension());
+
+		config.overrideExtensionType(ExtensionFileType.XLS);
+		assertEquals(config.getExtension(), ExtensionFileType.XLS);
+	}
+
+	/**
+	 * Test the override extension file type at {@link XConfigCriteria}.
+	 */
+	@Test
+	public void checkOverrideExtensionXlsx() throws Exception {
+
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.overrideExtensionType(null);
+		assertNull(config.getExtension());
+
+		config.overrideExtensionType(ExtensionFileType.XLSX);
+		assertEquals(config.getExtension(), ExtensionFileType.XLSX);
 	}
 
 	/**
 	 * Test the override propagation type at {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverridePropagationHorizontal() throws Exception {
+	public void checkOverridePropagationHorizontal() throws Exception {
 
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setPropagation(null);
+		assertNull(config.getPropagation());
+
 		config.overridePropagationType(PropagationType.PROPAGATION_HORIZONTAL);
-
-		Assert.assertEquals(config.getPropagation(), PropagationType.PROPAGATION_HORIZONTAL);
+		assertEquals(config.getPropagation(), PropagationType.PROPAGATION_HORIZONTAL);
 	}
 
 	/**
-	 * Test the override propagation type at {@link XConfigCriteria}.<br>
+	 * Test the override propagation type at {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverridePropagationVertical() throws Exception {
+	public void checkOverridePropagationVertical() throws Exception {
 
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setPropagation(null);
+		assertNull(config.getPropagation());
+
 		config.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
-
-		Assert.assertEquals(config.getPropagation(), PropagationType.PROPAGATION_VERTICAL);
-	}
-
-	/**
-	 * Test the override cascade level at {@link XConfigCriteria}.<br>
-	 */
-	@Test
-	public void testOverrideCascadeLevelBASE() throws Exception {
-
-		XConfigCriteria config = new XConfigCriteria();
-
-		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_BASE);
-
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_BASE);
-	}
-
-	/**
-	 * Test the override cascade level at {@link XConfigCriteria}.<br>
-	 */
-	@Test
-	public void testOverrideCascadeLevelONE() throws Exception {
-
-		XConfigCriteria config = new XConfigCriteria();
-
-		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_L1);
-
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L1);
+		assertEquals(config.getPropagation(), PropagationType.PROPAGATION_VERTICAL);
 	}
 
 	/**
 	 * Test the override cascade level at {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideCascadeLevelTWO() throws Exception {
+	public void checkOverrideCascadeLevelBase() throws Exception {
 
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_L2);
+		assertNull(config.getCascadeLevel());
 
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L2);
+		config.overrideCascadeLevel(CascadeType.CASCADE_BASE);
+		assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_BASE);
 	}
 
 	/**
-	 * Test the override cascade level at {@link XConfigCriteria}.<br>
+	 * Test the override cascade level at {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideCascadeLevelFULL() throws Exception {
+	public void checkOverrideCascadeLevelL1() throws Exception {
 
 		XConfigCriteria config = new XConfigCriteria();
 
 		config.setCascadeLevel(null);
-		config.overrideCascadeLevel(CascadeType.CASCADE_FULL);
+		assertNull(config.getCascadeLevel());
 
-		Assert.assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_FULL);
+		config.overrideCascadeLevel(CascadeType.CASCADE_L1);
+		assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L1);
+	}
+
+	/**
+	 * Test the override cascade level at {@link XConfigCriteria}.
+	 */
+	@Test
+	public void checkOverrideCascadeLevelL2() throws Exception {
+
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setCascadeLevel(null);
+		assertNull(config.getCascadeLevel());
+
+		config.overrideCascadeLevel(CascadeType.CASCADE_L2);
+		assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L2);
+	}
+
+	/**
+	 * Test the override cascade level at {@link XConfigCriteria}.
+	 */
+	@Test
+	public void checkOverrideCascadeLevelL3() throws Exception {
+
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setCascadeLevel(null);
+		assertNull(config.getCascadeLevel());
+
+		config.overrideCascadeLevel(CascadeType.CASCADE_L3);
+		assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_L3);
+	}
+
+	/**
+	 * Test the override cascade level at {@link XConfigCriteria}.
+	 */
+	@Test
+	public void checkOverrideCascadeLevelFull() throws Exception {
+
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setCascadeLevel(null);
+		assertNull(config.getCascadeLevel());
+
+		config.overrideCascadeLevel(CascadeType.CASCADE_FULL);
+		assertEquals(config.getCascadeLevel(), CascadeType.CASCADE_FULL);
 	}
 
 	/**
 	 * Test the override header {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideHeaderCellDecorator1() throws Exception {
+	public void checkOverrideHeaderCellDecoratorType1() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_HEADER;
 		short alignment = (short) CellStyle.ALIGN_CENTER;
 		short verticalAlignment = (short) CellStyle.VERTICAL_CENTER;
 		short border = (short) CellStyle.BORDER_DOTTED;
-		short foregroundColor = (short) HSSFColor.YELLOW.index;
+		short foregroundColor = (short) HSSFColor.GREEN.index;
 		String fontName = "Times New Roman";
 		short fontSize = (short) 20;
 		boolean isFontBold = true;
 		boolean isFontItalic = true;
-		byte fontUnderline = (byte) 1;
+		byte fontUnderline = (byte) 0;
 		boolean isWrapText = true;
 
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border,
@@ -190,19 +217,19 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorHeader = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorHeader);
-		Assert.assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorHeader.getAlignment(), alignment);
-		Assert.assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorHeader.getBorder(), border);
-		Assert.assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorHeader.getFontName(), fontName);
-		Assert.assertEquals(decoratorHeader.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorHeader.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorHeader.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorHeader);
+		assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
+		assertEquals(decoratorHeader.getAlignment(), alignment);
+		assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorHeader.getBorder(), border);
+		assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorHeader.getFontName(), fontName);
+		assertEquals(decoratorHeader.getFontSize(), fontSize);
+		assertEquals(decoratorHeader.isFontBold(), isFontBold);
+		assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
+		assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorHeader.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -210,7 +237,7 @@ public class ConfigCriteriaTest {
 	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideHeaderCellDecorator2() throws Exception {
+	public void checkOverrideHeaderCellDecoratorType2() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_HEADER;
 		short alignment = (short) CellStyle.ALIGN_LEFT;
@@ -219,9 +246,9 @@ public class ConfigCriteriaTest {
 		short foregroundColor = (short) HSSFColor.RED.index;
 		String fontName = "Helvetic";
 		short fontSize = (short) 8;
-		boolean isFontBold = true;
-		boolean isFontItalic = false;
-		byte fontUnderline = (byte) 1;
+		boolean isFontBold = false;
+		boolean isFontItalic = true;
+		byte fontUnderline = (byte) 0;
 		boolean isWrapText = true;
 
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border,
@@ -232,27 +259,27 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorHeader = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorHeader);
-		Assert.assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorHeader.getAlignment(), alignment);
-		Assert.assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorHeader.getBorder(), border);
-		Assert.assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorHeader.getFontName(), fontName);
-		Assert.assertEquals(decoratorHeader.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorHeader.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorHeader.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorHeader);
+		assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
+		assertEquals(decoratorHeader.getAlignment(), alignment);
+		assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorHeader.getBorder(), border);
+		assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorHeader.getFontName(), fontName);
+		assertEquals(decoratorHeader.getFontSize(), fontSize);
+		assertEquals(decoratorHeader.isFontBold(), isFontBold);
+		assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
+		assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorHeader.isWrapText(), isWrapText);
 	}
 
 	/**
 	 * Test the override header {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideHeaderCellDecorator3() throws Exception {
+	public void checkOverrideHeaderCellDecoratorType3() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_HEADER;
 		short alignment = (short) CellStyle.ALIGN_RIGHT;
@@ -274,27 +301,27 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorHeader = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorHeader);
-		Assert.assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorHeader.getAlignment(), alignment);
-		Assert.assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorHeader.getBorder(), border);
-		Assert.assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorHeader.getFontName(), fontName);
-		Assert.assertEquals(decoratorHeader.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorHeader.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorHeader.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorHeader);
+		assertEquals(decoratorHeader.getDecoratorName(), decoratorName);
+		assertEquals(decoratorHeader.getAlignment(), alignment);
+		assertEquals(decoratorHeader.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorHeader.getBorder(), border);
+		assertEquals(decoratorHeader.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorHeader.getFontName(), fontName);
+		assertEquals(decoratorHeader.getFontSize(), fontSize);
+		assertEquals(decoratorHeader.isFontBold(), isFontBold);
+		assertEquals(decoratorHeader.isFontItalic(), isFontItalic);
+		assertEquals(decoratorHeader.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorHeader.isWrapText(), isWrapText);
 	}
 
 	/**
 	 * Test the override generic {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideGenericCellDecorator1() throws Exception {
+	public void checkOverrideGenericCellDecoratorType1() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_GENERIC;
 		short alignment = (short) CellStyle.ALIGN_CENTER;
@@ -316,19 +343,19 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorGeneric = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorGeneric);
-		Assert.assertEquals(decoratorGeneric.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorGeneric.getAlignment(), alignment);
-		Assert.assertEquals(decoratorGeneric.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorGeneric.getBorder(), border);
-		Assert.assertEquals(decoratorGeneric.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorGeneric.getFontName(), fontName);
-		Assert.assertEquals(decoratorGeneric.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorGeneric.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorGeneric.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorGeneric.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorGeneric.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorGeneric);
+		assertEquals(decoratorGeneric.getDecoratorName(), decoratorName);
+		assertEquals(decoratorGeneric.getAlignment(), alignment);
+		assertEquals(decoratorGeneric.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorGeneric.getBorder(), border);
+		assertEquals(decoratorGeneric.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorGeneric.getFontName(), fontName);
+		assertEquals(decoratorGeneric.getFontSize(), fontSize);
+		assertEquals(decoratorGeneric.isFontBold(), isFontBold);
+		assertEquals(decoratorGeneric.isFontItalic(), isFontItalic);
+		assertEquals(decoratorGeneric.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorGeneric.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -336,7 +363,7 @@ public class ConfigCriteriaTest {
 	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideGenericCellDecorator2() throws Exception {
+	public void checkOverrideGenericCellDecoratorType2() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_GENERIC;
 		short alignment = (short) CellStyle.ALIGN_RIGHT;
@@ -345,7 +372,7 @@ public class ConfigCriteriaTest {
 		short foregroundColor = (short) HSSFColor.PINK.index;
 		String fontName = "Times New Roman";
 		short fontSize = (short) 11;
-		boolean isFontBold = true;
+		boolean isFontBold = false;
 		boolean isFontItalic = false;
 		byte fontUnderline = (byte) 0;
 		boolean isWrapText = false;
@@ -358,19 +385,19 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorGeneric = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorGeneric);
-		Assert.assertEquals(decoratorGeneric.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorGeneric.getAlignment(), alignment);
-		Assert.assertEquals(decoratorGeneric.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorGeneric.getBorder(), border);
-		Assert.assertEquals(decoratorGeneric.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorGeneric.getFontName(), fontName);
-		Assert.assertEquals(decoratorGeneric.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorGeneric.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorGeneric.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorGeneric.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorGeneric.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorGeneric);
+		assertEquals(decoratorGeneric.getDecoratorName(), decoratorName);
+		assertEquals(decoratorGeneric.getAlignment(), alignment);
+		assertEquals(decoratorGeneric.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorGeneric.getBorder(), border);
+		assertEquals(decoratorGeneric.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorGeneric.getFontName(), fontName);
+		assertEquals(decoratorGeneric.getFontSize(), fontSize);
+		assertEquals(decoratorGeneric.isFontBold(), isFontBold);
+		assertEquals(decoratorGeneric.isFontItalic(), isFontItalic);
+		assertEquals(decoratorGeneric.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorGeneric.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -378,7 +405,7 @@ public class ConfigCriteriaTest {
 	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideDateCellDecorator1() throws Exception {
+	public void checkOverrideDateCellDecoratorType1() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_DATE;
 		short alignment = (short) CellStyle.ALIGN_CENTER;
@@ -400,27 +427,27 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorDate = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorDate);
-		Assert.assertEquals(decoratorDate.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorDate.getAlignment(), alignment);
-		Assert.assertEquals(decoratorDate.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorDate.getBorder(), border);
-		Assert.assertEquals(decoratorDate.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorDate.getFontName(), fontName);
-		Assert.assertEquals(decoratorDate.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorDate.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorDate.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorDate.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorDate.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorDate);
+		assertEquals(decoratorDate.getDecoratorName(), decoratorName);
+		assertEquals(decoratorDate.getAlignment(), alignment);
+		assertEquals(decoratorDate.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorDate.getBorder(), border);
+		assertEquals(decoratorDate.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorDate.getFontName(), fontName);
+		assertEquals(decoratorDate.getFontSize(), fontSize);
+		assertEquals(decoratorDate.isFontBold(), isFontBold);
+		assertEquals(decoratorDate.isFontItalic(), isFontItalic);
+		assertEquals(decoratorDate.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorDate.isWrapText(), isWrapText);
 	}
 
 	/**
 	 * Test the override date {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideDateCellDecorator2() throws Exception {
+	public void checkOverrideDateCellDecoratorType2() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_DATE;
 		short alignment = (short) CellStyle.ALIGN_CENTER;
@@ -442,27 +469,27 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorDate = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorDate);
-		Assert.assertEquals(decoratorDate.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorDate.getAlignment(), alignment);
-		Assert.assertEquals(decoratorDate.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorDate.getBorder(), border);
-		Assert.assertEquals(decoratorDate.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorDate.getFontName(), fontName);
-		Assert.assertEquals(decoratorDate.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorDate.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorDate.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorDate.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorDate.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorDate);
+		assertEquals(decoratorDate.getDecoratorName(), decoratorName);
+		assertEquals(decoratorDate.getAlignment(), alignment);
+		assertEquals(decoratorDate.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorDate.getBorder(), border);
+		assertEquals(decoratorDate.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorDate.getFontName(), fontName);
+		assertEquals(decoratorDate.getFontSize(), fontSize);
+		assertEquals(decoratorDate.isFontBold(), isFontBold);
+		assertEquals(decoratorDate.isFontItalic(), isFontItalic);
+		assertEquals(decoratorDate.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorDate.isWrapText(), isWrapText);
 	}
 
 	/**
 	 * Test the override numeric {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideNumericCellDecorator1() throws Exception {
+	public void checkOverrideNumericCellDecoratorType1() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_NUMERIC;
 		short alignment = (short) CellStyle.ALIGN_RIGHT;
@@ -473,7 +500,7 @@ public class ConfigCriteriaTest {
 		short fontSize = (short) 7;
 		boolean isFontBold = false;
 		boolean isFontItalic = false;
-		byte fontUnderline = (byte) 0;
+		byte fontUnderline = (byte) 1;
 		boolean isWrapText = false;
 
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border,
@@ -484,19 +511,19 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorNumeric = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorNumeric);
-		Assert.assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorNumeric.getAlignment(), alignment);
-		Assert.assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorNumeric.getBorder(), border);
-		Assert.assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorNumeric.getFontName(), fontName);
-		Assert.assertEquals(decoratorNumeric.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorNumeric.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorNumeric.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorNumeric);
+		assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
+		assertEquals(decoratorNumeric.getAlignment(), alignment);
+		assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorNumeric.getBorder(), border);
+		assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorNumeric.getFontName(), fontName);
+		assertEquals(decoratorNumeric.getFontSize(), fontSize);
+		assertEquals(decoratorNumeric.isFontBold(), isFontBold);
+		assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
+		assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorNumeric.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -504,7 +531,7 @@ public class ConfigCriteriaTest {
 	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideNumericCellDecorator2() throws Exception {
+	public void checkOverrideNumericCellDecoratorType2() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_NUMERIC;
 		short alignment = (short) CellStyle.ALIGN_RIGHT;
@@ -515,7 +542,7 @@ public class ConfigCriteriaTest {
 		short fontSize = (short) 8;
 		boolean isFontBold = false;
 		boolean isFontItalic = false;
-		byte fontUnderline = (byte) 0;
+		byte fontUnderline = (byte) 1;
 		boolean isWrapText = false;
 
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border,
@@ -526,38 +553,38 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorNumeric = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorNumeric);
-		Assert.assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorNumeric.getAlignment(), alignment);
-		Assert.assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorNumeric.getBorder(), border);
-		Assert.assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorNumeric.getFontName(), fontName);
-		Assert.assertEquals(decoratorNumeric.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorNumeric.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorNumeric.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorNumeric);
+		assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
+		assertEquals(decoratorNumeric.getAlignment(), alignment);
+		assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorNumeric.getBorder(), border);
+		assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorNumeric.getFontName(), fontName);
+		assertEquals(decoratorNumeric.getFontSize(), fontSize);
+		assertEquals(decoratorNumeric.isFontBold(), isFontBold);
+		assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
+		assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorNumeric.isWrapText(), isWrapText);
 	}
 
 	/**
 	 * Test the override numeric {@link CellDecorator} level at
-	 * {@link XConfigCriteria}.<br>
+	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideNumericCellDecorator3() throws Exception {
+	public void checkOverrideNumericCellDecoratorType() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_NUMERIC;
 		short alignment = (short) CellStyle.ALIGN_RIGHT;
 		short verticalAlignment = (short) CellStyle.VERTICAL_BOTTOM;
 		short border = (short) CellStyle.BORDER_DASHED;
-		short foregroundColor = (short) HSSFColor.GREEN.index;
+		short foregroundColor = (short) HSSFColor.ORANGE.index;
 		String fontName = "Helvetic";
 		short fontSize = (short) 9;
 		boolean isFontBold = false;
 		boolean isFontItalic = false;
-		byte fontUnderline = (byte) 0;
+		byte fontUnderline = (byte) 1;
 		boolean isWrapText = false;
 
 		CellDecorator decorator = initializeCellDecorator(decoratorName, alignment, verticalAlignment, border,
@@ -568,19 +595,19 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorNumeric = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorNumeric);
-		Assert.assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorNumeric.getAlignment(), alignment);
-		Assert.assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorNumeric.getBorder(), border);
-		Assert.assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorNumeric.getFontName(), fontName);
-		Assert.assertEquals(decoratorNumeric.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorNumeric.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorNumeric.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorNumeric);
+		assertEquals(decoratorNumeric.getDecoratorName(), decoratorName);
+		assertEquals(decoratorNumeric.getAlignment(), alignment);
+		assertEquals(decoratorNumeric.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorNumeric.getBorder(), border);
+		assertEquals(decoratorNumeric.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorNumeric.getFontName(), fontName);
+		assertEquals(decoratorNumeric.getFontSize(), fontSize);
+		assertEquals(decoratorNumeric.isFontBold(), isFontBold);
+		assertEquals(decoratorNumeric.isFontItalic(), isFontItalic);
+		assertEquals(decoratorNumeric.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorNumeric.isWrapText(), isWrapText);
 	}
 
 	/**
@@ -588,7 +615,7 @@ public class ConfigCriteriaTest {
 	 * {@link XConfigCriteria}.
 	 */
 	@Test
-	public void testOverrideBooleanCellDecorator() throws Exception {
+	public void checkOverrideBooleanCellDecorator() throws Exception {
 
 		String decoratorName = CellStyleHandler.CELL_DECORATOR_BOOLEAN;
 		short alignment = (short) CellStyle.ALIGN_CENTER;
@@ -596,7 +623,7 @@ public class ConfigCriteriaTest {
 		short border = (short) CellStyle.BORDER_HAIR;
 		short foregroundColor = (short) HSSFColor.YELLOW.index;
 		String fontName = "Times New Roman";
-		short fontSize = (short) 11;
+		short fontSize = (short) 9;
 		boolean isFontBold = true;
 		boolean isFontItalic = true;
 		byte fontUnderline = (byte) 1;
@@ -610,223 +637,364 @@ public class ConfigCriteriaTest {
 
 		CellDecorator decoratorBoolean = config.getCellDecoratorMap().get(decoratorName);
 
-		Assert.assertNotNull(decorator);
-		Assert.assertNotNull(decoratorBoolean);
-		Assert.assertEquals(decoratorBoolean.getDecoratorName(), decoratorName);
-		Assert.assertEquals(decoratorBoolean.getAlignment(), alignment);
-		Assert.assertEquals(decoratorBoolean.getVerticalAlignment(), verticalAlignment);
-		Assert.assertEquals(decoratorBoolean.getBorder(), border);
-		Assert.assertEquals(decoratorBoolean.getForegroundColor(), foregroundColor);
-		Assert.assertEquals(decoratorBoolean.getFontName(), fontName);
-		Assert.assertEquals(decoratorBoolean.getFontSize(), fontSize);
-		Assert.assertEquals(decoratorBoolean.isFontBold(), isFontBold);
-		Assert.assertEquals(decoratorBoolean.isFontItalic(), isFontItalic);
-		Assert.assertEquals(decoratorBoolean.getFontUnderline(), fontUnderline);
-		Assert.assertEquals(decoratorBoolean.isWrapText(), isWrapText);
+		assertNotNull(decorator);
+		assertNotNull(decoratorBoolean);
+		assertEquals(decoratorBoolean.getDecoratorName(), decoratorName);
+		assertEquals(decoratorBoolean.getAlignment(), alignment);
+		assertEquals(decoratorBoolean.getVerticalAlignment(), verticalAlignment);
+		assertEquals(decoratorBoolean.getBorder(), border);
+		assertEquals(decoratorBoolean.getForegroundColor(), foregroundColor);
+		assertEquals(decoratorBoolean.getFontName(), fontName);
+		assertEquals(decoratorBoolean.getFontSize(), fontSize);
+		assertEquals(decoratorBoolean.isFontBold(), isFontBold);
+		assertEquals(decoratorBoolean.isFontItalic(), isFontItalic);
+		assertEquals(decoratorBoolean.getFontUnderline(), fontUnderline);
+		assertEquals(decoratorBoolean.isWrapText(), isWrapText);
 	}
 
 	/* TODO test getCellStyle */
-	/* TODO test getFormatMask */
-	/* TODO test getTransformMask */
 
+	/**
+	 * Test if the formatMask is selected correctly at {@link XConfigCriteria}
+	 */
 	@Test
-	public void testFormatMask1() {
-		XConfigCriteria config = new XConfigCriteria();
-
+	public void checDatekFormatMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 1", "date", "", "ddMMyy", "ddMMyyyy", false, "", "",
 				10);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testFormatMask2() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the formatMask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkNumericFormatMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 2", "numeric", "", "0", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testFormatMask3() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the formatMask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkDoubleFormatMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 3", "double", "", "", "0.00", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testFormatMask4() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the formatMask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkBooleanFormatMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 4", "boolean", "", "", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testTransformMask1() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getFormatMask("thisMask"), detectFormatMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the transformMask is selected correctly at
+	 * {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkDateTransformMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 1", "date", "", "ddMMyy", "ddMMyyyy", false, "", "",
 				10);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testTransformMask2() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the transformMask is selected correctly at
+	 * {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkNumericTransformMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 2", "numeric", "", "0", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testTransformMask3() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the transformMask is selected correctly at
+	 * {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkDoubleTransformMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 3", "double", "", "", "0.00", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testTransformMask4() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the transformMask is selected correctly at
+	 * {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkBooleanTransformMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 4", "boolean", "", "", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testMask1() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getTransformMask("thisMask"), detectTransformMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the mask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkDateMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 1", "date", "", "ddMMyy", "ddMMyyyy", false, "", "",
 				10);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testMask2() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the mask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkNumericMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 2", "numeric", "", "0", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testMask3() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the mask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkDoubleMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 3", "double", "", "", "0.00", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testMask4() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the mask is selected correctly at {@link XConfigCriteria}
+	 */
+	@Test
+	public void checkBooleanMask() {
 		XlsElement element = XlsElementTestFactory.build("Title 4", "boolean", "", "", "", false, "", "", 0);
-		config.setElement(element);
-
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
-	}
-
-	@Test
-	public void testGenerateCellStyleKey1() {
 		XConfigCriteria config = new XConfigCriteria();
 
+		config.setElement(element);
+
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.getMask("thisMask"), detectMaskToUse(element, "thisMask"));
+	}
+
+	/**
+	 * Test if the key {@link CellStyle} is generated correctly at
+	 * {@link XConfigCriteria}
+	 * 
+	 * @param element
+	 */
+	@Test
+	public void checkDateGenerateCellStyleKey() {
 		XlsElement element = XlsElementTestFactory.build("Title 1", "date", "", "ddMMyy", "ddMMyyyy", false, "", "",
 				10);
+		XConfigCriteria config = new XConfigCriteria();
+
 		config.setElement(element);
 
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"),
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.generateCellStyleKey("", "thisMask"),
 				detectMaskToUse(element, "thisMask").concat(element.decorator()));
 	}
 
+	/**
+	 * Test if the key {@link CellStyle} is generated correctly at
+	 * {@link XConfigCriteria}
+	 * 
+	 * @param element
+	 */
 	@Test
-	public void testGenerateCellStyleKey2() {
-		XConfigCriteria config = new XConfigCriteria();
-
+	public void checkNumericGenerateCellStyleKey() {
 		XlsElement element = XlsElementTestFactory.build("Title 2", "numeric", "", "0", "", false, "", "", 0);
+		XConfigCriteria config = new XConfigCriteria();
+
 		config.setElement(element);
 
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"),
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.generateCellStyleKey("", "thisMask"),
 				detectMaskToUse(element, "thisMask").concat(element.decorator()));
 	}
 
+	/**
+	 * Test if the key {@link CellStyle} is generated correctly at
+	 * {@link XConfigCriteria}
+	 * 
+	 * @param element
+	 */
 	@Test
-	public void testGenerateCellStyleKey3() {
-		XConfigCriteria config = new XConfigCriteria();
-
+	public void checkDoubleGenerateCellStyleKey() {
 		XlsElement element = XlsElementTestFactory.build("Title 3", "double", "", "", "0.00", false, "", "", 0);
+		XConfigCriteria config = new XConfigCriteria();
+
 		config.setElement(element);
 
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"),
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.generateCellStyleKey("", "thisMask"),
 				detectMaskToUse(element, "thisMask").concat(element.decorator()));
 	}
 
+	/**
+	 * Test if the key {@link CellStyle} is generated correctly at
+	 * {@link XConfigCriteria}
+	 * 
+	 * @param element
+	 */
 	@Test
-	public void testGenerateCellStyleKey4() {
+	public void checkBooleanGenerateCellStyleKey() {
+		XlsElement element = XlsElementTestFactory.build("Title 4", "boolean", "", "", "", false, "", "", 0);
 		XConfigCriteria config = new XConfigCriteria();
 
-		XlsElement element = XlsElementTestFactory.build("Title 4", "boolean", "", "", "", false, "", "", 0);
 		config.setElement(element);
 
-		Assert.assertNotNull(element);
-		Assert.assertNotNull(config);
-		Assert.assertEquals(config.generateCellStyleKey("", "thisMask"),
+		assertNotNull(element);
+		assertNotNull(config);
+		assertEquals(config.generateCellStyleKey("", "thisMask"),
 				detectMaskToUse(element, "thisMask").concat(element.decorator()));
+	}
+
+	/**
+	 * Validate if the attribute startRow decrease one position
+	 */
+	@Test
+	public void checkStartRow() {
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setStartRow(1);
+		assertEquals(config.getStartRow(), 0);
+
+		config.setStartRow(5);
+		assertEquals(config.getStartRow(), 4);
+	}
+
+	/**
+	 * Validate if the attribute startRowInmutable assigned only the first time
+	 * and increase one position
+	 */
+	@Test
+	public void checkStartRowInmutable() {
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setStartRow(1);
+		assertEquals(config.getStartRowInmutable(), 2);
+
+		config.setStartRow(5);
+		assertEquals(config.getStartRowInmutable(), 2);
+	}
+
+	/**
+	 * Validate if the attribute startCell decrease one position
+	 */
+	@Test
+	public void checkStartCell() {
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setStartCell(6);
+		assertEquals(config.getStartCell(), 5);
+
+		config.setStartCell(3);
+		assertEquals(config.getStartCell(), 2);
+	}
+
+	/**
+	 * Validate if the attribute startCellInmutable assigned only the first time
+	 * and increase one position
+	 */
+	@Test
+	public void checkStartCellInmutable() {
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setStartCell(3);
+		assertEquals(config.getStartCellInmutable(), 4);
+
+		config.setStartCell(1);
+		assertEquals(config.getStartCellInmutable(), 4);
+	}
+
+	/**
+	 * Validate if the attribute lastCellIndex accept only greater values than
+	 * himself
+	 */
+	@Test
+	public void checkLastCellIndex() {
+		XConfigCriteria config = new XConfigCriteria();
+
+		config.setLastCellIndex(30);
+		assertEquals(config.getLastCellIndex(), 30);
+
+		config.setLastCellIndex(88);
+		assertEquals(config.getLastCellIndex(), 88);
+
+		config.setLastCellIndex(52);
+		assertEquals(config.getLastCellIndex(), 88);
+
+		config.setLastCellIndex(89);
+		assertEquals(config.getLastCellIndex(), 89);
 	}
 
 	/* Test complete */
@@ -836,7 +1004,7 @@ public class ConfigCriteriaTest {
 	 * annotation at the element {@link ObjectConfigurable}
 	 */
 	@Test
-	public void testMarshalOverrideHeader() throws Exception {
+	public void checkMarshalOverrideHeader() throws Exception {
 		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
 
 		IEngine en = new Engine();
@@ -848,26 +1016,20 @@ public class ConfigCriteriaTest {
 		configurationHeader.setDecoratorName("header");
 		configurationHeader.setAlignment(CellStyle.ALIGN_CENTER);
 		configurationHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-
 		configurationHeader.setBorder(CellStyle.BORDER_THIN);
-
 		configurationHeader.setForegroundColor(HSSFColor.BLUE.index);
 		configurationHeader.setFontBold(true);
 		configurationHeader.setFontItalic(true);
 		configurationHeader.setWrapText(true);
-		// en.overrideHeaderCellDecorator(configurationHeader);
 		configCriteria.overrideHeaderCellDecorator(configurationHeader);
 
 		CellDecorator dateDecorator = new CellDecorator();
 		dateDecorator.setDecoratorName("anotherDate");
 		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
 		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-
 		dateDecorator.setForegroundColor(HSSFColor.RED.index);
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
-
-		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
 		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
 
 		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
@@ -879,22 +1041,21 @@ public class ConfigCriteriaTest {
 	 * the moment of unmarshal.
 	 */
 	@Test
-	public void testUnmarshalOverrideHeader() throws Exception {
+	public void checkUnmarshalOverrideHeader() throws Exception {
 		ObjectConfigurable oc = new ObjectConfigurable();
 
 		Engine en = new Engine();
-
 		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
 
 		ObjectConfigurableBuilder.validateObjectConfigurable(oc);
 	}
 
 	/**
-	 * Test the override the header {@link CellDecorator} specified by
-	 * annotation at the element {@link ObjectConfigurable}
+	 * Test the add specific {@link CellDecorator} specified by
+	 * {@link XConfigCriteria} at the element {@link ObjectConfigurable}
 	 */
 	@Test
-	public void testMarshalHeaderAnnotated() throws Exception {
+	public void checkMarshalHeaderAnnotated() throws Exception {
 		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
 
 		IEngine en = new Engine();
@@ -905,28 +1066,24 @@ public class ConfigCriteriaTest {
 		dateDecorator.setDecoratorName("anotherDate");
 		dateDecorator.setAlignment(CellStyle.ALIGN_CENTER);
 		dateDecorator.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-
 		dateDecorator.setForegroundColor(HSSFColor.RED.index);
 		dateDecorator.setFontItalic(true);
 		dateDecorator.setWrapText(true);
-
-		// en.addSpecificCellDecorator("anotherDate", dateDecorator);
 		configCriteria.addSpecificCellDecorator("anotherDate", dateDecorator);
 
 		en.marshalAndSave(configCriteria, oc, TestUtils.WORKING_DIR_GENERATED_II);
 	}
 
 	/**
-	 * Test if the override of the header {@link CellDecorator} specified by
-	 * annotation at the element {@link ObjectConfigurable} cause any damage at
-	 * the moment of unmarshal.
+	 * Test the add specific {@link CellDecorator} {@link CellDecorator}
+	 * specified by {@link XConfigCriteria} at the element
+	 * {@link ObjectConfigurable} cause any damage at the moment of unmarshal.
 	 */
 	@Test
-	public void testUnmarshalHeaderAnnotated() throws Exception {
+	public void checkUnmarshalHeaderAnnotated() throws Exception {
 		ObjectConfigurable oc = new ObjectConfigurable();
 
 		Engine en = new Engine();
-
 		en.unmarshalFromPath(oc, TestUtils.WORKING_DIR_GENERATED_I + "\\");
 
 		ObjectConfigurableBuilder.validateObjectConfigurable(oc);

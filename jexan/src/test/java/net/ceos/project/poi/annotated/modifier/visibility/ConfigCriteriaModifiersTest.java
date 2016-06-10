@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ceos.project.poi.annotated.annotation.visibility;
+package net.ceos.project.poi.annotated.modifier.visibility;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.core.CellDecorator;
+import net.ceos.project.poi.annotated.core.CConfigCriteria;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
 
 /**
  * Validate the number of public modifiers declared as fields or methods.
@@ -40,7 +41,7 @@ import net.ceos.project.poi.annotated.core.CellDecorator;
  * @version 1.0
  * @author Carlos CRISTO ABREU
  */
-public class CellDecoratorModifiersTest {
+public class ConfigCriteriaModifiersTest {
 
 	/* number of methods to ignore */
 	private int defaultMethods = 9;
@@ -49,16 +50,31 @@ public class CellDecoratorModifiersTest {
 	 * Validate the access level modifiers at the fields
 	 */
 	@Test
-	public void checkAccessLevelModifiersFields() {
-		assertEquals(new CellDecorator().getClass().getFields().length, 0);
+	public void checkAccessLevelModifiersFieldsXConfigCriteria() {
+		assertEquals(new XConfigCriteria().getClass().getFields().length, 0);
+	}
+
+	/**
+	 * Validate the access level modifiers at the fields
+	 */
+	@Test
+	public void checkAccessLevelModifiersFieldsCConfigCriteria() {
+		assertEquals(new CConfigCriteria().getClass().getFields().length, 0);
 	}
 
 	/**
 	 * Validate the access level modifiers at the methods
 	 */
 	@Test
-	public void checkAccessLevelModifiersMethods() {
-		assertEquals(new CellDecorator().getClass().getMethods().length - defaultMethods, 34);
+	public void checkAccessLevelModifiersMethodsXConfigCriteria() {
+		assertEquals(new XConfigCriteria().getClass().getMethods().length - defaultMethods, 10);
 	}
 
+	/**
+	 * Validate the access level modifiers at the methods
+	 */
+	@Test
+	public void checkAccessLevelModifiersMethodsCConfigCriteria() {
+		assertEquals(new CConfigCriteria().getClass().getMethods().length - defaultMethods, 3);
+	}
 }

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.bean.XMenFactory;
+import net.ceos.project.poi.annotated.bean.factory.XMenFactory;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 /**

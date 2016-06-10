@@ -17,11 +17,11 @@ package net.ceos.project.poi.annotated.exception;
 
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.bean.AvengersFactory;
-import net.ceos.project.poi.annotated.bean.AvengersFactory.SpiderWoman;
-import net.ceos.project.poi.annotated.bean.AvengersFactory.Thor;
 import net.ceos.project.poi.annotated.bean.BasicObject;
 import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.SpiderWoman;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Thor;
 import net.ceos.project.poi.annotated.core.CellDecorator;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;

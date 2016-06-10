@@ -19,12 +19,12 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.bean.FantasticFourFactory;
-import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory;
-import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Drax;
-import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Gamora;
-import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.Groot;
-import net.ceos.project.poi.annotated.bean.GuardiansOfTheGalaxyFactory.RocketRaccoon;
+import net.ceos.project.poi.annotated.bean.factory.FantasticFourFactory;
+import net.ceos.project.poi.annotated.bean.factory.GuardiansOfTheGalaxyFactory;
+import net.ceos.project.poi.annotated.bean.factory.GuardiansOfTheGalaxyFactory.Drax;
+import net.ceos.project.poi.annotated.bean.factory.GuardiansOfTheGalaxyFactory.Gamora;
+import net.ceos.project.poi.annotated.bean.factory.GuardiansOfTheGalaxyFactory.Groot;
+import net.ceos.project.poi.annotated.bean.factory.GuardiansOfTheGalaxyFactory.RocketRaccoon;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;

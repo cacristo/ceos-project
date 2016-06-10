@@ -17,8 +17,8 @@ package net.ceos.project.poi.annotated.exception;
 
 import org.junit.Test;
 
-import net.ceos.project.poi.annotated.bean.AvengersFactory;
-import net.ceos.project.poi.annotated.bean.AvengersFactory.Vision;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
+import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Vision;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
