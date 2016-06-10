@@ -39,7 +39,7 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
  * @version 2.0
  * @author Carlos CRISTO ABREU
  */
-public class PredicateFactory {
+class PredicateFactory {
 
 	/* Object annotations presents */
 	protected static final Predicate<Class<?>> isAnnotationXlsSheetPresent = object -> object.isAnnotationPresent(XlsSheet.class);
