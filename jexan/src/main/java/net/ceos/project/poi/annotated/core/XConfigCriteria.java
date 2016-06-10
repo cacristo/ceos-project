@@ -441,7 +441,7 @@ public class XConfigCriteria {
 	 * 
 	 * @return the fileName
 	 */
-	public String getFileName() {
+	protected String getFileName() {
 		return fileName;
 	}
 
@@ -587,7 +587,7 @@ public class XConfigCriteria {
 	/**
 	 * @return the freezePane
 	 */
-	public final XlsFreezePane getFreezePane() {
+	protected final XlsFreezePane getFreezePane() {
 		return freezePane;
 	}
 
@@ -595,14 +595,14 @@ public class XConfigCriteria {
 	 * @param freezePane
 	 *            the freezePane to set
 	 */
-	public final void setFreezePane(XlsFreezePane freezePane) {
+	protected final void setFreezePane(XlsFreezePane freezePane) {
 		this.freezePane = freezePane;
 	}
 
 	/**
 	 * @return the groupElement
 	 */
-	public final XlsGroupElement getGroupElement() {
+	protected final XlsGroupElement getGroupElement() {
 		return groupElement;
 	}
 
@@ -610,7 +610,7 @@ public class XConfigCriteria {
 	 * @param groupElement
 	 *            the groupElement to set
 	 */
-	public final void setGroupElement(XlsGroupElement groupElement) {
+	protected final void setGroupElement(XlsGroupElement groupElement) {
 		this.groupElement = groupElement;
 	}
 

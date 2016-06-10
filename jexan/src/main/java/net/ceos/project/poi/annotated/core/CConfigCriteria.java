@@ -57,7 +57,7 @@ public class CConfigCriteria {
 	 * @param fileName
 	 *            the fileName to set
 	 */
-	protected final void setFileName(String fileName) {
+	public final void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
 

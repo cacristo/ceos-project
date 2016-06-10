@@ -2066,12 +2066,6 @@ public class Engine implements IEngine {
 	}
 
 	@Override
-	public void marshalAsCollection(final Collection<?> collection) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public Collection<?> unmarshalToCollection(final XConfigCriteria configCriteria, final Object object,
 			String excelFilePath) throws WorkbookException {
 		// FileInputStream inputStream = new FileInputStream(new

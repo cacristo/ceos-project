@@ -15,10 +15,9 @@
  */
 package net.ceos.project.poi.annotated.annotation.visibility;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.core.CGen;
 import net.ceos.project.poi.annotated.core.Engine;
@@ -49,73 +48,57 @@ public class EngineModifiersTest {
 	/* number of methods to ignore */
 	private int defaultMethods = 9;
 
-	@DataProvider
-	public Object[][] objectModifiersFieldsProvider() throws Exception {
-		return new Object[][] {
-				/* Engine object & expected public fields */
-				{ new Engine(), 0 },
-				/* CGen object & expected public fields */
-				{ new CGen(), 0 } };
-	}
-
-	@DataProvider
-	public Object[][] objectModifiersMethodsProvider() throws Exception {
-		return new Object[][] {
-				/* Engine object & expected public methods */
-				{ new Engine(), 20 },
-				/* CGen object & expected public methods */
-				{ new CGen(), 8 } };
-	}
-
-	@DataProvider
-	public Object[][] objectModifiersMethodsInterfaceProvider() throws Exception {
-		return new Object[][] {
-				/* Engine object & expected public methods */
-				{ Engine.class, IEngine.class, 20 },
-				/* CGen object & expected public methods */
-				{ CGen.class, IGeneratorCSV.class, 8 } };
-	}
-
-	
-	
 	/**
 	 * Validate the access level modifiers at the fields
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public fields
 	 */
-	@Test(dataProvider = "objectModifiersFieldsProvider")
-	public void checkAccessLevelModifiersFields(Object object, int expectedValue) {
-		assertEquals(object.getClass().getFields().length, expectedValue);
+	@Test
+	public void checkAccessLevelModifiersFieldsEngine() {
+		assertEquals(new Engine().getClass().getFields().length, 0);
+	}
+
+	/**
+	 * Validate the access level modifiers at the fields
+	 */
+	@Test
+	public void checkAccessLevelModifiersFieldsCGen() {
+		assertEquals(new CGen().getClass().getFields().length, 0);
 	}
 
 	/**
 	 * Validate the access level modifiers at the methods
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public methods
 	 */
-	@Test(dataProvider = "objectModifiersMethodsProvider")
-	public void checkAccessLevelModifiersMethods(Object object, int expectedValue) {
-		assertEquals(object.getClass().getMethods().length - defaultMethods, expectedValue);
+	@Test
+	public void checkAccessLevelModifiersMethodsEngine() {
+		assertEquals(new Engine().getClass().getMethods().length - defaultMethods, 20);
 	}
 
 	/**
 	 * Validate the access level modifiers at the methods
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public methods
 	 */
-	@SuppressWarnings("rawtypes")
-	@Test(dataProvider = "objectModifiersMethodsInterfaceProvider")
-	public void checkModifiersMethodsInterfaces(Class objClass, Class objInterface, int expectedValue) {
-		assertEquals(objClass.getMethods().length - defaultMethods, expectedValue);
-		assertEquals(objInterface.getDeclaredMethods().length, expectedValue);
+	@Test
+	public void checkAccessLevelModifiersMethodsCGen() {
+		assertEquals(new CGen().getClass().getMethods().length - defaultMethods, 8);
+	}
+
+	/**
+	 * Validate the access level modifiers at the methods
+	 */
+	@Test
+	public void checkModifiersMethodsInterfacesEngine() {
+		Class<?> objClass = Engine.class;
+		Class<?> objInterface = IEngine.class;
+		assertEquals(objClass.getMethods().length - defaultMethods, 20);
+		assertEquals(objInterface.getDeclaredMethods().length, 20);
+	}
+
+	/**
+	 * Validate the access level modifiers at the methods
+	 */
+	@Test
+	public void checkModifiersMethodsInterfacesCGen() {
+		Class<?> objClass = CGen.class;
+		Class<?> objInterface = IGeneratorCSV.class;
+		assertEquals(objClass.getMethods().length - defaultMethods, 8);
+		assertEquals(objInterface.getDeclaredMethods().length, 8);
 	}
 }

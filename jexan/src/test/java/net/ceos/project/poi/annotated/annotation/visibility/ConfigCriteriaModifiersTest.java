@@ -15,10 +15,9 @@
  */
 package net.ceos.project.poi.annotated.annotation.visibility;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.core.CConfigCriteria;
 import net.ceos.project.poi.annotated.core.XConfigCriteria;
@@ -47,48 +46,35 @@ public class ConfigCriteriaModifiersTest {
 	/* number of methods to ignore */
 	private int defaultMethods = 9;
 
-	@DataProvider
-	public Object[][] objectModifiersFieldsProvider() throws Exception {
-		return new Object[][] {
-				/* XConfigCriteria object & expected public fields */
-				{ new XConfigCriteria(), 0 },
-				/* CConfigCriteria object & expected public fields */
-				{ new CConfigCriteria(), 0 } };
-	}
-
-	@DataProvider
-	public Object[][] objectModifiersMethodsProvider() throws Exception {
-		return new Object[][] {
-				/* XConfigCriteria object & expected public methods */
-				{ new XConfigCriteria(), 10 },
-				/* CConfigCriteria object & expected public methods */
-				{ new CConfigCriteria(), 3 } };
+	/**
+	 * Validate the access level modifiers at the fields
+	 */
+	@Test
+	public void checkAccessLevelModifiersFieldsXConfigCriteria() {
+		assertEquals(new XConfigCriteria().getClass().getFields().length, 0);
 	}
 
 	/**
 	 * Validate the access level modifiers at the fields
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public fields
 	 */
-	@Test(dataProvider = "objectModifiersFieldsProvider")
-	public void checkAccessLevelModifiersFields(Object object, int expectedValue) {
-		assertEquals(object.getClass().getFields().length, expectedValue);
+	@Test
+	public void checkAccessLevelModifiersFieldsCConfigCriteria() {
+		assertEquals(new CConfigCriteria().getClass().getFields().length, 0);
 	}
 
 	/**
 	 * Validate the access level modifiers at the methods
-	 * 
-	 * @param object
-	 *            the object to validate
-	 * @param expectedValue
-	 *            the number of expected public methods
 	 */
-	@Test(dataProvider = "objectModifiersMethodsProvider")
-	public void checkAccessLevelModifiersMethods(Object object, int expectedValue) {
-		assertEquals(object.getClass().getMethods().length - defaultMethods, expectedValue);
+	@Test
+	public void checkAccessLevelModifiersMethodsXConfigCriteria() {
+		assertEquals(new XConfigCriteria().getClass().getMethods().length - defaultMethods, 10);
 	}
 
+	/**
+	 * Validate the access level modifiers at the methods
+	 */
+	@Test
+	public void checkAccessLevelModifiersMethodsCConfigCriteria() {
+		assertEquals(new CConfigCriteria().getClass().getMethods().length - defaultMethods, 3);
+	}
 }

@@ -15,9 +15,9 @@
  */
 package net.ceos.project.poi.annotated.annotation.visibility;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.core.CellDecorator;
 
