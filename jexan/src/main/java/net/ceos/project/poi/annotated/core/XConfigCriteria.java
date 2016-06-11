@@ -135,6 +135,16 @@ public class XConfigCriteria {
 	}
 
 	/**
+	 * Force the enumeration cell decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public final void overrideEnumCellDecorator(final CellDecorator decorator) {
+		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_ENUM, decorator);
+	}
+
+	/**
 	 * Add a new Cell Decorator for a specific use case.
 	 * 
 	 * @param decoratorName
