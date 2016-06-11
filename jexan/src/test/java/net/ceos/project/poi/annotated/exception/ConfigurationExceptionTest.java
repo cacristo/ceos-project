@@ -100,6 +100,21 @@ public class ConfigurationExceptionTest {
 	}
 
 	/**
+	 * Test a missing configuration exception at override the header
+	 * {@link CellDecorator}
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionGeneric() throws Exception {
+		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
+
+		XConfigCriteria generic = new XConfigCriteria();
+		generic.overrideGenericCellDecorator(null);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(generic, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
 	 * Test a missing configuration exception at override the numeric
 	 * {@link CellDecorator}
 	 */
@@ -142,6 +157,21 @@ public class ConfigurationExceptionTest {
 
 		IEngine en = new Engine();
 		en.marshalAndSave(date, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the date
+	 * {@link CellDecorator}
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testOverrideMissingExceptionEnum() throws Exception {
+		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
+
+		XConfigCriteria enumeration = new XConfigCriteria();
+		enumeration.overrideEnumCellDecorator(null);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(enumeration, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }
