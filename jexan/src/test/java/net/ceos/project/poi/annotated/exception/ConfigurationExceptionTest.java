@@ -43,6 +43,9 @@ public class ConfigurationExceptionTest {
 		XConfigCriteria header = new XConfigCriteria();
 		header.overrideHeaderCellDecorator(null);
 
+		XConfigCriteria generic = new XConfigCriteria();
+		generic.overrideGenericCellDecorator(null);
+
 		XConfigCriteria numeric = new XConfigCriteria();
 		numeric.overrideNumericCellDecorator(null);
 
@@ -52,7 +55,22 @@ public class ConfigurationExceptionTest {
 		XConfigCriteria date = new XConfigCriteria();
 		date.overrideDateCellDecorator(null);
 
-		return new Object[][] { { header }, { numeric }, { bool }, { date } };
+		XConfigCriteria enumeration = new XConfigCriteria();
+		enumeration.overrideEnumCellDecorator(null);
+
+		return new Object[][] {
+				/* ConfigCriteria override header CellStyle */
+				{ header },
+				/* ConfigCriteria override generic CellStyle */
+				{ generic },
+				/* ConfigCriteria override numeric CellStyle */
+				{ numeric },
+				/* ConfigCriteria override boolean CellStyle */
+				{ bool },
+				/* ConfigCriteria override date CellStyle */
+				{ date },
+				/* ConfigCriteria override enumeration CellStyle */
+				{ enumeration } };
 	}
 
 	/**
@@ -108,7 +126,7 @@ public class ConfigurationExceptionTest {
 	 * boolean or date {@link CellDecorator}
 	 */
 	@Test(dataProvider = "configCriteriaProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is missing. Review your configuration.")
-	public void testOverrideMissingException(XConfigCriteria configCriteria) throws Exception {
+	public void validateOverrideMissingException(XConfigCriteria configCriteria) throws Exception {
 		BasicObject missingConfig = BasicObjectBuilder.buildBasicObject();
 
 		IEngine en = new Engine();
