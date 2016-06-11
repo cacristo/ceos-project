@@ -656,6 +656,7 @@ public class CGen implements IGeneratorCSV {
 	 * @throws WorkbookException
 	 *             given when a not supported action.
 	 */
+	@SuppressWarnings("resource")
 	@Override
 	public void unmarshalFromPath(final CConfigCriteria configCriteria, final Object object, final String pathFile)
 			throws WorkbookException {

@@ -76,7 +76,7 @@ public class CascadeObjectBuilder {
 		toValidate.setJob(job);
 
 		BasicObject bo = BasicObjectBuilder.buildBasicObject();
-		List<BasicObject> boList = new ArrayList<>();
+		List<BasicObject> boList = new ArrayList<BasicObject>();
 		boList.add(bo);
 		boList.add(bo);
 		boList.add(bo);
@@ -86,7 +86,7 @@ public class CascadeObjectBuilder {
 		toValidate.setBasicObjectList(boList);
 		
 		ObjectConfigurable oc = ObjectConfigurableBuilder.buildObjectConfigurable();
-		ArrayList<ObjectConfigurable> ocList = new ArrayList<>();
+		ArrayList<ObjectConfigurable> ocList = new ArrayList<ObjectConfigurable>();
 		ocList.add(oc);
 		ocList.add(oc);
 		ocList.add(oc);
@@ -94,7 +94,7 @@ public class CascadeObjectBuilder {
 		toValidate.setObjectConfList(ocList);
 		
 		CascadeL1 l1 = CascadeL1Builder.buildCascadeL1();
-		ArrayList<CascadeL1> objectsList = new ArrayList<>();
+		ArrayList<CascadeL1> objectsList = new ArrayList<CascadeL1>();
 		objectsList.add(l1);
 		objectsList.add(l1);
 		
@@ -116,7 +116,7 @@ public class CascadeObjectBuilder {
 	 */
 	public static List<CascadeObject> buildListOfCascadeObject(int entryNumber) {
 
-		List<CascadeObject> returnList = new ArrayList<>();
+		List<CascadeObject> returnList = new ArrayList<CascadeObject>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildCascadeObject(RandomUtils.nextInt(1, entryNumber)));
 		}

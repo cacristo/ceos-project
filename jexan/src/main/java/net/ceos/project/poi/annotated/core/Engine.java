@@ -1597,7 +1597,7 @@ public class Engine implements IEngine {
 		marshalEngine(configCriteria, object);
 
 		/* Return the collection of Sheet generated */
-		List<Sheet> collection = new ArrayList<>();
+		List<Sheet> collection = new ArrayList<Sheet>();
 		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
 			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
 			collection.add(configCriteria.getWorkbook().getSheetAt(i));
@@ -1625,7 +1625,7 @@ public class Engine implements IEngine {
 		marshalEngine(configCriteria, object);
 
 		/* Return the collection of Sheet generated */
-		List<Sheet> collection = new ArrayList<>();
+		List<Sheet> collection = new ArrayList<Sheet>();
 		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
 			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
 			collection.add(configCriteria.getWorkbook().getSheetAt(i));
@@ -2110,7 +2110,7 @@ public class Engine implements IEngine {
 		int idxRow = configCriteria.getStartRow();
 		int idxCell = configCriteria.getStartCell();
 		Iterator<Row> iterator = s.iterator();
-		Collection<Object> collection = new ArrayList<>();
+		Collection<Object> collection = new ArrayList<Object>();
 		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
 			while (iterator.hasNext()) {
 				try {

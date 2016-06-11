@@ -83,7 +83,7 @@ public class CascadeL3Builder {
 	 */
 	public static List<CascadeL3> buildListOfCascadeL3(int entryNumber) {
 
-		List<CascadeL3> returnList = new ArrayList<>();
+		List<CascadeL3> returnList = new ArrayList<CascadeL3>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildCascadeL3(RandomUtils.nextInt(1, entryNumber)));
 		}

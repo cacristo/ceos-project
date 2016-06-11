@@ -72,7 +72,7 @@ public class CascadeL1Builder {
 		toValidate.setJob(job);
 
 		CascadeL2 l2 = CascadeL2Builder.buildCascadeL2();
-		ArrayList<CascadeL2> l2List = new ArrayList<>();
+		ArrayList<CascadeL2> l2List = new ArrayList<CascadeL2>();
 		l2List.add(l2);
 		l2List.add(l2);
 		l2List.add(l2);
@@ -93,7 +93,7 @@ public class CascadeL1Builder {
 	 */
 	public static List<CascadeL1> buildListOfCascadeL1(int entryNumber) {
 
-		List<CascadeL1> returnList = new ArrayList<>();
+		List<CascadeL1> returnList = new ArrayList<CascadeL1>();
 		for (int i = 0; i < entryNumber; i++) {
 			returnList.add(buildCascadeL1(RandomUtils.nextInt(1, entryNumber)));
 		}
