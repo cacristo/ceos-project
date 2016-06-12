@@ -64,6 +64,18 @@ public @interface XlsSheet {
 	int startCell() default 1;
 
 	/**
+	 * Define tab color of the sheet. Sets the value from HSSFColor:
+	 * <ul>
+	 * <li>HSSFColor.RED.index.
+	 * </ul>
+	 * <p>
+	 * By default is TRANSPARENT.
+	 * 
+	 * @return the tab color
+	 */
+	int tabColor() default -1;
+
+	/**
 	 * Define the coordinates of the freeze pane to apply at the sheet
 	 * 
 	 * @return the freeze pane to apply
