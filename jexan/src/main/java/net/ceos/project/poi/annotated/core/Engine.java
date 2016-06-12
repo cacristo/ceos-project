@@ -66,7 +66,8 @@ public class Engine implements IEngine {
 	 * @param object
 	 *            the object
 	 * @return the runtime class
-	 * @throws ElementException given when null object.
+	 * @throws ElementException
+	 *             given when null object.
 	 */
 	private Class<?> initializeRuntimeClass(final Object object) throws ElementException {
 		Class<?> oC = null;
@@ -89,7 +90,8 @@ public class Engine implements IEngine {
 	 * @param insideCollection
 	 *            true if this configuration is inside of one collection
 	 * @param excludeCascadeInit
-	 *            true if to exclude the initialization of the parameter cascade level
+	 *            true if to exclude the initialization of the parameter cascade
+	 *            level
 	 * @throws ConfigurationException
 	 *             given when basic configuration is missing.
 	 */
@@ -146,11 +148,12 @@ public class Engine implements IEngine {
 	 * @param annotation
 	 *            the {@link XlsSheet}
 	 */
-	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation, final boolean excludeCascadeInit) {
+	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation,
+			final boolean excludeCascadeInit) {
 		configCriteria.setTitleSheet(annotation.title());
 
 		configCriteria.setPropagation(annotation.propagation());
-		if(excludeCascadeInit){
+		if (excludeCascadeInit) {
 			configCriteria.setCascadeLevel(annotation.cascadeLevel());
 		}
 
@@ -277,16 +280,17 @@ public class Engine implements IEngine {
 	 * @param annotation
 	 *            the {@link XlsNestedHeader} annotation
 	 * @throws ConfigurationException
-	 *             given when conflict between NestedHeader and propagation type.
+	 *             given when conflict between NestedHeader and propagation
+	 *             type.
 	 */
 	private void isValidNestedHeaderConfiguration(final boolean isPH, final XlsNestedHeader annotation)
 			throws ConfigurationException {
 
 		if (isPH && annotation.startX() == annotation.endX()) {
-			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT_NESTED_HEADER.getMessage());
 
 		} else if (!isPH && annotation.startY() == annotation.endY()) {
-			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
+			throw new ConfigurationException(ExceptionMessage.CONFIGURATION_CONFLICT_NESTED_HEADER.getMessage());
 		}
 	}
 
@@ -313,6 +317,10 @@ public class Engine implements IEngine {
 		if (configCriteria.getField().isAnnotationPresent(XlsNestedHeader.class)) {
 			XlsNestedHeader annotation = (XlsNestedHeader) configCriteria.getField()
 					.getAnnotation(XlsNestedHeader.class);
+
+			/* validation of configuration */
+			isValidNestedHeaderConfiguration(isPH, annotation);
+
 			/* if row null is necessary to create it */
 			Row row = r;
 			if (row == null) {
@@ -323,9 +331,6 @@ public class Engine implements IEngine {
 					row = initializeRow(configCriteria.getSheet(), idxR);
 				}
 			}
-
-			/* validation of configuration */
-			isValidNestedHeaderConfiguration(isPH, annotation);
 
 			/* prepare position rows / cells */
 			int startRow;
@@ -620,6 +625,14 @@ public class Engine implements IEngine {
 		 */
 		if (configCriteria.getRow().getCell(idxC) != null) {
 			throw new ElementException(ExceptionMessage.ELEMENT_OVERWRITE_CELL.getMessage());
+		}
+
+		if (PropagationType.PROPAGATION_VERTICAL.equals(configCriteria.getPropagation())) {
+			if (ExtensionFileType.XLS.equals(configCriteria.getExtension()) && idxC > 255) {
+				throw new SheetException(ExceptionMessage.SHEET_INVALID_COLUMN_INDEX_XLS.getMessage());
+			} else if (ExtensionFileType.XLSX.equals(configCriteria.getExtension()) && idxC > 16383) {
+				throw new SheetException(ExceptionMessage.SHEET_INVALID_COLUMN_INDEX_XLSX.getMessage());
+			}
 		}
 
 		if (CellHandler.OBJECT_DATE.equals(fT.getName())) {
@@ -947,7 +960,7 @@ public class Engine implements IEngine {
 				/* validate the propagation type & formulas */
 				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
 						&& xlsAnnotation.formula().contains("idy")) {
-					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
+					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT_FORMULA.getMessage());
 				}
 
 				/* update annotation at ConfigCriteria */
@@ -1080,7 +1093,7 @@ public class Engine implements IEngine {
 				/* validate the propagation type & formulas */
 				if (xlsAnnotation.isFormula() && StringUtils.isNotBlank(xlsAnnotation.formula())
 						&& xlsAnnotation.formula().contains("idx")) {
-					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT.getMessage());
+					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT_FORMULA.getMessage());
 				}
 
 				/* update annotation at ConfigCriteria */
@@ -1540,10 +1553,10 @@ public class Engine implements IEngine {
 			int idxCell, Class<?> oC, int cL) throws WorkbookException {
 
 		/* validate cascade level */
-		if(!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, listObject)){
+		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, listObject)) {
 			return;
 		}
-		
+
 		int idxRow;
 		int indexCellCalculated = idxCell;
 
@@ -1597,10 +1610,10 @@ public class Engine implements IEngine {
 		marshalEngine(configCriteria, object);
 
 		/* Return the collection of Sheet generated */
-		List<Sheet> collection = new ArrayList<Sheet>();
-		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
-			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
-			collection.add(configCriteria.getWorkbook().getSheetAt(i));
+		List<Sheet> collection = new ArrayList<>();
+		if (configCriteria.getWorkbook().getNumberOfSheets() > 0) {
+			for (int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
+				collection.add(configCriteria.getWorkbook().getSheetAt(i));
 		} else {
 			return Collections.emptyList();
 		}
@@ -1620,15 +1633,16 @@ public class Engine implements IEngine {
 	 *             given when a not supported action.
 	 */
 	@Override
-	public Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object) throws WorkbookException {
+	public Collection<Sheet> marshalToSheet(final XConfigCriteria configCriteria, final Object object)
+			throws WorkbookException {
 		/* Generate the workbook based at the object passed as parameter */
 		marshalEngine(configCriteria, object);
 
 		/* Return the collection of Sheet generated */
-		List<Sheet> collection = new ArrayList<Sheet>();
-		if(configCriteria.getWorkbook().getNumberOfSheets() > 0){
-			for(int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
-			collection.add(configCriteria.getWorkbook().getSheetAt(i));
+		List<Sheet> collection = new ArrayList<>();
+		if (configCriteria.getWorkbook().getNumberOfSheets() > 0) {
+			for (int i = 0; i < configCriteria.getWorkbook().getNumberOfSheets(); i++)
+				collection.add(configCriteria.getWorkbook().getSheetAt(i));
 		} else {
 			return Collections.emptyList();
 		}

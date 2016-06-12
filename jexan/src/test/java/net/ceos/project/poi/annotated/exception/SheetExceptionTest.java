@@ -15,13 +15,20 @@
  */
 package net.ceos.project.poi.annotated.exception;
 
+import java.util.List;
+
 import org.junit.Test;
 
+import net.ceos.project.poi.annotated.bean.MultiTypeObject;
+import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Vision;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
+import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Test the {@link SheetException}
@@ -31,9 +38,9 @@ import net.ceos.project.poi.annotated.core.TestUtils;
  */
 public class SheetExceptionTest {
 
-
 	/**
-	 * Test a horizontal configuration exception conflict
+	 * Test a conflict between the PropagationType HORIZONTAL and the
+	 * configuration of the XlsNestedHeader
 	 */
 	@Test(expected = SheetException.class)
 	public void testXlsConflictXlsNestedHeaderHorizIncompatible() throws Exception {
@@ -42,7 +49,8 @@ public class SheetExceptionTest {
 	}
 
 	/**
-	 * Test a horizontal configuration exception conflict
+	 * Test a conflict between the PropagationType VERTICAL and the
+	 * configuration of the XlsNestedHeader
 	 */
 	@Test(expected = SheetException.class)
 	public void testXlsConflictXlsNestedHeaderVertiIncompatible() throws Exception {
@@ -70,5 +78,43 @@ public class SheetExceptionTest {
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test a sheet exception caused by invalid column index 256 when
+	 * <ul>
+	 * <li>PropagationType.PROPAGATION_VERTICAL
+	 * <li>ExtensionFileType.XLS
+	 * </ul>
+	 */
+	@Test(expected = SheetException.class)
+	public void limitationSheetVerticalListXlsException() throws Exception {
+		List<MultiTypeObject> so = MultiTypeObjectBuilder.buildListOfMultiTypeObject(260);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, so, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test a sheet exception caused by invalid column index 16384 when
+	 * <ul>
+	 * <li>PropagationType.PROPAGATION_VERTICAL
+	 * <li>ExtensionFileType.XLSX
+	 * </ul>
+	 */
+	@Test(expected = SheetException.class)
+	public void limitationSheetVerticalListXlsxException() throws Exception {
+		List<MultiTypeObject> so = MultiTypeObjectBuilder.buildListOfMultiTypeObject(16500);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, so, TestUtils.WORKING_DIR_GENERATED_II);
 	}
 }

@@ -274,7 +274,7 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsElement} with an invalid position
+	 * Object to test TODO available for test
 	 * <p>
 	 * Configuration :
 	 * <ul>
@@ -285,7 +285,7 @@ public class AvengersFactory {
 	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "XlsElement invalid position", startRow = 2)
-	@XlsConfiguration(nameFile = "ElementInvalidPosition")
+	@XlsConfiguration(nameFile = "AvengersInvalidPosition")
 	public class Falcon {
 
 		@XlsNestedHeader(title = "Main", startX = 1, endX = 3)
@@ -363,7 +363,7 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsFreeElement} at invalid position
+	 * Object to test TODO available for test
 	 * <p>
 	 * Configuration :
 	 * <ul>
@@ -374,7 +374,7 @@ public class AvengersFactory {
 	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "XlsFreeElement invalid position cell")
-	@XlsConfiguration(nameFile = "FreeElementInvalid")
+	@XlsConfiguration(nameFile = "AvengersInvalidPosition")
 	public class Hulk {
 		@XlsFreeElement(title = "Free String", row = 1, cell = 0)
 		private String freeString;
@@ -397,7 +397,7 @@ public class AvengersFactory {
 	}
 
 	/**
-	 * Object to test a {@link XlsFreeElement} at invalid position
+	 * Object to TODO available for test
 	 * <p>
 	 * Configuration :
 	 * <ul>
@@ -408,7 +408,7 @@ public class AvengersFactory {
 	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsSheet(title = "XlsFreeElement invalid position cell")
-	@XlsConfiguration(nameFile = "FreeElementInvalid")
+	@XlsConfiguration(nameFile = "AvengersInvalidPosition")
 	public class IronMan {
 		@XlsFreeElement(title = "Free String", row = 1, cell = 1)
 		private String freeString;

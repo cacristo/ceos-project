@@ -26,6 +26,8 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Hawkeye;
+import net.ceos.project.poi.annotated.bean.factory.FantasticFourDecoratorFactory;
+import net.ceos.project.poi.annotated.bean.factory.MarvelBadGuysFactory;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
@@ -152,6 +154,86 @@ public class ElementExceptionTest {
 	}
 
 	/**
+	 * Test marshal and save with a invalid position: PropagationType HORIZONTAL
+	 * and element entry with a invalid position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionHorizontalElementMarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(MarvelBadGuysFactory.instanceLoki(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test marshal and save with a invalid position PropagationType VERTICAL
+	 * and element entry with a invalid position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionVerticalElementMarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(MarvelBadGuysFactory.instanceRedSkull(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test marshal and save with a invalid position Free element entry with a
+	 * invalid cell position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionCellElementMarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(MarvelBadGuysFactory.instanceMystique(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test marshal and save with a invalid position Free element entry with a
+	 * invalid row position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionRowElementMarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(MarvelBadGuysFactory.instanceThanos(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test unmarshal and save with a invalid position PropagationType
+	 * HORIZONTAL and element entry with a invalid position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionHorizontalElementUnmarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.unmarshalFromPath(MarvelBadGuysFactory.instanceLoki(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test unmarshal and save with a invalid position PropagationType VERTICAL
+	 * and element entry with a invalid position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionVerticalElementUnmarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.unmarshalFromPath(MarvelBadGuysFactory.instanceRedSkull(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test unmarshal and save with a invalid position Free element entry with a
+	 * invalid cell position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionCellElementUnmarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.unmarshalFromPath(MarvelBadGuysFactory.instanceMystique(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test unmarshal and save with a invalid position Free element entry with a
+	 * invalid row position
+	 */
+	@Test(expected = ElementException.class)
+	public void invalidPositionElementUnmarshalException() throws Exception {
+		IEngine en = new Engine();
+		en.unmarshalFromPath(MarvelBadGuysFactory.instanceThanos(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
 	 * Test a horizontal configuration exception conflict
 	 */
 	@Test(expected = ElementException.class)
@@ -185,6 +267,87 @@ public class ElementExceptionTest {
 	public void testXlsConflictAnnotationVertical() throws Exception {
 		IEngine en = new Engine();
 		en.marshalAndSave(AvengersFactory.instanceBlackWidow(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @String which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorStringException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceMrFantastic(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Integer which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorIntegerException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceInvisibleWoman(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Double which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorDoubleException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceThing(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Date which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorDateException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceHumanTorch(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @BigDecimal which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorBigDecimalException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceAntMan(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Float which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorFloatException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceBlackPanther(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Boolean which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorBooleanException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceCrystal(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Long which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorLongException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceDrDoom(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/*
+	 * Test a comment rules @Object which does not exist a method
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationMissingDecoratorObjectException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceFlux(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }

@@ -29,6 +29,8 @@ public enum ExceptionMessage {
 	CONFIGURATION_CELLSTYLE_DUPLICATED("Cell style configuration is duplicated. Review your configuration."),
 	CONFIGURATION_DECORATOR_MISSING("There is one XlsDecorator missing. Review your configuration."),
 	CONFIGURATION_CONFLICT("Conflict at the configuration. Review your configuration."),
+	CONFIGURATION_CONFLICT_NESTED_HEADER("Conflict caused by the PropagationType and XlsNestedHeader orientation. Review your configuration."),
+	CONFIGURATION_CONFLICT_FORMULA("Conflict caused by the PropagationType and formula orientation. Review your configuration."),
 	/* declared messages of ConverterException */
 	CONVERTER_DEFAULT("Problem while convert the element."),
 	CONVERTER_STRING("Problem while convert the string element."),
@@ -50,6 +52,8 @@ public enum ExceptionMessage {
 	ELEMENT_CONFLICT_WITH_FREEELEMENT("Conflict with annotation of type @XlsElement and @XlsFreeElement. Only one annotation type is valid per attribute."),
 	/* declared messages of SheetException */
 	SHEET_CREATION_SHEET("Problem while creating the Sheet. Review your configuration."),
+	SHEET_INVALID_COLUMN_INDEX_XLS("Invalid column index (256). Allowable column range for XLS files is (0..255) or ('A'..'IV'). Review your configuration."),
+	SHEET_INVALID_COLUMN_INDEX_XLSX("Invalid column index (16384). Allowable column range for XLSX files is (0..16383) or ('A'..'XFD'). Review your configuration."),
 	/* declared messages of SheetException */
 	CUSTOMIZEDRULES_NO_SUCH_METHOD("The customized method entry does not exist. Review your configuration."),
 	CUSTOMIZEDRULES_NO_SUCH_COMMENT_METHOD("The method entry at commentRules does not exist or the return type is incorrect. Review your configuration.");
