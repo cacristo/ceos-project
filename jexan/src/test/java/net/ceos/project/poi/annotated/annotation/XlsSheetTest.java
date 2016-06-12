@@ -47,6 +47,7 @@ public class XlsSheetTest {
 			// add here the annotations attributes
 			assertEquals(xlsSheet.startRow(), 1);
 			assertEquals(xlsSheet.startCell(), 1);
+			assertEquals(xlsSheet.tabColor(), -1);
 			assertEquals(xlsSheet.freezePane().colSplit(), 0);
 			assertEquals(xlsSheet.freezePane().rowSplit(), 0);
 			assertEquals(xlsSheet.freezePane().leftMostColumn(), 0);
