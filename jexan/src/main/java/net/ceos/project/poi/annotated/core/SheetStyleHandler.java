@@ -37,9 +37,14 @@ class SheetStyleHandler {
 	 * @param configCriteria
 	 *            the {@link XConfigCriteria}
 	 */
-	protected static void applyTabColor(XConfigCriteria configCriteria, int colorIndex) {
-		if (configCriteria.getSheet() instanceof XSSFSheet) {
-			((XSSFSheet) configCriteria.getSheet()).setTabColor(colorIndex);
+	protected static void applyTabColor(XConfigCriteria configCriteria) {
+		if (configCriteria.getSheet() instanceof XSSFSheet
+				&& configCriteria.getTabColorSheet() != -1) {
+			// FIXME active the code when update POI version [change the return type at Annotation & XConfigCriteria]
+			//XSSFColor xColor = new XSSFColor();
+			//xColor.setARGBHex(configCriteria.getTabColorSheet());
+			//((XSSFSheet) configCriteria.getSheet()).setTabColor(xColor);
+			((XSSFSheet) configCriteria.getSheet()).setTabColor(configCriteria.getTabColorSheet());
 		}
 	}
 }

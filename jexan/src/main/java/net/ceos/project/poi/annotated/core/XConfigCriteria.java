@@ -49,6 +49,7 @@ public class XConfigCriteria {
 	private Workbook workbook;
 	private Sheet sheet;
 	private String titleSheet;
+	private int tabColorSheet;
 	private Row rowHeader;
 	private Row row;
 	private int startRow;
@@ -326,6 +327,21 @@ public class XConfigCriteria {
 	 */
 	protected void setTitleSheet(final String titleSheet) {
 		this.titleSheet = titleSheet;
+	}
+
+	/**
+	 * @return the tabColorSheet
+	 */
+	protected final int getTabColorSheet() {
+		return tabColorSheet;
+	}
+
+	/**
+	 * @param tabColorSheet
+	 *            the tabColorSheet to set
+	 */
+	protected final void setTabColorSheet(int tabColorSheet) {
+		this.tabColorSheet = tabColorSheet;
 	}
 
 	/**
