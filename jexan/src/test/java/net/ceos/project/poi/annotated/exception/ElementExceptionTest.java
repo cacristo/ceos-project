@@ -28,6 +28,8 @@ import net.ceos.project.poi.annotated.bean.MultiTypeObject;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Hawkeye;
+import net.ceos.project.poi.annotated.bean.factory.FantasticFourDecoratorFactory;
+import net.ceos.project.poi.annotated.bean.factory.MarvelBadGuysFactory;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
@@ -54,31 +56,96 @@ public class ElementExceptionTest {
 		SimpleObject so = null;
 		collection.add(so);
 
-		return new Object[][] { { collectionNull, "CollectionNull", ExtensionFileType.XLS },
+		return new Object[][] {
+				/* Null Collection */
+				{ collectionNull, "CollectionNull", ExtensionFileType.XLS },
+				/* Collection empty */
 				{ collectionEmpty, "CollectionEmpty", ExtensionFileType.XLS },
+				/* Collection with object empty */
 				{ collection, "CollectionWithObjectEmpty", ExtensionFileType.XLSX } };
 	}
 
 	@DataProvider
 	public Object[][] overwriteCellProvider() {
-		return new Object[][] { { AvengersFactory.instanceHankPym() }, { AvengersFactory.instanceLukeCage() } };
+		return new Object[][] {
+				/* XlsElement with 2 attributes at the same position */
+				{ AvengersFactory.instanceHankPym() },
+				/* XlsFreeElement with 2 attributes at the same position */
+				{ AvengersFactory.instanceLukeCage() } };
 	}
 
 	@DataProvider
 	public Object[][] invalidPositionProvider() {
-		return new Object[][] { { AvengersFactory.instanceFalcon() }, { AvengersFactory.instanceHulk() },
-				{ AvengersFactory.instanceIronMan() } };
+		return new Object[][] {
+				/*
+				 * PropagationType HORIZONTAL and element entry with a invalid
+				 * position
+				 */
+				{ MarvelBadGuysFactory.instanceLoki() },
+				/*
+				 * PropagationType VERTICAL and element entry with a invalid
+				 * position
+				 */
+				{ MarvelBadGuysFactory.instanceRedSkull() },
+				/* Free element entry with a invalid cell position */
+				{ MarvelBadGuysFactory.instanceMystique() },
+				/* Free element entry with a invalid row position */
+				{ MarvelBadGuysFactory.instanceThanos() } };
 	}
 
 	@DataProvider
 	public Object[][] xlsConflictFormulaProvider() {
-		return new Object[][] { { AvengersFactory.instanceCaptainAmerica() },
+		return new Object[][] {
+				/*
+				 * Conflict caused by the PropagationType HORIZONTAL and formula
+				 * orientation
+				 */
+				{ AvengersFactory.instanceCaptainAmerica() },
+				/*
+				 * Conflict caused by the PropagationType VERTICAL and formula
+				 * orientation
+				 */
 				{ AvengersFactory.instanceCaptainMarvel() } };
 	}
 
 	@DataProvider
 	public Object[][] xlsConflictAnnotationProvider() {
-		return new Object[][] { { AvengersFactory.instanceBlackPanther() }, { AvengersFactory.instanceBlackWidow() } };
+		return new Object[][] {
+				/*
+				 * (PropagationType HORIZONTAL) Conflict annotation type:
+				 * impossible to have XlsElement & XlsFreeElement at the same
+				 * attribute
+				 */
+				{ AvengersFactory.instanceBlackPanther() },
+				/*
+				 * (PropagationType VERTICAL) Conflict annotation type:
+				 * impossible to have XlsElement & XlsFreeElement at the same
+				 * attribute
+				 */
+				{ AvengersFactory.instanceBlackWidow() } };
+	}
+
+	@DataProvider
+	public Object[][] fantasticFourFactoryProvider() {
+		return new Object[][] {
+				/* Comment rules @String which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceMrFantastic() },
+				/* Comment rules @Integer which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceInvisibleWoman() },
+				/* Comment rules @Double which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceThing() },
+				/* Comment rules @Date which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceHumanTorch() },
+				/* Comment rules @BigDecimal which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceAntMan() },
+				/* Comment rules @Float which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceBlackPanther() },
+				/* Comment rules @Boolean which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceCrystal() },
+				/* Comment rules @Long which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceDrDoom() },
+				/* Comment rules @Object which does not exist a method */
+				{ FantasticFourDecoratorFactory.instanceFlux() } };
 	}
 
 	/**
@@ -147,27 +214,38 @@ public class ElementExceptionTest {
 	}
 
 	/**
+	 * Test marshal and save with a invalid position
 	 * <ul>
 	 * <li>Test a {@link XlsElement} trying write at invalid position
 	 * <li>Test a {@link XlsFreeElement} trying write at invalid cell position
 	 * <li>Test a {@link XlsFreeElement} trying write at invalid row position
 	 * </ul>
 	 */
-	// @Test(dataProvider = "invalidPositionProvider", expectedExceptions =
-	// ElementException.class, expectedExceptionsMessageRegExp = "The element
-	// entry has a invalid position, make sure you are setting a positive value
-	// and start at least by 1. Review your configuration.")
-	// public void testMarshalXlsElementInvalidPosition(Object object) throws
-	// Exception {
-	// IEngine en = new Engine();
-	// en.marshalToFileOutputStream(object);
-	// }
+	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
+	public void invalidPositionElementMarshalException(Object object) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(object, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test unmarshal and save with a invalid position
+	 * <ul>
+	 * <li>Test a {@link XlsElement} trying write at invalid position
+	 * <li>Test a {@link XlsFreeElement} trying write at invalid cell position
+	 * <li>Test a {@link XlsFreeElement} trying write at invalid row position
+	 * </ul>
+	 */
+	@Test(dataProvider = "invalidPositionProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "The element entry has a invalid position, make sure you are setting a positive value and start at least by 1. Review your configuration.")
+	public void invalidPositionElementUnmarshalException(Object object) throws Exception {
+		IEngine en = new Engine();
+		en.unmarshalFromPath(object, TestUtils.WORKING_DIR_GENERATED_I);
+	}
 
 	/**
 	 * Test a configuration conflict caused by the {@link PropagationType} and
 	 * formula orientation
 	 */
-	@Test(dataProvider = "xlsConflictFormulaProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict at the configuration. Review your configuration.")
+	@Test(dataProvider = "xlsConflictFormulaProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict caused by the PropagationType and formula orientation. Review your configuration.")
 	public void configurationConflictByPropagationFormulaElementException(Object incompatibleConfig) throws Exception {
 		IEngine en = new Engine();
 		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
@@ -182,4 +260,15 @@ public class ElementExceptionTest {
 		IEngine en = new Engine();
 		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
+
+	/**
+	 * Test a non-conflict annotation type: impossible to have
+	 * {@link XlsElement} & {@link XlsFreeElement} at the same attribute
+	 */
+	@Test(dataProvider = "fantasticFourFactoryProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "There is one XlsDecorator missing. Review your configuration.")
+	public void configurationMissingDecoratorElementException(Object incompatibleConfig) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
 }
