@@ -18,13 +18,15 @@ package net.ceos.project.poi.annotated.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.poi.hssf.util.HSSFColor;
+
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_HORIZONTAL)
+@XlsSheet(title = "Multiple type obj", propagation = PropagationType.PROPAGATION_HORIZONTAL, tabColor = HSSFColor.RED.index)
 @XlsConfiguration(nameFile = "MultipleTypeOfObjects", extensionFile = ExtensionFileType.XLSX)
 public class MultiTypeObject {
 

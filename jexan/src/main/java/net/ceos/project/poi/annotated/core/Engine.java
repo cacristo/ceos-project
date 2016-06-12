@@ -151,6 +151,7 @@ public class Engine implements IEngine {
 	private void initializeXlsSheet(final XConfigCriteria configCriteria, final XlsSheet annotation,
 			final boolean excludeCascadeInit) {
 		configCriteria.setTitleSheet(annotation.title());
+		configCriteria.setTabColorSheet(annotation.tabColor());
 
 		configCriteria.setPropagation(annotation.propagation());
 		if (excludeCascadeInit) {
@@ -1465,8 +1466,8 @@ public class Engine implements IEngine {
 		/* apply the elements as group */
 		SheetGroupElementHandler.applyGroupElements(configCriteria);
 
-		/* TODO apply background color to sheet tab */
-		SheetStyleHandler.applyTabColor(configCriteria, 3);
+		/* apply background color to sheet tab */
+		SheetStyleHandler.applyTabColor(configCriteria);
 
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
@@ -1547,6 +1548,9 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC, 0);
+
+		/* apply background color to sheet tab */
+		SheetStyleHandler.applyTabColor(configCriteria);
 	}
 
 	private void marshallCollectionEngineT(final XConfigCriteria configCriteria, final Collection<?> listObject,
