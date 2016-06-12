@@ -64,6 +64,7 @@ class PredicateFactory {
 
 	/* Propagation file validation */
 	protected static final Predicate<PropagationType> isPropagationHorizontal = PropagationType.PROPAGATION_HORIZONTAL::equals;
+	protected static final Predicate<PropagationType> isPropagationVertical = PropagationType.PROPAGATION_VERTICAL::equals;
 	
 	/* XlsNestedHeader validations */
 	protected static final Predicate<XlsNestedHeader> isNestedHeaderIdenticalHorizontalConfiguration = nestedHeader -> nestedHeader.startX() == nestedHeader.endX();

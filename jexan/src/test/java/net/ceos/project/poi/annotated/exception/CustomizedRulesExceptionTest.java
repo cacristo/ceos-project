@@ -40,11 +40,25 @@ public class CustomizedRulesExceptionTest {
 
 	@DataProvider
 	public Object[][] fantasticFourFactoryProvider() {
-		return new Object[][] { { FantasticFourFactory.instanceMrFantastic() },
-				{ FantasticFourFactory.instanceInvisibleWoman() }, { FantasticFourFactory.instanceThing() },
-				{ FantasticFourFactory.instanceHumanTorch() }, { FantasticFourFactory.instanceAntMan() },
-				{ FantasticFourFactory.instanceBlackPanther() }, { FantasticFourFactory.instanceCrystal() },
-				{ FantasticFourFactory.instanceDrDoom() }, { FantasticFourFactory.instanceFlux() } };
+		return new Object[][] {
+				/* Comment rules @String which does not exist a method */
+				{ FantasticFourFactory.instanceMrFantastic() },
+				/* Comment rules @Integer which does not exist a method */
+				{ FantasticFourFactory.instanceInvisibleWoman() },
+				/* Comment rules @Double which does not exist a method */
+				{ FantasticFourFactory.instanceThing() },
+				/* Comment rules @Date which does not exist a method */
+				{ FantasticFourFactory.instanceHumanTorch() },
+				/* Comment rules @BigDecimal which does not exist a method */
+				{ FantasticFourFactory.instanceAntMan() },
+				/* Comment rules @Float which does not exist a method */
+				{ FantasticFourFactory.instanceBlackPanther() },
+				/* Comment rules @Boolean which does not exist a method */
+				{ FantasticFourFactory.instanceCrystal() },
+				/* Comment rules @Long which does not exist a method */
+				{ FantasticFourFactory.instanceDrDoom() },
+				/* Comment rules @Object which does not exist a method */
+				{ FantasticFourFactory.instanceFlux() } };
 	}
 
 	/**

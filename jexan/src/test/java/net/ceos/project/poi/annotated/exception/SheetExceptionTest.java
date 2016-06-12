@@ -15,15 +15,21 @@
  */
 package net.ceos.project.poi.annotated.exception;
 
+import java.util.List;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
+import net.ceos.project.poi.annotated.bean.MultiTypeObject;
+import net.ceos.project.poi.annotated.bean.MultiTypeObjectBuilder;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Vision;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
+import net.ceos.project.poi.annotated.core.XConfigCriteria;
+import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
@@ -36,7 +42,17 @@ public class SheetExceptionTest {
 
 	@DataProvider
 	public Object[][] xlsConflictConfigurationProvider() {
-		return new Object[][] { { AvengersFactory.instanceQuicksilver() }, { AvengersFactory.instanceScarletWitch() } };
+		return new Object[][] {
+				/*
+				 * Conflict between the PropagationType HORIZONTAL and the
+				 * configuration of the XlsNestedHeader
+				 */
+				{ AvengersFactory.instanceQuicksilver() },
+				/*
+				 * Conflict between the PropagationType VERTICAL and the
+				 * configuration of the XlsNestedHeader
+				 */
+				{ AvengersFactory.instanceScarletWitch() } };
 	}
 
 	/**
@@ -69,5 +85,43 @@ public class SheetExceptionTest {
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(emptyTitle, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test a sheet exception caused by invalid column index 256 when
+	 * <ul>
+	 * <li>PropagationType.PROPAGATION_VERTICAL
+	 * <li>ExtensionFileType.XLS
+	 * </ul>
+	 */
+	@Test(expectedExceptions = SheetException.class, expectedExceptionsMessageRegExp = "Invalid column index \\(256\\). Allowable column range for XLS files is \\(0..255\\) or \\('A'..'IV'\\). Review your configuration.")
+	public void limitationSheetVerticalListXlsException() throws Exception {
+		List<MultiTypeObject> so = MultiTypeObjectBuilder.buildListOfMultiTypeObject(260);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
+
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, so, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test a sheet exception caused by invalid column index 16384 when
+	 * <ul>
+	 * <li>PropagationType.PROPAGATION_VERTICAL
+	 * <li>ExtensionFileType.XLSX
+	 * </ul>
+	 */
+	@Test(expectedExceptions = SheetException.class, expectedExceptionsMessageRegExp = "Invalid column index \\(16384\\). Allowable column range for XLSX files is \\(0..16383\\) or \\('A'..'XFD'\\). Review your configuration.")
+	public void limitationSheetVerticalListXlsxException() throws Exception {
+		List<MultiTypeObject> so = MultiTypeObjectBuilder.buildListOfMultiTypeObject(16500);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+		configCriteria.overrideExtensionType(ExtensionFileType.XLSX);
+
+		IEngine en = new Engine();
+		en.marshalAsCollectionAndSave(configCriteria, so, TestUtils.WORKING_DIR_GENERATED_II);
 	}
 }

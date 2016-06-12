@@ -91,6 +91,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideHeaderCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_HEADER);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_HEADER, decorator);
 	}
 
@@ -101,6 +104,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideGenericCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_GENERIC);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC, decorator);
 	}
 
@@ -111,6 +117,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideNumericCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_NUMERIC);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC, decorator);
 	}
 
@@ -121,6 +130,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideBooleanCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_BOOLEAN);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN, decorator);
 	}
 
@@ -131,6 +143,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideDateCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_DATE);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_DATE, decorator);
 	}
 
@@ -141,6 +156,9 @@ public class XConfigCriteria {
 	 *            the {@link CellDecorator} to apply
 	 */
 	public final void overrideEnumCellDecorator(final CellDecorator decorator) {
+		if (decorator != null) {
+			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_ENUM);
+		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_ENUM, decorator);
 	}
 

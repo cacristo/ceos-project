@@ -481,12 +481,12 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
-			/* apply the style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
 		}
+
+		/* apply the style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_GENERIC, null);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -518,13 +518,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_INTEGER);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -556,13 +556,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_INTEGER);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -594,13 +594,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_INTEGER);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_INTEGER);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -632,13 +632,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.doubleHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_DOUBLE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -670,13 +670,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.bigDecimalHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_DOUBLE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -708,13 +708,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.dateHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
-					CellStyleHandler.MASK_DECORATOR_DATE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.MASK_DECORATOR_DATE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -746,13 +746,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.localDateHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
-					CellStyleHandler.MASK_DECORATOR_DATE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATE.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.MASK_DECORATOR_DATE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -784,13 +784,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.localDateTimeHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
-					CellStyleHandler.MASK_DECORATOR_DATE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_LOCALDATETIME.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_DATE,
+				CellStyleHandler.MASK_DECORATOR_DATE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -822,13 +822,13 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.genericHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					CellStyleHandler.MASK_DECORATOR_DOUBLE);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_NUMERIC,
+				CellStyleHandler.MASK_DECORATOR_DOUBLE);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -861,12 +861,12 @@ public class CellHandler {
 			/* apply the formula, if exist, otherwise apply the value */
 			CellFormulaHandler.booleanHandler(configCriteria, object, cell);
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_BOOLEAN.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_BOOLEAN, null);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);
@@ -908,12 +908,12 @@ public class CellHandler {
 				cell.setCellValue((String) objEnum.toString());
 			}
 
-			/* apply cell style */
-			CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_ENUM, null);
-
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_ENUM.getMessage(), e);
 		}
+
+		/* apply cell style */
+		CellStyleHandler.applyCellStyle(configCriteria, cell, CellStyleHandler.CELL_DECORATOR_ENUM, null);
 
 		/* apply the comment */
 		CellCommentHandler.applyComment(configCriteria, object, cell);

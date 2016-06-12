@@ -23,11 +23,14 @@ import net.ceos.project.poi.annotated.bean.BasicObjectBuilder;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.SpiderWoman;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Thor;
+import net.ceos.project.poi.annotated.bean.factory.FantasticFourDecoratorFactory;
+import net.ceos.project.poi.annotated.bean.factory.MarvelBadGuysFactory;
 import net.ceos.project.poi.annotated.core.CellDecorator;
 import net.ceos.project.poi.annotated.core.Engine;
 import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
 import net.ceos.project.poi.annotated.core.XConfigCriteria;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Test the {@link ConfigurationException}
@@ -71,6 +74,21 @@ public class ConfigurationExceptionTest {
 				{ date },
 				/* ConfigCriteria override enumeration CellStyle */
 				{ enumeration } };
+	}
+
+	@DataProvider
+	public Object[][] xlsConflictNestedHeaderProvider() {
+		return new Object[][] {
+				/*
+				 * Conflict caused by the PropagationType HORIZONTAL and XlsNestedHeader
+				 * orientation
+				 */
+				{ MarvelBadGuysFactory.instanceUltron() },
+				/*
+				 * Conflict caused by the PropagationType VERTICAL and XlsNestedHeader
+				 * orientation
+				 */
+				{ MarvelBadGuysFactory.instanceGreenGoblin() } };
 	}
 
 	/**
@@ -131,6 +149,26 @@ public class ConfigurationExceptionTest {
 
 		IEngine en = new Engine();
 		en.marshalAndSave(configCriteria, missingConfig, TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a missing configuration exception at override the header, numeric,
+	 * boolean or date {@link CellDecorator}
+	 */
+	@Test(expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Cell style configuration is duplicated. Review your configuration.")
+	public void validateDuplicateDecoratorException() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(FantasticFourDecoratorFactory.instanceDuplicate(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a configuration conflict caused by the {@link PropagationType} and
+	 * {@link XlsNestedheader}
+	 */
+	@Test(dataProvider = "xlsConflictNestedHeaderProvider", expectedExceptions = ConfigurationException.class, expectedExceptionsMessageRegExp = "Conflict caused by the PropagationType and XlsNestedHeader orientation. Review your configuration.")
+	public void configurationConflictByPropagationNestedHeaderException(Object incompatibleConfig) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }
