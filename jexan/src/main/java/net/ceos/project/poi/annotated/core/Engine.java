@@ -1612,6 +1612,9 @@ public class Engine implements IEngine {
 
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
+
+		/* re-evaluate formulas with POI's FormulaEvaluator  */
+		configCriteria.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
 	}
 
 	/**

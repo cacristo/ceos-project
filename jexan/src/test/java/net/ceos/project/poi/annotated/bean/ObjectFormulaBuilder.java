@@ -96,9 +96,27 @@ public class ObjectFormulaBuilder {
 		assertEquals(base.getValueLocal(), toValidate.getValueLocal());
 		assertEquals(base.getValueRegion(), toValidate.getValueRegion());
 		assertEquals(base.getValueCountry(), toValidate.getValueCountry());
-		// FIXME review how get formula result
-		 assertEquals(base.getSomeString(), toValidate.getSomeString());
+
+		// prepare simulation data
+		simulateFormulaResults(base);
+
+		assertEquals(base.getTotalValue(), toValidate.getTotalValue());
+		assertEquals(base.getTotalValueTax(), toValidate.getTotalValueTax());
+		assertEquals(base.getAvgValue(), toValidate.getAvgValue());
+		assertEquals(base.getSomeString(), toValidate.getSomeString());
+
 		// TODO add new validation below
+	}
+
+	/**
+	 * Prepare simulation data
+	 * 
+	 * @param base the object to generate the simulation values
+	 */
+	private static void simulateFormulaResults(ObjectFormula base) {
+		base.setTotalValue(base.getValueLocal() + base.getValueRegion() + base.getValueCountry());
+		base.setTotalValueTax(base.getTotalValue() * 1.21);
+		base.setAvgValue((base.getValueLocal() + base.getValueRegion() + base.getValueCountry()) / 3);
 	}
 
 }

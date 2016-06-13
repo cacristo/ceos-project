@@ -25,28 +25,28 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 public class ObjectFormula {
 
 	@XlsElement(title = "Store", position = 1)
-	private int store = 0;
+	private int store;
 	@XlsElement(title = "Online Store", position = 2)
-	private int webStore = 0;
+	private int webStore;
 
 	@XlsElement(title = "Local sales", position = 3)
-	private double valueLocal = 0;
+	private double valueLocal;
 	@XlsElement(title = "Regional sales", position = 4)
-	private double valueRegion = 0;
+	private double valueRegion;
 	@XlsElement(title = "Country sales", position = 5)
-	private double valueCountry = 0;
+	private double valueCountry;
 
 	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM(D2,E2,F2)", position = 6)
-	private double totalValue = 0;
+	private double totalValue;
 
 	@XlsElement(title = "Total Sales", isFormula = true, formula = "G2 * 1.21", position = 7)
-	private double totalValueTax = 0;
+	private Double totalValueTax;
 
 	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(D2,E2,F2)", position = 8)
-	private double avgValue = 0;
+	private double avgValue;
 
 	@XlsElement(title = "ROI", isFormula = true, position = 9)
-	private double generateValue = 0;
+	private double generateValue;
 
 	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(Didx < Eidx,\"Over Budget\", \"OK\")", position = 10)
 	private String someString;
