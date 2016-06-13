@@ -111,12 +111,14 @@ public class ObjectFormulaBuilder {
 	/**
 	 * Prepare simulation data
 	 * 
-	 * @param base the object to generate the simulation values
+	 * @param base
+	 *            the object to generate the simulation values
 	 */
 	private static void simulateFormulaResults(ObjectFormula base) {
 		base.setTotalValue(base.getValueLocal() + base.getValueRegion() + base.getValueCountry());
 		base.setTotalValueTax(base.getTotalValue() * 1.21);
 		base.setAvgValue((base.getValueLocal() + base.getValueRegion() + base.getValueCountry()) / 3);
+		base.setSomeString(base.getValueLocal() < base.getValueRegion() ? "Over Budget" : "OK");
 	}
 
 }

@@ -474,8 +474,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -511,8 +511,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -549,8 +549,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -587,8 +587,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -625,8 +625,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -663,8 +663,8 @@ public class CellHandler {
 			final Cell cell) throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -701,8 +701,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -739,8 +739,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -777,8 +777,8 @@ public class CellHandler {
 			final Cell cell) throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -815,8 +815,8 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
@@ -855,7 +855,7 @@ public class CellHandler {
 		boolean isUpdated = true;
 		try {
 			/* ignore treatment if object null */
-			if (configCriteria.getField().get(object) == null) {
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			/* apply the formula, if exist, otherwise apply the value */
