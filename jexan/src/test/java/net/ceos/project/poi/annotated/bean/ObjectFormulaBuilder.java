@@ -110,7 +110,8 @@ public class ObjectFormulaBuilder {
 	/**
 	 * Prepare simulation data
 	 * 
-	 * @param base the object to generate the simulation values
+	 * @param base
+	 *            the object to generate the simulation values
 	 */
 	private static void simulateFormulaResults(ObjectFormula base) {
 		base.setTotalValue(base.getValueLocal() + base.getValueRegion() + base.getValueCountry());

@@ -395,6 +395,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.stringHandler(configCriteria, object, cell);
 
@@ -428,6 +432,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.shortHandler(configCriteria, object, cell);
 
@@ -462,6 +470,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.integerHandler(configCriteria, object, cell);
 
@@ -496,6 +508,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.longHandler(configCriteria, object, cell);
 
@@ -530,6 +546,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.doubleHandler(configCriteria, object, cell);
 
@@ -564,6 +584,10 @@ public class CellHandler {
 			final Cell cell) throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.bigDecimalHandler(configCriteria, object, cell);
 
@@ -598,11 +622,13 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
-			if (configCriteria.getField().get(object) == null) {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
 				return isUpdated;
 			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.dateHandler(configCriteria, object, cell);
+
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
@@ -634,6 +660,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.floatHandler(configCriteria, object, cell);
 
@@ -669,6 +699,10 @@ public class CellHandler {
 			throws WorkbookException {
 		boolean isUpdated = true;
 		try {
+			/* ignore treatment if object null and is NOT a formula */
+			if (configCriteria.getField().get(object) == null && !configCriteria.getElement().isFormula()) {
+				return isUpdated;
+			}
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.booleanHandler(configCriteria, object, cell);
 
