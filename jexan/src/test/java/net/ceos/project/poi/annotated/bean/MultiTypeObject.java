@@ -319,6 +319,9 @@ public class MultiTypeObject {
 	 * @return the sumVal
 	 */
 	public Double formulaSumVal() {
+		if (doubleAttribute == null) {
+			return (double) 0;
+		}
 		return doubleAttribute + doubleAttribute * 5;
 	}
 
