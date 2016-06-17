@@ -18,8 +18,10 @@ package net.ceos.project.poi.annotated.core;
 import java.lang.reflect.Field;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 
+import net.ceos.project.poi.annotated.annotation.XlsConditionalFormat;
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
@@ -41,23 +43,26 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
  */
 class PredicateFactory {
 
+	private static final CharSequence numericSequence = "0123456789";
+
 	/* Object annotations presents */
 	protected static final Predicate<Class<?>> isAnnotationXlsSheetPresent = object -> object.isAnnotationPresent(XlsSheet.class);
 	protected static final Predicate<Class<?>> isAnnotationXlsElementPresent = object -> object.isAnnotationPresent(XlsElement.class);
 	protected static final Predicate<Class<?>> isAnnotationXlsDecoratorPresent = object -> object.isAnnotationPresent(XlsDecorator.class);
 	protected static final Predicate<Class<?>> isAnnotationXlsDecoratorsPresent = object -> object.isAnnotationPresent(XlsDecorators.class);
 	protected static final Predicate<Class<?>> isAnnotationXlsConfigurationPresent = object -> object.isAnnotationPresent(XlsConfiguration.class);
+	protected static final Predicate<Class<?>> isFieldAnnotationXlsConditionalFormatPresent = object -> object.isAnnotationPresent(XlsConditionalFormat.class);
 
 	/* Field annotations presents */
 	protected static final Predicate<Field> isFieldAnnotationXlsElementPresent = object -> object.isAnnotationPresent(XlsElement.class);
 	protected static final Predicate<Field> isFieldAnnotationXlsFreeElementPresent = object -> object.isAnnotationPresent(XlsFreeElement.class);
 	protected static final Predicate<Field> isFieldAnnotationXlsNestedHeaderPresent = object -> object.isAnnotationPresent(XlsNestedHeader.class);
-	
+
 	/* Element validations */
 	protected static final Predicate<XlsElement> isXlsElementInvalid = element -> element.position() < 1;
 	protected static final Predicate<XlsFreeElement> isXlsFreeElementInvalid = freeElement -> freeElement.row() < 1
 			|| freeElement.cell() < 1;
-	
+
 	/* Extension file validation */
 	protected static final Predicate<ExtensionFileType> isExtensionFileDefault = extensionType -> extensionType != null 
 			&& ExtensionFileType.XLS.getExtension().equals(extensionType.getExtension());
@@ -65,16 +70,16 @@ class PredicateFactory {
 	/* Propagation file validation */
 	protected static final Predicate<PropagationType> isPropagationHorizontal = PropagationType.PROPAGATION_HORIZONTAL::equals;
 	protected static final Predicate<PropagationType> isPropagationVertical = PropagationType.PROPAGATION_VERTICAL::equals;
-	
+
 	/* XlsNestedHeader validations */
 	protected static final Predicate<XlsNestedHeader> isNestedHeaderIdenticalHorizontalConfiguration = nestedHeader -> nestedHeader.startX() == nestedHeader.endX();
 	protected static final Predicate<XlsNestedHeader> isNestedHeaderIdenticalVerticalConfiguration = nestedHeader -> nestedHeader.startY() == nestedHeader.endY();
-	
+
 	/* XlsFreezePane validations */
 	protected static final Predicate<XlsFreezePane> isMandatoryFreezePaneValid = freezePane -> freezePane.colSplit() != -1 && freezePane.rowSplit() != -1;
 	protected static final Predicate<XlsFreezePane> isOptionalFieldsFreezePaneIgnored = freezePane -> freezePane.leftMostColumn() == 0 && freezePane.topRow() == 0;
 	protected static final Predicate<XlsFreezePane> isOptionalFieldsFreezePaneActived = freezePane -> freezePane.leftMostColumn() != 0 || freezePane.topRow() != 0;
-	
+
 	/* GroupElement validations */
 	protected static final Predicate<XlsGroupColumn> isGroupColumnValid = column -> column.fromColumn() != 0 || column.toColumn() != 0;
 	protected static final Predicate<XlsGroupRow> isGroupRowValid = row -> row.fromRow() != 0 || row.toRow() != 0;
@@ -82,6 +87,8 @@ class PredicateFactory {
 	/* Row validations */
 	protected static final Predicate<Row> isRowValid = row -> row != null;
 	
+	protected static final Predicate<String> isFalseAlphaNumericRangeAddress = templateRangeAddress -> StringUtils.isAlpha(templateRangeAddress) && !StringUtils.isNumeric(templateRangeAddress);
+	protected static final Predicate<String> isReadyRangeAddress = templateRangeAddress -> StringUtils.isAlphanumeric(templateRangeAddress) && !StringUtils.isNumeric(templateRangeAddress) && StringUtils.containsAny(templateRangeAddress, numericSequence);
 	
 	private PredicateFactory() {
 		/* private constructor to hide the implicit public */
