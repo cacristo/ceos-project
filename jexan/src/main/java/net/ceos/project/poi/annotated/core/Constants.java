@@ -31,6 +31,7 @@ class Constants {
 
 	protected static final String INDY = "idy";
 	protected static final String INDX = "idx";
+	protected static final String DOLLAR = "$";
 	protected static final String GET = "get";
 
 	protected static final String END_OF_LINE = "\r\n";

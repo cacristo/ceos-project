@@ -41,6 +41,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import net.ceos.project.poi.annotated.annotation.XlsConditionalFormat;
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
@@ -1466,6 +1467,11 @@ public class Engine implements IEngine {
 		/* apply the elements as group */
 		SheetGroupElementHandler.applyGroupElements(configCriteria);
 
+		if (oC.isAnnotationPresent(XlsConditionalFormat.class)) {
+			XlsConditionalFormat xlsAnnotation = (XlsConditionalFormat) oC.getAnnotation(XlsConditionalFormat.class);
+			ConditionalFormattingHandler.applyCondition(configCriteria, xlsAnnotation);
+		}
+
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);
 
@@ -1551,6 +1557,11 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC, 0);
+
+		if (oC.isAnnotationPresent(XlsConditionalFormat.class)) {
+			XlsConditionalFormat xlsAnnotation = (XlsConditionalFormat) oC.getAnnotation(XlsConditionalFormat.class);
+			ConditionalFormattingHandler.applyCondition(configCriteria, xlsAnnotation);
+		}
 
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);

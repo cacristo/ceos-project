@@ -28,6 +28,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.util.CellReference;
 
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 
 /**
@@ -329,13 +330,14 @@ class CellFormulaHandler {
 		boolean isFormulaApplied = false;
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
-			if (configCriteria.getElement().formula().contains(Constants.INDX)) {
-				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.INDX,
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())
+					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
+				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.DOLLAR,
 						String.valueOf(cell.getRowIndex() + 1)));
 				isFormulaApplied = true;
-
-			} else if (configCriteria.getElement().formula().contains(Constants.INDY)) {
-				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.INDY,
+			} else if (PropagationType.PROPAGATION_VERTICAL.equals(configCriteria.getPropagation())
+					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
+				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.DOLLAR,
 						String.valueOf(CellReference.convertNumToColString(cell.getColumnIndex()))));
 				isFormulaApplied = true;
 
