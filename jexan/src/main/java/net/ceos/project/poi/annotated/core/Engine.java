@@ -41,6 +41,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import net.ceos.project.poi.annotated.annotation.XlsConditionalFormat;
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
@@ -597,6 +598,9 @@ public class Engine implements IEngine {
 
 		} else {
 			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+
+			/* backup of the cell index */
+			configCriteria.setLastCellIndex(idxC);
 
 			if (!isAppliedObject && !fT.isPrimitive()) {
 				try {
@@ -1607,6 +1611,11 @@ public class Engine implements IEngine {
 		/* apply the elements as group */
 		SheetGroupElementHandler.applyGroupElements(configCriteria);
 
+		if (PredicateFactory.isFieldAnnotationXlsConditionalFormatPresent.test(oC)) {
+			XlsConditionalFormat xlsAnnotation = (XlsConditionalFormat) oC.getAnnotation(XlsConditionalFormat.class);
+			ConditionalFormattingHandler.applyCondition(configCriteria, xlsAnnotation);
+		}
+
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);
 
@@ -1692,6 +1701,11 @@ public class Engine implements IEngine {
 		configCriteria.initializeCellDecorator();
 
 		marshallCollectionEngineT(configCriteria, listObject, idxCell, oC, 0);
+
+		if (PredicateFactory.isFieldAnnotationXlsConditionalFormatPresent.test(oC)) {
+			XlsConditionalFormat xlsAnnotation = (XlsConditionalFormat) oC.getAnnotation(XlsConditionalFormat.class);
+			ConditionalFormattingHandler.applyCondition(configCriteria, xlsAnnotation);
+		}
 
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);

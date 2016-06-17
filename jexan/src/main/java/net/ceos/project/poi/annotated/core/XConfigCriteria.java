@@ -400,7 +400,6 @@ public class XConfigCriteria {
 	 */
 	protected int getStartRowInmutable() {
 		return startRowInmutable + 1;
-
 	}
 
 	/**
@@ -447,7 +446,6 @@ public class XConfigCriteria {
 	 */
 	protected final void setLastCellIndex(int lastCellIndex) {
 		this.lastCellIndex = lastCellIndex > this.lastCellIndex ? lastCellIndex : this.lastCellIndex;
-
 	}
 
 	/**

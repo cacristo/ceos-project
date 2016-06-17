@@ -22,7 +22,8 @@ package net.ceos.project.poi.annotated.definition;
  * <li><b>PropagationType.PROPAGATION_HORIZONTAL</b> Will propagate horizontally
  * all the elements.
  * <li><b>PropagationType.PROPAGATION_VERTICAL</b> Will propagate vertically all
- * the elements. Be aware the index cell range is (0..255)
+ * the elements. Be aware the index cell range is (0..255) for files .xls and
+ * (0..16383) for files .xlsx
  * </ul>
  * 
  * @version 1.0
