@@ -32,6 +32,7 @@ public enum ExceptionMessage {
 	CONFIGURATION_CONFLICT_NESTED_HEADER("Conflict caused by the PropagationType and XlsNestedHeader orientation. Review your configuration."),
 	CONFIGURATION_CONFLICT_FORMULA("Conflict caused by the PropagationType and formula orientation. Review your configuration."),
 	CONFIGURATION_CONFLICT_CONDITIONAL_FORMAT("Conflict caused by the PropagationType and the conditional format range address. Review your configuration."),
+	CONFIGURATION_CONFLICT_FORMULA_ORIENTATION("Conflict caused by the PropagationType and formula orientation. Review your configuration."),
 	/* declared messages of ConverterException */
 	CONVERTER_DEFAULT("Problem while convert the element."),
 	CONVERTER_STRING("Problem while convert the string element."),

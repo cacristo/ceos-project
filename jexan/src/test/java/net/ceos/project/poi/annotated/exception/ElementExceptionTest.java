@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Hawkeye;
@@ -94,18 +95,24 @@ public class ElementExceptionTest {
 	}
 
 	@DataProvider
-	public Object[][] xlsConflictFormulaProvider() {
+	public Object[][] xlsConflictPropagationFormulaProvider() {
+		XConfigCriteria overrideToVertical = new XConfigCriteria();
+		overrideToVertical.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+
+		XConfigCriteria overrideToHorizontal = new XConfigCriteria();
+		overrideToHorizontal.overridePropagationType(PropagationType.PROPAGATION_HORIZONTAL);
+
 		return new Object[][] {
 				/*
-				 * Conflict caused by the PropagationType HORIZONTAL and formula
-				 * orientation
-				 */
-				{ AvengersFactory.instanceCaptainAmerica() },
-				/*
 				 * Conflict caused by the PropagationType VERTICAL and formula
-				 * orientation
+				 * horizontal orientation
 				 */
-				{ AvengersFactory.instanceCaptainMarvel() } };
+				{ ObjectFormulaBuilder.buildObjectFormulaHorizontal(), overrideToVertical },
+				/*
+				 * Conflict caused by the PropagationType HORIZONTAL and and
+				 * formula vertical orientation
+				 */
+				{ ObjectFormulaBuilder.buildObjectFormulaVertical(), overrideToHorizontal } };
 	}
 
 	@DataProvider
@@ -245,10 +252,11 @@ public class ElementExceptionTest {
 	 * Test a configuration conflict caused by the {@link PropagationType} and
 	 * formula orientation
 	 */
-	@Test(dataProvider = "xlsConflictFormulaProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict caused by the PropagationType and formula orientation. Review your configuration.")
-	public void configurationConflictByPropagationFormulaElementException(Object incompatibleConfig) throws Exception {
+	@Test(dataProvider = "xlsConflictPropagationFormulaProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict caused by the PropagationType and formula orientation. Review your configuration.")
+	public void configurationConflictByPropagationFormulaException(Object formulaObj, XConfigCriteria configCriteria)
+			throws Exception {
 		IEngine en = new Engine();
-		en.marshalAndSave(incompatibleConfig, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(configCriteria, formulaObj, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
