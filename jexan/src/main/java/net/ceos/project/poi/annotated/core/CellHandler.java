@@ -31,6 +31,7 @@ import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.exception.ConverterException;
 import net.ceos.project.poi.annotated.exception.CustomizedRulesException;
+import net.ceos.project.poi.annotated.exception.ElementException;
 import net.ceos.project.poi.annotated.exception.WorkbookException;
 
 /**
@@ -402,6 +403,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.stringHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_STRING.getMessage(), e);
 		}
@@ -439,6 +442,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.shortHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_SHORT.getMessage(), e);
 		}
@@ -477,6 +482,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.integerHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_INTEGER.getMessage(), e);
 		}
@@ -515,6 +522,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.longHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_LONG.getMessage(), e);
 		}
@@ -553,6 +562,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.doubleHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_DOUBLE.getMessage(), e);
 		}
@@ -591,6 +602,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.bigDecimalHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_BIGDECIMAL.getMessage(), e);
 		}
@@ -667,6 +680,8 @@ public class CellHandler {
 			// apply the formula, if exist, otherwise apply the value
 			CellFormulaHandler.floatHandler(configCriteria, object, cell);
 
+		} catch (ElementException e) {
+			throw new ElementException(e.getMessage(), e);
 		} catch (Exception e) {
 			throw new ConverterException(ExceptionMessage.CONVERTER_FLOAT.getMessage(), e);
 		}

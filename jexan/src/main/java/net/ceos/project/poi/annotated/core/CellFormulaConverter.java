@@ -16,11 +16,13 @@
 package net.ceos.project.poi.annotated.core;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.util.CellReference;
 
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.ConfigurationException;
+import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
  * This class converter the input formula to a valid excel formula.
@@ -36,17 +38,51 @@ import net.ceos.project.poi.annotated.exception.ConfigurationException;
  */
 class CellFormulaConverter {
 
-	private static final String[] splitCharacters = { ":", "," };
+	private static final String[] SPLIT_CHARACTERS = { ":", "," };
+	/* Valid regular expression horizontal */
+	private static final String REGEXP_HORIZONTAL = ".{0,}[a-zA-Z]+\\$.{0,}";
+	/* Valid regular expression vertical */
+	private static final String REGEXP_VERTICAL = ".{0,}\\$+[0-9].{0,}";
+	/* Valid regular expression horizontal */
+	private static final String REGEXP_HORIZONTAL_INVALID = ".{0,}\\$+[a-zA-Z].{0,}";
+	/* Valid regular expression vertical */
+	private static final String REGEXP_VERTICAL_INVALID = ".{0,}[0-9]+\\$.{0,}";
 
 	private CellFormulaConverter() {
 		/* private constructor to hide the implicit public */
 	}
 
 	/**
-	 * =SUMA(D11,E11,F11) =SUMA(D11:F11)
+	 * Calculate a dynamic formula based at the declared template.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria} object
+	 * @param position
+	 *            the {@link Cell} position to apply
+	 * @throws ConfigurationException
 	 */
-	protected void convertFormulaToDynamicList() {
+	protected static String calculateSimpleOrDynamicFormula(final XConfigCriteria configCriteria, int position)
+			throws ElementException {
 
+		String formula = null;
+		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
+
+			validatePropagationWithFormula(configCriteria);
+
+			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())
+					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
+				formula = configCriteria.getElement().formula().replace(Constants.DOLLAR, String.valueOf(position));
+
+			} else if (PropagationType.PROPAGATION_VERTICAL.equals(configCriteria.getPropagation())
+					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
+				formula = configCriteria.getElement().formula().replace(Constants.DOLLAR,
+						String.valueOf(CellReference.convertNumToColString(position)));
+
+			} else {
+				formula = configCriteria.getElement().formula();
+			}
+		}
+		return formula;
 	}
 
 	/**
@@ -82,8 +118,8 @@ class CellFormulaConverter {
 		validatePropagationWithRangeAddress(configCriteria, rangeAddressWithoutSeparator);
 
 		/* check if specific range group */
-		if (StringUtils.isAlphanumeric(rangeAddressWithoutSeparator) 
-				&& !StringUtils.isNumeric(rangeAddressWithoutSeparator) 
+		if (StringUtils.isAlphanumeric(rangeAddressWithoutSeparator)
+				&& !StringUtils.isNumeric(rangeAddressWithoutSeparator)
 				&& StringUtils.containsAny(rangeAddressWithoutSeparator, numericSequence)) {
 			/* if true, return the range address */
 			return templateRangeAddress;
@@ -145,7 +181,7 @@ class CellFormulaConverter {
 	 */
 	private static String removeRangeSeparator(String templateRangeAddress) {
 		String cleanRangeAddress = templateRangeAddress;
-		for (String value : splitCharacters) {
+		for (String value : SPLIT_CHARACTERS) {
 			if (cleanRangeAddress.contains(value)) {
 				/* remove character if exists */
 				cleanRangeAddress = cleanRangeAddress.replace(value, StringUtils.EMPTY);
@@ -164,7 +200,7 @@ class CellFormulaConverter {
 	private static String[] splitRangeSeparator(String templateRangeAddress) {
 		String[] splitted = null;
 
-		for (String value : splitCharacters) {
+		for (String value : SPLIT_CHARACTERS) {
 			if (templateRangeAddress.contains(value)) {
 				/* remove ':' if exists */
 				splitted = templateRangeAddress.split(value);
@@ -177,6 +213,54 @@ class CellFormulaConverter {
 			splitted[0] = templateRangeAddress;
 		}
 		return splitted;
+	}
+
+	/**
+	 * Validate propagation with template range address passed as parameter.
+	 * <p>
+	 * Acceptable values are:
+	 * <ul>
+	 * <li>if PropagationType.HORIZONTAL, only numeric values allowed
+	 * <li>if PropagationType.VERTICAL, only letters values allowed
+	 * </ul>
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 * @param templateRangeAddress
+	 *            the template range address
+	 * @throws ElementException
+	 */
+	private static void validatePropagationWithFormula(final XConfigCriteria configCriteria) throws ElementException {
+		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())
+				&& isInvalidHorizontalFormula(configCriteria.getElement().formula())
+				|| PropagationType.PROPAGATION_VERTICAL.equals(configCriteria.getPropagation())
+						&& isInvalidVerticalFormula(configCriteria.getElement().formula())) {
+			throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT_FORMULA_ORIENTATION.getMessage());
+		}
+	}
+
+	/**
+	 * Validate if the formula is invalid according the HORIZONTAL propagation
+	 * 
+	 * @param formula
+	 *            the formula to validate
+	 * @return true if the formula is invalid, otherwise false
+	 */
+	private static boolean isInvalidHorizontalFormula(String formula) {
+		return formula.matches(REGEXP_HORIZONTAL_INVALID) || formula.matches(REGEXP_VERTICAL)
+				|| formula.matches(REGEXP_VERTICAL_INVALID);
+	}
+
+	/**
+	 * Validate if the formula is invalid according the VERTICAL propagation
+	 * 
+	 * @param formula
+	 *            the formula to validate
+	 * @return true if the formula is invalid, otherwise false
+	 */
+	private static boolean isInvalidVerticalFormula(String formula) {
+		return formula.matches(REGEXP_VERTICAL_INVALID) || formula.matches(REGEXP_HORIZONTAL)
+				|| formula.matches(REGEXP_HORIZONTAL_INVALID);
 	}
 
 	/**

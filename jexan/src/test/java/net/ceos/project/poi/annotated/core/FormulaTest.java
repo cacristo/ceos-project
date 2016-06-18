@@ -18,8 +18,11 @@ package net.ceos.project.poi.annotated.core;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
-import net.ceos.project.poi.annotated.bean.ObjectFormula;
 import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaHorizontal;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaVertical;
+import net.ceos.project.poi.annotated.bean.factory.IlluminatiFactory;
+import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
  * Test multiple formulas to apply at {@link XlsElement}
@@ -34,8 +37,8 @@ public class FormulaTest {
 	 * {@link XlsElement}
 	 */
 	@Test
-	public void validateMarshalObjectFormula() throws Exception {
-		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
+	public void validateMarshalObjectFormulaHorizontal() throws Exception {
+		ObjectFormulaHorizontal of = ObjectFormulaBuilder.buildObjectFormulaHorizontal();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(of, TestUtils.WORKING_DIR_GENERATED_II);
@@ -46,13 +49,119 @@ public class FormulaTest {
 	 * any damage at the moment of unmarshal.
 	 */
 	@Test
-	public void validateUnmarshalObjectFormula() throws Exception {
-		ObjectFormula of = new ObjectFormula();
+	public void validateUnmarshalObjectFormulaHorizontal() throws Exception {
+		ObjectFormulaHorizontal of = new ObjectFormulaHorizontal();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(of, TestUtils.WORKING_DIR_GENERATED_II);
 
-		ObjectFormulaBuilder.validateObjectFormula(of);
+		ObjectFormulaBuilder.validateObjectFormulaHorizontal(of);
+	}
+
+	/**
+	 * Test the marshal of one object applying formulas at the
+	 * {@link XlsElement}
+	 */
+	@Test
+	public void validateMarshalObjectFormulaVertical() throws Exception {
+		ObjectFormulaVertical of = ObjectFormulaBuilder.buildObjectFormulaVertical();
+
+		IEngine en = new Engine();
+		en.marshalAndSave(of, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test if the object who applied formulas at the {@link XlsElement} cause
+	 * any damage at the moment of unmarshal.
+	 */
+	@Test
+	public void validateUnmarshalObjectFormulaVertical() throws Exception {
+		ObjectFormulaVertical of = new ObjectFormulaVertical();
+
+		IEngine en = new Engine();
+		en.unmarshalFromPath(of, TestUtils.WORKING_DIR_GENERATED_II);
+
+		ObjectFormulaBuilder.validateObjectFormulaVertical(of);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsElement by the PropagationType HORIZONTAL
+	 * and invalid formula template
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula1Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceIronMan(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsElement by the PropagationType HORIZONTAL
+	 * and formula vertical orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula2Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceBlackBolt(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsElement by the PropagationType VERTICAL and
+	 * formula horizontal orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula3Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceNamor(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsElement by the PropagationType VERTICAL and
+	 * invalid formula template
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula4Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceDrStrange(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsFreeElement by the PropagationType
+	 * HORIZONTAL and invalid formula template
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula5Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceMisterFantastic(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsFreeElement by the PropagationType
+	 * HORIZONTAL and formula vertical orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula6Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceBlackPanther(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsFreeElement by the PropagationType VERTICAL
+	 * and formula horizontal orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula7Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceProfessorX(), TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused at @XlsFreeElement by the PropagationType VERTICAL
+	 * and invalid formula template
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationFormula8Exception() throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(IlluminatiFactory.instanceHood(), TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }

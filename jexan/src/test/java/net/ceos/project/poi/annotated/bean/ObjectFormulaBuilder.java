@@ -29,7 +29,7 @@ import org.apache.commons.lang3.RandomUtils;
  * <li>inject
  * <li>validate
  * </ul>
- * data at the object {@link ObjectFormula}
+ * data at the object {@link ObjectFormulaHorizontal}
  * <p>
  * 
  * @version 1.0
@@ -38,21 +38,30 @@ import org.apache.commons.lang3.RandomUtils;
 public class ObjectFormulaBuilder {
 
 	/**
-	 * Create a ObjectFormula for tests.
+	 * Create a ObjectFormulaHorizontal for tests.
 	 * 
-	 * @return the {@link ObjectFormula}
+	 * @return the {@link ObjectFormulaHorizontal}
 	 */
-	public static ObjectFormula buildObjectFormula() {
-		return buildObjectFormula(3);
+	public static ObjectFormulaHorizontal buildObjectFormulaHorizontal() {
+		return buildObjectFormulaHorizontal(3);
 	}
 
 	/**
-	 * Create a ObjectFormula for tests.
+	 * Create a ObjectFormulaVertical for tests.
 	 * 
-	 * @return the {@link ObjectFormula}
+	 * @return the {@link ObjectFormulaVertical}
 	 */
-	public static ObjectFormula buildObjectFormula(int multiplier) {
-		ObjectFormula toValidate = new ObjectFormula();
+	public static ObjectFormulaVertical buildObjectFormulaVertical() {
+		return buildObjectFormulaVertical(3);
+	}
+
+	/**
+	 * Create a ObjectFormulaHorizontal for tests.
+	 * 
+	 * @return the {@link ObjectFormulaHorizontal}
+	 */
+	public static ObjectFormulaHorizontal buildObjectFormulaHorizontal(int multiplier) {
+		ObjectFormulaHorizontal toValidate = new ObjectFormulaHorizontal();
 
 		toValidate.setStore(200 * multiplier);
 		toValidate.setWebStore(455 * multiplier);
@@ -62,34 +71,92 @@ public class ObjectFormulaBuilder {
 		toValidate.setValueCountry(8421.80 * multiplier);
 
 		toValidate.setSomeString(null);
-		// TODO add new fields below
 
 		return toValidate;
 	}
 
 	/**
-	 * Create a list of ObjectFormula for tests.
+	 * Create a ObjectFormulaHorizontal for tests.
 	 * 
-	 * @return the {@link ObjectFormula}
+	 * @return the {@link ObjectFormulaHorizontal}
 	 */
-	public static List<ObjectFormula> buildListOfObjectFormula(int entryNumber) {
+	public static ObjectFormulaVertical buildObjectFormulaVertical(int multiplier) {
+		ObjectFormulaVertical toValidate = new ObjectFormulaVertical();
 
-		List<ObjectFormula> returnList = new ArrayList<ObjectFormula>();
+		toValidate.setStore(200 * multiplier);
+		toValidate.setWebStore(455 * multiplier);
+
+		toValidate.setValueLocal(1623.99 * multiplier);
+		toValidate.setValueRegion(3199.99 * multiplier);
+		toValidate.setValueCountry(8421.80 * multiplier);
+
+		toValidate.setSomeString(null);
+
+		return toValidate;
+	}
+
+	/**
+	 * Create a list of ObjectFormulaHorizontal for tests.
+	 * 
+	 * @return the {@link ObjectFormulaHorizontal}
+	 */
+	public static List<ObjectFormulaHorizontal> buildListOfObjectFormulaHorizontal(int entryNumber) {
+
+		List<ObjectFormulaHorizontal> returnList = new ArrayList<>();
 		for (int i = 0; i < entryNumber; i++) {
-			returnList.add(buildObjectFormula(RandomUtils.nextInt(1, entryNumber)));
+			returnList.add(buildObjectFormulaHorizontal(RandomUtils.nextInt(1, entryNumber)));
 		}
 		return returnList;
 	}
 
 	/**
-	 * Validate the ObjectFormula based on the object build with the method
-	 * 'buildObjectFormula'
+	 * Create a list of ObjectFormulaVertical for tests.
+	 * 
+	 * @return the {@link ObjectFormulaVertical}
+	 */
+	public static List<ObjectFormulaVertical> buildListOfObjectFormulaVertical(int entryNumber) {
+
+		List<ObjectFormulaVertical> returnList = new ArrayList<>();
+		for (int i = 0; i < entryNumber; i++) {
+			returnList.add(buildObjectFormulaVertical(RandomUtils.nextInt(1, entryNumber)));
+		}
+		return returnList;
+	}
+
+	/**
+	 * Validate the ObjectFormulaHorizontal based on the object build with the
+	 * method 'buildObjectFormula'
 	 * 
 	 * @param toValidate
 	 *            the object to validate
 	 */
-	public static void validateObjectFormula(ObjectFormula toValidate) {
-		ObjectFormula base = buildObjectFormula();
+	public static void validateObjectFormulaHorizontal(ObjectFormulaHorizontal toValidate) {
+		ObjectFormulaHorizontal base = buildObjectFormulaHorizontal();
+
+		assertEquals(base.getStore(), toValidate.getStore());
+		assertEquals(base.getWebStore(), toValidate.getWebStore(), 0.001);
+		assertEquals(base.getValueLocal(), toValidate.getValueLocal(), 0.001);
+		assertEquals(base.getValueRegion(), toValidate.getValueRegion(), 0.001);
+		assertEquals(base.getValueCountry(), toValidate.getValueCountry(), 0.001);
+
+		// prepare simulation data
+		simulateFormulaResults(base);
+
+		assertEquals(base.getTotalValue(), toValidate.getTotalValue(), 0.001);
+		assertEquals(base.getTotalValueTax(), toValidate.getTotalValueTax(), 0.001);
+		assertEquals(base.getAvgValue(), toValidate.getAvgValue(), 0.001);
+		assertEquals(base.getSomeString(), toValidate.getSomeString());
+	}
+
+	/**
+	 * Validate the ObjectFormulaHorizontal based on the object build with the
+	 * method 'buildObjectFormula'
+	 * 
+	 * @param toValidate
+	 *            the object to validate
+	 */
+	public static void validateObjectFormulaVertical(ObjectFormulaVertical toValidate) {
+		ObjectFormulaVertical base = buildObjectFormulaVertical();
 
 		assertEquals(base.getStore(), toValidate.getStore());
 		assertEquals(base.getWebStore(), toValidate.getWebStore());
@@ -104,7 +171,7 @@ public class ObjectFormulaBuilder {
 		assertEquals(base.getTotalValueTax(), toValidate.getTotalValueTax(), 0.001);
 		assertEquals(base.getAvgValue(), toValidate.getAvgValue(), 0.001);
 		assertEquals(base.getSomeString(), toValidate.getSomeString());
-		// TODO add new validation below
+
 	}
 
 	/**
@@ -113,7 +180,20 @@ public class ObjectFormulaBuilder {
 	 * @param base
 	 *            the object to generate the simulation values
 	 */
-	private static void simulateFormulaResults(ObjectFormula base) {
+	private static void simulateFormulaResults(ObjectFormulaHorizontal base) {
+		base.setTotalValue(base.getValueLocal() + base.getValueRegion() + base.getValueCountry());
+		base.setTotalValueTax(base.getTotalValue() * 1.21);
+		base.setAvgValue((base.getValueLocal() + base.getValueRegion() + base.getValueCountry()) / 3);
+		base.setSomeString(base.getValueLocal() < base.getValueRegion() ? "Over Budget" : "OK");
+	}
+
+	/**
+	 * Prepare simulation data
+	 * 
+	 * @param base
+	 *            the object to generate the simulation values
+	 */
+	private static void simulateFormulaResults(ObjectFormulaVertical base) {
 		base.setTotalValue(base.getValueLocal() + base.getValueRegion() + base.getValueCountry());
 		base.setTotalValueTax(base.getTotalValue() * 1.21);
 		base.setAvgValue((base.getValueLocal() + base.getValueRegion() + base.getValueCountry()) / 3);

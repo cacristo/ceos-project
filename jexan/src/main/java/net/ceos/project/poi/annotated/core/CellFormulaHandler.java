@@ -25,11 +25,11 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.util.CellReference;
 
 import net.ceos.project.poi.annotated.definition.ExceptionMessage;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.ConverterException;
+import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
  * This class manage the formula or value to apply to one cell.
@@ -71,9 +71,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	protected static void stringHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
@@ -97,9 +98,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	protected static void shortHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
@@ -123,9 +125,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	protected static void integerHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
@@ -149,9 +152,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	protected static void longHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
@@ -175,9 +179,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	protected static void floatHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
 			if (!toFormula(configCriteria, cell)) {
@@ -201,9 +206,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException 
 	 */
 	protected static void doubleHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			if (!toFormula(configCriteria, cell)) {
 				// apply the formula
@@ -233,9 +239,10 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ElementException 
 	 */
 	protected static void bigDecimalHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
 		if (configCriteria.getElement().isFormula()) {
 			// apply the formula
 			if (!toFormula(configCriteria, cell)) {
@@ -321,30 +328,20 @@ class CellFormulaHandler {
 	 *            the object
 	 * @param cell
 	 *            the {@link Cell} to use
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
+	 * @throws ElementException
 	 */
 	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell)
-			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+			throws ElementException {
 		boolean isFormulaApplied = false;
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
-			if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())
-					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
-				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.DOLLAR,
-						String.valueOf(cell.getRowIndex() + 1)));
-				isFormulaApplied = true;
-			} else if (PropagationType.PROPAGATION_VERTICAL.equals(configCriteria.getPropagation())
-					&& configCriteria.getElement().formula().contains(Constants.DOLLAR)) {
-				cell.setCellFormula(configCriteria.getElement().formula().replace(Constants.DOLLAR,
-						String.valueOf(CellReference.convertNumToColString(cell.getColumnIndex()))));
-				isFormulaApplied = true;
+			// calculate position according the propagation type
+			int position = PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())
+					? cell.getRowIndex() + 1 : cell.getColumnIndex();
 
-			} else {
-				cell.setCellFormula(configCriteria.getElement().formula());
-				isFormulaApplied = true;
-			}
+			// calculate and apply formula
+			cell.setCellFormula(CellFormulaConverter.calculateSimpleOrDynamicFormula(configCriteria, position));
+			isFormulaApplied = true;
 		}
 
 		return isFormulaApplied;

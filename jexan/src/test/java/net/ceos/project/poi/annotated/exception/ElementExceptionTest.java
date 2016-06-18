@@ -23,6 +23,7 @@ import org.junit.Test;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsFreeElement;
 import net.ceos.project.poi.annotated.bean.MultiTypeObject;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
 import net.ceos.project.poi.annotated.bean.SimpleObject;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory;
 import net.ceos.project.poi.annotated.bean.factory.AvengersFactory.Hawkeye;
@@ -33,6 +34,7 @@ import net.ceos.project.poi.annotated.core.IEngine;
 import net.ceos.project.poi.annotated.core.TestUtils;
 import net.ceos.project.poi.annotated.core.XConfigCriteria;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
 /**
  * Test the {@link ElementException}
@@ -47,7 +49,8 @@ public class ElementExceptionTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(expected = ElementException.class)
+	@Test(expected=ElementException.class)
+
 	public void testMarsharObjectNull() throws Exception {
 		MultiTypeObject objNull = null;
 
@@ -181,6 +184,35 @@ public class ElementExceptionTest {
 	public void invalidPositionCellElementMarshalException() throws Exception {
 		IEngine en = new Engine();
 		en.marshalAndSave(MarvelBadGuysFactory.instanceMystique(), TestUtils.WORKING_DIR_GENERATED_I);
+
+	}
+
+	/**
+	 * Test a conflict caused by the PropagationType VERTICAL and formula
+	 * horizontal orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationHorizontalFormulaException() throws Exception {
+		XConfigCriteria overrideToVertical = new XConfigCriteria();
+		overrideToVertical.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(overrideToVertical, ObjectFormulaBuilder.buildObjectFormulaHorizontal(),
+				TestUtils.WORKING_DIR_GENERATED_I);
+	}
+
+	/**
+	 * Test a conflict caused by the PropagationType HORIZONTAL and and formula
+	 * vertical orientation
+	 */
+	@Test(expected = ElementException.class)
+	public void configurationConflictByPropagationVerticalFormulaException() throws Exception {
+		XConfigCriteria overrideToHorizontal = new XConfigCriteria();
+		overrideToHorizontal.overridePropagationType(PropagationType.PROPAGATION_HORIZONTAL);
+
+		IEngine en = new Engine();
+		en.marshalAndSave(overrideToHorizontal, ObjectFormulaBuilder.buildObjectFormulaVertical(),
+				TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**

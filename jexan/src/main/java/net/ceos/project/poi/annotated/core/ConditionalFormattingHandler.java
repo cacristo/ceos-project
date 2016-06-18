@@ -25,7 +25,6 @@ import org.apache.poi.ss.usermodel.PatternFormatting;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellReference;
 
 import net.ceos.project.poi.annotated.annotation.XlsConditionalFormat;
 import net.ceos.project.poi.annotated.annotation.XlsConditionalFormatRules;
@@ -78,8 +77,7 @@ public class ConditionalFormattingHandler {
 	protected static void applyCondition(XConfigCriteria configCriteria, XlsConditionalFormat conditionalFomat)
 			throws ConfigurationException {
 		// Define a Conditional Formatting rule, which triggers formatting
-		// when cell's value is greater or equal than 100.0 and
-		// applies patternFormatting defined below.
+		// according the developer definition and applies patternFormatting
 		SheetConditionalFormatting sheet = configCriteria.getSheet().getSheetConditionalFormatting();
 
 		/* apply all rules defined */
@@ -109,10 +107,10 @@ public class ConditionalFormattingHandler {
 			borderFormat.setBorderTop(decorator.getBorderTop());
 			borderFormat.setBorderLeft(decorator.getBorderLeft());
 			borderFormat.setBorderRight(decorator.getBorderRight());
-			//borderFormat.setBottomBorderColor(color);
-			//borderFormat.setTopBorderColor(color);
-			//borderFormat.setLeftBorderColor(color);
-			//borderFormat.setRightBorderColor(color);
+			// borderFormat.setBottomBorderColor(color);
+			// borderFormat.setTopBorderColor(color);
+			// borderFormat.setLeftBorderColor(color);
+			// borderFormat.setRightBorderColor(color);
 
 			/* add PatternFormatting */
 			PatternFormatting patternFormat = setRule.createPatternFormatting();
@@ -129,33 +127,5 @@ public class ConditionalFormattingHandler {
 		/* Apply Conditional Formatting rule defined above to the regions */
 		sheet.addConditionalFormatting(regions, rules);
 
-	}
-
-	/**
-	 * Calculate the range address based at baseRangeAddress passed as parameter
-	 * and also the propagation type.
-	 * 
-	 * @param configCriteria
-	 *            the {@link XConfigCriteria}
-	 * @param baseRangeAddress
-	 *            the base range address: letter if horizontal, number if
-	 *            vertical
-	 * @deprecated use <i>CellFormulaConverter.calculateRangeAddressFromTemplate()</i>
-	 * @return the range address calculated
-	 */
-	@SuppressWarnings("unused")
-	@Deprecated
-	private static String calculateRangeAddress(final XConfigCriteria configCriteria, String baseRangeAddress) {
-		String start;
-		String end;
-		if (PropagationType.PROPAGATION_HORIZONTAL.equals(configCriteria.getPropagation())) {
-			start = baseRangeAddress + configCriteria.getStartRowInmutable();
-			end = baseRangeAddress + (configCriteria.getSheet().getLastRowNum() + 1);
-		} else {
-			start = CellReference.convertNumToColString(configCriteria.getStartCellInmutable()) + baseRangeAddress;
-			end = CellReference.convertNumToColString(configCriteria.getLastCellIndex()) + baseRangeAddress;
-		}
-
-		return start + ":" + end;
 	}
 }

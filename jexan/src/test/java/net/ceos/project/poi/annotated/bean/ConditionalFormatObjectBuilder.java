@@ -71,8 +71,6 @@ public class ConditionalFormatObjectBuilder {
 		job.setJobName("Job Name L2");
 		toValidate.setJob(job);
 
-		// TODO add new fields below
-
 		return toValidate;
 	}
 
@@ -117,8 +115,6 @@ public class ConditionalFormatObjectBuilder {
 		assertEquals(base.getJob().getJobCode(), toValidate.getJob().getJobCode());
 		assertEquals(base.getJob().getJobFamily(), toValidate.getJob().getJobFamily());
 		assertEquals(base.getJob().getJobName(), toValidate.getJob().getJobName());
-
-		// TODO add new validation below
 	}
 
 }
