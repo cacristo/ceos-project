@@ -80,13 +80,13 @@ public class ConfigurationExceptionTest {
 	public Object[][] xlsConflictNestedHeaderProvider() {
 		return new Object[][] {
 				/*
-				 * Conflict caused by the PropagationType HORIZONTAL and XlsNestedHeader
-				 * orientation
+				 * Conflict caused by the PropagationType HORIZONTAL and
+				 * XlsNestedHeader orientation
 				 */
 				{ MarvelBadGuysFactory.instanceUltron() },
 				/*
-				 * Conflict caused by the PropagationType VERTICAL and XlsNestedHeader
-				 * orientation
+				 * Conflict caused by the PropagationType VERTICAL and
+				 * XlsNestedHeader orientation
 				 */
 				{ MarvelBadGuysFactory.instanceGreenGoblin() } };
 	}

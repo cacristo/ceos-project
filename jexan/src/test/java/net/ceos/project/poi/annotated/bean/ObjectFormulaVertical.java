@@ -19,10 +19,11 @@ import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
+import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsConfiguration(nameFile = "ObjectFormula", extensionFile = ExtensionFileType.XLSX)
-@XlsSheet(title = "Formula test case")
-public class ObjectFormula {
+@XlsConfiguration(nameFile = "ObjectFormulaVertical", extensionFile = ExtensionFileType.XLSX)
+@XlsSheet(title = "Formula test case", propagation= PropagationType.PROPAGATION_VERTICAL)
+public class ObjectFormulaVertical {
 
 	@XlsElement(title = "Store", position = 1)
 	private int store;
@@ -36,22 +37,22 @@ public class ObjectFormula {
 	@XlsElement(title = "Country sales", position = 5)
 	private double valueCountry;
 
-	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM(D$,E$,F$)", position = 6)
+	@XlsElement(title = "Total Sales", isFormula = true, formula = "SUM($4,$5,$6)", position = 6)
 	private double totalValue;
 
-	@XlsElement(title = "Total Sales", isFormula = true, formula = "G$ * 1.21", position = 7)
+	@XlsElement(title = "Total Sales", isFormula = true, formula = "$7 * 1.21", position = 7)
 	private Double totalValueTax;
 
-	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE(D$,E$,F$)", position = 8)
+	@XlsElement(title = "Average sales", isFormula = true, formula = "AVERAGE($4,$5,$6)", position = 8)
 	private double avgValue;
 
 	@XlsElement(title = "ROI", isFormula = true, position = 9)
 	private double generateValue;
 
-	@XlsElement(title = "Average sales", isFormula = true, formula = "IF(D$ < E$,\"Over Budget\", \"OK\")", position = 10)
+	@XlsElement(title = "Average sales", isFormula = true, formula = "IF($4 < $5,\"Over Budget\", \"OK\")", position = 10)
 	private String someString;
 
-	public ObjectFormula() {
+	public ObjectFormulaVertical() {
 	}
 
 	/**

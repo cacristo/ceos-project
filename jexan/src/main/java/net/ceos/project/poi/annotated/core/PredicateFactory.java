@@ -43,7 +43,15 @@ import net.ceos.project.poi.annotated.definition.PropagationType;
  */
 class PredicateFactory {
 
-	private static final CharSequence numericSequence = "0123456789";
+	protected static final CharSequence numericSequence = "0123456789";
+	/* Valid regular expression horizontal */
+	private static final String REGEXP_HORIZONTAL = ".{0,}[a-zA-Z]+\\$.{0,}";
+	/* Valid regular expression vertical */
+	private static final String REGEXP_VERTICAL = ".{0,}\\$+[0-9].{0,}";
+	/* Valid regular expression horizontal */
+	private static final String REGEXP_HORIZONTAL_INVALID = ".{0,}\\$+[a-zA-Z].{0,}";
+	/* Valid regular expression vertical */
+	private static final String REGEXP_VERTICAL_INVALID = ".{0,}[0-9]+\\$.{0,}";
 
 	/* Object annotations presents */
 	protected static final Predicate<Class<?>> isAnnotationXlsSheetPresent = object -> object.isAnnotationPresent(XlsSheet.class);
@@ -89,7 +97,9 @@ class PredicateFactory {
 	
 	protected static final Predicate<String> isFalseAlphaNumericRangeAddress = templateRangeAddress -> StringUtils.isAlpha(templateRangeAddress) && !StringUtils.isNumeric(templateRangeAddress);
 	protected static final Predicate<String> isReadyRangeAddress = templateRangeAddress -> StringUtils.isAlphanumeric(templateRangeAddress) && !StringUtils.isNumeric(templateRangeAddress) && StringUtils.containsAny(templateRangeAddress, numericSequence);
-	
+	protected static final Predicate<String> isInvalidHorizontalFormula = templateFormula -> templateFormula.matches(REGEXP_HORIZONTAL_INVALID)	|| templateFormula.matches(REGEXP_VERTICAL) || templateFormula.matches(REGEXP_VERTICAL_INVALID);
+	protected static final Predicate<String> isInvalidVerticalFormula = templateFormula -> templateFormula.matches(REGEXP_VERTICAL_INVALID)	|| templateFormula.matches(REGEXP_HORIZONTAL) || templateFormula.matches(REGEXP_HORIZONTAL_INVALID);
+
 	private PredicateFactory() {
 		/* private constructor to hide the implicit public */
 	}

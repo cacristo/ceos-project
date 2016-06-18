@@ -15,11 +15,16 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.annotation.XlsElement;
-import net.ceos.project.poi.annotated.bean.ObjectFormula;
 import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaHorizontal;
+import net.ceos.project.poi.annotated.bean.ObjectFormulaVertical;
+import net.ceos.project.poi.annotated.bean.factory.IlluminatiFactory;
+import net.ceos.project.poi.annotated.definition.PropagationType;
+import net.ceos.project.poi.annotated.exception.ElementException;
 
 /**
  * Test multiple formulas to apply at {@link XlsElement}
@@ -29,13 +34,58 @@ import net.ceos.project.poi.annotated.bean.ObjectFormulaBuilder;
  */
 public class FormulaTest {
 
+	@DataProvider
+	public Object[][] incorrectFormulaProvider() {
+		return new Object[][] {
+				/*
+				 * Conflict caused at @XlsElement by the PropagationType
+				 * HORIZONTAL and invalid formula template
+				 */
+				{ IlluminatiFactory.instanceIronMan() },
+				/*
+				 * Conflict caused at @XlsElement by the PropagationType
+				 * HORIZONTAL and formula vertical orientation
+				 */
+				{ IlluminatiFactory.instanceBlackBolt() },
+				/*
+				 * Conflict caused at @XlsElement by the PropagationType
+				 * VERTICAL and formula horizontal orientation
+				 */
+				{ IlluminatiFactory.instanceNamor() },
+				/*
+				 * Conflict caused at @XlsElement by the PropagationType
+				 * VERTICAL and invalid formula template
+				 */
+				{ IlluminatiFactory.instanceDrStrange() },
+				/*
+				 * Conflict caused at @XlsFreeElement by the PropagationType
+				 * HORIZONTAL and invalid formula template
+				 */
+				{ IlluminatiFactory.instanceMisterFantastic() },
+				/*
+				 * Conflict caused at @XlsFreeElement by the PropagationType
+				 * HORIZONTAL and formula vertical orientation
+				 */
+				{ IlluminatiFactory.instanceBlackPanther() },
+				/*
+				 * Conflict caused at @XlsFreeElement by the PropagationType
+				 * VERTICAL and formula horizontal orientation
+				 */
+				{ IlluminatiFactory.instanceProfessorX() },
+				/*
+				 * Conflict caused at @XlsFreeElement by the PropagationType
+				 * VERTICAL and invalid formula template
+				 */
+				{ IlluminatiFactory.instanceHood() } };
+	}
+
 	/**
 	 * Test the marshal of one object applying formulas at the
 	 * {@link XlsElement}
 	 */
 	@Test
-	public void validateMarshalObjectFormula() throws Exception {
-		ObjectFormula of = ObjectFormulaBuilder.buildObjectFormula();
+	public void validateMarshalObjectFormulaHorizontal() throws Exception {
+		ObjectFormulaHorizontal of = ObjectFormulaBuilder.buildObjectFormulaHorizontal();
 
 		IEngine en = new Engine();
 		en.marshalAndSave(of, TestUtils.WORKING_DIR_GENERATED_II);
@@ -46,13 +96,49 @@ public class FormulaTest {
 	 * any damage at the moment of unmarshal.
 	 */
 	@Test
-	public void validateUnmarshalObjectFormula() throws Exception {
-		ObjectFormula of = new ObjectFormula();
+	public void validateUnmarshalObjectFormulaHorizontal() throws Exception {
+		ObjectFormulaHorizontal of = new ObjectFormulaHorizontal();
 
 		IEngine en = new Engine();
 		en.unmarshalFromPath(of, TestUtils.WORKING_DIR_GENERATED_II);
 
-		ObjectFormulaBuilder.validateObjectFormula(of);
+		ObjectFormulaBuilder.validateObjectFormulaHorizontal(of);
+	}
+
+	/**
+	 * Test the marshal of one object applying formulas at the
+	 * {@link XlsElement}
+	 */
+	@Test
+	public void validateMarshalObjectFormulaVertical() throws Exception {
+		ObjectFormulaVertical of = ObjectFormulaBuilder.buildObjectFormulaVertical();
+
+		IEngine en = new Engine();
+		en.marshalAndSave(of, TestUtils.WORKING_DIR_GENERATED_II);
+	}
+
+	/**
+	 * Test if the object who applied formulas at the {@link XlsElement} cause
+	 * any damage at the moment of unmarshal.
+	 */
+	@Test
+	public void validateUnmarshalObjectFormulaVertical() throws Exception {
+		ObjectFormulaVertical of = new ObjectFormulaVertical();
+
+		IEngine en = new Engine();
+		en.unmarshalFromPath(of, TestUtils.WORKING_DIR_GENERATED_II);
+
+		ObjectFormulaBuilder.validateObjectFormulaVertical(of);
+	}
+
+	/**
+	 * Test a configuration conflict caused by the {@link PropagationType} and
+	 * formula template/orientation
+	 */
+	@Test(dataProvider = "incorrectFormulaProvider", expectedExceptions = ElementException.class, expectedExceptionsMessageRegExp = "Conflict caused by the PropagationType and formula orientation. Review your configuration.")
+	public void configurationConflictByPropagationFormulaException(Object formulaObj) throws Exception {
+		IEngine en = new Engine();
+		en.marshalAndSave(formulaObj, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 }
