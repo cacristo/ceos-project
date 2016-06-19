@@ -22,7 +22,6 @@ import org.junit.Test;
 import net.ceos.project.poi.annotated.bean.ConditionalFormatObject;
 import net.ceos.project.poi.annotated.bean.ConditionalFormatObjectBuilder;
 import net.ceos.project.poi.annotated.definition.CascadeType;
-import net.ceos.project.poi.annotated.definition.PropagationType;
 import net.ceos.project.poi.annotated.exception.WorkbookException;
 
 /**
@@ -45,7 +44,6 @@ public class ConditionalFormatTest {
 
 		XConfigCriteria criteria = new XConfigCriteria();
 		criteria.overrideCascadeLevel(CascadeType.CASCADE_L3);
-		//criteria.overridePropagationType(PropagationType.PROPAGATION_VERTICAL);
 		
 		IEngine en = new Engine();
 		en.marshalAsCollectionAndSave(criteria, cascadeObj, TestUtils.WORKING_DIR_GENERATED_I);

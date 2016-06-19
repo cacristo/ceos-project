@@ -160,6 +160,51 @@ public @interface XlsDecorator {
 	short borderBottom() default CellStyleHandler.CELL_BORDER;
 
 	/**
+	 * Define the border color of the element.
+	 * <p>
+	 * By default is 0 (default value equivalent to CellStyle.BORDER_NONE).
+	 * 
+	 * @return the type of the border
+	 */
+	short borderColor() default 0;
+
+	/**
+	 * Define the left border color of the element.
+	 * <p>
+	 * By default is 0 (default value equivalent to CellStyle.BORDER_NONE).
+	 * 
+	 * @return the type of the left border
+	 */
+	short borderLeftColor() default 0;
+
+	/**
+	 * Define the right border color of the element.
+	 * <p>
+	 * By default is 0 (default value equivalent to CellStyle.BORDER_NONE).
+	 * 
+	 * @return the type of the right border
+	 */
+	short borderRightColor() default 0;
+
+	/**
+	 * Define the top border color of the element.
+	 * <p>
+	 * By default is 0 (default value equivalent to CellStyle.BORDER_NONE).
+	 * 
+	 * @return the type of the top border
+	 */
+	short borderTopColor() default 0;
+
+	/**
+	 * Define the bottom border color of the element.
+	 * <p>
+	 * By default is 0 (default value equivalent to CellStyle.BORDER_NONE).
+	 * 
+	 * @return the type of the bottom border
+	 */
+	short borderBottomColor() default 0;
+
+	/**
 	 * Define the background color of the element.
 	 * <p>
 	 * By default is 9.

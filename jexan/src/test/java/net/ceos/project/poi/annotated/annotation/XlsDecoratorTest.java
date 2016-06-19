@@ -57,6 +57,11 @@ public class XlsDecoratorTest {
 			assertEquals(xlsDecorator.borderRight(), 0);
 			assertEquals(xlsDecorator.borderTop(), 0);
 			assertEquals(xlsDecorator.borderBottom(), 0);
+			assertEquals(xlsDecorator.borderColor(), 0);
+			assertEquals(xlsDecorator.borderLeftColor(), 0);
+			assertEquals(xlsDecorator.borderRightColor(), 0);
+			assertEquals(xlsDecorator.borderTopColor(), 0);
+			assertEquals(xlsDecorator.borderBottomColor(), 0);
 			assertEquals(xlsDecorator.backgroundColor(), 0);
 			assertEquals(xlsDecorator.foregroundColor(), 0);
 			assertEquals(xlsDecorator.wrapText(), false);
@@ -92,6 +97,11 @@ public class XlsDecoratorTest {
 					assertEquals(xlsDecorator.borderRight(), 0);
 					assertEquals(xlsDecorator.borderTop(), 0);
 					assertEquals(xlsDecorator.borderBottom(), 0);
+					assertEquals(xlsDecorator.borderColor(), 0);
+					assertEquals(xlsDecorator.borderLeftColor(), 0);
+					assertEquals(xlsDecorator.borderRightColor(), 0);
+					assertEquals(xlsDecorator.borderTopColor(), 0);
+					assertEquals(xlsDecorator.borderBottomColor(), 0);
 					// TODO check why color initialized at 9
 					assertEquals(xlsDecorator.backgroundColor(), 9);
 					assertEquals(xlsDecorator.foregroundColor(), 9);
@@ -111,6 +121,11 @@ public class XlsDecoratorTest {
 					assertEquals(xlsDecorator.borderRight(), 0);
 					assertEquals(xlsDecorator.borderTop(), 0);
 					assertEquals(xlsDecorator.borderBottom(), 0);
+					assertEquals(xlsDecorator.borderColor(), 0);
+					assertEquals(xlsDecorator.borderLeftColor(), 0);
+					assertEquals(xlsDecorator.borderRightColor(), 0);
+					assertEquals(xlsDecorator.borderTopColor(), 0);
+					assertEquals(xlsDecorator.borderBottomColor(), 0);
 					// TODO check why color initialized at 9
 					assertEquals(xlsDecorator.backgroundColor(), 9);
 					assertEquals(xlsDecorator.foregroundColor(), HSSFColor.BLUE.index);

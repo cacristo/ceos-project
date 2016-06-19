@@ -31,10 +31,11 @@ import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
 
-@XlsDecorators(values = { @XlsDecorator(decoratorName = "conditionalFormat1", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index) })
+@XlsDecorators(values = {
+		@XlsDecorator(decoratorName = "conditionalFormat1", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, borderColor = HSSFColor.BLACK.index, foregroundColor = HSSFColor.ORANGE.index) })
 @XlsConditionalFormat(rules = {
 		@XlsConditionalFormatRules(operator = ComparisonOperator.LE, formula1 = "1000") }, rangeAddress = "D", decorator = "conditionalFormat1")
-@XlsSheet(title = "Conditional Format", startRow=10, propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_L2)
+@XlsSheet(title = "Conditional Format", startRow = 10, propagation = PropagationType.PROPAGATION_HORIZONTAL, cascadeLevel = CascadeType.CASCADE_L2)
 @XlsConfiguration(nameFile = "ConditionalFormatObject")
 public class ConditionalFormatObject {
 
