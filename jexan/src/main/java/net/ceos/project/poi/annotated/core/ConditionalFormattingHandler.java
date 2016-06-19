@@ -107,10 +107,10 @@ public class ConditionalFormattingHandler {
 			borderFormat.setBorderTop(decorator.getBorderTop());
 			borderFormat.setBorderLeft(decorator.getBorderLeft());
 			borderFormat.setBorderRight(decorator.getBorderRight());
-			// borderFormat.setBottomBorderColor(color);
-			// borderFormat.setTopBorderColor(color);
-			// borderFormat.setLeftBorderColor(color);
-			// borderFormat.setRightBorderColor(color);
+			borderFormat.setBottomBorderColor(decorator.getBottomBorderColor());
+			borderFormat.setTopBorderColor(decorator.getTopBorderColor());
+			borderFormat.setLeftBorderColor(decorator.getLeftBorderColor());
+			borderFormat.setRightBorderColor(decorator.getRightBorderColor());
 
 			/* add PatternFormatting */
 			PatternFormatting patternFormat = setRule.createPatternFormatting();
