@@ -78,9 +78,9 @@ public class XConfigCriteria {
 	private CascadeType overrideCascadeLevel;
 
 	/* cell style parameters */
+	private Boolean uniqueCellStyle = false;
 	private Map<String, CellStyle> stylesMap = new HashMap<>();
 	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<>();
-
 	private Map<String, CellStyle> cellStyleManager = new HashMap<>();
 
 	private Map<Integer, Integer> columnWidthMap = new HashMap<>();
@@ -96,6 +96,21 @@ public class XConfigCriteria {
 			decorator.setDecoratorName(CellStyleHandler.CELL_DECORATOR_HEADER);
 		}
 		cellDecoratorMap.put(CellStyleHandler.CELL_DECORATOR_HEADER, decorator);
+	}
+
+	/**
+	 * Force all cell decorators except the header decorator.
+	 * 
+	 * @param decorator
+	 *            the {@link CellDecorator} to apply
+	 */
+	public final void overrideAllCellDecorators(final CellDecorator decorator) {
+		this.uniqueCellStyle = true;
+		overrideGenericCellDecorator(decorator);
+		overrideBooleanCellDecorator(decorator);
+		overrideDateCellDecorator(decorator);
+		overrideNumericCellDecorator(decorator);
+		overrideEnumCellDecorator(decorator);
 	}
 
 	/**
@@ -263,8 +278,17 @@ public class XConfigCriteria {
 		}
 
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
-			stylesMap.put(object.getKey(),
-					CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+			if (uniqueCellStyle) {
+				/*
+				 * when activate unique style, set all styles with the declared
+				 * style
+				 */
+				stylesMap.put(object.getKey(), CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+						cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC)));
+			} else {
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+			}
 		}
 	}
 
