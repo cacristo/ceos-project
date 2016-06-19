@@ -257,12 +257,12 @@ public class CellHandler {
 	 */
 	protected static void dateReader(final Object object, final Field field, final Cell cell,
 			final XlsElement xlsAnnotation) throws ConverterException {
-		try {
-			if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
-				field.set(object, cell.getDateCellValue());
-			} else {
-				String date = cell.getStringCellValue();
-				if (StringUtils.isNotBlank(date)) {
+		if (StringUtils.isNotBlank(readCell(cell))) {
+			try {
+				if (StringUtils.isBlank(xlsAnnotation.transformMask())) {
+					field.set(object, cell.getDateCellValue());
+				} else {
+					String date = cell.getStringCellValue();
 
 					String tM = xlsAnnotation.transformMask();
 					String fM = xlsAnnotation.formatMask();
@@ -274,16 +274,17 @@ public class CellHandler {
 					Date dateConverted = dt.parse(date);
 					field.set(object, dateConverted);
 				}
+				/*
+				 * if date decorator do not match with a valid mask launch
+				 * exception
+				 */
+			} catch (ParseException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+			} catch (IllegalArgumentException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
+			} catch (IllegalAccessException e) {
+				throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 			}
-			/*
-			 * if date decorator do not match with a valid mask launch exception
-			 */
-		} catch (ParseException e) {
-			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
-		} catch (IllegalArgumentException e) {
-			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
-		} catch (IllegalAccessException e) {
-			throw new ConverterException(ExceptionMessage.CONVERTER_DATE.getMessage(), e);
 		}
 	}
 
