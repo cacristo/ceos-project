@@ -258,18 +258,16 @@ public class CellHandler {
 					field.set(object, cell.getDateCellValue());
 				} else {
 					String date = cell.getStringCellValue();
-					if (StringUtils.isNotBlank(date)) {
 
-						String tM = xlsAnnotation.transformMask();
-						String fM = xlsAnnotation.formatMask();
-						String decorator = StringUtils.isEmpty(tM)
-								? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+					String tM = xlsAnnotation.transformMask();
+					String fM = xlsAnnotation.formatMask();
+					String decorator = StringUtils.isEmpty(tM)
+							? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
 
-						SimpleDateFormat dt = new SimpleDateFormat(decorator);
+					SimpleDateFormat dt = new SimpleDateFormat(decorator);
 
-						Date dateConverted = dt.parse(date);
-						field.set(object, dateConverted);
-					}
+					Date dateConverted = dt.parse(date);
+					field.set(object, dateConverted);
 				}
 			} catch (ParseException | IllegalArgumentException | IllegalAccessException e) {
 				/*
@@ -304,18 +302,16 @@ public class CellHandler {
 					field.set(object, cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				} else {
 					String date = cell.getStringCellValue();
-					if (StringUtils.isNotBlank(date)) {
 
-						String tM = xlsAnnotation.transformMask();
-						String fM = xlsAnnotation.formatMask();
-						String decorator = StringUtils.isEmpty(tM)
-								? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+					String tM = xlsAnnotation.transformMask();
+					String fM = xlsAnnotation.formatMask();
+					String decorator = StringUtils.isEmpty(tM)
+							? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
 
-						SimpleDateFormat dt = new SimpleDateFormat(decorator);
+					SimpleDateFormat dt = new SimpleDateFormat(decorator);
 
-						Date dateConverted = dt.parse(date);
-						field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-					}
+					Date dateConverted = dt.parse(date);
+					field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 				}
 			} catch (ParseException | IllegalArgumentException | IllegalAccessException e) {
 				/*
@@ -350,17 +346,15 @@ public class CellHandler {
 							cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				} else {
 					String date = cell.getStringCellValue();
-					if (StringUtils.isNotBlank(date)) {
 
-						String tM = xlsAnnotation.transformMask();
-						String fM = xlsAnnotation.formatMask();
-						String decorator = StringUtils.isEmpty(tM)
-								? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
+					String tM = xlsAnnotation.transformMask();
+					String fM = xlsAnnotation.formatMask();
+					String decorator = StringUtils.isEmpty(tM)
+							? (StringUtils.isEmpty(fM) ? CellStyleHandler.MASK_DECORATOR_DATE : fM) : tM;
 
-						SimpleDateFormat dt = new SimpleDateFormat(decorator);
-						Date dateConverted = dt.parse(date);
-						field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-					}
+					SimpleDateFormat dt = new SimpleDateFormat(decorator);
+					Date dateConverted = dt.parse(date);
+					field.set(object, dateConverted.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				}
 			} catch (ParseException | IllegalArgumentException | IllegalAccessException e) {
 				/*
