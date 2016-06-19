@@ -269,70 +269,70 @@ public class CellDecorator {
 	/**
 	 * @return the borderColor
 	 */
-	protected final short getBorderColor() {
+	public final short getBorderColor() {
 		return borderColor;
 	}
 
 	/**
 	 * @param borderColor the borderColor to set
 	 */
-	protected final void setBorderColor(short borderColor) {
+	public final void setBorderColor(short borderColor) {
 		this.borderColor = borderColor;
 	}
 
 	/**
 	 * @return the borderLeftColor
 	 */
-	protected final short getBorderLeftColor() {
+	public final short getBorderLeftColor() {
 		return borderLeftColor;
 	}
 
 	/**
 	 * @param borderLeftColor the borderLeftColor to set
 	 */
-	protected final void setBorderLeftColor(short borderLeftColor) {
+	public final void setBorderLeftColor(short borderLeftColor) {
 		this.borderLeftColor = borderLeftColor;
 	}
 
 	/**
 	 * @return the borderRightColor
 	 */
-	protected final short getBorderRightColor() {
+	public final short getBorderRightColor() {
 		return borderRightColor;
 	}
 
 	/**
 	 * @param borderRightColor the borderRightColor to set
 	 */
-	protected final void setBorderRightColor(short borderRightColor) {
+	public final void setBorderRightColor(short borderRightColor) {
 		this.borderRightColor = borderRightColor;
 	}
 
 	/**
 	 * @return the borderTopColor
 	 */
-	protected final short getBorderTopColor() {
+	public final short getBorderTopColor() {
 		return borderTopColor;
 	}
 
 	/**
 	 * @param borderTopColor the borderTopColor to set
 	 */
-	protected final void setBorderTopColor(short borderTopColor) {
+	public final void setBorderTopColor(short borderTopColor) {
 		this.borderTopColor = borderTopColor;
 	}
 
 	/**
 	 * @return the borderBottomColor
 	 */
-	protected final short getBorderBottomColor() {
+	public final short getBorderBottomColor() {
 		return borderBottomColor;
 	}
 
 	/**
 	 * @param borderBottomColor the borderBottomColor to set
 	 */
-	protected final void setBorderBottomColor(short borderBottomColor) {
+	public final void setBorderBottomColor(short borderBottomColor) {
 		this.borderBottomColor = borderBottomColor;
 	}
 
