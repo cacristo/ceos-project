@@ -204,6 +204,7 @@ public class CellStyleHandler {
 	 */
 	protected static void applyBorderDefault(final CellStyle cs) {
 		applyBorder(cs, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN, CellStyle.BORDER_THIN);
+		applyBorderColor(cs, (short) 0, (short) 0, (short) 0, (short) 0);
 	}
 
 	/**
@@ -226,6 +227,28 @@ public class CellStyleHandler {
 		cs.setBorderRight(bR);
 		cs.setBorderTop(bT);
 		cs.setBorderBottom(bB);
+	}
+
+	/**
+	 * Apply the border to the cell style.
+	 * 
+	 * @param cs
+	 *            the {@link CellStyle} to use
+	 * @param bL
+	 *            the cell border left
+	 * @param bR
+	 *            the cell border right
+	 * @param bT
+	 *            the cell border top
+	 * @param bB
+	 *            the cell border bottom
+	 */
+	protected static void applyBorderColor(final CellStyle cs, final short bL, final short bR, final short bT,
+			final short bB) {
+		cs.setLeftBorderColor(bL);
+		cs.setRightBorderColor(bR);
+		cs.setTopBorderColor(bT);
+		cs.setBottomBorderColor(bB);
 	}
 
 	/**
@@ -534,9 +557,13 @@ public class CellStyleHandler {
 			if (decorator.border() != 0 && isBorderPropagationValid(decorator)) {
 				CellStyleHandler.applyBorder(cs, decorator.border(), decorator.border(), decorator.border(),
 						decorator.border());
+				CellStyleHandler.applyBorderColor(cs, decorator.borderColor(), decorator.borderColor(), decorator.borderColor(),
+						decorator.borderColor());
 			} else {
 				CellStyleHandler.applyBorder(cs, decorator.borderLeft(), decorator.borderRight(), decorator.borderTop(),
 						decorator.borderBottom());
+				CellStyleHandler.applyBorderColor(cs, decorator.borderLeftColor(), decorator.borderRightColor(), decorator.borderTopColor(),
+						decorator.borderBottomColor());
 			}
 
 			/* add the background to the cell */

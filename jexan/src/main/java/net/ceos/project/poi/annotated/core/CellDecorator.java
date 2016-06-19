@@ -41,6 +41,12 @@ public class CellDecorator {
 	private short borderTop = 0;
 	private short borderBottom = 0;
 
+	private short borderColor = 0;
+	private short borderLeftColor = 0;
+	private short borderRightColor = 0;
+	private short borderTopColor = 0;
+	private short borderBottomColor = 0;
+
 	private short backgroundColor = 0;
 	private short foregroundColor = 0;
 
@@ -258,6 +264,76 @@ public class CellDecorator {
 	 */
 	public final void setBorderBottom(final short borderBottom) {
 		this.borderBottom = borderBottom;
+	}
+
+	/**
+	 * @return the borderColor
+	 */
+	protected final short getBorderColor() {
+		return borderColor;
+	}
+
+	/**
+	 * @param borderColor the borderColor to set
+	 */
+	protected final void setBorderColor(short borderColor) {
+		this.borderColor = borderColor;
+	}
+
+	/**
+	 * @return the borderLeftColor
+	 */
+	protected final short getBorderLeftColor() {
+		return borderLeftColor;
+	}
+
+	/**
+	 * @param borderLeftColor the borderLeftColor to set
+	 */
+	protected final void setBorderLeftColor(short borderLeftColor) {
+		this.borderLeftColor = borderLeftColor;
+	}
+
+	/**
+	 * @return the borderRightColor
+	 */
+	protected final short getBorderRightColor() {
+		return borderRightColor;
+	}
+
+	/**
+	 * @param borderRightColor the borderRightColor to set
+	 */
+	protected final void setBorderRightColor(short borderRightColor) {
+		this.borderRightColor = borderRightColor;
+	}
+
+	/**
+	 * @return the borderTopColor
+	 */
+	protected final short getBorderTopColor() {
+		return borderTopColor;
+	}
+
+	/**
+	 * @param borderTopColor the borderTopColor to set
+	 */
+	protected final void setBorderTopColor(short borderTopColor) {
+		this.borderTopColor = borderTopColor;
+	}
+
+	/**
+	 * @return the borderBottomColor
+	 */
+	protected final short getBorderBottomColor() {
+		return borderBottomColor;
+	}
+
+	/**
+	 * @param borderBottomColor the borderBottomColor to set
+	 */
+	protected final void setBorderBottomColor(short borderBottomColor) {
+		this.borderBottomColor = borderBottomColor;
 	}
 
 	/**
