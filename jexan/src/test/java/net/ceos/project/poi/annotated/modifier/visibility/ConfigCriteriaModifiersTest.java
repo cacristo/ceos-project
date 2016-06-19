@@ -67,7 +67,7 @@ public class ConfigCriteriaModifiersTest {
 	 */
 	@Test
 	public void checkAccessLevelModifiersMethodsXConfigCriteria() {
-		assertEquals(new XConfigCriteria().getClass().getMethods().length - defaultMethods, 11);
+		assertEquals(new XConfigCriteria().getClass().getMethods().length - defaultMethods, 12);
 	}
 
 	/**

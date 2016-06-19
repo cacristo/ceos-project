@@ -58,7 +58,7 @@ public class CellDecoratorModifiersTest {
 	 */
 	@Test
 	public void checkAccessLevelModifiersMethods() {
-		assertEquals(new CellDecorator().getClass().getMethods().length - defaultMethods, 34);
+		assertEquals(new CellDecorator().getClass().getMethods().length - defaultMethods, 44);
 	}
 
 }
