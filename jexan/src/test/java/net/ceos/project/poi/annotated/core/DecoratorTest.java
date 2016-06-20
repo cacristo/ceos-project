@@ -38,25 +38,23 @@ public class DecoratorTest {
 
 	/**
 	 * Test a declaration of one new decorator by ConfigCriteria
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void validatePropagationTypeHorizontal() throws Exception {
+	public void validateDeclarationViaConfigCriteria() throws Exception {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
-		IEngine en = new Engine();
-		CellDecorator anotherDate = new CellDecorator();
-		anotherDate.setDecoratorName("anotherDate");
-		anotherDate.setAlignment(CellStyle.ALIGN_CENTER);
-		anotherDate.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
-		anotherDate.setForegroundColor(HSSFColor.LIGHT_GREEN.index);
-		anotherDate.setFontItalic(true);
-		anotherDate.setWrapText(true);
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
 
 		XConfigCriteria configCriteria = new XConfigCriteria();
-		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.setFileName("DeclarationViaConfigCriteria");
 
+		IEngine en = new Engine();
 		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
 
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();
@@ -66,22 +64,139 @@ public class DecoratorTest {
 	}
 
 	/**
-	 * TODO Test the override of one decorator (non-default) by ConfigCriteria
+	 * Test the override, by annotation, of one decorator (default)
+	 */
+	@Test
+	public void validateOverrideNumericDecoratorViaAnnotation() throws Exception {
+		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
+
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.setFileName("OverrideNumericDecoratorViaAnnotation");
+
+		IEngine en = new Engine();
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
+
+		PropagationHorizontalObject charger = new PropagationHorizontalObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
+		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
+	}
+
+	/**
+	 * Test the override, by ConfigCriteria, of one decorator (default)
+	 */
+	@Test
+	public void validateOverrideEnumDecoratorViaConfigCriteria() throws Exception {
+		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
+
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+
+		CellDecorator enumDecoratorDefault = new CellDecorator();
+		enumDecoratorDefault.setDecoratorName(CellStyleHandler.CELL_DECORATOR_ENUM);
+		enumDecoratorDefault.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		enumDecoratorDefault.setForegroundColor(HSSFColor.RED.index);
+		enumDecoratorDefault.setFontSize((short) 6);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.overrideEnumCellDecorator(enumDecoratorDefault);
+		configCriteria.setFileName("OverrideEnumDecoratorConfigCriteria");
+
+		IEngine en = new Engine();
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
+
+		PropagationHorizontalObject charger = new PropagationHorizontalObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
+		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
+	}
+
+	/**
+	 * Test the override of one decorator (non-default) by ConfigCriteria
+	 */
+	@Test
+	public void validateOverrideSpecificDecoratorViaConfigCriteria() throws Exception {
+		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
+
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+
+		CellDecorator anotherDate = new CellDecorator();
+		anotherDate.setDecoratorName("anotherDate");
+		anotherDate.setAlignment(CellStyle.ALIGN_LEFT);
+		anotherDate.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		anotherDate.setForegroundColor(HSSFColor.LIGHT_BLUE.index);
+		anotherDate.setFontColor((short) 8);
+		anotherDate.setFontBold(true);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
+		configCriteria.setFileName("OverrideSpecificDecoratorViaConfigCriteria");
+
+		IEngine en = new Engine();
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
+
+		PropagationHorizontalObject charger = new PropagationHorizontalObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
+		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
+	}
+
+	/**
+	 * TODO Test the declaration, by annotation, of unique decorator (override
+	 * all defaults except the header)
 	 */
 
 	/**
-	 * TODO Test the override, by annotation, of one decorator (default)
+	 * Test the declaration, by ConfigCriteria, of unique decorator (override
+	 * all defaults except the header)
 	 */
+	@Test
+	public void validateOverrideUniqueDecoratorViaConfigCriteria() throws Exception {
+		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
-	/**
-	 * TODO Test the override, by ConfigCriteria, of one decorator (default)
-	 */
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
 
-	/**
-	 * TODO Test the declaration, by annotation, of unique decorator (override all defaults except the header)
-	 */
+		CellDecorator unique = new CellDecorator();
+		unique.setAlignment(CellStyle.ALIGN_CENTER);
+		unique.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		unique.setForegroundColor(HSSFColor.LIGHT_ORANGE.index);
+		unique.setFontBold(true);
 
-	/**
-	 * TODO Test the declaration, by ConfigCriteria, of unique decorator (override all defaults except the header)
-	 */
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.overrideAllCellDecorators(unique);
+		configCriteria.setFileName("OverrideUniqueDecoratoViaConfigCriteria");
+
+		IEngine en = new Engine();
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
+
+		PropagationHorizontalObject charger = new PropagationHorizontalObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
+		PropagationHorizontalObjectBuilder.validatePropagationHorizontalObject(charger);
+	}
 }

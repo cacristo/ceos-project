@@ -76,7 +76,13 @@ public class EngineTest {
 	public void testPropagationTypeHorizontal() throws Exception {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
-		IEngine en = new Engine();
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+		
 		CellDecorator anotherDate = new CellDecorator();
 		anotherDate.setDecoratorName("anotherDate");
 		anotherDate.setAlignment(CellStyle.ALIGN_CENTER);
@@ -86,8 +92,10 @@ public class EngineTest {
 		anotherDate.setWrapText(true);
 
 		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
 		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
 
+		IEngine en = new Engine();
 		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
 
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();

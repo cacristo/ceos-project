@@ -79,6 +79,7 @@ public class XConfigCriteria {
 
 	/* cell style parameters */
 	private Boolean uniqueCellStyle = false;
+	private CellDecorator cellDecoratorUnique = new CellDecorator();
 	private Map<String, CellStyle> stylesMap = new HashMap<String, CellStyle>();
 	private Map<String, CellDecorator> cellDecoratorMap = new HashMap<String, CellDecorator>();
 	private Map<String, CellStyle> cellStyleManager = new HashMap<String, CellStyle>();
@@ -106,6 +107,7 @@ public class XConfigCriteria {
 	 */
 	public final void overrideAllCellDecorators(final CellDecorator decorator) {
 		this.uniqueCellStyle = true;
+		this.cellDecoratorUnique = decorator;
 		overrideGenericCellDecorator(decorator);
 		overrideBooleanCellDecorator(decorator);
 		overrideDateCellDecorator(decorator);
@@ -228,6 +230,15 @@ public class XConfigCriteria {
 	 */
 	protected final void initializeCellDecorator() throws ConfigurationException {
 
+		if (uniqueCellStyle) {
+			/* treat all the styles declared via annotation */
+			for (Map.Entry<String, CellStyle> object : stylesMap.entrySet()) {
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
+			}
+		}
+
+		/* treat all default styles non-declared */
 		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER) == null) {
 			stylesMap.put(CellStyleHandler.CELL_DECORATOR_HEADER,
 					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER)
@@ -277,14 +288,15 @@ public class XConfigCriteria {
 			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM));
 		}
 
+		/* treat all the styles non-default override via XConfigCriteria */
 		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
 			if (uniqueCellStyle) {
 				/*
 				 * when activate unique style, set all styles with the declared
 				 * style
 				 */
-				stylesMap.put(object.getKey(), CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-						cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC)));
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
 			} else {
 				stylesMap.put(object.getKey(),
 						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));

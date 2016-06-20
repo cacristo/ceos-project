@@ -15,6 +15,8 @@
  */
 package net.ceos.project.poi.annotated.core;
 
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
@@ -40,8 +42,18 @@ public class PropagationTest {
 	public void validatePropagationTypeHorizontal() throws Exception {
 		PropagationHorizontalObject pHO = PropagationHorizontalObjectBuilder.buildPropagationHorizontalObject();
 
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+
 		IEngine en = new Engine();
-		en.marshalAndSave(pHO, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
 
 		PropagationHorizontalObject charger = new PropagationHorizontalObject();
 
