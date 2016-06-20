@@ -18,19 +18,24 @@ package net.ceos.project.poi.annotated.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.poi.hssf.util.HSSFColor;
+
 import net.ceos.project.poi.annotated.annotation.XlsConfiguration;
+import net.ceos.project.poi.annotated.annotation.XlsDecorator;
+import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
+@XlsDecorators(values = { @XlsDecorator(decoratorName = "anotherDate"), @XlsDecorator(decoratorName = "numeric", foregroundColor = HSSFColor.BRIGHT_GREEN.index) })
 @XlsSheet(title = "Propagation Horizontal Obj")
 @XlsConfiguration(nameFile = "PropagationHorizontalObjects", extensionFile = ExtensionFileType.XLSX)
 public class PropagationHorizontalObject {
 
-	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd")
+	@XlsElement(title = "Date value", position = 1, formatMask = "yyyy-MM-dd", decorator = "anotherDate")
 	private Date dateAttribute;
 
-	@XlsElement(title = "String value", position = 2)
+	@XlsElement(title = "String value", position = 2, decorator = "myDecorator")
 	private String stringAttribute;
 
 	@XlsElement(title = "Integer value", position = 3)
