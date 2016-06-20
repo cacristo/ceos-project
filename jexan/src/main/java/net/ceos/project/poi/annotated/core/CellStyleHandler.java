@@ -74,6 +74,7 @@ public class CellStyleHandler {
 	public static final String CELL_DECORATOR_NUMERIC = "numeric";
 	public static final String CELL_DECORATOR_HEADER = "header";
 	public static final String CELL_DECORATOR_GENERIC = "generic";
+	public static final String CELL_DECORATOR_UNIQUE = "unique";
 	// default mask decorators
 	public static final String MASK_DECORATOR_DATE = "yyyy-MM-dd";
 	public static final String MASK_DECORATOR_INTEGER = "0";
