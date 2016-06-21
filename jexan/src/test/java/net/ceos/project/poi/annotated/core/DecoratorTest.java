@@ -21,6 +21,8 @@ import org.testng.annotations.Test;
 
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObject;
 import net.ceos.project.poi.annotated.bean.PropagationHorizontalObjectBuilder;
+import net.ceos.project.poi.annotated.bean.UniqueDecoratorObject;
+import net.ceos.project.poi.annotated.bean.UniqueDecoratorObjectBuilder;
 
 /**
  * Test the cell decorator
@@ -161,9 +163,39 @@ public class DecoratorTest {
 	}
 
 	/**
-	 * TODO Test the declaration, by annotation, of unique decorator (override
-	 * all defaults except the header)
+	 * Test the declaration, by annotation, of unique decorator (override all
+	 * defaults except the header)
 	 */
+	@Test
+	public void validateOverrideUniqueDecoratorViaAnnotation() throws Exception {
+		UniqueDecoratorObject uDeco = UniqueDecoratorObjectBuilder.buildUniqueDecoratorObject();
+
+		CellDecorator myDecoratorCell = new CellDecorator();
+		myDecoratorCell.setDecoratorName("myDecorator");
+		myDecoratorCell.setAlignment(CellStyle.ALIGN_CENTER);
+		myDecoratorCell.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		myDecoratorCell.setForegroundColor(HSSFColor.DARK_YELLOW.index);
+		myDecoratorCell.setFontItalic(true);
+
+		CellDecorator anotherDate = new CellDecorator();
+		anotherDate.setAlignment(CellStyle.ALIGN_CENTER);
+		anotherDate.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		anotherDate.setForegroundColor(HSSFColor.LIGHT_ORANGE.index);
+		anotherDate.setFontBold(true);
+
+		XConfigCriteria configCriteria = new XConfigCriteria();
+		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
+		configCriteria.addSpecificCellDecorator("anotherDate", anotherDate);
+		configCriteria.setFileName("OverrideUniqueDecoratorViaAnnotation");
+
+		IEngine en = new Engine();
+		en.marshalAndSave(configCriteria, uDeco, TestUtils.WORKING_DIR_GENERATED_I);
+
+		UniqueDecoratorObject charger = new UniqueDecoratorObject();
+
+		en.unmarshalFromPath(charger, TestUtils.WORKING_DIR_GENERATED_II);
+		UniqueDecoratorObjectBuilder.validateUniqueDecoratorObject(charger);
+	}
 
 	/**
 	 * Test the declaration, by ConfigCriteria, of unique decorator (override
@@ -189,7 +221,7 @@ public class DecoratorTest {
 		XConfigCriteria configCriteria = new XConfigCriteria();
 		configCriteria.addSpecificCellDecorator("myDecorator", myDecoratorCell);
 		configCriteria.overrideAllCellDecorators(unique);
-		configCriteria.setFileName("OverrideUniqueDecoratoViaConfigCriteria");
+		configCriteria.setFileName("OverrideUniqueDecoratorViaConfigCriteria");
 
 		IEngine en = new Engine();
 		en.marshalAndSave(configCriteria, pHO, TestUtils.WORKING_DIR_GENERATED_I);
