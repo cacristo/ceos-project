@@ -230,77 +230,18 @@ public class XConfigCriteria {
 	 */
 	protected final void initializeCellDecorator() throws ConfigurationException {
 
-		if (uniqueCellStyle) {
-			/* treat all the styles declared via annotation */
-			for (Map.Entry<String, CellStyle> object : stylesMap.entrySet()) {
-				stylesMap.put(object.getKey(),
-						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
-			}
-		}
+		CellStyle uCellStyle = stylesMap.get(CellStyleHandler.CELL_DECORATOR_UNIQUE);
+		if (uCellStyle != null) {
+			/* unique decorator defined by annotation */
+			treatUniqueDecoratorViaAnnotation(uCellStyle);
 
-		/* treat all default styles non-declared */
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_HEADER,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_HEADER))
-							: CellStyleHandler.initializeHeaderCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC))
-							: CellStyleHandler.initializeGenericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC))
-							: CellStyleHandler.initializeNumericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_DATE) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_DATE,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_DATE))
-							: CellStyleHandler.initializeDateCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN))
-							: CellStyleHandler.initializeBooleanCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN));
-		}
-		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_ENUM) == null) {
-			stylesMap.put(CellStyleHandler.CELL_DECORATOR_ENUM,
-					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM)
-							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
-									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_ENUM))
-							: CellStyleHandler.initializeGenericCellDecorator(workbook));
-			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM));
-		}
+		} else if (uniqueCellStyle) {
+			/* unique decorator defined by criteria */
+			treatUniqueDecoratorViaCriteria();
 
-		/* treat all the styles non-default override via XConfigCriteria */
-		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
-			if (uniqueCellStyle) {
-				/*
-				 * when activate unique style, set all styles with the declared
-				 * style
-				 */
-				stylesMap.put(object.getKey(),
-						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
-			} else {
-				stylesMap.put(object.getKey(),
-						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
-			}
+		} else {
+			/* basic treatment */
+			treatmentBasicDecorator();
 		}
 	}
 
@@ -758,5 +699,207 @@ public class XConfigCriteria {
 		String mask = StringUtils.isNotBlank(element.transformMask()) ? element.transformMask()
 				: (StringUtils.isNotBlank(element.formatMask()) ? element.formatMask() : maskDecoratorType);
 		return mask.concat(decorator);
+	}
+
+	/**
+	 * Basic treatment of the decorators.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentBasicDecorator() throws ConfigurationException {
+		/* treat all default styles non-declared */
+		treatmentHeaderDecorator();
+		treatmentGenericDecorator();
+		treatmentNumericDecorator();
+		treatmentDateDecorator();
+		treatmentBooleanDecorator();
+		treatmentEnumDecorator();
+
+		/* treat all the styles non-default override via XConfigCriteria */
+		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
+			stylesMap.put(object.getKey(),
+					CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+		}
+	}
+
+	/**
+	 * Treatment of the decorators using unique decorator declared via criteria.
+	 * <p>
+	 * If the unique decorator is activated, will override all others decorators
+	 * by the unique decorator.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatUniqueDecoratorViaCriteria() throws ConfigurationException {
+		if (uniqueCellStyle) {
+			/* treat all the styles declared via annotation */
+			for (Map.Entry<String, CellStyle> object : stylesMap.entrySet()) {
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
+			}
+		}
+
+		/* treat all default styles non-declared */
+		treatmentHeaderDecorator();
+		treatmentGenericDecorator();
+		treatmentNumericDecorator();
+		treatmentDateDecorator();
+		treatmentBooleanDecorator();
+		treatmentEnumDecorator();
+
+		/* treat all the styles non-default override via XConfigCriteria */
+		treatmentSpecificDecorator();
+	}
+
+	/**
+	 * Treatment of the decorators using unique decorator declared via
+	 * annotation.
+	 * <p>
+	 * If the unique decorator is activated, will override all others decorators
+	 * by the unique decorator.
+	 * 
+	 * @param uCellStyle
+	 *            the {@link CellStyle} to apply to all decorators except the
+	 *            header
+	 * @throws ConfigurationException
+	 */
+	private void treatUniqueDecoratorViaAnnotation(final CellStyle uCellStyle) throws ConfigurationException {
+		/* treat all the styles declared via annotation */
+		for (Map.Entry<String, CellStyle> object : stylesMap.entrySet()) {
+			stylesMap.put(object.getKey(), uCellStyle);
+		}
+
+		/* treat all default styles non-declared */
+		treatmentHeaderDecorator();
+		stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC, uCellStyle);
+		stylesMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC, uCellStyle);
+		stylesMap.put(CellStyleHandler.CELL_DECORATOR_DATE, uCellStyle);
+		stylesMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN, uCellStyle);
+		stylesMap.put(CellStyleHandler.CELL_DECORATOR_ENUM, uCellStyle);
+
+		/* treat all the styles non-default override via XConfigCriteria */
+		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
+			stylesMap.put(object.getKey(), uCellStyle);
+		}
+	}
+
+	/**
+	 * Set the header decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentHeaderDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_HEADER) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_HEADER,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_HEADER))
+							: CellStyleHandler.initializeHeaderCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_HEADER));
+		}
+	}
+
+	/**
+	 * Set the generic decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentGenericDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_GENERIC,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_GENERIC))
+							: CellStyleHandler.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_GENERIC));
+		}
+	}
+
+	/**
+	 * Set the numeric decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentNumericDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_NUMERIC,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_NUMERIC))
+							: CellStyleHandler.initializeNumericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_NUMERIC));
+		}
+	}
+
+	/**
+	 * Set the date decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentDateDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_DATE) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_DATE,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_DATE))
+							: CellStyleHandler.initializeDateCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_DATE));
+		}
+	}
+
+	/**
+	 * Set the boolean decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentBooleanDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_BOOLEAN,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_BOOLEAN))
+							: CellStyleHandler.initializeBooleanCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_BOOLEAN));
+		}
+	}
+
+	/**
+	 * Set the enumeration decorator by default if not declared via annotation.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentEnumDecorator() throws ConfigurationException {
+		if (stylesMap.get(CellStyleHandler.CELL_DECORATOR_ENUM) == null) {
+			stylesMap.put(CellStyleHandler.CELL_DECORATOR_ENUM,
+					cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM)
+							? CellStyleHandler.initializeCellStyleByCellDecorator(workbook,
+									cellDecoratorMap.get(CellStyleHandler.CELL_DECORATOR_ENUM))
+							: CellStyleHandler.initializeGenericCellDecorator(workbook));
+			cellDecoratorMap.remove(cellDecoratorMap.containsKey(CellStyleHandler.CELL_DECORATOR_ENUM));
+		}
+	}
+
+	/**
+	 * Set the all non-default decorators declared via annotation.
+	 * <p>
+	 * If the unique decorator is activated, will override all others decorators
+	 * by the unique decorator.
+	 * 
+	 * @throws ConfigurationException
+	 */
+	private void treatmentSpecificDecorator() throws ConfigurationException {
+		for (Map.Entry<String, CellDecorator> object : cellDecoratorMap.entrySet()) {
+			if (uniqueCellStyle) {
+				/*
+				 * when activate unique style, set all styles with the declared
+				 * style
+				 */
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, cellDecoratorUnique));
+			} else {
+				stylesMap.put(object.getKey(),
+						CellStyleHandler.initializeCellStyleByCellDecorator(workbook, object.getValue()));
+			}
+		}
 	}
 }
