@@ -42,7 +42,7 @@ public class MultiTypeAttributesTest {
 		IEngine en = new Engine();
 
 		CellDecorator configuration = new CellDecorator();
-		configuration.setDecoratorName("header");
+		configuration.setDecoratorName(CellStyleHandler.CELL_DECORATOR_HEADER);
 		configuration.setAlignment(CellStyle.ALIGN_CENTER);
 		configuration.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		configuration.setBorder(CellStyle.BORDER_DOTTED);

@@ -25,9 +25,10 @@ import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.core.CellStyleHandler;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
-@XlsDecorators(values = { @XlsDecorator(decoratorName = "anotherDate"), @XlsDecorator(decoratorName = "numeric", foregroundColor = HSSFColor.BRIGHT_GREEN.index) })
+@XlsDecorators(values = { @XlsDecorator(decoratorName = "anotherDate"), @XlsDecorator(decoratorName = CellStyleHandler.CELL_DECORATOR_NUMERIC, foregroundColor = HSSFColor.BRIGHT_GREEN.index) })
 @XlsSheet(title = "Propagation Horizontal Obj")
 @XlsConfiguration(nameFile = "PropagationHorizontalObjects", extensionFile = ExtensionFileType.XLSX)
 public class PropagationHorizontalObject {
