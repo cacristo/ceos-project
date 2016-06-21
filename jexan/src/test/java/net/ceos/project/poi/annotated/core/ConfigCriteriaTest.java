@@ -538,7 +538,7 @@ public class ConfigCriteriaTest {
 
 		CellDecorator configurationHeader = new CellDecorator();
 		// override default header configuration
-		configurationHeader.setDecoratorName("header");
+		configurationHeader.setDecoratorName(CellStyleHandler.CELL_DECORATOR_HEADER);
 		configurationHeader.setAlignment(CellStyle.ALIGN_CENTER);
 		configurationHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 		configurationHeader.setBorder(CellStyle.BORDER_THIN);

@@ -32,6 +32,7 @@ import net.ceos.project.poi.annotated.annotation.XlsGroupRow;
 import net.ceos.project.poi.annotated.annotation.XlsNestedHeader;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
 import net.ceos.project.poi.annotated.bean.Job;
+import net.ceos.project.poi.annotated.core.CellStyleHandler;
 import net.ceos.project.poi.annotated.definition.CascadeType;
 import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 import net.ceos.project.poi.annotated.definition.PropagationType;
@@ -302,7 +303,7 @@ public class XMenFactory {
 	 * @author Carlos CRISTO ABREU
 	 */
 	@XlsDecorators(values = {
-			@XlsDecorator(decoratorName = "header", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
+			@XlsDecorator(decoratorName = CellStyleHandler.CELL_DECORATOR_HEADER, fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
 			@XlsDecorator(decoratorName = "myDecorator", fontItalic = true, fontBold = true, fontSize = 8),
 			@XlsDecorator(decoratorName = "extendedIntDecorator", border = CellStyle.BORDER_MEDIUM, fontBold = true, foregroundColor = HSSFColor.BLUE.index) })
 	@XlsSheet(title = "Simple object sample", cascadeLevel = CascadeType.CASCADE_L1, startRow = 4, startCell = 1, freezePane = @XlsFreezePane(colSplit = 0, rowSplit = 4) )
