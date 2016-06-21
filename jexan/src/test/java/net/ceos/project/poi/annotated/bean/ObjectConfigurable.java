@@ -26,10 +26,11 @@ import net.ceos.project.poi.annotated.annotation.XlsDecorator;
 import net.ceos.project.poi.annotated.annotation.XlsDecorators;
 import net.ceos.project.poi.annotated.annotation.XlsElement;
 import net.ceos.project.poi.annotated.annotation.XlsSheet;
+import net.ceos.project.poi.annotated.core.CellStyleHandler;
 
 @XlsDecorators(values = {
-		@XlsDecorator(decoratorName = "header", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
-		@XlsDecorator(decoratorName = "numeric", fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
+		@XlsDecorator(decoratorName = CellStyleHandler.CELL_DECORATOR_HEADER, fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
+		@XlsDecorator(decoratorName = CellStyleHandler.CELL_DECORATOR_NUMERIC, fontItalic = true, fontBold = true, border = CellStyle.BORDER_DOTTED, foregroundColor = HSSFColor.ORANGE.index),
 		@XlsDecorator(decoratorName = "extendedDate", fontItalic = true, fontBold = true),
 		@XlsDecorator(decoratorName = "extendedInteger", border = CellStyle.BORDER_MEDIUM, fontBold = true, foregroundColor = HSSFColor.BLUE.index) })
 @XlsConfiguration(nameFile = "Object configurable")
