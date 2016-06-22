@@ -108,8 +108,15 @@ class CellFormulaHandler {
 				cell.setCellValue((Short) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
-			// apply the value
-			cell.setCellValue((Short) configCriteria.getField().get(object));
+			// normal manage cell
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+				cell.setCellValue(
+						df.format(configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+			} else {
+				// apply the value
+				cell.setCellValue((Short) configCriteria.getField().get(object));
+			}
 		}
 	}
 
@@ -135,8 +142,15 @@ class CellFormulaHandler {
 				cell.setCellValue((Long) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
-			// apply the value
-			cell.setCellValue((Integer) configCriteria.getField().get(object));
+			// normal manage cell
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+				cell.setCellValue(
+						df.format(configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+			} else {
+				// apply the value
+				cell.setCellValue((Integer) configCriteria.getField().get(object));
+			}
 		}
 	}
 
@@ -162,8 +176,15 @@ class CellFormulaHandler {
 				cell.setCellValue((Long) toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
-			// apply the value
-			cell.setCellValue((Long) configCriteria.getField().get(object));
+			// normal manage cell
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+				cell.setCellValue(
+						df.format(configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+			} else {
+				// apply the value
+				cell.setCellValue((Long) configCriteria.getField().get(object));
+			}
 		}
 	}
 
@@ -190,7 +211,14 @@ class CellFormulaHandler {
 			}
 		} else {
 			// normal manage cell
-			cell.setCellValue((Float) configCriteria.getField().get(object));
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+				cell.setCellValue(
+						df.format(configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+			} else {
+				// apply the value
+				cell.setCellValue((Float) configCriteria.getField().get(object));
+			}
 		}
 	}
 
@@ -206,7 +234,7 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
-	 * @throws ElementException 
+	 * @throws ElementException
 	 */
 	protected static void doubleHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
@@ -239,7 +267,7 @@ class CellFormulaHandler {
 	 * @throws NoSuchMethodException
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
-	 * @throws ElementException 
+	 * @throws ElementException
 	 */
 	protected static void bigDecimalHandler(final XConfigCriteria configCriteria, final Object object, final Cell cell)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, ElementException {
@@ -256,7 +284,7 @@ class CellFormulaHandler {
 				Double dBigDecimal = bd.doubleValue();
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-					cell.setCellValue(Double.valueOf(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT)));
+					cell.setCellValue(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT));
 				} else {
 					cell.setCellValue(dBigDecimal);
 				}
@@ -330,8 +358,7 @@ class CellFormulaHandler {
 	 *            the {@link Cell} to use
 	 * @throws ElementException
 	 */
-	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell)
-			throws ElementException {
+	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell) throws ElementException {
 		boolean isFormulaApplied = false;
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {

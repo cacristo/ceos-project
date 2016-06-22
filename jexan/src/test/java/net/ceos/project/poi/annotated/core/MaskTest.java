@@ -226,13 +226,11 @@ public class MaskTest {
 		// transform float attributes
 		Cell cellFloat1 = extractCell(charger, wb.getSheetAt(0), 22);
 		String floatStr1 = charger.getFloatAttribute4().toString();
-		assertEquals(String.valueOf(cellFloat1.getNumericCellValue())
-				.startsWith(floatStr1.substring(0, floatStr1.length() - 1)), true);
+		assertEquals(cellFloat1.getStringCellValue().startsWith(floatStr1.substring(0, floatStr1.length() - 1)), true);
 
 		Cell cellFloat2 = extractCell(charger, wb.getSheetAt(0), 23);
 		String floatStr2 = String.valueOf(charger.getFloatAttribute5());
-		assertEquals(String.valueOf(cellFloat2.getNumericCellValue())
-				.startsWith(floatStr2.substring(0, floatStr2.length() - 1)), true);
+		assertEquals(cellFloat2.getStringCellValue().startsWith(floatStr2.substring(0, floatStr2.length() - 1)), true);
 	}
 
 	/**
@@ -255,13 +253,16 @@ public class MaskTest {
 
 		// transform bigdecimal attributes
 		Cell cellBD1 = extractCell(charger, wb.getSheetAt(0), 16);
-		assertEquals(charger.getBigDecimalAttribute4(), BigDecimal.valueOf(cellBD1.getNumericCellValue()));
+		assertEquals(charger.getBigDecimalAttribute4(),
+				BigDecimal.valueOf(Double.valueOf(cellBD1.getStringCellValue())));
 
 		Cell cellBD2 = extractCell(charger, wb.getSheetAt(0), 17);
-		assertEquals(charger.getBigDecimalAttribute5(), BigDecimal.valueOf(cellBD2.getNumericCellValue()));
+		assertEquals(charger.getBigDecimalAttribute5(),
+				BigDecimal.valueOf(Double.valueOf(cellBD2.getStringCellValue())));
 
 		Cell cellBD3 = extractCell(charger, wb.getSheetAt(0), 18);
-		assertEquals(charger.getBigDecimalAttribute6(), BigDecimal.valueOf(cellBD3.getNumericCellValue()));
+		assertEquals(charger.getBigDecimalAttribute6(),
+				BigDecimal.valueOf(Double.valueOf(cellBD3.getStringCellValue())));
 	}
 
 	/**
@@ -336,8 +337,7 @@ public class MaskTest {
 		// transform integer attributes
 		Cell cellInteger = extractCell(charger, wb.getSheetAt(0), 28);
 		assertEquals(charger.getIntegerAttribute1(), Integer.valueOf((int) cellInteger.getNumericCellValue()));
-		// FIXME mask doesn't work correctly
-		assertEquals(parserNumeric(charger.getIntegerAttribute1(), "0.0"), cellInteger.getNumericCellValue(),5);
+		assertEquals(parserNumeric(charger.getIntegerAttribute1(), "0.0"), cellInteger.getNumericCellValue(), 5);
 	}
 
 	/**
@@ -360,9 +360,8 @@ public class MaskTest {
 
 		// transform integer attributes
 		Cell cellInteger = extractCell(charger, wb.getSheetAt(0), 29);
-		assertEquals(charger.getIntAttribute2(), (int) cellInteger.getNumericCellValue());
-		// FIXME mask doesn't work correctly
-		assertEquals(parserNumeric(charger.getIntAttribute2(), "0.0"), cellInteger.getNumericCellValue(),5);
+		assertEquals(String.valueOf(parserNumeric(charger.getIntAttribute2(), "0.0")),
+				cellInteger.getStringCellValue());
 	}
 
 	/**
@@ -386,8 +385,7 @@ public class MaskTest {
 		// transform short attributes
 		Cell cellShort = extractCell(charger, wb.getSheetAt(0), 30);
 		assertEquals(charger.getShortAttribute1(), (short) cellShort.getNumericCellValue());
-		// FIXME mask doesn't work correctly
-		assertEquals(parserNumeric(charger.getShortAttribute1(), "0.0000"), cellShort.getNumericCellValue(),4);
+		assertEquals(parserNumeric(charger.getShortAttribute1(), "0.0000"), cellShort.getNumericCellValue(), 4);
 	}
 
 	/**
@@ -410,9 +408,8 @@ public class MaskTest {
 
 		// transform short attributes
 		Cell cellShort = extractCell(charger, wb.getSheetAt(0), 31);
-		assertEquals(charger.getShortAttribute2(), Short.valueOf((short) cellShort.getNumericCellValue()));
-		// FIXME mask doesn't work correctly
-		assertEquals(parserNumeric(charger.getShortAttribute2(), "0.0"), cellShort.getNumericCellValue(),1);
+		assertEquals(String.valueOf(parserNumeric(charger.getShortAttribute2(), "0.0")),
+				cellShort.getStringCellValue());
 	}
 
 	/* private tests methods */

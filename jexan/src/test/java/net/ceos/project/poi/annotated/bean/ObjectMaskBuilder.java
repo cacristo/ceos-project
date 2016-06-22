@@ -101,7 +101,6 @@ public class ObjectMaskBuilder {
 		// Short
 		toValidate.setShortAttribute1((short)5);
 		toValidate.setShortAttribute2((short)44);
-		// TODO add new fields below
 
 		return toValidate;
 	}
@@ -155,13 +154,12 @@ public class ObjectMaskBuilder {
 		assertEquals(base.getFloatAttribute1(), toValidate.getFloatAttribute1(), 0.001);
 		assertEquals(base.getFloatAttribute2(), toValidate.getFloatAttribute2());
 		assertEquals(base.getFloatAttribute3(), toValidate.getFloatAttribute3());
-		assertEquals(base.getFloatAttribute4(), toValidate.getFloatAttribute4());
-		assertEquals(base.getFloatAttribute5(), toValidate.getFloatAttribute5(), 0.001);
+		assertEquals(String.valueOf(base.getFloatAttribute4()).startsWith(String.valueOf(toValidate.getFloatAttribute4())), true);
+		assertEquals(String.valueOf(base.getFloatAttribute5()).startsWith(String.valueOf(toValidate.getFloatAttribute5())), true);
 		assertEquals(base.isBooleanAttribute1(), toValidate.isBooleanAttribute1());
 		assertEquals(base.getBooleanAttribute2(), toValidate.getBooleanAttribute2());
 		assertEquals(base.getBooleanAttribute3(), toValidate.getBooleanAttribute3());
 		assertEquals(base.isBooleanAttribute4(), toValidate.isBooleanAttribute4());
-		// TODO add new validation below
 		assertEquals(base.getIntegerAttribute1(), toValidate.getIntegerAttribute1());
 		assertEquals(base.getIntAttribute2(), toValidate.getIntAttribute2());
 		assertEquals(base.getShortAttribute1(), toValidate.getShortAttribute1());
