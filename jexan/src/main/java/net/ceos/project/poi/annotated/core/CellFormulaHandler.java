@@ -83,8 +83,15 @@ class CellFormulaHandler {
 				CellValueHandler.consumeValue(cell, toExplicitFormula(object, configCriteria.getField()));
 			}
 		} else {
-			// apply the value
-			CellValueHandler.consumeValue(cell, configCriteria.getField().get(object));
+			// normal manage cell
+			if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
+				DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
+				CellValueHandler.consumeValue(cell,
+						df.format(configCriteria.getField().get(object)).replace(Constants.COMMA, Constants.DOT));
+			} else {
+				// apply the value
+				CellValueHandler.consumeValue(cell, configCriteria.getField().get(object));
+			}
 		}
 	}
 
@@ -151,8 +158,7 @@ class CellFormulaHandler {
 				Double dBigDecimal = bd.doubleValue();
 				if (StringUtils.isNotBlank(configCriteria.getElement().transformMask())) {
 					DecimalFormat df = new DecimalFormat(configCriteria.getElement().transformMask());
-					CellValueHandler.consumeValue(cell,
-							Double.valueOf(df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT)));
+					CellValueHandler.consumeValue(cell, df.format(dBigDecimal).replace(Constants.COMMA, Constants.DOT));
 				} else {
 					CellValueHandler.consumeValue(cell, dBigDecimal);
 				}
@@ -282,8 +288,7 @@ class CellFormulaHandler {
 	 *            the {@link Cell} to use
 	 * @throws ElementException
 	 */
-	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell)
-			throws ElementException {
+	private static boolean toFormula(final XConfigCriteria configCriteria, final Cell cell) throws ElementException {
 		boolean isFormulaApplied = false;
 
 		if (StringUtils.isNotBlank(configCriteria.getElement().formula())) {
