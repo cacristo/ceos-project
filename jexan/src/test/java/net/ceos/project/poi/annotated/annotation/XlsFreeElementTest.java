@@ -55,12 +55,14 @@ public class XlsFreeElementTest {
 					assertEquals(xlsFreeElement.row(), 1);
 					assertEquals(xlsFreeElement.cell(), 1);
 					assertEquals(xlsFreeElement.comment(), "");
+					assertEquals(xlsFreeElement.commentRules(), "");
 					assertEquals(xlsFreeElement.decorator(), "");
 					assertEquals(xlsFreeElement.formatMask(), "");
 					assertEquals(xlsFreeElement.transformMask(), "");
 					assertEquals(xlsFreeElement.isFormula(), false);
 					assertEquals(xlsFreeElement.formula(), "");
 					assertEquals(xlsFreeElement.customizedRules(), "");
+					assertEquals(xlsFreeElement.columnWidthInUnits(), 0);
 				}
 			}
 		}
