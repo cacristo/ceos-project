@@ -56,6 +56,8 @@ public class XlsElementTest {
 				assertEquals(xlsElement.isFormula(), false);
 				assertEquals(xlsElement.formula(), "");
 				assertEquals(xlsElement.customizedRules(), "");
+				assertEquals(xlsElement.columnWidthInUnits(), 0);
+				assertEquals(xlsElement.parentSheet(), false);
 			}
 		}
 	}
