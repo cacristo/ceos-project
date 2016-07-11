@@ -64,6 +64,15 @@ public @interface XlsSheet {
 	int startCell() default 1;
 
 	/**
+	 * Define the auto resize of all columns.
+	 * <p>
+	 * By default is false.
+	 * 
+	 * @return the auto resize value
+	 */
+	boolean autoResizeColumn() default false;
+
+	/**
 	 * Define tab color of the sheet. Sets the value from HSSFColor:
 	 * <ul>
 	 * <li>HSSFColor.RED.index.
