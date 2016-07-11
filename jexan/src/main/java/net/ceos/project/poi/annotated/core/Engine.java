@@ -165,6 +165,7 @@ public class Engine implements IEngine {
 		configCriteria.setFreezePane(annotation.freezePane());
 		configCriteria.setGroupElement(annotation.groupElement());
 
+		configCriteria.setAutoResizeColumn(annotation.autoResizeColumn());
 	}
 
 	/**
@@ -522,6 +523,9 @@ public class Engine implements IEngine {
 		} else {
 
 			boolean isAppliedObject = toExcel(configCriteria, o, fT, idxC);
+
+			/* backup of the cell index */
+			configCriteria.setLastCellIndex(idxC);
 
 			if (!isAppliedObject && !fT.isPrimitive()) {
 				try {
@@ -1478,7 +1482,7 @@ public class Engine implements IEngine {
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
 
-		/* re-evaluate formulas with POI's FormulaEvaluator  */
+		/* re-evaluate formulas with POI's FormulaEvaluator */
 		configCriteria.getWorkbook().getCreationHelper().createFormulaEvaluator().evaluateAll();
 	}
 
@@ -1565,6 +1569,10 @@ public class Engine implements IEngine {
 
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);
+
+		/* apply column auto resize to sheet */
+		SheetStyleHandler.applyAutoResizeColumn(configCriteria);
+
 	}
 
 	private void marshallCollectionEngineT(final XConfigCriteria configCriteria, final Collection<?> listObject,

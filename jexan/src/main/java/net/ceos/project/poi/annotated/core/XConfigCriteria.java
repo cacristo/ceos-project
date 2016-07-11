@@ -61,6 +61,8 @@ public class XConfigCriteria {
 	/* sheet parameters */
 	private XlsFreezePane freezePane;
 	private XlsGroupElement groupElement;
+	private Boolean autoResizeColumn = false;
+	private Boolean overrideAutoResizeColumn;
 
 	/* element parameters */
 	private XlsElement element;
@@ -223,6 +225,16 @@ public class XConfigCriteria {
 	}
 
 	/**
+	 * Force the column auto resize to apply at the Sheet.
+	 * 
+	 * @param isAutoResize
+	 *            true if to auto resize, otherwise false
+	 */
+	public final void overrideAutoResizeColumn(final boolean isAutoResize) {
+		overrideAutoResizeColumn = isAutoResize;
+	}
+
+	/**
 	 * Initialize Cell Decorator system.
 	 * 
 	 * @throws ConfigurationException
@@ -256,8 +268,10 @@ public class XConfigCriteria {
 	 * Apply to sheet the column width defined.
 	 */
 	protected final void applyColumnWidthToSheet() {
-		for (Map.Entry<Integer, Integer> column : columnWidthMap.entrySet()) {
-			getSheet().setColumnWidth(column.getKey(), column.getValue() * 256);
+		if (!autoResizeColumn) {
+			for (Map.Entry<Integer, Integer> column : columnWidthMap.entrySet()) {
+				getSheet().setColumnWidth(column.getKey(), column.getValue() * 256);
+			}
 		}
 	}
 
@@ -631,6 +645,24 @@ public class XConfigCriteria {
 	 */
 	protected final void setGroupElement(XlsGroupElement groupElement) {
 		this.groupElement = groupElement;
+	}
+
+	/**
+	 * @return the autoResizeColumn
+	 */
+	protected final boolean isAutoResizeColumn() {
+		if (overrideAutoResizeColumn != null) {
+			return overrideAutoResizeColumn;
+		}
+		return autoResizeColumn;
+	}
+
+	/**
+	 * @param isAutoResize
+	 *            the autoResizeColumn to set
+	 */
+	protected final void setAutoResizeColumn(boolean isAutoResize) {
+		this.autoResizeColumn = isAutoResize;
 	}
 
 	/**
