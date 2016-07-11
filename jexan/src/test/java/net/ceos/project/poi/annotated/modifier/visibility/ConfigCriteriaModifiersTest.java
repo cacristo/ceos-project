@@ -60,7 +60,7 @@ public class ConfigCriteriaModifiersTest {
 	public Object[][] objectModifiersMethodsProvider() throws Exception {
 		return new Object[][] {
 				/* XConfigCriteria object & expected public methods */
-				{ new XConfigCriteria(), 12 },
+				{ new XConfigCriteria(), 13 },
 				/* CConfigCriteria object & expected public methods */
 				{ new CConfigCriteria(), 3 } };
 	}

@@ -47,4 +47,18 @@ class SheetStyleHandler {
 			((XSSFSheet) configCriteria.getSheet()).setTabColor(configCriteria.getTabColorSheet());
 		}
 	}
+
+	/**
+	 * Auto resize of each column at the sheet in use.
+	 * 
+	 * @param configCriteria
+	 *            the {@link XConfigCriteria}
+	 */
+	protected static void applyAutoResizeColumn(XConfigCriteria configCriteria) {
+		if (configCriteria.isAutoResizeColumn()) {
+			for(int i = configCriteria.getStartCell(); i < configCriteria.getLastCellIndex() + 1; i++){
+				configCriteria.getSheet().autoSizeColumn(i);
+			}
+		}
+	}
 }
