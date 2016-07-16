@@ -17,8 +17,8 @@ package net.ceos.project.poi.annotated.core;
 
 import java.util.List;
 
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import net.ceos.project.poi.annotated.bean.AutomaticPositionObject;
 import net.ceos.project.poi.annotated.bean.AutomaticPositionObjectBuilder;
@@ -26,10 +26,10 @@ import net.ceos.project.poi.annotated.definition.ExtensionFileType;
 
 public class ElementPositionTest {
 
-	private List<AutomaticPositionObject> collection;
+	private static List<AutomaticPositionObject> collection;
 
 	@BeforeClass
-	private void prepareDataList() {
+	public static void prepareDataList() {
 		collection = AutomaticPositionObjectBuilder.buildListOfAutomaticPositionObject(100);
 	}
 
@@ -44,7 +44,7 @@ public class ElementPositionTest {
 		configCriteria.overrideExtensionType(ExtensionFileType.XLS);
 		configCriteria.overrideAutoResizeColumn(true);
 
-		en.marshalAsCollectionAndSave(configCriteria, collection, TestUtils.WORKING_DIR_GENERATED_I);
+		en.marshalAsCollectionAndSave(configCriteria, ElementPositionTest.collection, TestUtils.WORKING_DIR_GENERATED_I);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class ElementPositionTest {
 				.unmarshalToCollection(configCriteria, new AutomaticPositionObject(), TestUtils.WORKING_DIR_GENERATED_I);
 
 		for(int i = 0; i < collection.size(); i++){
-			AutomaticPositionObjectBuilder.validateAutomaticPositionObject(this.collection.get(i), collection.get(i), false);
+			AutomaticPositionObjectBuilder.validateAutomaticPositionObject(ElementPositionTest.collection.get(i), collection.get(i), false);
 		}
 	}
 }

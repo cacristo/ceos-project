@@ -960,7 +960,7 @@ public class Engine implements IEngine {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (xlsAnnotation.position() != -99 && xlsAnnotation.position() < 1) {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
@@ -1096,7 +1096,7 @@ public class Engine implements IEngine {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (xlsAnnotation.position() != -99 && xlsAnnotation.position() < 1) {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
@@ -1215,7 +1215,7 @@ public class Engine implements IEngine {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (xlsAnnotation.position() != -99 && xlsAnnotation.position() < 1) {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
@@ -1320,7 +1320,7 @@ public class Engine implements IEngine {
 				XlsElement xlsAnnotation = (XlsElement) f.getAnnotation(XlsElement.class);
 
 				/* validate the position of the element */
-				if (xlsAnnotation.position() < 1) {
+				if (xlsAnnotation.position() != -99 && xlsAnnotation.position() < 1) {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
