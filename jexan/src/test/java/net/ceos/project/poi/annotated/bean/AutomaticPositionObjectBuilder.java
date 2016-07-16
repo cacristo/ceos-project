@@ -15,7 +15,7 @@
  */
 package net.ceos.project.poi.annotated.bean;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -213,7 +213,7 @@ public class AutomaticPositionObjectBuilder {
 		assertEquals(base.getIntegerPrimitiveAttribute3(), toValidate.getIntegerPrimitiveAttribute3());
 		assertEquals(base.getIntegerPrimitiveAttribute4(), toValidate.getIntegerPrimitiveAttribute4());
 		assertEquals(base.getIntegerPrimitiveAttribute5(), toValidate.getIntegerPrimitiveAttribute5());
-		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute());
+		assertEquals(base.getDoublePrimitiveAttribute(), toValidate.getDoublePrimitiveAttribute(), 0.001);
 		assertEquals(base.getLongPrimitiveAttribute(), toValidate.getLongPrimitiveAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
 
@@ -226,7 +226,7 @@ public class AutomaticPositionObjectBuilder {
 		}
 
 		assertEquals(base.getFloatAttribute(), toValidate.getFloatAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute().setScale(2, RoundingMode.HALF_UP), 
 				toValidate.getBigDecimalAttribute().setScale(2, RoundingMode.HALF_UP));
