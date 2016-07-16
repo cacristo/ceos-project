@@ -67,7 +67,7 @@ class PredicateFactory {
 	protected static final Predicate<Field> isFieldAnnotationXlsNestedHeaderPresent = object -> object.isAnnotationPresent(XlsNestedHeader.class);
 
 	/* Element validations */
-	protected static final Predicate<XlsElement> isXlsElementInvalid = element -> element.position() < 1;
+	protected static final Predicate<XlsElement> isXlsElementInvalid = element -> element.position() != -99 && element.position() < 1;
 	protected static final Predicate<XlsFreeElement> isXlsFreeElementInvalid = freeElement -> freeElement.row() < 1
 			|| freeElement.cell() < 1;
 
