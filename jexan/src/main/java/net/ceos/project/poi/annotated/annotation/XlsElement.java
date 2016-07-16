@@ -49,7 +49,7 @@ public @interface XlsElement {
 	 * 
 	 * @return the position
 	 */
-	int position();
+	int position() default -99;
 
 	/**
 	 * Define the commentary of the element.<p>

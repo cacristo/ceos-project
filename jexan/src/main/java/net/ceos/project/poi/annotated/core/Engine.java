@@ -1003,6 +1003,7 @@ public class Engine implements IEngine {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexCell = idxC;
+		int elementPosition = 0;
 		int rem = 0;
 
 		/* validate cascade level */
@@ -1063,6 +1064,9 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT_FORMULA.getMessage());
 				}
 
+				/* set position of the element */
+				elementPosition = xlsAnnotation.position() == -99 ? elementPosition + 1 : xlsAnnotation.position();
+
 				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
@@ -1076,14 +1080,14 @@ public class Engine implements IEngine {
 				 * new object)
 				 */
 				counter++;
-				int pos = idxC + xlsAnnotation.position();
+				int pos = idxC + elementPosition;
 				// if is a list don't generate the head
 				if (configCriteria.getRowHeader() != null && !Collection.class.isAssignableFrom(f.getType())
 						&& CellHandler.isAuthorizedType(f)) {
 					pos = pos - rem;
 					/* header treatment */
 					CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(), configCriteria.getRowHeader(),
-							indexCell + xlsAnnotation.position(), xlsAnnotation.title());
+							indexCell + elementPosition, xlsAnnotation.title());
 					rem = 0;
 				} else {
 					//
@@ -1091,13 +1095,12 @@ public class Engine implements IEngine {
 				}
 				/* prepare the column width */
 				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
-					configCriteria.getColumnWidthMap().put(indexCell + xlsAnnotation.position(),
+					configCriteria.getColumnWidthMap().put(indexCell + elementPosition,
 							xlsAnnotation.columnWidthInUnits());
 				}
 
 				/* content treatment */
-				indexCell += initializeCellByFieldHorizontal(configCriteria, o, idxR,
-						indexCell + xlsAnnotation.position(), cL);
+				indexCell += initializeCellByFieldHorizontal(configCriteria, o, idxR, indexCell + elementPosition, cL);
 			}
 		}
 
@@ -1142,6 +1145,7 @@ public class Engine implements IEngine {
 		int counter = -1;
 		int indexCell = idxC;
 		int indexRow = idxR;
+		int elementPosition = 0;
 		/* backup base index of the cell */
 		int baseIdxCell = indexCell;
 		int rem = 0;
@@ -1198,6 +1202,9 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.CONFIGURATION_CONFLICT_FORMULA.getMessage());
 				}
 
+				/* set position of the element */
+				elementPosition = xlsAnnotation.position() == -99 ? elementPosition + 1 : xlsAnnotation.position();
+
 				/* update annotation at ConfigCriteria */
 				configCriteria.setElement(xlsAnnotation);
 
@@ -1213,17 +1220,17 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* create the row */
-				Row row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
+				Row row = configCriteria.getSheet().getRow(indexRow + elementPosition);
 				if (row == null || baseIdxCell == 0 || baseIdxCell == 1) {
 					/* header treatment with nested header */
 					int tmpIdxCell = indexCell - 1;
 					/* initialize row */
-					row = initializeRow(configCriteria.getSheet(), indexRow + xlsAnnotation.position());
+					row = initializeRow(configCriteria.getSheet(), indexRow + elementPosition);
 
 					/* apply merge region */
 					applyMergeRegion(configCriteria, row, indexRow, tmpIdxCell, false);
 
-					int pos = indexRow + xlsAnnotation.position();
+					int pos = indexRow + elementPosition;
 					// if is a list don't generate the head
 					if (row != null && !Collection.class.isAssignableFrom(f.getType())
 							&& CellHandler.isAuthorizedType(f)) {
@@ -1238,7 +1245,7 @@ public class Engine implements IEngine {
 					}
 
 				} else {
-					row = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
+					row = configCriteria.getSheet().getRow(indexRow + elementPosition);
 					/* header treatment without nested header */
 					// CellStyleHandler.initializeHeaderCell(configCriteria.getStylesMap(),
 					// row, indexCell,
@@ -1247,15 +1254,15 @@ public class Engine implements IEngine {
 
 				/* prepare the column width */
 				if (configCriteria.getResizeActive() && xlsAnnotation.columnWidthInUnits() != 0) {
-					configCriteria.getColumnWidthMap().put(indexCell + xlsAnnotation.position(),
+					configCriteria.getColumnWidthMap().put(indexCell + elementPosition,
 							xlsAnnotation.columnWidthInUnits());
 				}
 
 				/* increment the cell position */
 				indexCell++;
 				/* content treatment */
-				indexRow += initializeCellByFieldVertical(configCriteria, o, row, indexRow + xlsAnnotation.position(),
-						indexCell, cL);
+				indexRow += initializeCellByFieldVertical(configCriteria, o, row, indexRow + elementPosition, indexCell,
+						cL);
 			}
 		}
 
@@ -1293,10 +1300,15 @@ public class Engine implements IEngine {
 	 *             given when a not supported action.
 	 */
 	private int unmarshalAsPropagationHorizontal(final XConfigCriteria configCriteria, Object o, Class<?> oC,
-			final int idxR, final int idxC) throws WorkbookException {
+			final int idxR, final int idxC, final int cL) throws WorkbookException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexCell = idxC;
+		int elementPosition = 0;
+
+		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
+			return counter;
+		}
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -1312,6 +1324,10 @@ public class Engine implements IEngine {
 				if (PredicateFactory.isXlsElementInvalid.test(xlsAnnotation)) {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
+
+				/* set position of the element */
+				elementPosition = xlsAnnotation.position() == -99 ? elementPosition + 1 : xlsAnnotation.position();
+
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -1322,7 +1338,7 @@ public class Engine implements IEngine {
 				// MAL - ERRO AQUI
 				Row contentRow = configCriteria.getSheet().getRow(idxR + 1);
 				if (contentRow != null && idxR < configCriteria.getSheet().getLastRowNum()) {
-					Cell contentCell = contentRow.getCell(indexCell + xlsAnnotation.position());
+					Cell contentCell = contentRow.getCell(indexCell + elementPosition);
 					if (contentCell != null) {
 						if (Collection.class.isAssignableFrom(fT)) {
 
@@ -1341,8 +1357,7 @@ public class Engine implements IEngine {
 									Class<?> subObjbectClass = subObjbect.getClass();
 
 									int internalCellCounter = unmarshalAsPropagationHorizontal(configCriteria,
-											subObjbect, subObjbectClass, idxR,
-											indexCell + xlsAnnotation.position() - 1);
+											subObjbect, subObjbectClass, idxR, indexCell + elementPosition - 1, cL + 1);
 
 									/*
 									 * add the sub object to the parent object
@@ -1418,6 +1433,7 @@ public class Engine implements IEngine {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexRow = idxR;
+		int elementPosition = idxR;
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -1434,6 +1450,9 @@ public class Engine implements IEngine {
 					throw new ElementException(ExceptionMessage.ELEMENT_INVALID_POSITION.getMessage());
 				}
 
+				/* set position of the element */
+				elementPosition = xlsAnnotation.position() == -99 ? elementPosition + 1 : xlsAnnotation.position();
+
 				/*
 				 * increment of the counter related to the number of fields (if
 				 * new object)
@@ -1441,7 +1460,7 @@ public class Engine implements IEngine {
 				counter++;
 
 				/* content row */
-				Row contentRow = configCriteria.getSheet().getRow(indexRow + xlsAnnotation.position());
+				Row contentRow = configCriteria.getSheet().getRow(indexRow + elementPosition);
 				Cell contentCell = contentRow.getCell(idxC + 2);
 				if (contentCell != null) {
 					if (Collection.class.isAssignableFrom(fT)) {
@@ -1464,7 +1483,7 @@ public class Engine implements IEngine {
 								Class<?> subObjbectClass = subObjbect.getClass();
 
 								int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
-										subObjbectClass, indexRow + xlsAnnotation.position() - 1, idxC);
+										subObjbectClass, indexRow + elementPosition - 1, idxC);
 
 								/* add the sub object to the parent object */
 								f.set(o, subObjbect);
@@ -1623,6 +1642,9 @@ public class Engine implements IEngine {
 		/* apply background color to sheet tab */
 		SheetStyleHandler.applyTabColor(configCriteria);
 
+		/* apply column auto resize to sheet */
+		SheetStyleHandler.applyAutoResizeColumn(configCriteria);
+		
 		/* apply the column resize */
 		configCriteria.applyColumnWidthToSheet();
 
@@ -1657,7 +1679,7 @@ public class Engine implements IEngine {
 		int idxCell = configCriteria.getStartCell();
 
 		if (PredicateFactory.isPropagationHorizontal.test(configCriteria.getPropagation())) {
-			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell);
+			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
 		} else {
 			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
 		}
@@ -2296,7 +2318,7 @@ public class Engine implements IEngine {
 			while (iterator.hasNext()) {
 				try {
 					Object obj = oC.newInstance();
-					int counter = unmarshalAsPropagationHorizontal(configCriteria, obj, oC, idxRow, idxCell);
+					int counter = unmarshalAsPropagationHorizontal(configCriteria, obj, oC, idxRow, idxCell, 1);
 					if (obj != null && counter != -5) {
 						collection.add((Object) obj);
 						idxRow = idxRow + 1;
