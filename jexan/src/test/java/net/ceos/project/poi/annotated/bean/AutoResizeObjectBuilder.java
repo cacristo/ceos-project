@@ -15,7 +15,7 @@
  */
 package net.ceos.project.poi.annotated.bean;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class AutoResizeObjectBuilder {
 		assertEquals(base.getDoubleAttribute(), toValidate.getDoubleAttribute());
 		assertEquals(base.getLongAttribute(), toValidate.getLongAttribute());
 		assertEquals(base.isBooleanPrimitiveAttribute(), toValidate.isBooleanPrimitiveAttribute());
-		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute());
+		assertEquals(base.getFloatPrimitiveAttribute(), toValidate.getFloatPrimitiveAttribute(), 0.001);
 		assertEquals(base.getUnitFamily(), toValidate.getUnitFamily());
 		assertEquals(base.getBigDecimalAttribute(), toValidate.getBigDecimalAttribute());
 		// TODO add new validation below
