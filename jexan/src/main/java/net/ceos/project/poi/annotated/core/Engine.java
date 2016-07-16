@@ -1429,11 +1429,15 @@ public class Engine implements IEngine {
 	 *             given when a not supported action.
 	 */
 	private int unmarshalAsPropagationVertical(final XConfigCriteria configCriteria, Object o, Class<?> oC,
-			final int idxR, final int idxC) throws WorkbookException {
+			final int idxR, final int idxC, final int cL) throws WorkbookException {
 		/* counter related to the number of fields (if new object) */
 		int counter = -1;
 		int indexRow = idxR;
 		int elementPosition = idxR;
+
+		if (!CascadeHandler.isAuthorizedCascadeLevel(configCriteria, cL, o)) {
+			return counter;
+		}
 
 		/* get declared fields */
 		List<Field> fL = Arrays.asList(oC.getDeclaredFields());
@@ -1483,7 +1487,7 @@ public class Engine implements IEngine {
 								Class<?> subObjbectClass = subObjbect.getClass();
 
 								int internalCellCounter = unmarshalAsPropagationVertical(configCriteria, subObjbect,
-										subObjbectClass, indexRow + elementPosition - 1, idxC);
+										subObjbectClass, indexRow + elementPosition - 1, idxC, cL + 1);
 
 								/* add the sub object to the parent object */
 								f.set(o, subObjbect);
@@ -1681,7 +1685,7 @@ public class Engine implements IEngine {
 		if (PredicateFactory.isPropagationHorizontal.test(configCriteria.getPropagation())) {
 			unmarshalAsPropagationHorizontal(configCriteria, object, oC, idxRow, idxCell, 0);
 		} else {
-			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell);
+			unmarshalAsPropagationVertical(configCriteria, object, oC, idxRow, idxCell, 0);
 		}
 	}
 
@@ -2335,7 +2339,7 @@ public class Engine implements IEngine {
 			while (iterator.hasNext()) {
 				try {
 					Object obj = oC.newInstance();
-					int counter = unmarshalAsPropagationVertical(configCriteria, obj, oC, idxRow, idxCell);
+					int counter = unmarshalAsPropagationVertical(configCriteria, obj, oC, idxRow, idxCell, 1);
 					if (obj != null && counter != -5) {
 						collection.add((Object) obj);
 						idxCell = idxCell + 1;
