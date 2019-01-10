@@ -17,7 +17,6 @@ package net.ceos.project.poi.annotated.definition;
 
 /**
  * This will define the propagation type when writing into the Excel.
- * <p>
  * <ul>
  * <li><b>PropagationType.PROPAGATION_HORIZONTAL</b> Will propagate horizontally
  * all the elements.

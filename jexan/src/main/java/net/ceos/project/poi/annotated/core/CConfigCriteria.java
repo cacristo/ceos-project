@@ -135,8 +135,8 @@ public class CConfigCriteria {
 	}
 
 	/**
-	 * @param overrideSeparator
-	 *            the overrideSeparator to set
+	 * @param cascadeLevel
+	 *            the cascadeLevel to set
 	 */
 	public final void overrideCascadeLevel(CascadeType cascadeLevel) {
 		this.overrideCascadeLevel = cascadeLevel;

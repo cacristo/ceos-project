@@ -17,7 +17,6 @@ package net.ceos.project.poi.annotated.definition;
 
 /**
  * This will define the file extension type.
- * <p>
  * <ul>
  * <li><b>ExtensionFileType.XLSX</b> Related to the files with the extension .xlsx.
  * <li><b>ExtensionFileType.XLS</b> Related to the files with the extension .xls.

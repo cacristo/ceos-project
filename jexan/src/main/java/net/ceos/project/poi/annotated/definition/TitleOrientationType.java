@@ -17,7 +17,6 @@ package net.ceos.project.poi.annotated.definition;
 
 /**
  * This will define the title orientation type when writing into the Excel.
- * <p>
  * <ul>
  * <li><b>TitleOrientationType.TOP</b> Will paint the title over the element.
  * <li><b>TitleOrientationType.LEFT</b> Will paint the title at the left of the

@@ -73,6 +73,7 @@ public class ConditionalFormattingHandler {
 	 * @param conditionalFomat
 	 *            the {@link XlsConditionalFormat}
 	 * @throws ConfigurationException
+	 * 				the configuration exception at jexan
 	 */
 	protected static void applyCondition(XConfigCriteria configCriteria, XlsConditionalFormat conditionalFomat)
 			throws ConfigurationException {
